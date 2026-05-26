@@ -1,5 +1,4 @@
 ---
-import Wordmark from '../primitives/Wordmark.astro';
 import Button from '../primitives/Button.astro';
 
 const links = [
@@ -13,20 +12,19 @@ const links = [
 <header class="nav" data-scrolled="false">
   <div class="nav__inner container">
     <a href="/" class="nav__brand" aria-label="Moose home">
-      <Wordmark variant="cream" size={26} textSize={18} />
+      <img
+        src="/brand/logo/moose-wordmark-twotone.svg"
+        alt="Moose"
+        width="698"
+        height="136"
+        class="nav__logo"
+      />
     </a>
 
     <nav class="nav__links" aria-label="Primary">
       {links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
     </nav>
 
-    <div class="nav__right">
-      <a href="#member-signin" class="nav__signin">Member sign in</a>
-      <Button href="#apply" variant="pink-primary" size="md">Apply to join</Button>
-      <button class="nav__menu" type="button" aria-label="Open menu" aria-expanded="false" id="nav-menu-toggle">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
   </div>
 
   <nav class="nav__mobile" id="nav-mobile" aria-label="Mobile">
@@ -85,6 +83,11 @@ const links = [
     padding-block: 18px;
   }
   .nav__brand { display: inline-flex; }
+  .nav__logo {
+    display: block;
+    height: 28px;
+    width: auto;
+  }
   .nav__links {
     display: none;
     gap: 28px;

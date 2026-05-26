@@ -1,6 +1,4 @@
 ---
-import Wordmark from '../primitives/Wordmark.astro';
-
 const year = new Date().getFullYear();
 
 const cols = [
@@ -35,7 +33,13 @@ const cols = [
   <div class="container">
     <div class="footer__grid">
       <div class="footer__brand">
-        <Wordmark variant="pink" size={32} textSize={22} />
+        <img
+          src="/brand/logo/moose-wordmark-white.svg"
+          alt="Moose"
+          width="698"
+          height="136"
+          class="footer__logo"
+        />
         <p class="footer__tag">One pass. Every studio worth training at. Built in Sydney, for independent operators.</p>
       </div>
 
@@ -74,6 +78,11 @@ const cols = [
     gap: 48px;
   }
   .footer__brand { display: grid; gap: 14px; }
+  .footer__logo {
+    display: block;
+    height: 36px;
+    width: auto;
+  }
   .footer__tag {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.55);
