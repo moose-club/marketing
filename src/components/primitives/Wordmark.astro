@@ -1,0 +1,76 @@
+---
+// The two-tone Moose wordmark — a stroke-drawn M glyph + "Moose" text.
+// The glyph is identical to MooseMark in 01-design-tokens.jsx:
+// stroke-based so it scales crisply. The right loop is pink — the rest
+// of the lockup adapts to the variant.
+
+type Variant = 'cream' | 'navy' | 'pink';
+
+interface Props {
+  variant?: Variant;
+  size?: number;          // glyph size in px
+  showText?: boolean;
+  textSize?: number;      // wordmark text size in px
+  class?: string;
+}
+
+const {
+  variant = 'cream',
+  size = 28,
+  showText = true,
+  textSize,
+  class: className,
+} = Astro.props;
+
+// variant → (glyph stroke, text fill, optional pink-loop accent)
+// Per brand discipline: the M is *always* pink in the cream / navy
+// lockups; only the wordmark text colour changes.
+const palette = {
+  cream: { glyph: 'var(--pink)', text: 'var(--navy)' },
+  navy:  { glyph: 'var(--pink)', text: '#FFFFFF'   },
+  pink:  { glyph: '#FFFFFF',     text: '#FFFFFF'   },
+}[variant];
+
+const computedTextSize = textSize ?? Math.round(size * 0.75);
+---
+
+<span
+  class:list={['wordmark', className]}
+  data-variant={variant}
+  style={`--glyph-size:${size}px; --text-size:${computedTextSize}px; --text-color:${palette.text};`}
+  aria-label="Moose"
+>
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 100 100"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M 17 81 L 17 28 L 50 58 L 83 28 L 83 81"
+      fill="none"
+      stroke={palette.glyph}
+      stroke-width="22"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  {showText && <span class="wordmark__text">Moose</span>}
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1;
+  }
+  .wordmark__text {
+    font-family: var(--font-sans);
+    font-size: var(--text-size);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text-color);
+  }
+</style>

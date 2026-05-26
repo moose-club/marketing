@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Wordmark from '../components/primitives/Wordmark.astro';
+import Button from '../components/primitives/Button.astro';
+import Eyebrow from '../components/primitives/Eyebrow.astro';
+import StudioTile from '../components/primitives/StudioTile.astro';
+import PhoneFrame from '../components/primitives/PhoneFrame.astro';
+import { PARTNERS, resolvePartner } from '../data/copy';
+
+const sample = resolvePartner(PARTNERS[0]);
+---
+
+<Base title="Moose — Styleguide" description="Internal styleguide for the Moose marketing site.">
+  <main class="sg container">
+    <h1 class="display-l">Moose styleguide</h1>
+    <p class="body-l">Visual sanity check for tokens and primitives.</p>
+
+    <section class="sg__row">
+      <Eyebrow>Wordmark variants</Eyebrow>
+      <div class="sg__chips">
+        <div class="chip chip--cream"><Wordmark variant="cream" /></div>
+        <div class="chip chip--navy"><Wordmark variant="navy" /></div>
+        <div class="chip chip--pink"><Wordmark variant="pink" /></div>
+      </div>
+    </section>
+
+    <section class="sg__row">
+      <Eyebrow>Buttons</Eyebrow>
+      <div class="sg__chips">
+        <Button variant="pink-primary">Apply to join</Button>
+        <Button variant="ghost-on-paper">See how it works</Button>
+        <div class="chip chip--navy">
+          <Button variant="ghost-on-navy">Book a call</Button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg__row">
+      <Eyebrow tone="pink">Eyebrow — pink</Eyebrow><br />
+      <Eyebrow>Eyebrow — default</Eyebrow>
+    </section>
+
+    <section class="sg__row">
+      <Eyebrow>Type scale</Eyebrow>
+      <div class="display-xl">display-xl</div>
+      <div class="display-l">display-l</div>
+      <div class="display-m">display-m</div>
+      <div class="headline">headline 18–22</div>
+      <div class="body-l">body-l lead paragraph at 17–19px</div>
+      <div class="body">body 15px copy</div>
+      <div class="meta">meta 12.5</div>
+      <div class="tnum-hero">$2.3M</div>
+    </section>
+
+    <section class="sg__row">
+      <Eyebrow>Studio tile</Eyebrow>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; max-width:720px;">
+        {PARTNERS.slice(0, 4).map((p) => <StudioTile partner={resolvePartner(p)} />)}
+      </div>
+    </section>
+
+    <section class="sg__row">
+      <Eyebrow>Phone frame</Eyebrow>
+      <PhoneFrame>
+        <div style="height:100%; background:var(--paper); display:flex; align-items:center; justify-content:center; color:var(--ink-dim);">
+          Screen content slot
+        </div>
+      </PhoneFrame>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .sg { padding: 64px 0 120px; display: grid; gap: 48px; }
+  .sg__row { display: grid; gap: 18px; }
+  .sg__chips { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .chip { padding: 18px 22px; border-radius: var(--r-card); }
+  .chip--cream { background: var(--paper); border: 1px solid var(--rule); }
+  .chip--navy  { background: var(--navy); }
+  .chip--pink  { background: var(--pink); }
+</style>

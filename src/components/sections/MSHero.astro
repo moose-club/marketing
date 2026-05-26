@@ -1,0 +1,147 @@
+---
+import Button from '../primitives/Button.astro';
+import PhoneFrame from '../primitives/PhoneFrame.astro';
+import ScreenHome from '../islands/ScreenHome';
+import { HERO } from '../../data/copy';
+
+// Build the headline with the highlight word rendered in pink. The
+// data has the full headline as two lines plus a `highlightWord`
+// substring; we split on it and inject a <span> in between.
+const headJoined = HERO.head.join(' ');
+const idx = headJoined.indexOf(HERO.highlightWord);
+const before = idx >= 0 ? headJoined.slice(0, idx) : headJoined;
+const after  = idx >= 0 ? headJoined.slice(idx + HERO.highlightWord.length) : '';
+
+// Render two lines: first line of `head`, then the second line with
+// the highlight word in pink. (Highlight is in the 2nd line by design.)
+const [line1, line2] = HERO.head;
+const line2HasHighlight = line2.includes(HERO.highlightWord);
+const line2Before = line2HasHighlight ? line2.split(HERO.highlightWord)[0] : line2;
+const line2After  = line2HasHighlight ? line2.split(HERO.highlightWord).slice(1).join(HERO.highlightWord) : '';
+---
+
+<section class="hero" id="top">
+  <div aria-hidden="true" class="hero__glow"></div>
+
+  <div class="hero__inner container">
+    <div class="hero__copy">
+      <div class="hero__kicker">
+        <span class="hero__dot" aria-hidden="true"></span>
+        {HERO.kicker} · Now live in SYD / MEL / BNE
+      </div>
+
+      <h1 class="hero__head display-xl">
+        <span>{line1}</span><br />
+        {line2HasHighlight ? (
+          <span>
+            {line2Before}<span class="pink">{HERO.highlightWord}</span>{line2After}
+          </span>
+        ) : (
+          <span>{line2}</span>
+        )}
+      </h1>
+
+      <p class="hero__sub body-l">{HERO.sub}</p>
+
+      <div class="hero__ctas">
+        <Button href={HERO.ctaPrimary.href} variant="pink-primary">{HERO.ctaPrimary.label}</Button>
+        <Button href={HERO.ctaSecondary.href} variant="ghost-on-navy">{HERO.ctaSecondary.label}</Button>
+      </div>
+
+      <div class="hero__trust">
+        <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12l5 5 9-11" stroke="var(--pink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> No discounting</span>
+        <span class="hero__dot-sm"></span>
+        <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12l5 5 9-11" stroke="var(--pink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Weekly cash payouts</span>
+        <span class="hero__dot-sm"></span>
+        <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12l5 5 9-11" stroke="var(--pink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> 9-day onboarding</span>
+      </div>
+    </div>
+
+    <div class="hero__phone">
+      <PhoneFrame tilt={-1.2}>
+        <ScreenHome client:load />
+      </PhoneFrame>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--navy);
+    color: var(--navy-on);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(900px 540px at 18% 30%, rgba(235, 78, 141, 0.10), transparent 60%);
+    pointer-events: none;
+  }
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 56px;
+    align-items: center;
+    padding-block: clamp(72px, 12vw, 120px) clamp(56px, 9vw, 80px);
+  }
+
+  .hero__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 8px;
+    border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--navy-rule);
+    font-size: 12px;
+    font-weight: 600;
+    width: max-content;
+    max-width: 100%;
+  }
+  .hero__dot {
+    width: 6px; height: 6px; border-radius: 3px;
+    background: var(--pink);
+    box-shadow: 0 0 0 4px rgba(235, 78, 141, 0.20);
+  }
+
+  .hero__head { margin-top: 24px; color: var(--navy-on); }
+
+  .hero__sub { color: var(--navy-dim); max-width: 540px; margin-top: 24px; }
+
+  .hero__ctas { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+
+  .hero__trust {
+    margin-top: clamp(36px, 6vw, 60px);
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--navy-dim);
+    font-weight: 500;
+  }
+  .hero__trust span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero__dot-sm {
+    width: 3px; height: 3px; border-radius: 2px; background: var(--navy-rule);
+  }
+
+  .hero__phone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero__phone-placeholder {
+    width: min(60vw, 360px);
+    aspect-ratio: 360 / 760;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--navy-rule);
+    border-radius: 44px;
+  }
+
+  @media (min-width: 960px) {
+    .hero__inner {
+      grid-template-columns: 1.05fr 420px;
+      gap: 56px;
+    }
+  }
+</style>

@@ -1,0 +1,119 @@
+---
+// iOS phone shell. Dimensions per SPEC §6.5 — 360×760 outer, 44px outer
+// radius, 38px inner, 6px bezel, dynamic island + home indicator.
+// The wrapped slot is the screen content (a React island).
+//
+// `tone` controls the status-bar / home-indicator colour so the chrome
+// adapts to light vs dark screen content.
+
+interface Props {
+  width?: number;
+  height?: number;
+  tone?: 'light' | 'dark';
+  /** Visual tilt — used in the hero. Disabled at prefers-reduced-motion. */
+  tilt?: number;
+  /** Affects layout only; the slot is positioned absolute regardless. */
+  class?: string;
+}
+
+const { width = 360, height = 760, tone = 'light', tilt = 0, class: className } = Astro.props;
+const statusFg = tone === 'dark' ? '#FFFFFF' : '#000000';
+const homeBg   = tone === 'dark' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.30)';
+---
+
+<div
+  class:list={['phone', className]}
+  style={`--phone-w:${width}px; --phone-h:${height}px; --phone-tilt:${tilt}deg;`}
+>
+  <div class="phone__chrome">
+    <div class="phone__island" aria-hidden="true"></div>
+
+    <div class="phone__status" aria-hidden="true">
+      <span class="phone__time" style={`color:${statusFg}`}>9:41</span>
+      <span class="phone__icons" style={`color:${statusFg}`}>
+        <svg width="17" height="11" viewBox="0 0 17 11">
+          <rect x="0"    y="7"   width="3" height="4"   rx="0.5" fill="currentColor"/>
+          <rect x="4.5"  y="5"   width="3" height="6"   rx="0.5" fill="currentColor"/>
+          <rect x="9"    y="2.5" width="3" height="8.5" rx="0.5" fill="currentColor"/>
+          <rect x="13.5" y="0"   width="3" height="11"  rx="0.5" fill="currentColor"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11">
+          <rect x="0.5" y="0.5" width="20" height="10" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.4"/>
+          <rect x="2"   y="2"   width="17" height="7"  rx="1.6" fill="currentColor"/>
+          <rect x="21.5" y="3.5" width="1.5" height="4" rx="0.6" fill="currentColor" fill-opacity="0.4"/>
+        </svg>
+      </span>
+    </div>
+
+    <div class="phone__screen">
+      <slot />
+    </div>
+
+    <div class="phone__home" aria-hidden="true" style={`background:${homeBg}`}></div>
+  </div>
+</div>
+
+<style>
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    transform: rotate(var(--phone-tilt));
+    flex-shrink: 0;
+  }
+  .phone__chrome {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 44px;
+    background: #F2F2F7;
+    overflow: hidden;
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.18),
+      0 0 0 1px rgba(0, 0, 0, 0.10),
+      inset 0 0 0 6px #0a0a0a;
+    font-family: var(--font-sans);
+  }
+  .phone__island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 32px;
+    border-radius: 22px;
+    background: #000;
+    z-index: 50;
+  }
+  .phone__status {
+    position: absolute;
+    inset: 0 0 auto 0;
+    padding: 18px 28px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .phone__icons { display: inline-flex; gap: 5px; align-items: center; }
+  .phone__screen {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .phone__home {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 124px;
+    height: 5px;
+    border-radius: 100px;
+    z-index: 60;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone { transform: none; }
+  }
+</style>

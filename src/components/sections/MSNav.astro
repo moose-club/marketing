@@ -1,0 +1,143 @@
+---
+import Wordmark from '../primitives/Wordmark.astro';
+import Button from '../primitives/Button.astro';
+
+const links = [
+  { href: '#how',     label: 'How it works' },
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#network', label: 'Network' },
+  { href: '#faq',     label: 'FAQ' },
+];
+---
+
+<header class="nav" data-scrolled="false">
+  <div class="nav__inner container">
+    <a href="/" class="nav__brand" aria-label="Moose home">
+      <Wordmark variant="cream" size={26} textSize={18} />
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      {links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
+    </nav>
+
+    <div class="nav__right">
+      <a href="#member-signin" class="nav__signin">Member sign in</a>
+      <Button href="#apply" variant="pink-primary" size="md">Apply to join</Button>
+      <button class="nav__menu" type="button" aria-label="Open menu" aria-expanded="false" id="nav-menu-toggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav__mobile" id="nav-mobile" aria-label="Mobile">
+    {links.map((l) => <a href={l.href} class="nav__mobile-link">{l.label}</a>)}
+    <a href="#member-signin" class="nav__mobile-link">Member sign in</a>
+  </nav>
+</header>
+
+<script>
+  // Sticky-on-scroll: switch `data-scrolled` once past 16px.
+  const nav = document.querySelector<HTMLElement>('.nav');
+  if (nav) {
+    const handler = () => nav.setAttribute('data-scrolled', String(window.scrollY > 16));
+    handler();
+    window.addEventListener('scroll', handler, { passive: true });
+  }
+
+  // Mobile menu toggle.
+  const toggle = document.getElementById('nav-menu-toggle');
+  const mobile = document.getElementById('nav-mobile');
+  if (toggle && mobile) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      mobile.dataset.open = String(!open);
+    });
+    mobile.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).tagName === 'A') {
+        toggle.setAttribute('aria-expanded', 'false');
+        mobile.dataset.open = 'false';
+      }
+    });
+  }
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    transition: background 160ms ease-out, border-color 160ms ease-out, backdrop-filter 160ms ease-out;
+    border-bottom: 1px solid transparent;
+  }
+  .nav[data-scrolled='true'] {
+    background: color-mix(in srgb, var(--paper) 78%, transparent);
+    border-bottom-color: var(--rule);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding-block: 18px;
+  }
+  .nav__brand { display: inline-flex; }
+  .nav__links {
+    display: none;
+    gap: 28px;
+    margin-left: -8px;
+    flex: 1;
+  }
+  .nav__link {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-dim);
+    transition: color 120ms ease-out;
+  }
+  .nav__link:hover { color: var(--ink); }
+
+  .nav__right { display: flex; align-items: center; gap: 16px; }
+  .nav__signin { font-size: 13.5px; font-weight: 500; color: var(--ink-dim); display: none; }
+  .nav__signin:hover { color: var(--ink); }
+
+  .nav__menu {
+    width: 44px; height: 44px;
+    display: inline-flex; flex-direction: column; gap: 5px;
+    align-items: center; justify-content: center;
+  }
+  .nav__menu span {
+    width: 20px; height: 2px; background: var(--ink); border-radius: 2px;
+    transition: transform 160ms ease-out, opacity 120ms ease-out;
+  }
+  .nav__menu[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav__menu[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .nav__menu[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav__mobile {
+    display: none;
+    flex-direction: column;
+    padding: 8px var(--container-px) 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .nav__mobile[data-open='true'] { display: flex; }
+  .nav__mobile-link {
+    padding: 14px 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav__mobile-link:last-child { border-bottom: none; }
+
+  @media (min-width: 760px) {
+    .nav__menu { display: none; }
+    .nav__mobile { display: none !important; }
+    .nav__signin { display: inline; }
+  }
+  @media (min-width: 960px) {
+    .nav__links { display: inline-flex; margin-left: 16px; }
+  }
+</style>

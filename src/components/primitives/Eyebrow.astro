@@ -1,0 +1,27 @@
+---
+// The "━━ Label" treatment used as a section kicker throughout the site.
+// Eyebrows always carry the em-dash prefix (handled in CSS via ::before),
+// uppercase, 11px, 2.4px tracking. Color flips per surface.
+
+type Tone = 'default' | 'pink' | 'navy';
+
+interface Props {
+  tone?: Tone;
+  as?: 'div' | 'span' | 'p';
+  class?: string;
+}
+
+const { tone = 'default', as = 'div', class: className } = Astro.props;
+const Tag = as;
+---
+
+<Tag
+  class:list={[
+    'eyebrow',
+    tone === 'pink' && 'eyebrow--pink',
+    tone === 'navy' && 'eyebrow--navy',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

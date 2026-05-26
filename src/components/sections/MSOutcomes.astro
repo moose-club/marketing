@@ -1,0 +1,69 @@
+---
+import Eyebrow from '../primitives/Eyebrow.astro';
+import { STATS } from '../../data/copy';
+---
+
+<section class="outcomes" id="outcomes">
+  <div class="container">
+    <Eyebrow>Outcomes</Eyebrow>
+    <div class="outcomes__grid">
+      {STATS.map((s) => (
+        <div class="outcomes__cell">
+          <div class="tnum-hero outcomes__n">{s.n}</div>
+          <div class="outcomes__l">{s.l}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .outcomes { padding-block: clamp(64px, 10vw, 96px) clamp(56px, 9vw, 88px); }
+  .outcomes :global(.eyebrow) { margin-bottom: 28px; }
+
+  .outcomes__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--rule);
+  }
+  .outcomes__cell {
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .outcomes__cell:last-child { border-bottom: none; }
+  .outcomes__n { color: var(--ink); }
+  .outcomes__l {
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-top: 12px;
+    max-width: 220px;
+    line-height: 1.4;
+    white-space: pre-line;
+  }
+
+  @media (min-width: 640px) {
+    .outcomes__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .outcomes__cell {
+      padding: 32px 28px;
+      border-bottom: 1px solid var(--rule);
+      border-right: 1px solid var(--rule);
+    }
+    .outcomes__cell:nth-child(2n) { border-right: none; }
+    .outcomes__cell:first-child { padding-left: 0; }
+    .outcomes__cell:nth-child(2) { padding-right: 0; }
+  }
+  @media (min-width: 960px) {
+    .outcomes__grid { grid-template-columns: repeat(4, 1fr); }
+    .outcomes__cell {
+      padding: 36px 28px 32px;
+      border-bottom: none;
+    }
+    .outcomes__cell:nth-child(2n) { border-right: 1px solid var(--rule); }
+    .outcomes__cell:nth-child(4n),
+    .outcomes__cell:last-child { border-right: none; }
+    .outcomes__cell:first-child { padding-left: 0; }
+    .outcomes__cell:nth-child(4) { padding-right: 0; }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+import Button from '../primitives/Button.astro';
+import { CTA } from '../../data/copy';
+---
+
+<section class="cta" id="apply">
+  <div aria-hidden="true" class="cta__glow"></div>
+  <div class="container cta__inner">
+    <h2 class="display-l cta__head">{CTA.head}</h2>
+    <p class="cta__sub body-l">{CTA.sub}</p>
+    <div class="cta__btns">
+      <Button href={CTA.applyHref} variant="navy-primary">Apply to join</Button>
+      <a href={CTA.callHref} class="cta__call" rel="noopener">Book a 20-min call →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--navy);
+    color: var(--navy-on);
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(96px, 14vw, 160px);
+  }
+  .cta__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(700px 420px at 80% 30%, rgba(235, 78, 141, 0.16), transparent 60%);
+    pointer-events: none;
+  }
+  .cta__inner { position: relative; }
+  .cta__head { color: var(--navy-on); max-width: 14ch; }
+  .cta__sub {
+    color: var(--navy-dim);
+    max-width: 540px;
+    margin-top: 24px;
+  }
+  .cta__btns {
+    margin-top: clamp(36px, 6vw, 56px);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cta__call {
+    font-size: 14px;
+    color: var(--navy-dim);
+    border-bottom: 1px solid var(--navy-rule);
+    padding-bottom: 2px;
+  }
+  .cta__call:hover { color: var(--navy-on); border-bottom-color: var(--navy-on); }
+</style>

@@ -1,0 +1,123 @@
+---
+import Eyebrow from '../primitives/Eyebrow.astro';
+import { FAQ } from '../../data/copy';
+---
+
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq__grid">
+      <aside class="faq__intro">
+        <Eyebrow>Questions</Eyebrow>
+        <h2 class="display-m faq__title">Operator FAQ</h2>
+        <p class="body">
+          Got something we haven't covered? Partnerships replies in under 4 hours, weekdays.
+        </p>
+        <a class="faq__mail" href="mailto:partners@moose.app">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          partners@moose.app
+        </a>
+      </aside>
+
+      <ul class="faq__list">
+        {FAQ.map((f, i) => (
+          <li>
+            <details open={i === 0}>
+              <summary>
+                <span class="faq__q">{f.q}</span>
+                <span class="faq__icon" aria-hidden="true">
+                  <svg class="faq__icon-plus" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                  </svg>
+                  <svg class="faq__icon-x" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <p class="faq__a">{f.a}</p>
+            </details>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { padding-block: clamp(80px, 12vw, 120px); }
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .faq__intro :global(.eyebrow) { margin-bottom: 24px; }
+  .faq__title { margin-top: 24px; max-width: 12ch; }
+  .faq__intro p { margin-top: 18px; max-width: 320px; }
+  .faq__mail {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--ink);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .faq__mail:hover { background: rgba(15, 15, 18, 0.06); }
+
+  .faq__list {
+    display: block;
+    border-top: 1px solid var(--rule);
+  }
+  .faq__list li { border-bottom: 1px solid var(--rule); }
+  .faq__list details { padding: 24px 0; }
+  .faq__list summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq__list summary::-webkit-details-marker { display: none; }
+  .faq__q {
+    font-size: clamp(17px, 1.8vw, 20px);
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .faq__icon {
+    width: 28px; height: 28px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 120ms ease-out, color 120ms ease-out, border-color 120ms ease-out;
+  }
+  .faq__icon-x { display: none; }
+  details[open] .faq__icon {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  details[open] .faq__icon-plus { display: none; }
+  details[open] .faq__icon-x { display: block; }
+  .faq__a {
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    margin-top: 12px;
+    max-width: 720px;
+  }
+
+  @media (min-width: 960px) {
+    .faq__grid { grid-template-columns: 1fr 2fr; gap: 64px; }
+    .faq__intro { position: sticky; top: 96px; align-self: start; }
+  }
+</style>

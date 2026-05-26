@@ -1,0 +1,46 @@
+---
+// Live-status strip between Hero and the page body. Static display
+// numbers (per SPEC §6.3) — no JS. The green dot pulses (and stops
+// pulsing under prefers-reduced-motion via globals.css).
+
+import { TICKER } from '../../data/copy';
+---
+
+<section class="ticker" aria-label="Network status">
+  <div class="ticker__inner container">
+    {TICKER.map((s, i) => (
+      <span class="ticker__item">
+        {i === 0 && <span class="ticker__dot" aria-hidden="true"></span>}
+        {s}
+      </span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ticker {
+    background: var(--navy-deep);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+  }
+  .ticker__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding-block: 12px;
+  }
+  .ticker__item { display: inline-flex; align-items: center; gap: 8px; }
+  .ticker__dot {
+    width: 7px; height: 7px; border-radius: 4px; background: var(--success);
+    animation: tickerPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes tickerPulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.35; }
+  }
+</style>

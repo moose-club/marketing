@@ -1,0 +1,118 @@
+---
+import Wordmark from '../primitives/Wordmark.astro';
+
+const year = new Date().getFullYear();
+
+const cols = [
+  { title: 'For studios', items: [
+    { l: 'Apply to join', h: '#apply' },
+    { l: 'Pricing', h: '#pricing' },
+    { l: 'Integrations', h: '#how' },
+    { l: 'Partner FAQ', h: '#faq' },
+  ]},
+  { title: 'For members', items: [
+    { l: 'How Moose works', h: '#how' },
+    { l: 'Find a studio', h: '#network' },
+    { l: 'Member app', h: '#showcase' },
+    { l: 'Member FAQ', h: '#faq' },
+  ]},
+  { title: 'Company', items: [
+    { l: 'About', h: '#' },
+    { l: 'Press', h: '#' },
+    { l: 'Careers', h: '#' },
+    { l: 'Contact', h: 'mailto:hello@moose.app' },
+  ]},
+  { title: 'Legal', items: [
+    { l: 'Privacy', h: '#' },           // TODO: real privacy URL
+    { l: 'Terms', h: '#' },             // TODO: real terms URL
+    { l: 'Partner agreement', h: '#' },
+    { l: 'Member agreement', h: '#' },
+  ]},
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <Wordmark variant="pink" size={32} textSize={22} />
+        <p class="footer__tag">One pass. Every studio worth training at. Built in Sydney, for independent operators.</p>
+      </div>
+
+      <div class="footer__cols">
+        {cols.map((c) => (
+          <div>
+            <div class="footer__col-title">{c.title}</div>
+            <ul class="footer__col-list">
+              {c.items.map((it) => (
+                <li><a href={it.h} class="footer__link">{it.l}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <span>© {year} Moose Pty Ltd</span>
+      {/* TODO: real ABN + registered address */}
+      <span>ABN 14 802 318 209 · Surry Hills, Sydney</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #0B1438;
+    color: #fff;
+    padding-block: 64px 32px;
+    margin-top: 0;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .footer__brand { display: grid; gap: 14px; }
+  .footer__tag {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.55;
+    max-width: 320px;
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 24px;
+  }
+  .footer__col-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .footer__col-list { display: grid; gap: 8px; }
+  .footer__link { font-size: 13.5px; color: rgba(255, 255, 255, 0.6); }
+  .footer__link:hover { color: #fff; }
+
+  .footer__legal {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  @media (min-width: 760px) {
+    .footer__cols { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (min-width: 960px) {
+    .footer__grid { grid-template-columns: 1.2fr 3fr; gap: 64px; }
+  }
+</style>
