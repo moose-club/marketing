@@ -7,5 +7,5 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'static',
   integrations: [react(), sitemap()],
-  site: 'https://trainmoose.com',
+  site: 'https://marketing.trainmoose.com',
 });
