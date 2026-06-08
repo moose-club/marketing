@@ -6,13 +6,15 @@ interface Props {
   description?: string;
   canonical?: string;
   ogImage?: string;
+  preloadImage?: string;
 }
 
 const {
   title = 'Moose — One subscription. Every studio.',
   description = 'Moose is the crossover access pass for boutique fitness studios. Fill empty slots, keep your members loyal, get paid weekly. 218 partner studios across Australia.',
   canonical,
-  ogImage = '/brand/logo/moose-on-navy-allwhite.png',
+  ogImage = '/og.png',
+  preloadImage,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
@@ -23,17 +25,48 @@ const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Moose',
-  url: siteUrl || 'https://moose.app',
+  url: siteUrl || 'https://trainmoose.com',
   logo: `${siteUrl}/brand/logo/moose-wordmark-twotone.svg`,
   description,
-  sameAs: [
-    // TODO: real social links
-  ],
+  areaServed: {
+    '@type': 'Country',
+    name: 'Australia',
+  },
+  email: 'partnerships@trainmoose.com',
+  sameAs: ['https://www.instagram.com/trainmoose/'],
+};
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Moose crossover access',
+  serviceType: 'Reciprocal fitness studio partnership network',
+  provider: { '@type': 'Organization', name: 'Moose', url: siteUrl || 'https://trainmoose.com' },
+  areaServed: { '@type': 'Country', name: 'Australia' },
+  description:
+    'A premium membership upgrade ($11/wk) sold by partner boutique fitness studios that entitles members to 4 sessions per month at complementary, non-competing partner venues nearby.',
+  offers: {
+    '@type': 'Offer',
+    price: '11',
+    priceCurrency: 'AUD',
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      price: '11',
+      priceCurrency: 'AUD',
+      unitText: 'WEEK',
+    },
+    eligibleQuantity: {
+      '@type': 'QuantitativeValue',
+      value: '4',
+      unitText: 'sessions per month',
+    },
+  },
+  audience: { '@type': 'BusinessAudience', audienceType: 'Boutique fitness studio operators' },
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -49,15 +82,20 @@ const orgJsonLd = {
     <link rel="apple-touch-icon" sizes="180x180" href="/brand/icon/Icon-60@3x.png" />
     <meta name="theme-color" content="#1A2B5F" />
 
+    {preloadImage && (
+      <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+    )}
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:width" content="1600" />
-    <meta property="og:image:height" content="900" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Moose" />
+    <meta property="og:locale" content="en_AU" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -66,6 +104,7 @@ const orgJsonLd = {
     <meta name="twitter:image" content={ogImageUrl} />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>

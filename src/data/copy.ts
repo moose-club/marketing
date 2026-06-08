@@ -19,7 +19,7 @@ export const HERO = {
   head: "Elevate your memberships with",
   highlightWord: "variety.",
   subLines: [
-    "Moose unlocks variety for fitness studios.",
+    "Moose unlocks variety for boutique fitness studios.",
     "Don't build new modalities in-house. Form reciprocal partnerships with complementary, non-competing studios nearby — and let collaboration do the work.",
   ] as const,
   points: [
@@ -30,7 +30,7 @@ export const HERO = {
   ctaPrimary: { label: "Get involved or hear more", href: "#register" },
   ctaSecondary: { label: "See how it works", href: "#how" },
   photo: {
-    src: "/photos/hero-strength.png",
+    src: "/photos/hero-strength.webp",
     alt: "Member training with a kettlebell in warm, golden studio light",
   },
 } as const;
@@ -108,7 +108,7 @@ export const NETWORK = {
     { strong: "120+", rest: " partner venues" },
     { strong: "30+", rest: " unique brands" },
   ] as const,
-  ledeSoft: "... and counting",
+  ledeSoft: "... and counting, across Australia",
   // First 9 partners are visible by default. The rest reveal on "View all".
   partners: [
     { name: "Form Pilates", mod: "Pilates" },
@@ -210,7 +210,7 @@ export const STORY = {
         name: "VRTUS",
         mod: "Strength & conditioning",
         photo: {
-          src: "/photos/hero-boxing.png",
+          src: "/photos/hero-boxing.webp",
           alt: "Kickboxing studio",
           position: "46% center",
         },
@@ -223,7 +223,7 @@ export const STORY = {
         name: "Body by Berner",
         mod: "Reformer Pilates",
         photo: {
-          src: "/photos/hero-pilates.png",
+          src: "/photos/hero-pilates.webp",
           alt: "Reformer Pilates studio",
           position: "4% 34%",
         },
