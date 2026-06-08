@@ -1,40 +1,46 @@
 ---
-import Button from '../primitives/Button.astro';
-
-const links = [
-  { href: '#how',     label: 'How it works' },
-  { href: '#pricing', label: 'Pricing' },
-  { href: '#network', label: 'Network' },
-  { href: '#faq',     label: 'FAQ' },
-];
+import { NAV } from '../../data/copy';
 ---
 
-<header class="nav" data-scrolled="false">
+<header class="nav" data-scrolled="false" id="siteHeader">
   <div class="nav__inner container">
-    <a href="/" class="nav__brand" aria-label="Moose home">
+    <a href="#top" class="nav__brand" aria-label="Moose home">
       <img
         src="/brand/logo/moose-wordmark-twotone.svg"
         alt="Moose"
-        width="698"
-        height="136"
         class="nav__logo"
       />
     </a>
 
     <nav class="nav__links" aria-label="Primary">
-      {links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
+      {NAV.links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
     </nav>
 
+    <a class="nav__cta" href={NAV.cta.href}>
+      <span>{NAV.cta.label}</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <button
+      class="nav__toggle"
+      id="navToggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="navMobile"
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 
-  <nav class="nav__mobile" id="nav-mobile" aria-label="Mobile">
-    {links.map((l) => <a href={l.href} class="nav__mobile-link">{l.label}</a>)}
-    <a href="#member-signin" class="nav__mobile-link">Member sign in</a>
+  <nav class="nav__mobile" id="navMobile" aria-label="Mobile" data-open="false">
+    {NAV.links.map((l) => <a href={l.href} class="nav__mobile-link">{l.label}</a>)}
+    <a href={NAV.cta.href} class="nav__mobile-link nav__mobile-link--cta">{NAV.cta.label}</a>
   </nav>
 </header>
 
 <script>
-  // Sticky-on-scroll: switch `data-scrolled` once past 16px.
+  // Switch `data-scrolled` once past 16px so the header gains its blurred
+  // background. Saves us from a permanent translucent bar over the hero.
   const nav = document.querySelector<HTMLElement>('.nav');
   if (nav) {
     const handler = () => nav.setAttribute('data-scrolled', String(window.scrollY > 16));
@@ -42,9 +48,9 @@ const links = [
     window.addEventListener('scroll', handler, { passive: true });
   }
 
-  // Mobile menu toggle.
-  const toggle = document.getElementById('nav-menu-toggle');
-  const mobile = document.getElementById('nav-mobile');
+  // Mobile menu toggle + auto-close on link tap.
+  const toggle = document.getElementById('navToggle');
+  const mobile = document.getElementById('navMobile');
   if (toggle && mobile) {
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
@@ -52,7 +58,7 @@ const links = [
       mobile.dataset.open = String(!open);
     });
     mobile.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).tagName === 'A') {
+      if ((e.target as HTMLElement).closest('a')) {
         toggle.setAttribute('aria-expanded', 'false');
         mobile.dataset.open = 'false';
       }
@@ -62,67 +68,84 @@ const links = [
 
 <style>
   .nav {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0;
     z-index: 100;
-    background: color-mix(in srgb, var(--paper) 90%, transparent);
-    transition: background 160ms ease-out, border-color 160ms ease-out, backdrop-filter 160ms ease-out;
+    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base), backdrop-filter var(--dur-base);
     border-bottom: 1px solid transparent;
   }
   .nav[data-scrolled='true'] {
-    background: color-mix(in srgb, var(--paper) 78%, transparent);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-bottom-color: var(--rule);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: var(--shadow-xs);
   }
   .nav__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    padding-block: 18px;
+    gap: 24px;
+    height: 72px;
   }
-  .nav__brand { display: inline-flex; }
+  .nav__brand { display: inline-flex; flex-shrink: 0; }
   .nav__logo {
     display: block;
-    height: 28px;
+    height: 30px;
     width: auto;
   }
+
   .nav__links {
     display: none;
-    gap: 28px;
-    margin-left: -8px;
-    flex: 1;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
   }
   .nav__link {
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--ink-dim);
-    transition: color 120ms ease-out;
+    padding: 9px 14px;
+    border-radius: var(--r-sm);
+    transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast);
+    white-space: nowrap;
   }
-  .nav__link:hover { color: var(--ink); }
+  .nav__link:hover { color: var(--ink); background: var(--navy-50); }
 
-  .nav__right { display: flex; align-items: center; gap: 16px; }
-  .nav__signin { font-size: 13.5px; font-weight: 500; color: var(--ink-dim); display: none; }
-  .nav__signin:hover { color: var(--ink); }
+  .nav__cta {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy);
+    color: #fff;
+    padding: 11px 20px;
+    border-radius: var(--r-pill);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-xs);
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast);
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+  .nav__cta svg { transition: transform var(--dur-fast) var(--ease-out); }
+  .nav__cta:hover { background: var(--navy-lift); transform: translateY(-1px); }
+  .nav__cta:hover svg { transform: translateX(3px); }
 
-  .nav__menu {
-    width: 44px; height: 44px;
-    display: inline-flex; flex-direction: column; gap: 5px;
-    align-items: center; justify-content: center;
+  .nav__toggle {
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    border-radius: var(--r-sm);
   }
-  .nav__menu span {
-    width: 20px; height: 2px; background: var(--ink); border-radius: 2px;
-    transition: transform 160ms ease-out, opacity 120ms ease-out;
-  }
-  .nav__menu[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav__menu[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
-  .nav__menu[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .nav__mobile {
     display: none;
     flex-direction: column;
     padding: 8px var(--container-px) 20px;
+    background: #fff;
     border-top: 1px solid var(--rule);
   }
   .nav__mobile[data-open='true'] { display: flex; }
@@ -134,13 +157,20 @@ const links = [
     border-bottom: 1px solid var(--rule);
   }
   .nav__mobile-link:last-child { border-bottom: none; }
+  .nav__mobile-link--cta {
+    margin-top: 8px;
+    background: var(--navy);
+    color: #fff;
+    text-align: center;
+    border-radius: var(--r-pill);
+    border-bottom: none;
+    padding: 14px 18px;
+  }
 
   @media (min-width: 760px) {
-    .nav__menu { display: none; }
-    .nav__mobile { display: none !important; }
-    .nav__signin { display: inline; }
-  }
-  @media (min-width: 960px) {
-    .nav__links { display: inline-flex; margin-left: 16px; }
+    .nav__toggle  { display: none; }
+    .nav__mobile  { display: none !important; }
+    .nav__links   { display: inline-flex; }
+    .nav__cta     { display: inline-flex; }
   }
 </style>

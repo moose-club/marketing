@@ -1,0 +1,107 @@
+---
+import { MODEL } from '../../data/copy';
+---
+
+<section class="section section--cream" id="model" aria-labelledby="modelHeading">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{MODEL.eyebrow}</span>
+      <h2 id="modelHeading">{MODEL.head}</h2>
+      <p class="lede">{MODEL.lede}</p>
+    </div>
+
+    <div class="model__steps" id="how">
+      <h3 class="model__steps-h">{MODEL.stepsTitle}</h3>
+      <div class="model__grid">
+        {MODEL.steps.map((s) => (
+          <article class="step">
+            <div class="step__ord">{s.n}</div>
+            <hr class="step__rule" />
+            <p class="step__eyebrow">{s.eyebrow}</p>
+            <h4 class="step__title">{s.title}</h4>
+            {s.body.map((p) => (
+              <p class="step__body">{p}</p>
+            ))}
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Inner card holding the four steps. Sits flush with the section's
+     left/right padding on wide screens via a negative margin trick. */
+  .model__steps {
+    --bo: clamp(0px, calc((100vw - 1176px) / 2), 64px);
+    margin: 56px calc(-1 * var(--bo)) 0;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-sheet);
+    padding: 52px max(28px, var(--bo));
+    box-shadow: var(--shadow-md);
+  }
+  .model__steps-h {
+    font-size: clamp(28px, 3.4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--navy);
+    margin: 0;
+  }
+  .model__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    margin-top: 44px;
+    align-items: stretch;
+  }
+
+  .step { display: flex; flex-direction: column; max-width: 320px; }
+  .step__ord {
+    font-weight: 700;
+    font-size: clamp(44px, 4vw, 60px);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: var(--navy);
+  }
+  .step__rule {
+    height: 2px;
+    background: var(--pink);
+    border: 0;
+    width: 56px;
+    margin: 18px 0 14px;
+  }
+  .step__eyebrow {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--navy-400);
+    line-height: 1;
+    margin: 0 0 10px;
+  }
+  .step__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.18;
+    margin: 0 0 14px;
+    min-height: 3.4em;
+    letter-spacing: -0.01em;
+  }
+  .step__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--navy);
+    opacity: 0.82;
+    margin: 0;
+  }
+  .step__body + .step__body { margin-top: 10px; }
+
+  @media (min-width: 760px) {
+    .model__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  }
+  @media (min-width: 1024px) {
+    .model__grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>

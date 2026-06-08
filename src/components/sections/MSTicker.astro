@@ -1,46 +1,69 @@
 ---
-// Live-status strip between Hero and the page body. Static display
-// numbers (per SPEC §6.3) — no JS. The green dot pulses (and stops
-// pulsing under prefers-reduced-motion via globals.css).
+import { MODALITIES } from '../../data/copy';
 
-import { TICKER } from '../../data/copy';
+// Render the list twice for the seamless infinite scroll.
+const items = [...MODALITIES, ...MODALITIES];
 ---
 
-<section class="ticker" aria-label="Network status">
-  <div class="ticker__inner container">
-    {TICKER.map((s, i) => (
-      <span class="ticker__item">
-        {i === 0 && <span class="ticker__dot" aria-hidden="true"></span>}
-        {s}
-      </span>
-    ))}
+<section class="ticker" aria-label="Modalities on the network">
+  <div class="ticker__viewport">
+    <div class="ticker__track">
+      {items.map((label) => {
+        const isLast = label === '& more';
+        return (
+          <>
+            <span class:list={['ticker__item', isLast && 'ticker__item--accent']}>{label}</span>
+            <span class="ticker__sep" aria-hidden="true">◆</span>
+          </>
+        );
+      })}
+    </div>
   </div>
 </section>
 
 <style>
   .ticker {
-    background: var(--navy-deep);
-    color: #fff;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.4px;
+    background: var(--navy-900);
+    overflow: hidden;
+    padding-block: 26px;
   }
-  .ticker__inner {
-    display: flex;
+  .ticker__viewport {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .ticker__track {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px 24px;
-    padding-block: 12px;
+    width: max-content;
+    animation: ticker-scroll 38s linear infinite;
   }
-  .ticker__item { display: inline-flex; align-items: center; gap: 8px; }
-  .ticker__dot {
-    width: 7px; height: 7px; border-radius: 4px; background: var(--success);
-    animation: tickerPulse 1.6s ease-in-out infinite;
+  .ticker__item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.66);
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    white-space: nowrap;
   }
-  @keyframes tickerPulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.35; }
+  .ticker__item--accent {
+    color: var(--pink);
+    text-transform: none;
+  }
+  .ticker__sep {
+    margin: 0 22px;
+    color: var(--pink);
+    font-size: 10px;
+  }
+
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__track { animation: none; }
   }
 </style>

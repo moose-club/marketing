@@ -1,174 +1,315 @@
-// Verbatim port of 06-marketing-copy-data.jsx. Do not paraphrase.
-// Spec §7 — copy stays exact; only the data shapes are typed.
+// Source of truth for marketing copy. All on-page text lives here — never
+// inline copy in section components (per CLAUDE.md). Copy is verbatim from
+// the 2026 redesign brief.
 
-import { STUDIOS, type Studio } from './studios';
+export const NAV = {
+  links: [
+    { href: '#model',   label: 'The Moose model' },
+    { href: '#network', label: 'Network' },
+    { href: '#value',   label: 'For studios' },
+    { href: '#members', label: 'Studio members' },
+  ],
+  cta: { label: 'Get involved or hear more', href: '#register' },
+} as const;
 
 export const HERO = {
-  kicker: 'For studio operators',
-  /** Each entry is a line; the headline renders one per row. */
-  head: ['Your studio,', 'plus 200 others.'] as const,
-  /** Substring of `head.join(' ')` rendered in pink. */
-  highlightWord: '200 others',
-  sub: 'Moose is the crossover access pass that fills your empty slots, keeps your members loyal, and pays you for the visit. One integration. Zero new admin.',
-  ctaPrimary:   { label: 'Apply to join', href: '#apply' },
-  ctaSecondary: { label: 'See how it works', href: '#how' },
+  eyebrow: 'Studio operators',
+  // The headline reads "Elevate your memberships with variety." with
+  // `highlightWord` rendered in pink. One pink word per headline (SPEC §14).
+  head: 'Elevate your memberships with',
+  highlightWord: 'variety.',
+  subLines: [
+    'Moose unlocks variety for fitness studios.',
+    "Don't build new modalities in-house. Form reciprocal partnerships with complementary, non-competing studios nearby — and let collaboration do the work.",
+  ] as const,
+  points: [
+    'Your members stay yours.',
+    'Your studio stays specialised.',
+    'Your memberships level up.',
+  ] as const,
+  ctaPrimary:   { label: 'Get involved or hear more', href: '#register' },
+  ctaSecondary: { label: 'See how it works',          href: '#how' },
+  photo: { src: '/photos/hero-strength.png', alt: 'Member training with a kettlebell in warm, golden studio light' },
 } as const;
 
-export const TICKER = [
-  'LIVE NETWORK',
-  '1,247 visits routed today',
-  '218 partner studios',
-  'Sydney · Melbourne · Brisbane',
-  'Perth Q3 2026',
+// Marquee of modalities under the hero. Last item rendered in pink.
+export const MODALITIES = [
+  'Pilates Studios',
+  'Functional fitness Gyms',
+  'HIIT Studios',
+  'Cycle & Spin Studios',
+  'Strength & conditioning Studios',
+  'Yoga Studios',
+  'Martial arts & combat fitness',
+  'Barre Studios',
+  'Dance fitness Studios',
+  'CrossFit',
+  '& more',
 ] as const;
 
-export const STATS = [
-  { n: '32%',   l: 'avg uplift in\noff-peak fill rate' },
-  { n: '94%',   l: 'partner retention\nafter 12 months' },
-  { n: '$2.3M', l: 'paid to partner\nstudios in 2025' },
-  { n: '218',   l: 'partner studios\nacross AU' },
-] as const;
-
-export const SHOWCASE = [
-  { eyebrow: '01 · Discovery',  title: 'Their credits, their week.',                  caption: 'Members open the app and see what their balance buys them this month — your studio sits next to every other partner.', screen: 'home' as const },
-  { eyebrow: '02 · Booking',    title: 'Real-time availability across your network.', caption: 'Two taps to book. Members spend credits, we pay you cash for the visit. No discounting, no clawbacks.',          screen: 'schedule' as const },
-  { eyebrow: '03 · Retention',  title: "Cancellations that don't punish you.",        caption: 'A 4-hour free window keeps members honest. Late cancels forfeit the credit, which lands in your weekly payout.',  screen: 'cancel' as const },
-] as const;
-
-export const STEPS = [
-  { n: '01', t: 'Apply',     d: 'Tell us where your studio fits — modality, location, capacity. We vet for quality, not quantity.' },
-  { n: '02', t: 'Sync',      d: 'One-click integrations with Mindbody, Glofox, Xplor and Momence. Your existing schedule and capacity, untouched.' },
-  { n: '03', t: 'Price',     d: 'You set the credit rate for each class type. Off-peak, on-peak, premium — your call. We never discount.' },
-  { n: '04', t: 'Get paid',  d: 'Network members book through Moose, you get paid weekly per attended class. Your members get the same access in return.' },
-] as const;
-
-export const PRICING = {
-  rate: '$14',
-  rateUnit: 'AUD / credit',
-  rateNote: 'Reviewed quarterly against partner studios’ published rack rates. Reformer at 1.5x · Yoga at 1.0x · Cycle at 0.75x — typical.',
-  pillars: [
-    { t: 'No discounting, ever', d: 'You publish your rack rate in credits. Members pay full price every time — we just convert credits to cash for you.' },
-    { t: 'Weekly payouts',       d: 'Every Monday, prior week. No clawbacks if a member shows up. No minimums. Stripe-direct, no platform escrow.' },
-    { t: 'No lock-in',           d: '30 days written notice and we wind down outbound bookings. No exit fee. Your members keep access through their billing cycle.' },
-  ],
+export const MODEL = {
+  eyebrow: 'At a glance',
+  head: 'The Moose model.',
+  // No pink highlight in this headline — the eyebrow already carries the
+  // accent. Keeps to the 'one pink word per headline' rule.
+  lede: 'Crossover between partner venues, offered on a rationed basis — enough to enrich a membership, while preserving the home-studio relationship.',
+  stepsTitle: 'How it works.',
+  steps: [
+    {
+      n: '01',
+      eyebrow: 'Formation',
+      title: 'Identify partners and form partnerships',
+      body: [
+        'Partnerships are seamlessly facilitated through Moose.',
+        "Run a single partnership, or stack several across complementary modalities to broaden member variety. Each partner elevating the other's offering.",
+      ] as const,
+    },
+    {
+      n: '02',
+      eyebrow: 'Offering',
+      title: 'Add a premium tier to your membership catalogue',
+      body: [
+        'Unlock a new, premium tier offering at $11/wk extra with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.',
+        'You choose which of your memberships the upgrade is eligible on.',
+      ] as const,
+      figure: '$11/wk',
+    },
+    {
+      n: '03',
+      eyebrow: 'Usage',
+      title: 'Controlled crossover',
+      body: [
+        'The upgrade entitles members to 4 crossover sessions per month at partner venues.',
+        'Capped by design — keeping members anchored to their home studio as their primary training destination.',
+      ] as const,
+      figure: '4 sessions / month',
+    },
+    {
+      n: '04',
+      eyebrow: 'Balance',
+      title: 'Even flow between partners',
+      body: [
+        'Our backend systems monitor crossover both ways, keeping member flow balanced between partners.',
+        'No one studio carries the other — reciprocity is reconciled automatically.',
+      ] as const,
+    },
+  ] as const,
 } as const;
 
-// Partner data — see SPEC §6.8 / §7. Mix of known studios (`k` resolves
-// via STUDIOS) and phantom generative tiles (`name` + `p1`/`p2`).
-type PartnerKnown = { k: keyof typeof STUDIOS; city: string; sub: string; mod: string };
-type PartnerPhantom = {
-  name: string;
-  city: string; sub: string; mod: string;
-  p1: string; p2: string; initial: string;
-};
-type Partner = PartnerKnown | PartnerPhantom;
-
-export const PARTNERS: readonly Partner[] = [
-  // Sydney — known studios
-  { k: 'flowyoga',  city: 'Sydney', sub: 'Surry Hills',     mod: 'Hot Yoga' },
-  { k: 'ironworks', city: 'Sydney', sub: 'Alexandria',      mod: 'Boxing' },
-  { k: 'pulse',     city: 'Sydney', sub: 'Paddington',      mod: 'Reformer' },
-  { k: 'spincity',  city: 'Sydney', sub: 'Bondi Junction',  mod: 'Cycle' },
-  { k: 'forge',     city: 'Sydney', sub: 'Redfern',         mod: 'HIIT' },
-  { k: 'barre9',    city: 'Sydney', sub: 'Mosman',          mod: 'Barre' },
-  { k: 'rowhouse',  city: 'Sydney', sub: 'Pyrmont',         mod: 'Rowing' },
-  // Phantoms — Sydney
-  { name: 'Method Pilates',    city: 'Sydney', sub: 'Newtown',     mod: 'Pilates',  p1: '#3a1f2c', p2: '#a05772', initial: 'M' },
-  { name: 'Cadence Cycling',   city: 'Sydney', sub: 'Crows Nest',  mod: 'Cycle',    p1: '#0e2536', p2: '#3d80b0', initial: 'C' },
-  { name: 'Eastside Strength', city: 'Sydney', sub: 'Waverley',    mod: 'Strength', p1: '#231e18', p2: '#665140', initial: 'E' },
-  { name: 'Anchor & Oar',      city: 'Sydney', sub: 'Manly',       mod: 'Rowing',   p1: '#1a2632', p2: '#4a7593', initial: 'A' },
-
-  // Melbourne
-  { name: 'Crucible Boxing',   city: 'Melbourne', sub: 'Collingwood', mod: 'Boxing',   p1: '#2a1208', p2: '#8a3a1c', initial: 'C' },
-  { name: 'Stillpoint Yoga',   city: 'Melbourne', sub: 'Fitzroy',     mod: 'Yoga',     p1: '#1a2820', p2: '#5e8d6f', initial: 'S' },
-  { name: 'Reform Studios',    city: 'Melbourne', sub: 'Richmond',    mod: 'Reformer', p1: '#3a1d44', p2: '#8e64a5', initial: 'R' },
-  { name: 'North Heat',        city: 'Melbourne', sub: 'Northcote',   mod: 'HIIT',     p1: '#2a1818', p2: '#a05a40', initial: 'N' },
-  { name: 'Vault Pilates',     city: 'Melbourne', sub: 'South Yarra', mod: 'Pilates',  p1: '#231a2c', p2: '#6a5685', initial: 'V' },
-  { name: 'Loop Cycle',        city: 'Melbourne', sub: 'Carlton',     mod: 'Cycle',    p1: '#0c1c2c', p2: '#4a78a8', initial: 'L' },
-  { name: 'Foundry Fitness',   city: 'Melbourne', sub: 'St Kilda',    mod: 'Strength', p1: '#1c1814', p2: '#5e4e3c', initial: 'F' },
-  { name: 'Barre & Co.',       city: 'Melbourne', sub: 'Prahran',     mod: 'Barre',    p1: '#3a2640', p2: '#9a78b0', initial: 'B' },
-
-  // Brisbane
-  { name: 'Sunshine Yoga',     city: 'Brisbane',  sub: 'New Farm',     mod: 'Yoga',     p1: '#2c1f08', p2: '#a07832', initial: 'S' },
-  { name: 'Riverhouse Row',    city: 'Brisbane',  sub: 'West End',     mod: 'Rowing',   p1: '#1c2a1e', p2: '#5e8a64', initial: 'R' },
-  { name: 'Hammer & Co.',      city: 'Brisbane',  sub: 'Fortitude V.',  mod: 'Boxing',   p1: '#2a1818', p2: '#7a3a32', initial: 'H' },
-  { name: 'Quay Reformer',     city: 'Brisbane',  sub: 'Teneriffe',    mod: 'Reformer', p1: '#1a2436', p2: '#5878a8', initial: 'Q' },
-  { name: 'Peak HIIT',         city: 'Brisbane',  sub: 'Paddington',   mod: 'HIIT',     p1: '#241a14', p2: '#7a563c', initial: 'P' },
-  { name: 'Vinyasa House',     city: 'Brisbane',  sub: 'Bulimba',      mod: 'Yoga',     p1: '#1f2818', p2: '#6e8a4c', initial: 'V' },
-];
-
-export type ResolvedPartner = {
-  name: string;
-  short: string;
-  p1: string; p2: string; initial: string;
-  city: string; sub: string; mod: string;
-};
-
-export function resolvePartner(p: Partner): ResolvedPartner {
-  if ('k' in p) {
-    const s = STUDIOS[p.k];
-    return { ...s, ...p, name: s.name, short: s.short };
-  }
-  return { ...p, short: p.name };
-}
-
-export const QUOTES = [
-  {
-    q: 'We were dark from 10am to 4pm three days a week. Six months on the network, those slots run at 70% capacity — and we still own the relationship with our home members.',
-    name: 'Priya Shah',
-    role: 'Owner, Pulse Reformer',
-    studioKey: 'pulse',
-  },
-  {
-    q: "Other multipass platforms wanted us to discount. Flex doesn't. We set our own credit rate and they just route paying members to our open slots.",
-    name: 'Marcus Vella',
-    role: 'Founder, Ironworks Boxing',
-    studioKey: 'ironworks',
-  },
-  {
-    q: 'Our retention curve flattened the month we turned it on. Members stop shopping around when they already have access to everything around them.',
-    name: 'Lena Otsu',
-    role: 'GM, Flow & Co. Yoga',
-    studioKey: 'flowyoga',
-  },
-] as const;
-
-export const FAQ = [
-  {
-    q: 'How is this different from ClassPass or other multipass apps?',
-    a: 'We do not discount you. Studios set their own credit rate and we pay you in cash, not in “marketing exposure”. Crossover is two-way — your home members get access to every other partner, so they have no reason to subscribe to a competing service.',
-  },
-  {
-    q: 'Will my regulars stop buying memberships?',
-    a: 'No — Moose sits on top of an existing studio membership, not in place of one. Members can only join the network through a partner studio they already pay. We protect your core relationship by design.',
-  },
-  {
-    q: 'How do payouts work?',
-    a: 'Each visit pays at the credit rate you set, times an agreed dollar value per credit (currently $14 AUD, reviewed quarterly). Payouts run every Monday for the prior week. No clawbacks, no minimums.',
-  },
-  {
-    q: 'Do I have to give up peak-time slots?',
-    a: 'Never. You control which sessions show up on the network and at what credit cost. Most partners list off-peak at standard rate and peak at 1.5x, but you set the rules.',
-  },
-  {
-    q: 'What CRM systems do you integrate with?',
-    a: 'Mindbody, Glofox, Xplor (Triib + Clubware), Momence, and Arketa today. We are adding TeamUp and bsport in Q3 2026. Pure-spreadsheet studios can use our manual sync portal.',
-  },
-  {
-    q: 'How long does onboarding take?',
-    a: 'Most studios are live within 9 business days from signing — three to confirm schedule sync, three to dial in pricing with our partnerships team, three soft-launch with a cohort of network members.',
-  },
-  {
-    q: 'What happens if I want to leave the network?',
-    a: '30 days written notice and we wind down outbound bookings. No exit fee, no lock-in. Your members keep their access until the end of the current billing cycle.',
-  },
-] as const;
-
-export const CTA = {
-  head: 'Ready when you are.',
-  sub: '9 business days from signing. No exit fee. Talk to a human before you commit.',
-  applyHref: 'mailto:partners@moose.app?subject=Apply%20to%20join%20the%20Moose%20network',
-  callHref: 'https://calendly.com/moose/intro',
+export const NETWORK = {
+  eyebrow: 'Partner network',
+  // Heading uses pink on a navy surface — single pink word, brand-compliant.
+  head: 'On the loose.',
+  headLead: 'Moose',
+  ledeLines: [
+    { strong: '120+',  rest: ' partner venues' },
+    { strong: '30+',   rest: ' unique brands'   },
+  ] as const,
+  ledeSoft: '... and counting',
+  // First 9 partners are visible by default. The rest reveal on "View all".
+  partners: [
+    { name: 'Form Pilates',       mod: 'Pilates'   },
+    { name: 'Forge Strength Co.', mod: 'Strength'  },
+    { name: 'Haus of Movement',   mod: 'Mobility'  },
+    { name: 'Tempo Ride',         mod: 'Cycle'     },
+    { name: 'Northside Boxing',   mod: 'Boxing'    },
+    { name: 'Stillwater Yoga',    mod: 'Yoga'      },
+    { name: 'Reform Lab',         mod: 'Reformer'  },
+    { name: 'Base Run Club',      mod: 'Running'   },
+    { name: 'Ember Hot Yoga',     mod: 'Hot Yoga'  },
+    // ↓ extras, hidden until "View all" is pressed
+    { name: 'Pulse Reformer',     mod: 'Reformer'  },
+    { name: 'Iron & Oak',         mod: 'Strength'  },
+    { name: 'Lotus Flow',         mod: 'Yoga'      },
+    { name: 'Cadence Cycle',      mod: 'Cycle'     },
+    { name: 'Glasshouse Pilates', mod: 'Pilates'   },
+    { name: 'Westside Boxing',    mod: 'Boxing'    },
+    { name: 'Range Mobility',     mod: 'Mobility'  },
+    { name: 'Coastal Run Co.',    mod: 'Running'   },
+    { name: 'Summit Strength',    mod: 'Strength'  },
+    { name: 'Vault Athletic',     mod: 'Functional'},
+    { name: 'Bend & Flow',        mod: 'Yoga'      },
+    { name: 'Ride House',         mod: 'Cycle'     },
+    { name: 'Knockout Club',      mod: 'Boxing'    },
+    { name: 'Studio Lagree',      mod: 'Pilates'   },
+    { name: 'Terra Movement',     mod: 'Mobility'  },
+    { name: 'Pace Run Co.',       mod: 'Running'   },
+    { name: 'Hot House Yoga',     mod: 'Hot Yoga'  },
+    { name: 'Apex HIIT',          mod: 'HIIT'      },
+  ] as const,
+  visibleCount: 9,
 } as const;
 
-export type { Studio };
+export const VALUE = {
+  eyebrow: 'For the studios',
+  // Original design uses 2 pink words. Per the brand rule we keep only one
+  // ("variety") — the second emphasis (`reason to stay`) is rendered in
+  // navy via the styling, not pink.
+  headHtml: 'Variety gives new members a compelling <em>reason to join</em>, and existing members another reason to stay.',
+  prizeNote: 'Moose adds a nice new revenue stream. But the real prize is a bigger, stickier membership base.',
+  benefits: [
+    { n: '01', title: 'New revenue stream',     body: 'A premium Moose tier that lifts yield per member — direct, incremental, recurring.' },
+    { n: '02', title: 'Attract new members',    body: 'Variety is a compelling reason for new members to choose you over competitors.' },
+    { n: '03', title: 'Reduce churn',           body: 'Monotony drives churn; variety combats it. Average tenure goes up.' },
+    { n: '04', title: 'Recurring memberships',  body: 'Convert customers from casual class-pack buyers to recurring memberships.' },
+    { n: '05', title: 'Zero-friction adoption', body: 'No cost, no integration work. Embedded into your existing systems.' },
+  ] as const,
+  quantification: [
+    { stat: '+$15k', unit: 'p.a.', cap: 'Additional studio profit (net of Moose fees) at 40 upgraders.' },
+    { stat: '+$18k', unit: 'p.a.', cap: 'Attracting 5 new members per year (assuming $70/wk memberships).' },
+    { stat: '+$18k', unit: 'p.a.', cap: 'Preserving 5 members per year (assuming $70/wk memberships).' },
+  ] as const,
+} as const;
+
+export const STORY = {
+  eyebrow: 'On the ground',
+  head: 'Featured partnership.',
+  case: {
+    titleLeft:  'VRTUS',
+    titleRight: 'Body by Berner',
+    location:   'Bondi, NSW',
+    studios: [
+      {
+        name: 'VRTUS',
+        mod:  'Strength & conditioning',
+        photo: { src: '/photos/hero-boxing.png', alt: 'Kickboxing studio', position: '46% center' },
+        quote: '"Our members live for the cardio and some lifting — but slotting in a Pilates session gives them a more well-rounded routine, and their bodies thank them for it."',
+        upgradedPct: '22%',
+        crossovers: 128,
+      },
+      {
+        name: 'Body by Berner',
+        mod:  'Reformer Pilates',
+        photo: { src: '/photos/hero-pilates.png', alt: 'Reformer Pilates studio', position: '4% 34%' },
+        quote: '"Reformer stays their home and their focus — but having the flexibility to fold in some functional training now and then is a really nice bit of variety for them."',
+        upgradedPct: '31%',
+        crossovers: 143,
+      },
+    ] as const,
+    credits: [
+      'Because of the price difference between studios, a VRTUS → BBB visit counts as 1.14 credits, while a BBB → VRTUS visit counts as 0.88 credits — so the value evens out both ways.',
+      "Weighted by those values, that's ~146 credits sent from VRTUS and ~126 credits from BBB each month.",
+      'The compensatory fee mechanism settles that net difference — BBB hosted more net sessions on a weighted basis, so it receives a larger share of the pooled funds to compensate.',
+    ] as const,
+  },
+  voicesHead: 'From some other studios who get it.',
+  voices: [
+    {
+      q: "I was sceptical about sharing members. Then I understood the caps — it's a quarter of their sessions, max. We've actually retained people we'd have lost to boredom.",
+      initials: 'SR',
+      name: 'Sarah Reid',
+      role: 'Owner · Form Pilates, Fitzroy',
+    },
+    {
+      q: 'The revenue is nice, but the real win is stickiness. Members who cross over churn far less. Setup was an afternoon and then it just runs.',
+      initials: 'MT',
+      name: 'Marcus Tran',
+      role: 'Owner · Forge Strength Co., Collingwood',
+    },
+    {
+      q: 'It only works because they pair you with complementary studios, not rivals. My members are still mine — they just get a little more variety in their week.',
+      initials: 'PN',
+      name: 'Priya Nair',
+      role: 'Owner · Haus of Movement',
+    },
+  ] as const,
+} as const;
+
+export const MEMBERS = {
+  eyebrow: 'For studio members',
+  // Headline keeps pink on the ellipsis only — the strong word ("variety")
+  // is ink-coloured to keep within one accent per headline.
+  headHtml: 'Finally, some (affordable) <em>variety</em>…',
+  ledeLines: [
+    "We don't sell Moose to members direct — it's available through the studios. We've just created the infrastructure.",
+    "If your home studio offers it, it's simple. If they don't, make the case to get them on board (or you'll have to consider a studio that does).",
+  ] as const,
+  commercials: [
+    { k: 'What you get', v: '4',     u: '/ month', d: 'Crossover sessions at partner venues.' },
+    { k: 'What you pay', v: '+$11',  u: '/ week',  d: 'Bundled with your eligible membership through your home studio.' },
+  ] as const,
+  noteHtml: 'Your studio not on Moose yet? <a href="#register" data-register="member">Let\'s help get them across →</a>',
+  // Pure-CSS phone mock content
+  phone: {
+    greetHi: 'Good evening,',
+    greetName: 'Ava',
+    anchorStudio: 'Form Pilates',
+    creditsLabel: 'Crossover credits',
+    creditsMonth: 'May',
+    creditsLeft: '3 of 4 left',
+    sectionTitle: 'Book a crossover',
+    filters: ['All', 'Forge', 'Haus', 'Northside'] as const,
+    slots: [
+      { time: '5:30', meridiem: 'pm', name: 'Forge Strength Co.',  meta: 'Strength · Fitzroy · 1.2km' },
+      { time: '6:00', meridiem: 'pm', name: 'Haus of Movement',    meta: 'Mobility · Collingwood · 2.0km' },
+      { time: '6:15', meridiem: 'pm', name: 'Northside Boxing',    meta: 'Boxing · Brunswick · 2.4km' },
+    ] as const,
+  },
+  calloutLines: [
+    'The Moose app is used only for booking crossover sessions at partner venues.',
+    'Members still book their home studio classes the way they always have.',
+  ] as const,
+} as const;
+
+// All forms POST to mailto: per CLAUDE.md decision — placeholders until
+// a real CRM/Typeform endpoint is wired.
+export const REGISTER = {
+  eyebrow: 'Get on board',
+  head: 'Get in touch with the Moose.',
+  prompt: 'Who are you?',
+  tabs: [
+    { id: 'studio', label: 'I run a studio' },
+    { id: 'member', label: "I'm a member" },
+  ] as const,
+  studioForm: {
+    title: 'Get involved or hear more.',
+    sub: "Leave your details and we'll reach out to fill in the gaps.",
+    mailto: 'mailto:partnerships@trainmoose.com?subject=Studio%20enquiry%20from%20the%20Moose%20site',
+  },
+  memberForm: {
+    title: 'Find out more or get your studio on Moose',
+    sub: "Leave your details and we'll take it from there.",
+    mailto: 'mailto:memberships@trainmoose.com?subject=Member%20enquiry%20from%20the%20Moose%20site',
+  },
+  successStudio: {
+    title: "Thanks — you're on our radar.",
+    body: "We'll be in touch within two business days to set up a quick chat about partners near you.",
+  },
+  successMember: {
+    title: "Thanks — got it.",
+    body: "We'll reach out shortly and, where we can, nudge your studio to come across.",
+  },
+} as const;
+
+export const FOOTER = {
+  tagline: 'Elevating memberships through local partner collaboration.',
+  cols: [
+    {
+      title: 'Explore',
+      items: [
+        { l: 'The Moose model', h: '#model' },
+        { l: 'For studios',     h: '#value' },
+      ],
+    },
+    {
+      title: 'More',
+      items: [
+        { l: 'Network',                    h: '#network'  },
+        { l: 'Case study',                 h: '#story'    },
+        { l: 'For studio members',         h: '#members'  },
+        { l: 'Get involved or hear more',  h: '#register' },
+      ],
+    },
+    {
+      title: 'Contact',
+      items: [
+        { l: 'support@trainmoose.com', h: 'mailto:support@trainmoose.com' },
+      ],
+    },
+  ] as const,
+  instagram: { href: 'https://www.instagram.com/trainmoose/', label: 'Moose on Instagram' },
+  legal: [
+    { l: 'Privacy',           h: '/privacy' },
+    { l: 'Terms & Conditions', h: '/terms'  },
+  ] as const,
+} as const;

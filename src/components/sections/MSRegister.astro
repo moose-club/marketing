@@ -1,0 +1,282 @@
+---
+import { REGISTER } from '../../data/copy';
+---
+
+<section class="section section--navy" id="register" aria-labelledby="registerHeading">
+  <div class="container">
+    <div class="register__inner">
+      <div class="register__head">
+        <span class="eyebrow eyebrow--on-dark">{REGISTER.eyebrow}</span>
+        <h2 id="registerHeading">{REGISTER.head}</h2>
+      </div>
+
+      <div class="register__card">
+        <p class="register__prompt">{REGISTER.prompt}</p>
+        <div class="register__choice" role="tablist" aria-label="Who are you registering as?">
+          {REGISTER.tabs.map((t, i) => (
+            <button
+              class:list={['choice', i === 0 && 'choice--active']}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              data-reg-tab={t.id}
+              type="button"
+            >
+              <span class="choice__ic" aria-hidden="true">
+                {t.id === 'studio' ? (
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                )}
+              </span>
+              <span class="choice__t">{t.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <form
+          class="reg-form"
+          data-reg-form="studio"
+          action={REGISTER.studioForm.mailto}
+          method="post"
+          enctype="text/plain"
+          novalidate
+        >
+          <h3>{REGISTER.studioForm.title}</h3>
+          <p class="reg-form__sub">{REGISTER.studioForm.sub}</p>
+          <div class="field">
+            <label for="s_studio">Studio name <span class="req">*</span></label>
+            <input id="s_studio" name="studio" type="text" placeholder="Enter studio" required />
+          </div>
+          <div class="field">
+            <label for="s_name">Your name <span class="req">*</span></label>
+            <input id="s_name" name="name" type="text" placeholder="First & last" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="s_email">Email <span class="req">*</span></label>
+              <input id="s_email" name="email" type="email" placeholder="you@studio.com" required />
+            </div>
+            <div class="field">
+              <label for="s_phone">Phone</label>
+              <input id="s_phone" name="phone" type="tel" placeholder="e.g. 0432 000 000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="s_suburb">Suburb / city</label>
+            <input id="s_suburb" name="suburb" type="text" placeholder="e.g. Fitzroy, VIC" />
+          </div>
+          <div class="field">
+            <label for="s_message">Message</label>
+            <textarea id="s_message" name="message" placeholder="Tell us more." rows="3"></textarea>
+          </div>
+          <button class="reg-submit" type="submit">
+            Submit
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+
+        <form
+          class="reg-form"
+          data-reg-form="member"
+          action={REGISTER.memberForm.mailto}
+          method="post"
+          enctype="text/plain"
+          novalidate
+          hidden
+        >
+          <h3>{REGISTER.memberForm.title}</h3>
+          <p class="reg-form__sub">{REGISTER.memberForm.sub}</p>
+          <div class="field">
+            <label for="m_name">Your name <span class="req">*</span></label>
+            <input id="m_name" name="name" type="text" placeholder="First & last" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="m_email">Email <span class="req">*</span></label>
+              <input id="m_email" name="email" type="email" placeholder="you@email.com" required />
+            </div>
+            <div class="field">
+              <label for="m_phone">Phone</label>
+              <input id="m_phone" name="phone" type="tel" placeholder="e.g. 0432 000 000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="m_studio">Your home studio <span class="req">*</span></label>
+            <input id="m_studio" name="studio" type="text" placeholder="Enter studio" required />
+          </div>
+          <div class="field">
+            <label for="m_suburb">Suburb / city</label>
+            <input id="m_suburb" name="suburb" type="text" placeholder="e.g. Fitzroy, VIC" />
+          </div>
+          <div class="field">
+            <label for="m_message">Message</label>
+            <textarea id="m_message" name="message" placeholder="Tell us more." rows="3"></textarea>
+          </div>
+          <button class="reg-submit" type="submit">
+            Submit
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tab toggle between studio and member forms. The forms are siblings inside
+  // .register__card and use `hidden` to swap visibility.
+  const tabs  = document.querySelectorAll<HTMLButtonElement>('[data-reg-tab]');
+  const forms = document.querySelectorAll<HTMLFormElement>('[data-reg-form]');
+
+  function setActive(id: string) {
+    tabs.forEach((t) => {
+      const on = t.dataset.regTab === id;
+      t.classList.toggle('choice--active', on);
+      t.setAttribute('aria-selected', String(on));
+    });
+    forms.forEach((f) => { f.hidden = f.dataset.regForm !== id; });
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => setActive(t.dataset.regTab!)));
+
+  // External callers (the member CTA inside the Members section) can pre-select
+  // the right tab by carrying data-register="member" on their anchor.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-register]').forEach((a) => {
+    a.addEventListener('click', () => setActive(a.dataset.register!));
+  });
+</script>
+
+<style>
+  .register__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .register__head h2 {
+    font-size: var(--t-display-m);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.025em;
+    margin-top: 18px;
+  }
+
+  .register__card {
+    background: #fff;
+    color: var(--ink);
+    border-radius: var(--r-sheet);
+    padding: 32px clamp(20px, 4vw, 36px);
+    box-shadow: var(--shadow-lg);
+  }
+  .register__prompt {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .register__choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 14px;
+    background: var(--cream);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-card);
+    color: var(--ink-dim);
+    font-weight: 600;
+    transition: all var(--dur-base) var(--ease-out);
+  }
+  .choice:hover { border-color: var(--rule-strong); }
+  .choice--active {
+    background: #fff;
+    border-color: var(--navy);
+    color: var(--navy);
+    box-shadow: var(--shadow-sm);
+  }
+  .choice__ic {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(26, 43, 95, 0.06);
+  }
+  .choice--active .choice__ic { background: var(--pink-50); color: var(--pink); }
+  .choice__t { font-size: 13.5px; }
+
+  .reg-form { display: grid; gap: 14px; }
+  .reg-form[hidden] { display: none; }
+  .reg-form h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .reg-form__sub { font-size: 13.5px; color: var(--ink-dim); margin-bottom: 6px; }
+
+  .field { display: grid; gap: 6px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .field .req { color: var(--pink); }
+  .field input, .field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r-tile);
+    font: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color var(--dur-fast) var(--ease-out);
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus {
+    border-color: var(--pink);
+    outline: none;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .reg-submit {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--r-pill);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast);
+    border: 0;
+    justify-self: start;
+  }
+  .reg-submit:hover { background: var(--navy-lift); transform: translateY(-2px); }
+
+  @media (min-width: 760px) {
+    .field-row { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 960px) {
+    .register__inner { grid-template-columns: 0.9fr 1.1fr; gap: 64px; }
+  }
+</style>

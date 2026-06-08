@@ -1,0 +1,199 @@
+---
+import { VALUE } from '../../data/copy';
+---
+
+<section class="section section--cream" id="value" aria-labelledby="valueHeading">
+  <div class="container">
+    <div class="value__head">
+      <span class="eyebrow">{VALUE.eyebrow}</span>
+      <h2 id="valueHeading" class="value__prize" set:html={VALUE.headHtml}></h2>
+      <p class="value__note">{VALUE.prizeNote}</p>
+    </div>
+
+    <div class="value__table">
+      <p class="value__grouplabel">The benefits.</p>
+      <div class="value__cards value__cards--benefits">
+        {VALUE.benefits.map((b) => (
+          <div class="value__bcard">
+            <span class="value__num">{b.n}</span>
+            <h4>{b.title}</h4>
+            <p>{b.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="value__connectors" aria-hidden="true">
+        <span class="value__conn">
+          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
+        </span>
+        <span class="value__conn">
+          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
+        </span>
+        <span class="value__conn">
+          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
+        </span>
+      </div>
+
+      <p class="value__grouplabel value__grouplabel--quant">Quantification.</p>
+      <div class="value__cards value__cards--quant">
+        {VALUE.quantification.map((q) => (
+          <div class="value__vcard">
+            <div class="value__stat"><span class="value__plus">+</span>{q.stat.replace(/^\+/, '')}<span class="value__unit">{q.unit}</span></div>
+            <p class="value__cap">{q.cap}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .value__head { max-width: 780px; margin-bottom: 48px; }
+  .value__prize {
+    font-size: var(--t-display-m);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .value__prize em {
+    color: var(--pink);
+    font-style: normal;
+  }
+  .value__note {
+    font-size: 17px;
+    color: var(--ink-dim);
+    margin-top: 22px;
+    max-width: 580px;
+    line-height: 1.55;
+  }
+
+  .value__table { width: 100%; }
+  .value__grouplabel {
+    display: block;
+    color: var(--navy);
+    border-bottom: 2px solid var(--rule-strong);
+    padding-bottom: 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 600;
+    margin: 0 0 22px;
+  }
+  .value__grouplabel--quant { margin-top: 14px; }
+
+  .value__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+  .value__cards--quant { grid-template-columns: 1fr; }
+
+  .value__bcard {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    padding: 22px 20px;
+    box-shadow: var(--shadow-xs);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base);
+  }
+  .value__bcard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--rule-strong);
+  }
+  .value__num {
+    font-weight: 800;
+    font-size: clamp(22px, 2vw, 28px);
+    color: var(--navy);
+    line-height: 1;
+  }
+  .value__bcard h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 16px 0 8px;
+    line-height: 1.2;
+    min-height: 2.5em;
+  }
+  .value__bcard p {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .value__connectors {
+    display: none;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin: 14px 0 6px;
+  }
+  .value__conn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-end: span 1;
+  }
+  .value__conn:nth-child(1) { grid-column: 1; }
+  .value__conn:nth-child(2) { grid-column: 3; }
+  .value__conn:nth-child(3) { grid-column: 5; }
+  .value__arrow {
+    width: 58px;
+    height: 34px;
+    color: var(--navy);
+    opacity: 0.18;
+    filter: drop-shadow(0 3px 5px rgba(16, 26, 60, 0.10));
+  }
+
+  .value__vcard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    padding: 22px;
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .value__vcard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .value__stat {
+    font-weight: 800;
+    font-size: clamp(28px, 3vw, 36px);
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: flex;
+    align-items: flex-end;
+  }
+  .value__plus { color: var(--navy); margin-right: 1px; }
+  .value__unit {
+    font-size: 0.4em;
+    color: var(--ink-dim);
+    font-weight: 600;
+    margin-left: 5px;
+    letter-spacing: 0;
+  }
+  .value__cap {
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 760px) {
+    .value__cards { grid-template-columns: repeat(3, 1fr); }
+    .value__cards--quant { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .value__cards--benefits { grid-template-columns: repeat(5, 1fr); }
+    .value__connectors { display: grid; }
+  }
+</style>
