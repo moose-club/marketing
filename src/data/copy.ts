@@ -5,7 +5,6 @@
 export const NAV = {
   links: [
     { href: "#model", label: "The Moose model" },
-    { href: "#network", label: "Network" },
     { href: "#value", label: "For studios" },
     { href: "#members", label: "Studio members" },
   ],
@@ -369,8 +368,6 @@ export const FOOTER = {
     {
       title: "More",
       items: [
-        { l: "Network", h: "#network" },
-        { l: "Case study", h: "#story" },
         { l: "For studio members", h: "#members" },
         { l: "Get involved or hear more", h: "#register" },
       ],
