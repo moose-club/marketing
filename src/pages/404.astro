@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Page not found — Moose"
+  description="The page you were looking for doesn't exist or has moved."
+>
+  <main id="main" class="nf">
+    <div class="container nf__inner">
+      <a href="/" class="nf__brand" aria-label="Moose home">
+        <img src="/brand/logo/moose-wordmark-twotone.svg" alt="Moose" class="nf__logo" />
+      </a>
+
+      <p class="nf__code">404</p>
+      <h1 class="display-m nf__title">This page took a <em>rest day</em>.</h1>
+      <p class="nf__lede">
+        The page you're after doesn't exist or has moved. Let's get you back on track.
+      </p>
+
+      <div class="nf__actions">
+        <a href="/" class="nf__cta">
+          <span>Back to home</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="/#register" class="nf__link">Get involved or hear more</a>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    background: var(--navy);
+    color: var(--navy-on);
+    padding-block: clamp(48px, 9vw, 96px);
+  }
+  .nf__inner {
+    max-width: 640px;
+    text-align: center;
+    display: grid;
+    justify-items: center;
+  }
+  .nf__logo { height: 32px; width: auto; }
+
+  .nf__code {
+    margin-top: 40px;
+    font-size: clamp(64px, 14vw, 120px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--pink);
+    font-variant-numeric: tabular-nums;
+  }
+  .nf__title {
+    margin-top: 8px;
+    color: var(--navy-on);
+  }
+  .nf__lede {
+    margin-top: 18px;
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.6;
+    color: var(--navy-dim);
+    max-width: 460px;
+  }
+
+  .nf__actions {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .nf__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--navy);
+    padding: 14px 26px;
+    border-radius: var(--r-pill);
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+  }
+  .nf__cta svg { transition: transform var(--dur-fast) var(--ease-out); }
+  .nf__cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .nf__cta:hover svg { transform: translateX(3px); }
+
+  .nf__link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-dim);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .nf__link:hover { color: #fff; }
+
+  @media (min-width: 640px) {
+    .nf__actions { flex-direction: row; }
+  }
+</style>
