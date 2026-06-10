@@ -14,6 +14,10 @@
 // path keeps its 2px stroke through the stretch (width is measured across
 // the path, and the x-axis maps 1:1). Icon nodes are positioned along this
 // path at runtime, so editing the curve moves them too.
+//
+// Deliberately NO vector-effect="non-scaling-stroke" on the paths: it moves
+// dashing into screen space while the tip is computed in user space, so the
+// fill edge and the dot drift apart under the non-uniform stretch.
 const SPINE_PATH =
   'M22 0 C38 80 38 160 22 250 C6 340 6 420 22 510 C38 600 38 680 22 770 C10 860 10 920 22 1000';
 
@@ -81,9 +85,6 @@ const nodes = [
 ---
 
 <div class="spine" id="scrollSpine" aria-hidden="true">
-  <!-- No vector-effect="non-scaling-stroke" here: it would move dashing into
-       screen space while the tip is computed in user space, so the fill edge
-       and the dot would drift apart under the non-uniform stretch. -->
   <svg class="spine__svg" viewBox="0 0 44 1000" preserveAspectRatio="none">
     <path class="spine__track" d={SPINE_PATH} />
     <path class="spine__fill" d={SPINE_PATH} pathLength="1" />
