@@ -6,26 +6,26 @@ import { MEMBERS } from '../../data/copy';
   <div class="container">
     <div class="members__grid">
       <div class="members__copy">
-        <span class="eyebrow">{MEMBERS.eyebrow}</span>
-        <h2 id="memberHeading" class="members__head" set:html={MEMBERS.headHtml}></h2>
-        <p class="lede members__lede">
+        <span class="eyebrow" data-reveal>{MEMBERS.eyebrow}</span>
+        <h2 id="memberHeading" class="members__head" data-reveal style="--ri:1" set:html={MEMBERS.headHtml}></h2>
+        <p class="lede members__lede" data-reveal style="--ri:2">
           {MEMBERS.ledeLines.map((line) => <span class="members__lede-line">{line}</span>)}
         </p>
 
         <div class="members__commercials">
-          {MEMBERS.commercials.map((c) => (
-            <div class="mc">
+          {MEMBERS.commercials.map((c, i) => (
+            <div class="mc" data-reveal="pop" style={`--ri:${3 + i}`}>
               <div class="mc__k">{c.k}</div>
-              <div class="mc__v">{c.v}<span class="mc__u">{c.u}</span></div>
+              <div class="mc__v"><span class="tnum" data-countup>{c.v}</span><span class="mc__u">{c.u}</span></div>
               <div class="mc__d">{c.d}</div>
             </div>
           ))}
         </div>
 
-        <p class="members__note" set:html={MEMBERS.noteHtml}></p>
+        <p class="members__note" data-reveal style="--ri:5" set:html={MEMBERS.noteHtml}></p>
       </div>
 
-      <div class="members__phone-stage">
+      <div class="members__phone-stage" data-reveal="right" style="--ri:2">
         <div class="phone" role="img" aria-label="Moose member app showing monthly crossover credits and nearby partner studios">
           <div class="phone__notch" aria-hidden="true"></div>
           <div class="phone__screen">
@@ -76,7 +76,7 @@ import { MEMBERS } from '../../data/copy';
           </div>
         </div>
 
-        <div class="members__callout">
+        <div class="members__callout" data-reveal style="--ri:4">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           <p>
             {MEMBERS.calloutLines.map((line) => <span class="members__callout-line">{line}</span>)}
@@ -179,6 +179,11 @@ import { MEMBERS } from '../../data/copy';
     padding: 12px;
     box-shadow: var(--shadow-lg);
     position: relative;
+    animation: phone-float 6.5s ease-in-out infinite alternate;
+  }
+  @keyframes phone-float {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-10px); }
   }
   .phone__notch {
     position: absolute;
@@ -276,7 +281,10 @@ import { MEMBERS } from '../../data/copy';
     width: 75%;
     background: var(--pink);
     border-radius: 3px;
+    transition: width 0.9s var(--ease-out) 0.55s;
   }
+  /* Credits bar fills once the phone has revealed (3 of 4 → 75%). */
+  :global(html.js) .members__phone-stage:not(:global(.is-revealed)) .phone__credits-track i { width: 0; }
 
   .phone__sec {
     font-size: 11px;
@@ -304,7 +312,16 @@ import { MEMBERS } from '../../data/copy';
     padding: 10px 12px;
     border: 1px solid var(--rule);
     border-radius: var(--r-md);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
   }
+  /* Booking slots cascade in after the phone lands. */
+  :global(html.js) .members__phone-stage:not(:global(.is-revealed)) .phone__slot {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .phone__slot:nth-child(1) { transition-delay: 0.55s; }
+  .phone__slot:nth-child(2) { transition-delay: 0.68s; }
+  .phone__slot:nth-child(3) { transition-delay: 0.81s; }
   .phone__time {
     font-size: 14px;
     font-weight: 700;

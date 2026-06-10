@@ -203,6 +203,44 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--pink); }
 }
 .skip-link:focus-visible { transform: translateY(0); }
 
+/* ── Scroll reveal ───────────────────────────────────────────────
+   Elements opt in with data-reveal (default rises; 'left' / 'right' /
+   'pop' variants) plus an optional inline --ri index for staggering.
+   A small IntersectionObserver in Base.astro adds .is-revealed. The
+   hidden state is gated behind html.js so content stays fully visible
+   without JavaScript. animation-fill is `backwards` (not forwards) so
+   hover transforms on revealed elements keep working once the
+   entrance finishes. */
+
+html.js [data-reveal] { opacity: 0; }
+html.js [data-reveal].is-revealed {
+  opacity: 1;
+  animation: reveal-up 0.7s var(--ease-out) backwards;
+  animation-delay: calc(var(--ri, 0) * 85ms);
+}
+html.js [data-reveal='left'].is-revealed  { animation-name: reveal-left; }
+html.js [data-reveal='right'].is-revealed { animation-name: reveal-right; }
+html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes reveal-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes reveal-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes reveal-pop {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+::selection { background: var(--pink); color: #fff; }
+
 /* ── Motion preference ───────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -212,4 +250,5 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--pink); }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  html.js [data-reveal] { opacity: 1 !important; }
 }

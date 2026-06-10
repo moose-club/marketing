@@ -5,16 +5,16 @@ import { VALUE } from '../../data/copy';
 <section class="section section--cream" id="value" aria-labelledby="valueHeading">
   <div class="container">
     <div class="value__head">
-      <span class="eyebrow">{VALUE.eyebrow}</span>
-      <h2 id="valueHeading" class="value__prize" set:html={VALUE.headHtml}></h2>
-      <p class="value__note">{VALUE.prizeNote}</p>
+      <span class="eyebrow" data-reveal>{VALUE.eyebrow}</span>
+      <h2 id="valueHeading" class="value__prize" data-reveal style="--ri:1" set:html={VALUE.headHtml}></h2>
+      <p class="value__note" data-reveal style="--ri:2">{VALUE.prizeNote}</p>
     </div>
 
     <div class="value__table">
-      <p class="value__grouplabel">The benefits.</p>
+      <p class="value__grouplabel" data-reveal>The benefits.</p>
       <div class="value__cards value__cards--benefits">
-        {VALUE.benefits.map((b) => (
-          <div class="value__bcard">
+        {VALUE.benefits.map((b, i) => (
+          <div class="value__bcard" data-reveal="pop" style={`--ri:${1 + i}`}>
             <span class="value__num">{b.n}</span>
             <h4>{b.title}</h4>
             <p>{b.body}</p>
@@ -22,7 +22,7 @@ import { VALUE } from '../../data/copy';
         ))}
       </div>
 
-      <div class="value__connectors" aria-hidden="true">
+      <div class="value__connectors" aria-hidden="true" data-reveal style="--ri:6">
         <span class="value__conn">
           <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
         </span>
@@ -34,11 +34,11 @@ import { VALUE } from '../../data/copy';
         </span>
       </div>
 
-      <p class="value__grouplabel value__grouplabel--quant">Quantification.</p>
+      <p class="value__grouplabel value__grouplabel--quant" data-reveal>Quantification.</p>
       <div class="value__cards value__cards--quant">
-        {VALUE.quantification.map((q) => (
-          <div class="value__vcard">
-            <div class="value__stat"><span class="value__plus">+</span>{q.stat.replace(/^\+/, '')}<span class="value__unit">{q.unit}</span></div>
+        {VALUE.quantification.map((q, i) => (
+          <div class="value__vcard" data-reveal="pop" style={`--ri:${1 + i}`}>
+            <div class="value__stat"><span class="value__plus">+</span><span class="tnum" data-countup>{q.stat.replace(/^\+/, '')}</span><span class="value__unit">{q.unit}</span></div>
             <p class="value__cap">{q.cap}</p>
           </div>
         ))}
@@ -148,6 +148,13 @@ import { VALUE } from '../../data/copy';
     color: var(--navy);
     opacity: 0.18;
     filter: drop-shadow(0 3px 5px rgba(16, 26, 60, 0.10));
+    animation: value-arrow-bob 2.6s ease-in-out infinite;
+  }
+  .value__conn:nth-child(2) .value__arrow { animation-delay: 0.3s; }
+  .value__conn:nth-child(3) .value__arrow { animation-delay: 0.6s; }
+  @keyframes value-arrow-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(5px); }
   }
 
   .value__vcard {

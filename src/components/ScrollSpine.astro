@@ -1,0 +1,267 @@
+---
+// Decorative scroll spine — a navy line that swerves down the left page
+// margin, filling in as the reader scrolls and drawing gym-equipment icons
+// as its tip passes them. Icons are Lucide-style inline SVGs (per CLAUDE.md;
+// SF Symbols are licensed for Apple platforms only). Every icon path carries
+// pathLength="1" so a single dashoffset transition draws any shape
+// edge-to-edge; the spine path uses the same trick for its scroll fill.
+//
+// Purely decorative: aria-hidden, pointer-events none, desktop-only, hidden
+// without JS, and the fill maps to the top of #register so the journey
+// "completes" right at the CTA, then the rail fades away.
+
+// The swerve, in a 44×1000 box stretched to the rail. The mostly-vertical
+// path keeps its 2px stroke through the stretch (width is measured across
+// the path, and the x-axis maps 1:1). Icon nodes are positioned along this
+// path at runtime, so editing the curve moves them too.
+const SPINE_PATH =
+  'M22 0 C38 80 38 160 22 250 C6 340 6 420 22 510 C38 600 38 680 22 770 C10 860 10 920 22 1000';
+
+// `at` = fraction (%) of the path length where the icon sits.
+const nodes = [
+  {
+    at: 6,
+    label: 'dumbbell',
+    paths: [
+      'M14.4 14.4 9.6 9.6',
+      'M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z',
+      'm21.5 21.5-1.4-1.4',
+      'M3.9 3.9 2.5 2.5',
+      'M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z',
+    ],
+  },
+  {
+    at: 22,
+    label: 'kettlebell',
+    paths: [
+      'M8.5 10 8 6.5a3.5 3.5 0 0 1 8 0L15.5 10',
+      'M12 21a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z',
+    ],
+  },
+  {
+    at: 38,
+    label: 'bike',
+    paths: [
+      'M18.5 21a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z',
+      'M5.5 21a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z',
+      'M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z',
+      'M12 17.5V14l-3-3 4-3 2 3h2',
+    ],
+  },
+  {
+    at: 54,
+    label: 'heart pulse',
+    paths: [
+      'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z',
+      'M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27',
+    ],
+  },
+  {
+    at: 70,
+    label: 'timer',
+    paths: [
+      'M10 2h4',
+      'M12 14l3-3',
+      'M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16z',
+    ],
+  },
+  {
+    at: 86,
+    label: 'trophy',
+    paths: [
+      'M6 9H4.5a2.5 2.5 0 0 1 0-5H6',
+      'M18 9h1.5a2.5 2.5 0 0 0 0-5H18',
+      'M4 22h16',
+      'M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22',
+      'M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22',
+      'M18 2H6v7a6 6 0 0 0 12 0V2Z',
+    ],
+  },
+] as const;
+---
+
+<div class="spine" id="scrollSpine" aria-hidden="true">
+  <!-- No vector-effect="non-scaling-stroke" here: it would move dashing into
+       screen space while the tip is computed in user space, so the fill edge
+       and the dot would drift apart under the non-uniform stretch. -->
+  <svg class="spine__svg" viewBox="0 0 44 1000" preserveAspectRatio="none">
+    <path class="spine__track" d={SPINE_PATH} />
+    <path class="spine__fill" d={SPINE_PATH} pathLength="1" />
+  </svg>
+  <span class="spine__tip"></span>
+  {nodes.map((n) => (
+    <span class="spine__node" data-at={n.at}>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        {n.paths.map((d) => <path d={d} pathLength="1" />)}
+      </svg>
+    </span>
+  ))}
+</div>
+
+<script>
+  const spine = document.getElementById('scrollSpine');
+  const fill = spine?.querySelector<SVGPathElement>('.spine__fill');
+  if (spine && fill) {
+    const nodes = Array.from(spine.querySelectorAll<HTMLElement>('.spine__node'));
+    const VB = { w: 44, h: 1000 };
+
+    // Lazy + guarded: some browsers won't measure non-rendered geometry.
+    let total = 0;
+    const pathLen = () => {
+      if (!total) {
+        try { total = fill.getTotalLength(); } catch { /* retry next call */ }
+      }
+      return total;
+    };
+
+    // Map a point in viewBox space to rail pixels (the svg is stretched
+    // non-uniformly, so each axis scales independently).
+    const toRail = (pt: DOMPoint) => ({
+      x: (pt.x / VB.w) * spine.clientWidth,
+      y: (pt.y / VB.h) * spine.clientHeight,
+    });
+
+    // Pin each icon node onto the curve itself.
+    const place = () => {
+      const len = pathLen();
+      if (!len) return;
+      for (const node of nodes) {
+        const at = Number(node.dataset.at) / 100;
+        const { x, y } = toRail(fill.getPointAtLength(at * len));
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+      }
+    };
+
+    const update = () => {
+      // The journey ends as the register section scrolls into view, so the
+      // trophy lands just before the CTA rather than at the footer.
+      const register = document.getElementById('register');
+      const vh = window.innerHeight;
+      const end = register
+        ? Math.max(1, register.offsetTop - vh * 0.5)
+        : document.documentElement.scrollHeight - vh;
+      const p = Math.min(1, window.scrollY / end);
+      spine.style.setProperty('--p', String(p));
+      spine.dataset.done = String(p >= 1);
+
+      const len = pathLen();
+      if (len) {
+        const { x, y } = toRail(fill.getPointAtLength(p * len));
+        spine.style.setProperty('--tip-x', `${x}px`);
+        spine.style.setProperty('--tip-y', `${y}px`);
+      }
+      for (const node of nodes) {
+        node.classList.toggle('is-on', p * 100 >= Number(node.dataset.at));
+      }
+    };
+
+    place();
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', () => { place(); update(); }, { passive: true });
+  }
+</script>
+
+<style>
+  .spine {
+    visibility: hidden; /* not display:none — geometry stays measurable */
+    position: fixed;
+    left: 12px;
+    top: 100px;
+    bottom: 30px;
+    width: 44px;
+    z-index: 50;
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease-out);
+  }
+  .spine[data-done='true'] { opacity: 0; }
+
+  /* Desktop-only (the container leaves free margin from 1280px up) and
+     JS-only — without the script the rail would just sit empty. */
+  @media (min-width: 1280px) {
+    :global(html.js) .spine { visibility: visible; }
+  }
+
+  .spine__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .spine__track,
+  .spine__fill {
+    fill: none;
+    stroke-width: 2px;
+    stroke-linecap: round;
+  }
+  .spine__track { stroke: var(--navy-100); }
+  .spine__fill {
+    stroke: var(--navy);
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--p, 0));
+  }
+
+  /* The "pen tip" riding the curve at the reader's position. */
+  .spine__tip {
+    position: absolute;
+    left: var(--tip-x, 50%);
+    top: var(--tip-y, 0px);
+    width: 8px;
+    height: 8px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--navy);
+  }
+  .spine__tip::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1.5px solid var(--navy);
+    opacity: 0;
+    animation: spine-pulse 2.4s var(--ease-out) infinite;
+  }
+  @keyframes spine-pulse {
+    0%   { transform: scale(0.4); opacity: 0.5; }
+    70%, 100% { transform: scale(1.25); opacity: 0; }
+  }
+
+  .spine__node {
+    position: absolute;
+    left: 50%;
+    top: -100px; /* parked offscreen until the script pins it to the curve */
+    width: 30px;
+    height: 30px;
+    transform: translate(-50%, -50%) scale(0.82);
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    color: var(--navy);
+    opacity: 0.45;
+    transition: transform 0.45s var(--ease-out), opacity 0.45s var(--ease-out),
+                box-shadow 0.45s var(--ease-out);
+  }
+  .spine__node.is-on {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Stroke draw: pathLength="1" normalises every shape, so dashoffset 1→0
+     sweeps each stroke end to end. Strokes stagger per path. */
+  .spine__node path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.7s var(--ease-out);
+  }
+  .spine__node.is-on path { stroke-dashoffset: 0; }
+  .spine__node.is-on path:nth-child(2) { transition-delay: 0.1s; }
+  .spine__node.is-on path:nth-child(3) { transition-delay: 0.2s; }
+  .spine__node.is-on path:nth-child(4) { transition-delay: 0.3s; }
+  .spine__node.is-on path:nth-child(5) { transition-delay: 0.4s; }
+  .spine__node.is-on path:nth-child(6) { transition-delay: 0.5s; }
+</style>

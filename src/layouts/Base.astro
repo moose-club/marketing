@@ -105,9 +105,66 @@ const serviceJsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} />
+
+    <!-- Gate for the scroll-reveal styles: without JS the page renders
+         fully visible. Inline so it lands before first paint. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <slot />
+
+    <script>
+      // Scroll reveal — adds .is-revealed once an element enters the viewport.
+      // Styles live in globals.css under the html.js gate.
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const revealIO = new IntersectionObserver(
+        (entries, io) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-revealed');
+            io.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
+      );
+      revealEls.forEach((el) => revealIO.observe(el));
+
+      // Count-up — elements with data-countup tick from 0 to their rendered
+      // value on first view. Non-numeric prefix/suffix ("$", "k", "+") are
+      // preserved, so copy stays the single source of truth.
+      const countEls = document.querySelectorAll<HTMLElement>('[data-countup]');
+      const countIO = new IntersectionObserver(
+        (entries, io) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            io.unobserve(entry.target);
+            runCount(entry.target as HTMLElement);
+          }
+        },
+        { threshold: 0.6 }
+      );
+
+      function runCount(el: HTMLElement) {
+        const text = (el.textContent ?? '').trim();
+        const match = text.match(/^([^\d]*)(\d+(?:\.\d+)?)(.*)$/);
+        if (!match || reduceMotion) return;
+        const [, pre, numStr, post] = match;
+        const target = parseFloat(numStr);
+        const decimals = (numStr.split('.')[1] ?? '').length;
+        const duration = 1100;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const k = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - k, 3);
+          el.textContent = pre + (target * eased).toFixed(decimals) + post;
+          if (k < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+      countEls.forEach((el) => countIO.observe(el));
+    </script>
   </body>
 </html>

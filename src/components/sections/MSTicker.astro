@@ -59,6 +59,9 @@ const items = [...MODALITIES, ...MODALITIES];
     font-size: 10px;
   }
 
+  /* Let readers stop the marquee to actually read it. */
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+
   @keyframes ticker-scroll {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }

@@ -148,7 +148,14 @@ import { NAV } from '../../data/copy';
     background: #fff;
     border-top: 1px solid var(--rule);
   }
-  .nav__mobile[data-open='true'] { display: flex; }
+  .nav__mobile[data-open='true'] {
+    display: flex;
+    animation: nav-drop 0.26s var(--ease-out);
+  }
+  @keyframes nav-drop {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: none; }
+  }
   .nav__mobile-link {
     padding: 14px 4px;
     font-size: 16px;

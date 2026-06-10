@@ -6,11 +6,11 @@ import { REGISTER } from '../../data/copy';
   <div class="container">
     <div class="register__inner">
       <div class="register__head">
-        <span class="eyebrow eyebrow--on-dark">{REGISTER.eyebrow}</span>
-        <h2 id="registerHeading">{REGISTER.head}</h2>
+        <span class="eyebrow eyebrow--on-dark" data-reveal>{REGISTER.eyebrow}</span>
+        <h2 id="registerHeading" data-reveal style="--ri:1">{REGISTER.head}</h2>
       </div>
 
-      <div class="register__card">
+      <div class="register__card" data-reveal="pop" style="--ri:2">
         <p class="register__prompt">{REGISTER.prompt}</p>
         <div class="register__choice" role="tablist" aria-label="Who are you registering as?">
           {REGISTER.tabs.map((t, i) => (
@@ -215,6 +215,12 @@ import { REGISTER } from '../../data/copy';
 
   .reg-form { display: grid; gap: 14px; }
   .reg-form[hidden] { display: none; }
+  /* Soft cross-fade when the studio/member tabs swap forms. */
+  .reg-form:not([hidden]) { animation: reg-form-in 0.35s var(--ease-out); }
+  @keyframes reg-form-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
   .reg-form h3 {
     font-size: 18px;
     font-weight: 700;
@@ -244,8 +250,12 @@ import { REGISTER } from '../../data/copy';
     transition: border-color var(--dur-fast) var(--ease-out);
     resize: vertical;
   }
+  .field input, .field textarea {
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
   .field input:focus, .field textarea:focus {
     border-color: var(--pink);
+    box-shadow: 0 0 0 4px var(--pink-soft);
     outline: none;
   }
   .field-row {
@@ -271,7 +281,9 @@ import { REGISTER } from '../../data/copy';
     border: 0;
     justify-self: start;
   }
+  .reg-submit svg { transition: transform var(--dur-fast) var(--ease-out); }
   .reg-submit:hover { background: var(--navy-lift); transform: translateY(-2px); }
+  .reg-submit:hover svg { transform: translateX(3px); }
 
   @media (min-width: 760px) {
     .field-row { grid-template-columns: 1fr 1fr; }

@@ -5,16 +5,16 @@ import { MODEL } from '../../data/copy';
 <section class="section section--cream" id="model" aria-labelledby="modelHeading">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">{MODEL.eyebrow}</span>
-      <h2 id="modelHeading">{MODEL.head}</h2>
-      <p class="lede">{MODEL.lede}</p>
+      <span class="eyebrow" data-reveal>{MODEL.eyebrow}</span>
+      <h2 id="modelHeading" data-reveal style="--ri:1">{MODEL.head}</h2>
+      <p class="lede" data-reveal style="--ri:2">{MODEL.lede}</p>
     </div>
 
-    <div class="model__steps" id="how">
+    <div class="model__steps" id="how" data-reveal="pop">
       <h3 class="model__steps-h">{MODEL.stepsTitle}</h3>
       <div class="model__grid">
-        {MODEL.steps.map((s) => (
-          <article class="step">
+        {MODEL.steps.map((s, i) => (
+          <article class="step" data-reveal style={`--ri:${2 + i}`}>
             <div class="step__ord">{s.n}</div>
             <hr class="step__rule" />
             <p class="step__eyebrow">{s.eyebrow}</p>
@@ -70,7 +70,11 @@ import { MODEL } from '../../data/copy';
     border: 0;
     width: 56px;
     margin: 18px 0 14px;
+    transition: width 0.6s var(--ease-out) 0.45s;
   }
+  /* The pink rule draws itself once the step has revealed. Hidden state
+     only applies when JS is around to reveal it again. */
+  :global(html.js) .step:not(:global(.is-revealed)) .step__rule { width: 0; }
   .step__eyebrow {
     font-size: 12px;
     font-weight: 800;

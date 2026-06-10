@@ -5,18 +5,18 @@ import { HERO } from '../../data/copy';
 <section class="hero" id="top" aria-labelledby="heroHeading">
   <div class="hero__grid">
     <div class="hero__copy">
-      <span class="eyebrow">{HERO.eyebrow}</span>
-      <h1 id="heroHeading" class="hero__head display-l">
+      <span class="eyebrow" data-reveal>{HERO.eyebrow}</span>
+      <h1 id="heroHeading" class="hero__head display-l" data-reveal style="--ri:1">
         {HERO.head} <em>{HERO.highlightWord}</em>
       </h1>
 
-      <p class="hero__lede body-l">
+      <p class="hero__lede body-l" data-reveal style="--ri:2">
         {HERO.subLines.map((line) => <span class="hero__lede-line">{line}</span>)}
       </p>
 
       <ul class="hero__points">
-        {HERO.points.map((p) => (
-          <li>
+        {HERO.points.map((p, i) => (
+          <li data-reveal style={`--ri:${3 + i}`}>
             <span class="hero__point-ic" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
@@ -25,7 +25,7 @@ import { HERO } from '../../data/copy';
         ))}
       </ul>
 
-      <div class="hero__actions">
+      <div class="hero__actions" data-reveal style="--ri:6">
         <a class="btn btn--primary" href={HERO.ctaPrimary.href}>
           {HERO.ctaPrimary.label}
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -65,6 +65,28 @@ import { HERO } from '../../data/copy';
     max-width: 760px;
   }
   .hero__head { margin-top: 18px; color: var(--navy); }
+
+  /* The pink word draws its own underline once the headline has landed.
+     Same single accent word — no extra pink elsewhere. */
+  .hero__head em {
+    position: relative;
+    display: inline-block;
+  }
+  .hero__head em::after {
+    content: '';
+    position: absolute;
+    left: 0.02em;
+    right: 0.06em;
+    bottom: 0.03em;
+    height: 0.09em;
+    border-radius: var(--r-pill);
+    background: var(--pink);
+    opacity: 0.3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.8s var(--ease-out) 0.95s;
+  }
+  .hero__head:global(.is-revealed) em::after { transform: scaleX(1); }
   .hero__lede {
     margin-top: 28px;
     max-width: 560px;
@@ -128,11 +150,13 @@ import { HERO } from '../../data/copy';
     color: #fff;
     box-shadow: var(--shadow-md);
   }
+  .btn svg { transition: transform var(--dur-base) var(--ease-out); }
   .btn--primary:hover {
     background: var(--navy-800);
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
   }
+  .btn--primary:hover svg { transform: translateX(3px); }
   .btn--ghost {
     background: #fff;
     color: var(--navy);
@@ -148,6 +172,18 @@ import { HERO } from '../../data/copy';
     min-height: 280px;
     background-size: cover;
     background-position: center;
+    animation: hero-photo-in 1.4s var(--ease-out) both,
+               hero-photo-settle 7s var(--ease-out) both;
+  }
+  @keyframes hero-photo-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  /* Slow ken-burns settle. The section's overflow:hidden clips the
+     temporary over-scale. */
+  @keyframes hero-photo-settle {
+    from { transform: scale(1.06); }
+    to   { transform: scale(1); }
   }
   .hero__photo::after {
     content: '';
