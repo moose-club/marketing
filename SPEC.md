@@ -2,7 +2,7 @@
 
 A spec for the public marketing site for **Moose**, a network for boutique fitness studios. Members of a partner studio can pay a small upgrade ($11/wk extra) for the right to attend 4 sessions/month at complementary, non-competing partner venues nearby. Audience: studio owners and operators — not end-member consumers.
 
-This document tracks the *2026-06 redesign* (the only design in production). It supersedes the original 12-section v1 spec. If anything in the source files contradicts this spec, the running code is the tiebreaker.
+This document tracks the _2026-06 redesign_ (the only design in production). It supersedes the original 12-section v1 spec. If anything in the source files contradicts this spec, the running code is the tiebreaker.
 
 ---
 
@@ -16,16 +16,16 @@ The site converts studio operators from "haven't heard of Moose" to "filled in t
 
 ## 2. Tech stack — decided
 
-| Concern | Choice | Why |
-|---|---|---|
-| Framework | **Astro 6** | Ships zero JS by default; perfect for marketing |
-| Component model | `.astro` files for every section. **No React islands currently.** | The redesign's only interactive bits (nav scroll, view-all toggle, tab swap) are 5–15 lines of vanilla JS scoped to the section that owns them. |
-| Styling | **Hand-rolled CSS with CSS custom properties** in `globals.css` + per-component `<style>` blocks | Brand discipline, not default |
-| Icons | **Inline SVGs** in each section | No icon library, no runtime cost |
-| Type system | TypeScript, strict mode | |
-| Package manager | `pnpm` | |
-| Deployment target | Static (`output: 'static'`) — Vercel or Cloudflare Pages | |
-| Node | 24 (`.nvmrc`) | Astro 6 needs ≥22.12 |
+| Concern           | Choice                                                                                           | Why                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework         | **Astro 6**                                                                                      | Ships zero JS by default; perfect for marketing                                                                                                 |
+| Component model   | `.astro` files for every section. **No React islands currently.**                                | The redesign's only interactive bits (nav scroll, view-all toggle, tab swap) are 5–15 lines of vanilla JS scoped to the section that owns them. |
+| Styling           | **Hand-rolled CSS with CSS custom properties** in `globals.css` + per-component `<style>` blocks | Brand discipline, not default                                                                                                                   |
+| Icons             | **Inline SVGs** in each section                                                                  | No icon library, no runtime cost                                                                                                                |
+| Type system       | TypeScript, strict mode                                                                          |                                                                                                                                                 |
+| Package manager   | `pnpm`                                                                                           |                                                                                                                                                 |
+| Deployment target | Static (`output: 'static'`) — Vercel or Cloudflare Pages                                         |                                                                                                                                                 |
+| Node              | 24 (`.nvmrc`)                                                                                    | Astro 6 needs ≥22.12                                                                                                                            |
 
 **Do not introduce:** Tailwind, CSS-in-JS, shadcn, Next.js, Remix, a CMS, a state library, a UI kit, or an icon library. The brand discipline is the point.
 
@@ -33,12 +33,12 @@ The site converts studio operators from "haven't heard of Moose" to "filled in t
 
 ## 3. Source material
 
-| File | What it is | How to use it |
-|---|---|---|
-| `src/data/copy.ts` | Single source of truth for all on-page copy + section data | Edit copy here, never inline in sections |
-| `public/photos/*` | 9 marketing photos extracted from the 2026-06 design bundle (hero kettlebell, VRTUS, BBB, etc.) | Reference via inline `background-image: url('/photos/…')`. Optimise before production push (hero-pilates.png is 2.8MB). |
-| `public/brand/logo/*.svg` | Wordmark lockups (twotone / white / navy) | Use the SVG that matches the surface |
-| `public/brand/icon/*.png` | Favicon / app-icon variants | Wired into `Base.astro` |
+| File                      | What it is                                                                                      | How to use it                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `src/data/copy.ts`        | Single source of truth for all on-page copy + section data                                      | Edit copy here, never inline in sections                                                                                |
+| `public/photos/*`         | 9 marketing photos extracted from the 2026-06 design bundle (hero kettlebell, VRTUS, BBB, etc.) | Reference via inline `background-image: url('/photos/…')`. Optimise before production push (hero-pilates.png is 2.8MB). |
+| `public/brand/logo/*.svg` | Wordmark lockups (twotone / white / navy)                                                       | Use the SVG that matches the surface                                                                                    |
+| `public/brand/icon/*.png` | Favicon / app-icon variants                                                                     | Wired into `Base.astro`                                                                                                 |
 
 The original `_context/` JSX bundle was the v1 source material; it is no longer load-bearing. Treat it as historical reference only.
 
@@ -50,21 +50,27 @@ Hex values are exact — **do not approximate**.
 
 ```css
 /* Brand */
---pink:        #EB4E8D;
---navy:        #1A2B5F;
+--pink: #eb4e8d;
+--navy: #1a2b5f;
 
 /* Brand — extended scales (used sparingly; pink at the strong end is still
    the only accent — see the 'one pink word' rule in §14) */
---pink-50: #fef2f7;  --pink-100: #fde4ee;  --pink-300: #f59bc0;
---navy-50: #f3f5fa;  --navy-100: #e6e9f2;  --navy-200: #c2c9dd;
---navy-300: #8b97bf; --navy-400: #5567a4;  --navy-800: #14224C;
---navy-900: #0F1A3C;
+--pink-50: #fef2f7;
+--pink-100: #fde4ee;
+--pink-300: #f59bc0;
+--navy-50: #f3f5fa;
+--navy-100: #e6e9f2;
+--navy-200: #c2c9dd;
+--navy-300: #8b97bf;
+--navy-400: #5567a4;
+--navy-800: #14224c;
+--navy-900: #0f1a3c;
 
 /* Surfaces */
---paper: #F0EEE9;   /* page bg */
---cream: #F7F4EF;   /* warmer alt — used for .section--cream */
---card:  #FFFFFF;
---ink:   #0F0F12;
+--paper: #f0eee9; /* page bg */
+--cream: #f7f4ef; /* warmer alt — used for .section--cream */
+--card: #ffffff;
+--ink: #0f0f12;
 ```
 
 Plus the full set of radii (`--r-pill / -sheet / -card / -md / -sm / -xs`), spacing tokens (`--s-1` through `--s-24`, 4pt grid), and shadow scale (`--shadow-xs/sm/md/lg`).
@@ -75,17 +81,17 @@ Plus the full set of radii (`--r-pill / -sheet / -card / -md / -sm / -xs`), spac
 
 ## 5. Type scale
 
-| Token | Use | Size (fluid) | Weight |
-|---|---|---|---|
-| `display-xl` | Reserved / unused in current sections | `clamp(48px, 8vw, 112px)` | 800, ls −0.03em |
-| `display-l` | Hero h1 | `clamp(40px, 6vw, 92px)` | 800, ls −0.03em |
-| `display-m` | Section h2 (Model, Network, Value, Story, Members, Register) | `clamp(28px, 4vw, 56px)` | 800, ls −0.025em |
-| `display-s` | Sub-section heads (Story title card, Voices header) | `clamp(24px, 3vw, 40px)` | 700, ls −0.02em |
-| `headline` | Card titles | 18–22px | 700, ls −0.3px |
-| `body-l` | Lead paragraphs | 17–19px | 500, lh 1.55 |
-| `body` | Default copy | 14–15px | 500, lh 1.55 |
-| `meta` | Labels, captions | 12–13px | 600 |
-| `eyebrow` | Section kickers | 12px | 700, uppercase, ls 0.22em. Default colour: `--pink`. No em-dash prefix (use `.eyebrow--rule` for the dashed variant). |
+| Token        | Use                                                          | Size (fluid)              | Weight                                                                                                                |
+| ------------ | ------------------------------------------------------------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `display-xl` | Reserved / unused in current sections                        | `clamp(48px, 8vw, 112px)` | 800, ls −0.03em                                                                                                       |
+| `display-l`  | Hero h1                                                      | `clamp(40px, 6vw, 92px)`  | 800, ls −0.03em                                                                                                       |
+| `display-m`  | Section h2 (Model, Network, Value, Story, Members, Register) | `clamp(28px, 4vw, 56px)`  | 800, ls −0.025em                                                                                                      |
+| `display-s`  | Sub-section heads (Story title card, Voices header)          | `clamp(24px, 3vw, 40px)`  | 700, ls −0.02em                                                                                                       |
+| `headline`   | Card titles                                                  | 18–22px                   | 700, ls −0.3px                                                                                                        |
+| `body-l`     | Lead paragraphs                                              | 17–19px                   | 500, lh 1.55                                                                                                          |
+| `body`       | Default copy                                                 | 14–15px                   | 500, lh 1.55                                                                                                          |
+| `meta`       | Labels, captions                                             | 12–13px                   | 600                                                                                                                   |
+| `eyebrow`    | Section kickers                                              | 12px                      | 700, uppercase, ls 0.22em. Default colour: `--pink`. No em-dash prefix (use `.eyebrow--rule` for the dashed variant). |
 
 ---
 
@@ -94,6 +100,7 @@ Plus the full set of radii (`--r-pill / -sheet / -card / -md / -sm / -xs`), spac
 Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `src/components/sections/`. Order is fixed.
 
 ### 6.1 `MSNav.astro` — fixed top nav
+
 - Left: navy/pink Moose wordmark SVG.
 - Centre: anchor links — `The Moose model`, `Network`, `For studios`, `Studio members`.
 - Right: Instagram link (`@trainmoose`), pink-text on light bg; **navy pill CTA** "Get involved or hear more" → `#register`.
@@ -101,16 +108,19 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - Fixed (`position: fixed`). Transparent over the cream hero, gains white/blur background once `scrollY > 16` via a 6-line vanilla JS handler. No backdrop over the hero so the headline starts at the top of the page.
 
 ### 6.2 `MSHero.astro` — cream split layout
+
 - Left column: eyebrow "Studio operators", h1 "Elevate your memberships with **variety.**" (single pink word), 2-paragraph lede, 3 ticked support points, two CTAs (navy primary "Get involved or hear more", white-ghost "See how it works").
 - Right column: full-bleed photo (hero-strength.png — kettlebell training) with a soft cream gradient mask blending into the left.
 - Mobile (<760px): single column, photo below the copy.
 
 ### 6.3 `MSTicker.astro` — modality marquee
+
 - Thin navy-900 band beneath the hero.
 - Infinite-scroll list of modality types (Pilates, Functional fitness, HIIT, Cycle & Spin, Yoga, etc.) joined by pink ◆ separators. Pure CSS animation (`@keyframes ticker-scroll`).
 - `prefers-reduced-motion: reduce` halts the animation.
 
 ### 6.4 `MSModel.astro` — "The Moose model" + 4-step how-it-works
+
 - `.section--cream`. Eyebrow "At a glance", h2 "The Moose model.", lede.
 - Inner white card (`.model__steps`) titled "How it works.", containing 4 columns:
   1. **Formation** — Identify partners and form partnerships
@@ -120,6 +130,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 1–2 paragraphs.
 
 ### 6.5 `MSNetwork.astro` — partner logo grid on navy
+
 - `.section--navy`. Eyebrow "Partner network", h2 "**Moose** on the loose." (Moose in pink, single accent word).
 - Lede: "120+ partner venues / 30+ unique brands … and counting".
 - Logo grid: 9 visible white chips by default; **View all** pill reveals an additional 18 (hidden via `[hidden]` attribute, toggled by vanilla JS).
@@ -127,6 +138,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - Grid: 2 → 3 → 4 → 5 columns across breakpoints.
 
 ### 6.6 `MSValue.astro` — "For the studios" benefit cards + quantification
+
 - `.section--cream`. Eyebrow "For the studios". H2 (`.value__prize`): "Variety gives new members a compelling **reason to join**, and existing members another reason to stay." (one pink emphasis).
 - Two card grids:
   1. **The benefits** — 5 numbered white cards (New revenue stream / Attract new members / Reduce churn / Recurring memberships / Zero-friction adoption).
@@ -134,24 +146,28 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - On ≥1024px, 3 down-arrows visually link the benefit cards to the quantification row.
 
 ### 6.7 `MSStory.astro` — featured partnership + voices
+
 - White background. Eyebrow "On the ground", h2 "Featured partnership."
 - Case card: VRTUS × Body by Berner (Bondi, NSW). Two photos (VRTUS kickboxing, BBB reformer pilates) on the left; metrics + quotes + credit-balance explanation on the right.
 - Metrics row: per-studio quote, per-studio % of members upgraded (22% / 31%), and a centre block showing 128 ↔ 143 crossovers/month with explanatory bullets about credit weighting.
 - Below: "From some other studios who get it." with 3 quote cards (Sarah Reid / Marcus Tran / Priya Nair).
 
 ### 6.8 `MSMembers.astro` — for studio members + phone mock
-- `.section--cream`. Eyebrow "For studio members", h2 "Finally, some (affordable) *variety…*" (one pink word).
+
+- `.section--cream`. Eyebrow "For studio members", h2 "Finally, some (affordable) _variety…_" (one pink word).
 - Left: 2-paragraph lede, two commercial cards ("What you get: 4 / month" + "What you pay: +$11 / week"), and a note linking back to the Register form with `data-register="member"` (which auto-selects the Member tab).
 - Right: a **pure-CSS** phone mock with notch, status bar, greet block, member-at-studio chip, credits card (navy, "3 of 4 left"), filter chips, and 3 booking slots. Plus a callout reminding readers the Moose app is only for booking crossover sessions.
 
 ### 6.9 `MSRegister.astro` — contact form (studio / member tabs)
+
 - `.section--navy`. Eyebrow "Get on board", h2 "Get in touch with the Moose."
 - White card with two-tab toggle (I run a studio / I'm a member). Tabs swap which `<form>` is visible (vanilla JS).
-- Studio form fields: studio name*, your name*, email*, phone, suburb, message.
-- Member form fields: your name*, email*, phone, your home studio*, suburb, message.
+- Studio form fields: studio name*, your name*, email\*, phone, suburb, message.
+- Member form fields: your name*, email*, phone, your home studio\*, suburb, message.
 - Both forms `action="mailto:…@trainmoose.com"` — placeholder until a real CRM/Typeform endpoint is wired (see §15).
 
 ### 6.10 `MSFooter.astro`
+
 - Navy-900 background.
 - Brand block (white wordmark + tagline) + 3 link columns: Explore, More, Contact.
 - Bottom rule, then small print: `© {year} Moose Club. Made in Australia.` + "Get involved or hear more" / "Back to top" links.
@@ -172,19 +188,31 @@ Copy edits go here, never inline in section files. Sections destructure their da
 
 ```css
 /* base = mobile (320px+) */
-@media (min-width: 640px)  { /* tablet portrait */ }
-@media (min-width: 760px)  { /* large mobile / tablet */ }
-@media (min-width: 960px)  { /* tablet landscape / small laptop */ }
-@media (min-width: 1024px) { /* small desktop */ }
-@media (min-width: 1280px) { /* desktop */ }
-@media (min-width: 1600px) { /* large desktop — content stays at ~1240 max */ }
+@media (min-width: 640px) {
+  /* tablet portrait */
+}
+@media (min-width: 760px) {
+  /* large mobile / tablet */
+}
+@media (min-width: 960px) {
+  /* tablet landscape / small laptop */
+}
+@media (min-width: 1024px) {
+  /* small desktop */
+}
+@media (min-width: 1280px) {
+  /* desktop */
+}
+@media (min-width: 1600px) {
+  /* large desktop — content stays at ~1240 max */
+}
 ```
 
 **Container:** every section's inner content is constrained by `max-width: 1240px; margin-inline: auto; padding-inline: clamp(20px, 5vw, 56px);`.
 
 **Mobile-specific rules:**
 
-- Hero photo moves *below* the copy on `<760px`.
+- Hero photo moves _below_ the copy on `<760px`.
 - Nav collapses to a hamburger below `760px`. Navy pill CTA stays visible inside the mobile menu.
 - Model: 1 col → 2 cols (≥760) → 4 cols (≥1024).
 - Network logos: 2 → 3 → 4 → 5 cols across 640/960/1280.
@@ -204,18 +232,19 @@ Copy edits go here, never inline in section files. Sections destructure their da
 
 Target Lighthouse scores on mobile, throttled, on the deployed build:
 
-| Metric | Target |
-|---|---|
-| Performance | ≥ 95 |
-| Accessibility | 100 |
-| Best Practices | 100 |
-| SEO | 100 |
-| LCP | < 1.8s |
-| CLS | 0 |
+| Metric            | Target                                                                        |
+| ----------------- | ----------------------------------------------------------------------------- |
+| Performance       | ≥ 95                                                                          |
+| Accessibility     | 100                                                                           |
+| Best Practices    | 100                                                                           |
+| SEO               | 100                                                                           |
+| LCP               | < 1.8s                                                                        |
+| CLS               | 0                                                                             |
 | Total page weight | < 1.5 MB (driven mostly by photos; goal is < 600 KB after photo optimisation) |
 
 **Required:**
-- `<title>`: "Moose — Reciprocal partnerships for boutique fitness studios"
+
+- `<title>`: "Moose - Elevate your memberships with variety."
 - `<meta name="description">`: see `src/pages/index.astro`.
 - Open Graph + Twitter card meta. OG image: `public/og.png` (regenerate when brand assets change).
 - `<link rel="canonical">`
@@ -318,7 +347,7 @@ The site is "good" when all of these are true:
 
 - ❌ Don't introduce Tailwind, CSS-in-JS, or any UI kit.
 - ❌ Don't add an icon library (`lucide-react`, `astro-icon`, etc). Inline SVGs only.
-- ❌ Don't load remote fonts — the system font stack *is* the brand.
+- ❌ Don't load remote fonts — the system font stack _is_ the brand.
 - ❌ Don't combine the wordmark and the loop icon in the same lockup.
 - ❌ Don't introduce a third brand colour or a gradient on the pink.
 - ❌ Don't put a pink CTA and a navy CTA on the same screen.

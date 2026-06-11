@@ -15,7 +15,7 @@ export const HERO = {
   eyebrow: "Studio operators",
   // The headline reads "Elevate your memberships with variety." with
   // `highlightWord` rendered in pink. One pink word per headline (SPEC §14).
-  head: "Elevate your memberships with",
+  head: "Elevate your memberships with variety",
   highlightWord: "variety.",
   subLines: [
     "Moose unlocks variety for boutique fitness studios.",
