@@ -47,8 +47,8 @@
   --danger:      #FF3B30;
   --peak:        #FF9500;
 
-  /* Type — system stack only, no remote fonts */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro",
+  /* Type — Poppins, with system stack as fallback */
+  --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro",
                system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
