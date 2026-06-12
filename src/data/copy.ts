@@ -376,6 +376,7 @@ export const FOOTER = {
       title: "Contact",
       items: [
         { l: "support@trainmoose.com", h: "mailto:support@trainmoose.com" },
+        { l: "partnerships@trainmoose.com", h: "mailto:partnerships@trainmoose.com" },
       ],
     },
   ] as const,
