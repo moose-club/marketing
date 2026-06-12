@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+
+const lastUpdated = '10 June 2026';
+---
+
+<Base
+  title="Liability Waiver and Risk Acknowledgement — Moose"
+  description="The Moose Liability Waiver and Risk Acknowledgement accepted when signing up for Moose, operated by Blubby Pty Ltd (trading as Moose Club). Covers inherent risks, member responsibilities and the limits of Moose's liability."
+>
+  <header class="legal-nav">
+    <div class="container legal-nav__inner">
+      <a href="/" class="legal-nav__brand" aria-label="Moose home">
+        <img src="/brand/logo/moose-wordmark-twotone.svg" alt="Moose" class="legal-nav__logo" />
+      </a>
+      <a href="/" class="legal-nav__back">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        <span>Back to home</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="legal">
+    <div class="container legal__inner">
+      <p class="eyebrow eyebrow--ink">Moose Club</p>
+      <h1 class="display-s legal__title">Liability Waiver and Risk Acknowledgement</h1>
+      <p class="legal__meta">
+        Blubby Pty Ltd ABN 11 690 645 106 trading as Moose Club<br />
+        Last updated: {lastUpdated}
+      </p>
+
+      <div class="legal__body">
+        <p>By signing up for Moose, I acknowledge and agree that:</p>
+        <ul>
+          <li>Moose is a platform and does not own, operate or control my Home Studio, any Partner Studio, or their venues, classes, instructors, staff, equipment, facilities or services.</li>
+          <li>Fitness, training, wellness and physical activity involve inherent risks, including risk of injury, illness, property loss or damage and, in rare cases, serious injury or death.</li>
+          <li>I am responsible for deciding whether I am fit, healthy and able to safely participate in any class, session or activity I book or attend through Moose.</li>
+          <li>I must comply with the applicable terms, rules, policies, waivers, safety requirements and reasonable directions of any Home Studio or Partner Studio I attend through Moose.</li>
+          <li>To the maximum extent permitted by law, Moose is not responsible for any injury, illness, incident, loss, damage, claim, conduct, service failure, venue condition, equipment issue, instructor issue, staff conduct or other matter arising from or connected with a Home Studio or Partner Studio.</li>
+          <li>Nothing in this acknowledgement excludes, restricts or modifies any right, remedy, guarantee or obligation that cannot be excluded, restricted or modified by law.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer class="legal-foot">
+    <div class="container legal-foot__inner">
+      <span>© {new Date().getFullYear()} Moose Club. Made in Australia.</span>
+      <a href="/">Return home</a>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  /* Slim header — section anchors don't exist on this route, so this page
+     ships its own minimal nav instead of reusing MSNav. Mirrors terms.astro. */
+  .legal-nav {
+    border-bottom: 1px solid var(--rule);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .legal-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .legal-nav__logo { display: block; height: 30px; width: auto; }
+  .legal-nav__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-dim);
+    padding: 9px 14px;
+    border-radius: var(--r-sm);
+    transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast);
+  }
+  .legal-nav__back:hover { color: var(--ink); background: var(--navy-50); }
+
+  .legal { padding-block: clamp(48px, 7vw, 88px); background: var(--paper); }
+  .legal__inner { max-width: 760px; }
+  .legal__title { color: var(--navy); margin-top: 18px; }
+  .legal__meta {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-mute);
+  }
+
+  .legal__body { margin-top: 40px; }
+  .legal__body p {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    margin-bottom: 16px;
+  }
+  .legal__body strong { color: var(--ink); font-weight: 700; }
+  .legal__body ul {
+    list-style: disc;
+    padding-left: 22px;
+    margin-bottom: 16px;
+  }
+  .legal__body li {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+  .legal__body a {
+    color: var(--pink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-foot {
+    background: var(--navy-900);
+    color: rgba(255, 255, 255, 0.5);
+    padding-block: 28px;
+    font-size: 13px;
+  }
+  .legal-foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .legal-foot a {
+    color: rgba(255, 255, 255, 0.65);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .legal-foot a:hover { color: #fff; }
+</style>
