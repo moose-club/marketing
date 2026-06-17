@@ -7,6 +7,7 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   preloadImage?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   canonical,
   ogImage = '/og.png',
   preloadImage,
+  noindex = false,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
@@ -74,6 +76,7 @@ const serviceJsonLd = {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalUrl} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

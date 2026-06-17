@@ -1,0 +1,349 @@
+---
+import Base from '../layouts/Base.astro';
+
+/*
+ * Member claim landing — the web fallback for the ChottuLink deep link emailed
+ * to members. ChottuLink (link.trainmoose.com) tries to open the iOS app via
+ * Universal Link first; everyone WITHOUT the app, and all desktop traffic, is
+ * redirected here with the member's pending-record id copied onto `?pm=<uuid>`.
+ *
+ * By the time anyone reaches this page the deep-link attempt has already
+ * happened and failed, so this page does NOT attempt any deep-linking. It is
+ * purely a "get the app" landing.
+ *
+ * `pm` is opaque, optional CONTEXT only — never a credential. Claiming happens
+ * inside the app via the member's own email OTP. We deliberately read nothing
+ * sensitive here and POST nowhere. App association (AASA / assetlinks) lives on
+ * link.trainmoose.com via ChottuLink — never on this marketing domain.
+ *
+ * Copy is inlined (not in src/data/copy.ts) to match the other standalone
+ * pages (404, liability-waiver, privacy) — copy.ts is for the marketing page.
+ */
+
+// TODO(launch): replace with the real App Store id once the listing is live.
+// Bundle id is com.trainmoose.moose, Apple Team ID 333876Z7UM.
+const APP_STORE_URL = 'https://apps.apple.com/app/moose/id000000000';
+
+const steps = [
+  {
+    title: 'Download the Moose app',
+    body: 'Free on the App Store.',
+  },
+  {
+    title: 'Sign in with your email',
+    body: 'Use the same email this link was sent to. We send a one-time code — no password.',
+  },
+  {
+    title: 'Claim your credits & book',
+    body: 'Your 6 credits are waiting. Spend them on classes at nearby partner studios.',
+  },
+];
+---
+
+<Base
+  title="Welcome to the Moose club"
+  description="We've received your membership upgrade and your Moose account is ready to activate."
+  noindex={true}
+>
+  <header class="claim-nav">
+    <div class="container claim-nav__inner">
+      <a href="/" class="claim-nav__brand" aria-label="Moose home">
+        <img src="/brand/logo/moose-wordmark-twotone.svg" alt="Moose" class="claim-nav__logo" />
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="claim" data-platform="unknown">
+    <div class="container claim__inner">
+      <span class="eyebrow">Your studio joined Moose</span>
+      <h1 class="display-m claim__title">Welcome to the <em>Moose</em> club.</h1>
+      <p class="claim__lede">
+        We've received your membership upgrade and your Moose account is ready to activate.
+      </p>
+
+      <!-- Action card. Server-rendered with every option visible so the page
+           works without JS; the inline script then emphasises the right one
+           for the visitor's platform via the data-platform attribute. -->
+      <div class="claim__card">
+        <!-- iOS -->
+        <div class="claim__cta claim__cta--ios">
+          <a class="store-btn" href={APP_STORE_URL} data-store="ios">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M17.05 12.54c-.02-2.07 1.69-3.06 1.77-3.11-.96-1.41-2.46-1.6-2.99-1.62-1.27-.13-2.49.75-3.13.75-.65 0-1.64-.73-2.7-.71-1.39.02-2.67.81-3.38 2.05-1.44 2.5-.37 6.2 1.03 8.23.69.99 1.5 2.1 2.57 2.06 1.03-.04 1.42-.67 2.67-.67 1.24 0 1.6.67 2.69.65 1.11-.02 1.81-1.01 2.49-2.01.78-1.15 1.1-2.27 1.12-2.33-.02-.01-2.15-.83-2.17-3.28zM15 6.31c.57-.69.95-1.65.85-2.61-.82.03-1.81.54-2.4 1.23-.52.61-.98 1.59-.86 2.52.91.07 1.84-.46 2.41-1.14z"/></svg>
+            <span class="store-btn__text">
+              <span class="store-btn__sm">Download on the</span>
+              <span class="store-btn__lg">App Store</span>
+            </span>
+          </a>
+        </div>
+
+        <!-- Desktop: scan to continue on a phone -->
+        <div class="claim__cta claim__cta--desktop">
+          <p class="claim__scan-title">Open this on your phone</p>
+          <div class="claim__qr" id="claimQr" aria-hidden="true">
+            <div class="claim__qr-fallback">QR</div>
+          </div>
+          <p class="claim__scan-note">Scan with your iPhone camera to get the app, then sign in with your email.</p>
+          <div class="claim__store-links">
+            <a href={APP_STORE_URL}>Download on the App Store</a>
+          </div>
+        </div>
+      </div>
+
+      <ol class="claim__steps">
+        {steps.map((step, i) => (
+          <li class="claim__step">
+            <span class="claim__step-num" aria-hidden="true">{i + 1}</span>
+            <span class="claim__step-text">
+              <span class="claim__step-title">{step.title}</span>
+              <span class="claim__step-body">{step.body}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <p class="claim__fineprint">
+        Trouble signing in? Make sure you're using the email address this link was sent
+        to. Need a hand? <a href="mailto:support@trainmoose.com">support@trainmoose.com</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="claim-foot">
+    <div class="container claim-foot__inner">
+      <span>© {new Date().getFullYear()} Moose Club. Made in Australia.</span>
+      <a href="/">trainmoose.com</a>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  import { QrCode, Ecc } from '../lib/qrcodegen';
+
+  // The app is iOS-only, so we only special-case iOS. Everyone else (desktop
+  // and Android) gets the "open on your phone" block with the App Store link.
+  type Platform = 'ios' | 'desktop';
+
+  function detectPlatform(): Platform {
+    const ua = navigator.userAgent || '';
+    // iPadOS 13+ reports as desktop Safari; the touch-point check catches it.
+    const isIpadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+    if (/iPhone|iPad|iPod/.test(ua) || isIpadOS) return 'ios';
+    return 'desktop';
+  }
+
+  const main = document.querySelector<HTMLElement>('.claim');
+  if (main) main.dataset.platform = detectPlatform();
+
+  // On desktop, render a QR for the current URL (pm included) so the visitor
+  // can hop to their phone and land on this same page, which then shows the
+  // right store button. Only runs on desktop — no QR weight on mobile.
+  if (main?.dataset.platform === 'desktop') {
+    const host = document.getElementById('claimQr');
+    if (host) {
+      try {
+        const qr = QrCode.encodeText(window.location.href, Ecc.MEDIUM);
+        // border = 4 modules: the QR-spec quiet zone, required for reliable scanning.
+        host.innerHTML = qr.toSvgString(4, '#F7F4EF', '#1A2B5F');
+        const svg = host.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('width', '100%');
+          svg.setAttribute('height', '100%');
+        }
+      } catch {
+        // Leave the "QR" text fallback in place; the store links still work.
+      }
+    }
+  }
+</script>
+
+<style>
+  /* Slim branded header — this route has no section anchors, so it ships its
+     own minimal nav rather than reusing MSNav (mirrors the legal pages). */
+  .claim-nav {
+    border-bottom: 1px solid var(--rule);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .claim-nav__inner {
+    display: flex;
+    align-items: center;
+    height: 72px;
+  }
+  .claim-nav__logo { display: block; height: 30px; width: auto; }
+
+  .claim {
+    background: var(--paper);
+    padding-block: clamp(40px, 7vw, 80px);
+    min-height: calc(100svh - 72px);
+  }
+  .claim__inner { max-width: 560px; }
+  .claim__title { color: var(--navy); margin-top: 18px; }
+  .claim__lede {
+    margin-top: 18px;
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.65;
+    color: var(--ink-dim);
+  }
+
+  /* Action card */
+  .claim__card {
+    margin-top: 32px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-card);
+    padding: clamp(22px, 4vw, 32px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Every CTA block renders by default (no-JS safety). The data-platform
+     attribute set by the inline script narrows to the relevant one. Before JS
+     runs, platform is "unknown" → show the desktop block (universal: QR +
+     both store links), which covers every visitor. */
+  .claim__cta { display: none; }
+  .claim[data-platform='unknown'] .claim__cta--desktop,
+  .claim[data-platform='desktop'] .claim__cta--desktop { display: block; }
+  .claim[data-platform='ios'] .claim__cta--ios { display: block; }
+
+  /* App store buttons */
+  .store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+    background: var(--navy);
+    color: #fff;
+    padding: 15px 24px;
+    border-radius: var(--r-pill);
+    box-shadow: var(--shadow-sm);
+    transition: background var(--dur-base) var(--ease-out), transform var(--dur-base), box-shadow var(--dur-base);
+  }
+  .store-btn:hover {
+    background: var(--navy-800);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .store-btn__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+  }
+  .store-btn__sm { font-size: 11px; font-weight: 500; opacity: 0.8; letter-spacing: 0.01em; }
+  .store-btn__lg { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+
+  /* Desktop QR block */
+  .claim__cta--desktop { text-align: center; }
+  .claim__scan-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .claim__qr {
+    width: 196px;
+    height: 196px;
+    margin: 18px auto 0;
+    border-radius: var(--r-tile);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+  }
+  .claim__qr :global(svg) { display: block; }
+  .claim__qr-fallback {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+  }
+  .claim__scan-note {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 320px;
+    margin-inline: auto;
+  }
+  .claim__store-links {
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-mute);
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .claim__store-links a {
+    color: var(--navy);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .claim__store-links a:hover { color: var(--pink); }
+
+  /* Steps */
+  .claim__steps {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .claim__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .claim__step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--pink-100);
+    color: var(--pink);
+    font-size: 14px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .claim__step-text { display: flex; flex-direction: column; gap: 2px; }
+  .claim__step-title { font-size: 15.5px; font-weight: 700; color: var(--navy); }
+  .claim__step-body { font-size: 14.5px; line-height: 1.55; color: var(--ink-dim); }
+
+  .claim__fineprint {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-mute);
+  }
+  .claim__fineprint a {
+    color: var(--pink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Footer — mirrors the legal pages' slim foot. */
+  .claim-foot {
+    background: var(--navy-900);
+    color: rgba(255, 255, 255, 0.5);
+    padding-block: 24px;
+    font-size: 13px;
+  }
+  .claim-foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .claim-foot a { color: rgba(255, 255, 255, 0.65); transition: color var(--dur-fast) var(--ease-out); }
+  .claim-foot a:hover { color: #fff; }
+</style>
