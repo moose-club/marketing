@@ -64,29 +64,17 @@ import { HERO } from '../../data/copy';
     justify-content: center;
     max-width: 760px;
   }
-  .hero__head { margin-top: 18px; color: var(--navy); }
+  .hero__head {
+    margin-top: 18px;
+    color: var(--navy);
+    /* A touch smaller than the global display-l scale. */
+    font-size: clamp(34px, 5vw, 76px);
+  }
 
-  /* The pink word draws its own underline once the headline has landed.
-     Same single accent word — no extra pink elsewhere. */
   .hero__head em {
     position: relative;
     display: inline-block;
   }
-  .hero__head em::after {
-    content: '';
-    position: absolute;
-    left: 0.02em;
-    right: 0.06em;
-    bottom: 0.03em;
-    height: 0.09em;
-    border-radius: var(--r-pill);
-    background: var(--pink);
-    opacity: 0.3;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.8s var(--ease-out) 0.95s;
-  }
-  .hero__head:global(.is-revealed) em::after { transform: scaleX(1); }
   .hero__lede {
     margin-top: 28px;
     max-width: 560px;

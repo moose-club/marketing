@@ -15,10 +15,10 @@ export const HERO = {
   eyebrow: "Studio operators",
   // The headline reads "Elevate your memberships with variety." with
   // `highlightWord` rendered in pink. One pink word per headline (SPEC §14).
-  head: "Elevate your memberships with variety",
+  head: "Elevate your memberships with",
   highlightWord: "variety.",
   subLines: [
-    "Moose unlocks variety for boutique fitness studios.",
+    "Moose unlocks variety for fitness studios.",
     "Don't build new modalities in-house. Form reciprocal partnerships with complementary, non-competing studios nearby — and let collaboration do the work.",
   ] as const,
   points: [
@@ -51,7 +51,7 @@ export const MODALITIES = [
 
 export const MODEL = {
   eyebrow: "At a glance",
-  head: "The Moose model.",
+  headHtml: "The <em>Moose</em> model.",
   // No pink highlight in this headline — the eyebrow already carries the
   // accent. Keeps to the 'one pink word per headline' rule.
   lede: "Crossover between partner venues, offered on a rationed basis — enough to enrich a membership, while preserving the home-studio relationship.",
@@ -71,7 +71,7 @@ export const MODEL = {
       eyebrow: "Offering",
       title: "Add a premium tier to your membership catalogue",
       body: [
-        "Unlock a new, premium tier offering at $11/wk extra with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.",
+        'Unlock a new, premium tier offering at <span class="step__hl">$11/wk</span> extra with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.',
         "You choose which of your memberships the upgrade is eligible on.",
       ] as const,
       figure: "$11/wk",
@@ -81,7 +81,7 @@ export const MODEL = {
       eyebrow: "Usage",
       title: "Controlled crossover",
       body: [
-        "The upgrade entitles members to 4 crossover sessions per month at partner venues.",
+        'The upgrade entitles members to <span class="step__hl">4 crossover sessions per month</span> at partner venues.',
         "Capped by design — keeping members anchored to their home studio as their primary training destination.",
       ] as const,
       figure: "4 sessions / month",
@@ -144,11 +144,11 @@ export const NETWORK = {
 
 export const VALUE = {
   eyebrow: "For the studios",
-  // Original design uses 2 pink words. Per the brand rule we keep only one
-  // ("variety") — the second emphasis (`reason to stay`) is rendered in
-  // navy via the styling, not pink.
+  // Both emphases ("reason to join" / "reason to stay") are rendered in pink
+  // — a deliberate matched pair framing the join/stay value, per the operator's
+  // request.
   headHtml:
-    "Variety gives new members a compelling <em>reason to join</em>, and existing members another reason to stay.",
+    "Variety gives new members a compelling <em>reason to join</em>, and existing members another <em>reason to stay</em>.",
   prizeNote:
     "Moose adds a nice new revenue stream. But the real prize is a bigger, stickier membership base.",
   benefits: [
@@ -326,7 +326,7 @@ export const MEMBERS = {
 // All forms POST to mailto: per CLAUDE.md decision — placeholders until
 // a real CRM/Typeform endpoint is wired.
 export const REGISTER = {
-  eyebrow: "Get on board",
+  eyebrow: "Reach out",
   head: "Get in touch with the Moose.",
   prompt: "Who are you?",
   tabs: [
@@ -346,12 +346,12 @@ export const REGISTER = {
       "mailto:memberships@trainmoose.com?subject=Member%20enquiry%20from%20the%20Moose%20site",
   },
   successStudio: {
-    title: "Thanks — you're on our radar.",
-    body: "We'll be in touch within two business days to set up a quick chat about partners near you.",
+    title: "Thanks — message received.",
+    body: "We'll be in touch to chat with you about Moose.",
   },
   successMember: {
-    title: "Thanks — got it.",
-    body: "We'll reach out shortly and, where we can, nudge your studio to come across.",
+    title: "Thanks — message received.",
+    body: "We'll be in touch to help you or your home studio with Moose.",
   },
 } as const;
 

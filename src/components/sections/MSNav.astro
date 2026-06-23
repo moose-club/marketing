@@ -87,10 +87,15 @@ import { NAV } from '../../data/copy';
     gap: 24px;
     height: 72px;
   }
-  .nav__brand { display: inline-flex; flex-shrink: 0; }
+  .nav__brand {
+    display: inline-flex;
+    flex-shrink: 0;
+    /* Pull the wordmark closer to the screen edge than the container inset. */
+    margin-left: clamp(-32px, -3.5vw, -12px);
+  }
   .nav__logo {
     display: block;
-    height: 30px;
+    height: 24px;
     width: auto;
   }
 

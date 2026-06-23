@@ -92,10 +92,12 @@ import { MEMBERS } from '../../data/copy';
     display: grid;
     grid-template-columns: 1fr;
     gap: 56px;
-    align-items: center;
+    /* Align column tops so the phone starts level with the heading block,
+       rather than floating above it. */
+    align-items: start;
   }
   .members__head {
-    font-size: var(--t-display-m);
+    font-size: clamp(24px, 3.4vw, 46px);
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.08;
@@ -103,7 +105,7 @@ import { MEMBERS } from '../../data/copy';
     margin-bottom: 8px;
   }
   .members__head em { color: var(--pink); font-style: normal; }
-  .members__lede { margin-top: 18px; }
+  .members__lede { margin-top: 18px; font-weight: 400; }
   .members__lede-line { display: block; }
   .members__lede-line + .members__lede-line { margin-top: 0.8em; }
 
@@ -125,7 +127,7 @@ import { MEMBERS } from '../../data/copy';
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--ink-mute);
+    color: var(--pink);
   }
   .mc__v {
     font-size: clamp(28px, 3vw, 36px);

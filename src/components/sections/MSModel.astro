@@ -6,7 +6,7 @@ import { MODEL } from '../../data/copy';
   <div class="container">
     <div class="section-head">
       <span class="eyebrow" data-reveal>{MODEL.eyebrow}</span>
-      <h2 id="modelHeading" data-reveal style="--ri:1">{MODEL.head}</h2>
+      <h2 id="modelHeading" data-reveal style="--ri:1" set:html={MODEL.headHtml}></h2>
       <p class="lede" data-reveal style="--ri:2">{MODEL.lede}</p>
     </div>
 
@@ -20,7 +20,7 @@ import { MODEL } from '../../data/copy';
             <p class="step__eyebrow">{s.eyebrow}</p>
             <h4 class="step__title">{s.title}</h4>
             {s.body.map((p) => (
-              <p class="step__body">{p}</p>
+              <p class="step__body" set:html={p}></p>
             ))}
           </article>
         ))}
@@ -101,6 +101,19 @@ import { MODEL } from '../../data/copy';
     margin: 0;
   }
   .step__body + .step__body { margin-top: 10px; }
+
+  /* Key figures ($11/wk, 4 sessions/month) get a soft pink fill chip with
+     bold navy text — pink as fill keeps small text WCAG-safe (SPEC §14). */
+  .step__hl {
+    background: var(--pink-100);
+    color: var(--navy);
+    font-weight: 700;
+    opacity: 1;
+    padding: 0.06em 0.36em;
+    border-radius: var(--r-sm);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
 
   @media (min-width: 760px) {
     .model__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
