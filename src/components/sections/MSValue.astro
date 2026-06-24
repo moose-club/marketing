@@ -11,35 +11,19 @@ import { VALUE } from '../../data/copy';
     </div>
 
     <div class="value__table">
-      <p class="value__grouplabel" data-reveal>The benefits.</p>
       <div class="value__cards value__cards--benefits">
         {VALUE.benefits.map((b, i) => (
           <div class="value__bcard" data-reveal="pop" style={`--ri:${1 + i}`}>
             <span class="value__num">{b.n}</span>
             <h4>{b.title}</h4>
             <p>{b.body}</p>
-          </div>
-        ))}
-      </div>
-
-      <div class="value__connectors" aria-hidden="true" data-reveal style="--ri:6">
-        <span class="value__conn">
-          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
-        </span>
-        <span class="value__conn">
-          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
-        </span>
-        <span class="value__conn">
-          <svg class="value__arrow" viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8 L24 23 L41 8"/></svg>
-        </span>
-      </div>
-
-      <p class="value__grouplabel value__grouplabel--quant" data-reveal>Quantification.</p>
-      <div class="value__cards value__cards--quant">
-        {VALUE.quantification.map((q, i) => (
-          <div class="value__vcard" data-reveal="pop" style={`--ri:${1 + i}`}>
-            <div class="value__stat"><span class="value__plus">+</span><span class="tnum" data-countup>{q.stat.replace(/^\+/, '')}</span><span class="value__unit">{q.unit}</span></div>
-            <p class="value__cap">{q.cap}</p>
+            <div class="value__statbox">
+              <div class="value__stat">
+                <span class="tnum" data-countup>{b.stat}</span>
+                {b.unit && <span class="value__unit">{b.unit}</span>}
+              </div>
+              <p class="value__cap">{b.cap}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -73,138 +57,103 @@ import { VALUE } from '../../data/copy';
   }
 
   .value__table { width: 100%; }
-  .value__grouplabel {
-    display: block;
-    color: var(--navy);
-    border-bottom: 2px solid var(--rule-strong);
-    padding-bottom: 12px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-weight: 600;
-    margin: 0 0 22px;
-  }
-  .value__grouplabel--quant { margin-top: 14px; }
 
   .value__cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 22px;
     align-items: stretch;
   }
-  .value__cards--quant { grid-template-columns: 1fr; }
 
+  /* Navy benefit card with a cream quantification box pinned to the bottom. */
   .value__bcard {
     display: flex;
     flex-direction: column;
-    background: var(--cream);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-card);
-    padding: 22px 20px;
-    box-shadow: var(--shadow-xs);
-    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base);
+    background: var(--navy);
+    border-radius: var(--r-sheet);
+    padding: 26px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
   }
   .value__bcard:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--rule-strong);
+    box-shadow: var(--shadow-lg);
   }
   .value__num {
     font-weight: 800;
-    font-size: clamp(22px, 2vw, 28px);
-    color: var(--navy);
+    font-size: clamp(28px, 2.4vw, 34px);
+    color: #fff;
     line-height: 1;
   }
   .value__bcard h4 {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
-    color: var(--navy);
-    margin: 16px 0 8px;
+    color: #fff;
+    margin: 20px 0 10px;
     line-height: 1.2;
-    min-height: 2.5em;
   }
-  .value__bcard p {
-    font-size: 13px;
-    color: var(--ink);
-    line-height: 1.5;
+  .value__bcard > p {
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.55;
     margin: 0;
-    opacity: 0.85;
+    /* Guaranteed gap between the body copy and the stat box below it. */
+    margin-bottom: 28px;
   }
 
-  .value__connectors {
-    display: none;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-    margin: 14px 0 6px;
-  }
-  .value__conn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    grid-column-end: span 1;
-  }
-  .value__conn:nth-child(1) { grid-column: 1; }
-  .value__conn:nth-child(2) { grid-column: 3; }
-  .value__conn:nth-child(3) { grid-column: 5; }
-  .value__arrow {
-    width: 58px;
-    height: 34px;
-    color: var(--navy);
-    opacity: 0.18;
-    filter: drop-shadow(0 3px 5px rgba(16, 26, 60, 0.10));
-    animation: value-arrow-bob 2.6s ease-in-out infinite;
-  }
-  .value__conn:nth-child(2) .value__arrow { animation-delay: 0.3s; }
-  .value__conn:nth-child(3) .value__arrow { animation-delay: 0.6s; }
-  @keyframes value-arrow-bob {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(5px); }
-  }
-
-  .value__vcard {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+  /* Cream stat box — bottom-pinned via margin-top:auto. Constrained to the
+     card width (min-width:0) so a long stat word can't bulge it out, and given
+     a uniform min-height so every box is the same size. With equal-height cards
+     + bottom pinning, equal box height means the box tops line up too. */
+  .value__statbox {
+    margin-top: auto;
+    width: 100%;
+    min-width: 0;
     background: var(--cream);
-    border: 1px solid var(--rule);
     border-radius: var(--r-card);
-    padding: 22px;
-    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
-  }
-  .value__vcard:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+    padding: 24px 22px 26px;
   }
   .value__stat {
     font-weight: 800;
-    font-size: clamp(28px, 3vw, 36px);
+    font-size: clamp(24px, 2.4vw, 32px);
     color: var(--navy);
     letter-spacing: -0.02em;
     line-height: 1;
     display: flex;
     align-items: flex-end;
+    min-width: 0;
   }
-  .value__plus { color: var(--navy); margin-right: 1px; }
   .value__unit {
-    font-size: 0.4em;
+    font-size: 0.42em;
     color: var(--ink-dim);
     font-weight: 600;
     margin-left: 5px;
     letter-spacing: 0;
   }
   .value__cap {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--ink-dim);
-    margin-top: 10px;
+    margin-top: 12px;
     line-height: 1.5;
+    /* Reserve space for the longest caption so all boxes match height. */
+    min-height: 4.5em;
   }
 
-  @media (min-width: 760px) {
-    .value__cards { grid-template-columns: repeat(3, 1fr); }
-    .value__cards--quant { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 640px) {
+    .value__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (min-width: 1024px) {
-    .value__cards--benefits { grid-template-columns: repeat(5, 1fr); }
-    .value__connectors { display: grid; }
+  @media (min-width: 960px) {
+    .value__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1280px) {
+    /* Break the 5-card row out wider than the 1240px container so each card
+       gets more width. Centred on the page; heading stays at container width. */
+    .value__cards--benefits {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      width: min(94vw, 1520px);
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 </style>

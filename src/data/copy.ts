@@ -151,48 +151,48 @@ export const VALUE = {
     "Variety gives new members a compelling <em>reason to join</em>, and existing members another <em>reason to stay</em>.",
   prizeNote:
     "Moose adds a nice new revenue stream. But the real prize is a bigger, stickier membership base.",
+  // Each benefit card carries its own quantification box (stat + unit + cap).
+  // unit is optional — cards 4/5 use a word/percentage with no "p.a." suffix.
   benefits: [
     {
       n: "01",
       title: "New revenue stream",
       body: "A premium Moose tier that lifts yield per member — direct, incremental, recurring.",
-    },
-    {
-      n: "02",
-      title: "Attract new members",
-      body: "Variety is a compelling reason for new members to choose you over competitors.",
-    },
-    {
-      n: "03",
-      title: "Reduce churn",
-      body: "Monotony drives churn; variety combats it. Average tenure goes up.",
-    },
-    {
-      n: "04",
-      title: "Recurring memberships",
-      body: "Convert customers from casual class-pack buyers to recurring memberships.",
-    },
-    {
-      n: "05",
-      title: "Zero-friction adoption",
-      body: "No cost, no integration work. Embedded into your existing systems.",
-    },
-  ] as const,
-  quantification: [
-    {
       stat: "+$15k",
       unit: "p.a.",
       cap: "Additional studio profit (net of Moose fees) at 40 upgraders.",
     },
     {
+      n: "02",
+      title: "Attract new members",
+      body: "Variety is a compelling reason for new members to choose you over competitors.",
       stat: "+$18k",
       unit: "p.a.",
       cap: "Attracting 5 new members per year (assuming $70/wk memberships).",
     },
     {
+      n: "03",
+      title: "Reduce churn",
+      body: "Monotony drives churn; variety combats it. Average tenure goes up.",
       stat: "+$18k",
       unit: "p.a.",
       cap: "Preserving 5 members per year (assuming $70/wk memberships).",
+    },
+    {
+      n: "04",
+      title: "Recurring memberships",
+      body: "Convert customers from casual class-pack buyers to recurring memberships.",
+      stat: "Stability",
+      unit: "",
+      cap: "Recurring memberships for better operational predictability.",
+    },
+    {
+      n: "05",
+      title: "Zero-friction adoption",
+      body: "No cost, no integration work. Embedded into your existing systems.",
+      stat: "100%",
+      unit: "",
+      cap: "New revenue flows straight to your bottom line.",
     },
   ] as const,
 } as const;
