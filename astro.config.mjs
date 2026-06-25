@@ -12,12 +12,12 @@ export default defineConfig({
     // direct link with studios, not surfaced publicly.
     sitemap({
       filter: (page) =>
-        !page.startsWith('https://marketing.trainmoose.com/studio-terms') &&
-        !page.startsWith('https://marketing.trainmoose.com/studio-conduct') &&
+        !page.startsWith('https://www.trainmoose.com/studio-terms') &&
+        !page.startsWith('https://www.trainmoose.com/studio-conduct') &&
         // /claim is a transactional landing reached via email deep links, not
         // a public marketing page — keep it out of the sitemap.
-        !page.startsWith('https://marketing.trainmoose.com/claim'),
+        !page.startsWith('https://www.trainmoose.com/claim'),
     }),
   ],
-  site: 'https://marketing.trainmoose.com',
+  site: 'https://www.trainmoose.com',
 });

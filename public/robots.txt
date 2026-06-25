@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://marketing.trainmoose.com/sitemap-index.xml
+Sitemap: https://www.trainmoose.com/sitemap-index.xml
