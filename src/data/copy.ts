@@ -286,37 +286,6 @@ export const MEMBERS = {
   ] as const,
   noteHtml:
     'Your studio not on Moose yet? <a href="#register" data-register="member">Let\'s help get them across →</a>',
-  // Pure-CSS phone mock content
-  phone: {
-    greetHi: "Good evening,",
-    greetName: "Ava",
-    anchorStudio: "Form Pilates",
-    creditsLabel: "Crossover credits",
-    creditsMonth: "May",
-    creditsLeft: "3 of 4 left",
-    sectionTitle: "Book a crossover",
-    filters: ["All", "Forge", "Haus", "Northside"] as const,
-    slots: [
-      {
-        time: "5:30",
-        meridiem: "pm",
-        name: "Forge Strength Co.",
-        meta: "Strength · Fitzroy · 1.2km",
-      },
-      {
-        time: "6:00",
-        meridiem: "pm",
-        name: "Haus of Movement",
-        meta: "Mobility · Collingwood · 2.0km",
-      },
-      {
-        time: "6:15",
-        meridiem: "pm",
-        name: "Northside Boxing",
-        meta: "Boxing · Brunswick · 2.4km",
-      },
-    ] as const,
-  },
   calloutLines: [
     "The Moose app is used only for booking crossover sessions at partner venues.",
     "Members still book their home studio classes the way they always have.",

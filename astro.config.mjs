@@ -16,7 +16,10 @@ export default defineConfig({
         !page.startsWith('https://www.trainmoose.com/studio-conduct') &&
         // /claim is a transactional landing reached via email deep links, not
         // a public marketing page — keep it out of the sitemap.
-        !page.startsWith('https://www.trainmoose.com/claim'),
+        !page.startsWith('https://www.trainmoose.com/claim') &&
+        // /calculator is a shareable sales tool reached by direct link (and is
+        // noindex for now) — keep it out of the sitemap.
+        !page.startsWith('https://www.trainmoose.com/calculator'),
     }),
   ],
   site: 'https://www.trainmoose.com',

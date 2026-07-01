@@ -1,0 +1,434 @@
+---
+/*
+ * Studio value calculator — a standalone, shareable tool that shows a studio
+ * operator what Moose adds to their numbers (upgrade-fee income + retained /
+ * won members). Ported from a self-contained HTML export:
+ *   - the bundled Poppins @font-face blocks were dropped (Base.astro already
+ *     loads Poppins),
+ *   - the bundled hero photo was re-extracted from the export and re-encoded
+ *     to WebP (public/photos/hero-poolside.webp); the bundled wordmark PNG was
+ *     swapped for the existing navy wordmark SVG,
+ *   - all CSS is namespaced under `.mvc-page` (via is:global) so the widget's
+ *     generic class names (.eyebrow, .btn, .field…) and :root-style tokens
+ *     can't collide with globals.css.
+ *
+ * Not linked from the homepage — reachable directly at /calculator. `noindex`
+ * keeps it out of search while the assumptions (($11/wk upgrade, Moose's
+ * one-third share) are still provisional. Remove noindex to make it public.
+ *
+ * The calculator logic is pure vanilla JS (no framework) — see the <script>.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Value calculator — what Moose adds to your studio"
+  description="See what Moose adds to your studio, in your own numbers. Fee income and retention — additive to the membership you already hold."
+  noindex={true}
+>
+  <main id="main" class="mvc-page">
+    <div class="wrap">
+
+      <div class="topbar">
+        <a class="mark" href="/" aria-label="Moose home">
+          <img src="/brand/logo/moose-wordmark-navy.svg" alt="Moose" style="height:22px;width:auto;display:block;" />
+        </a>
+        <div class="topbar-right">
+          <a class="back" href="/">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+            <span>Back to home</span>
+          </a>
+          <span class="est">Indicative studio estimate · AUD</span>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero">
+        <img class="hero-photo" src="/photos/hero-poolside.webp" alt="" />
+        <div class="hero-inner">
+          <span class="eyebrow" style="color:var(--accent);">Your numbers with Moose</span>
+          <h1>Incremental value.</h1>
+
+          <div class="figure">
+            <div class="big" id="h-annual">$0</div>
+            <div class="per">per year</div>
+          </div>
+
+          <div class="counter">
+            <b>Straight to your bottom line</b> — no incremental costs, resources or overheads.
+          </div>
+        </div>
+      </section>
+
+      <div class="block">
+        <div class="block-head"><h2>Your numbers</h2></div>
+        <div class="vgrid">
+
+          <!-- COLUMN 1: upgrade fees -->
+          <div class="vcard lead">
+            <div class="vhead"><div class="vt">Your upgrade fees</div></div>
+            <div class="zone inputs">
+              <div class="zone-label">Inputs</div>
+              <div class="field">
+                <div class="frow"><label for="eligible">Your members</label><span class="val" id="v-eligible">200</span></div>
+                <input type="range" id="eligible" min="0" max="500" step="5" value="200" />
+                <div class="hint">How many members/active customers your studio has.</div>
+              </div>
+              <div class="field">
+                <div class="frow"><label for="uptake">Uptake rate</label><span class="val" id="v-uptake">20%</span></div>
+                <input type="range" id="uptake" min="0" max="50" step="1" value="20" />
+                <div class="hint">Proportion of your members who upgrade their membership.</div>
+                <div class="seg-caption" id="cap-uptake" style="margin-top:11px;font-size:15px;color:var(--brand);font-weight:600;"><b style="font-size:20px;">40</b> members upgraded</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="value-card lead">
+            <div class="zone-label">Additional value</div>
+            <div style="display:flex; align-items:center; gap:22px; flex-wrap:wrap;">
+              <div class="onum" style="margin-top:0;"><span id="o-fee-annual">$0</span><span style="font-size:15px;font-weight:600;color:var(--label-2);"> /year</span></div>
+              <div style="display:flex; gap:20px; padding-left:22px; border-left:1px solid var(--sep);">
+                <div><div class="rk">Per week</div><div class="rv-sm" id="o-fee-weekly">$0</div></div>
+                <div><div class="rk">Per month</div><div class="rv-sm" id="o-fee-monthly">$0</div></div>
+              </div>
+            </div>
+            <div class="ledger" id="fee-ledger" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--sep);"></div>
+          </div>
+
+          <!-- COLUMN 2: attraction & retention -->
+          <div class="vcard">
+            <div class="vhead"><div class="vt">New members and retention</div></div>
+            <div class="zone inputs">
+              <div class="zone-label">Inputs</div>
+              <div class="field">
+                <div class="frow"><label for="retain">Additional members won or retained by offering variety through Moose</label><span class="val" id="v-retain">10</span></div>
+                <input type="range" id="retain" min="0" max="50" step="1" value="10" />
+                <div class="hint">Number of additional members retained or won because of your new membership offering.</div>
+              </div>
+              <div class="field">
+                <div class="frow"><label for="price">Standard membership price</label><span class="val" id="v-price">$75/wk</span></div>
+                <div class="seg" id="seg-period" role="group" aria-label="Pricing period" style="margin-bottom:10px;">
+                  <button data-k="wk" aria-pressed="true">Per week</button>
+                  <button data-k="mo" aria-pressed="false">Per month</button>
+                </div>
+                <input type="range" id="price" min="25" max="150" step="1" value="75" />
+                <div class="hint">How your standard membership is priced.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="value-card">
+            <div class="zone-label">Additional value</div>
+            <div style="display:flex; align-items:center; gap:22px; flex-wrap:wrap;">
+              <div class="onum" style="margin-top:0;"><span id="o-retain">$0</span><span style="font-size:15px;font-weight:600;color:var(--label-2);"> /year</span></div>
+              <div style="display:flex; gap:20px; padding-left:22px; border-left:1px solid var(--sep);">
+                <div><div class="rk">Per week</div><div class="rv-sm" id="o-retain-weekly">$0</div></div>
+                <div><div class="rk">Per month</div><div class="rv-sm" id="o-retain-monthly">$0</div></div>
+              </div>
+            </div>
+            <div class="osub" id="retain-calc" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--sep); font-size:14px; color:var(--label-1);"><b>10</b> members @ <b>$75 / wk</b></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">Save as PDF</button>
+        <button class="btn btn-ghost" id="reset">Reset to defaults</button>
+      </div>
+
+    </div>
+  </main>
+</Base>
+
+<style is:global>
+  /* ── Studio value calculator — namespaced under .mvc-page ──────────────
+     Every selector is prefixed with .mvc-page so the widget's generic class
+     names and token set can't collide with globals.css (which is imported by
+     Base.astro on every page). The bundled Poppins @font-face blocks from the
+     original export were removed — Base.astro loads Poppins already. */
+
+  .mvc-page{
+    --accent:#EB4E8D; --accent-glow:rgba(235,78,141,0.16); --accent-soft:rgba(235,78,141,0.10); --on-accent:#fff;
+    --brand:#1A2B5F; --brand-deep:#13204A; --brand-lift:#2C3D78; --on-brand:#fff; --on-brand-dim:rgba(255,255,255,0.65);
+    --paper:#F0EEE9; --surface:#FFFFFF; --surface-2:#F8F8F8; --surface-tint:#E9E9EE;
+    --label-1:#1A2B5F; --label-2:rgba(26,43,95,0.62); --label-3:rgba(26,43,95,0.38); --sep:rgba(26,43,95,0.12);
+    --success:#34C759; --peak:#FF9500;
+    --r-pill:999px; --r-card:16px; --r-glass:28px; --r-btn:14px;
+    --font:"Poppins",-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    background:var(--paper); color:var(--label-1);
+    font-family:var(--font); line-height:1.45; font-weight:400; letter-spacing:normal;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mvc-page .wrap{ max-width:1080px; margin:0 auto; padding:0 22px 64px; }
+  .mvc-page h1, .mvc-page h2, .mvc-page h3{ margin:0; letter-spacing:-0.02em; }
+  .mvc-page p{ margin:0; }
+  .mvc-page .eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--label-2); }
+
+  /* top bar */
+  .mvc-page .topbar{ display:flex; align-items:center; gap:14px; padding:22px 2px 6px; flex-wrap:wrap; }
+  .mvc-page .mark{ display:flex; align-items:center; gap:9px; }
+  .mvc-page .topbar-right{ margin-left:auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .mvc-page .back{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--label-2); }
+  .mvc-page .back:hover{ color:var(--brand); }
+  .mvc-page .est{ font-size:12px; color:var(--label-2); }
+
+  /* hero — editorial photography */
+  .mvc-page .hero{
+    position:relative; margin-top:12px; color:var(--on-brand);
+    border-radius:var(--r-glass); overflow:hidden;
+    min-height:440px; display:flex; align-items:flex-end;
+    padding:38px 40px 40px;
+    background:var(--brand);
+  }
+  .mvc-page .hero .hero-photo{
+    position:absolute; inset:0; width:100%; height:100%; z-index:0;
+    object-fit:cover; object-position:50% 22%;
+  }
+  .mvc-page .hero::before{
+    content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:
+      linear-gradient(90deg, rgba(16,22,48,0.94) 0%, rgba(16,22,48,0.80) 38%, rgba(16,22,48,0.30) 78%, rgba(16,22,48,0.12) 100%),
+      linear-gradient(0deg, rgba(16,22,48,0.72) 0%, rgba(16,22,48,0) 46%);
+  }
+  .mvc-page .hero-inner{ position:relative; z-index:2; width:100%; }
+  .mvc-page .hero .eyebrow{ color:var(--accent); }
+  .mvc-page .hero h1{ font-size:clamp(24px,3.6vw,34px); font-weight:600; letter-spacing:-0.02em; line-height:1.08; margin:13px 0 0; max-width:16ch; color:rgba(255,255,255,0.94); }
+  .mvc-page .figure{ display:flex; align-items:flex-end; gap:16px; margin:20px 0 0; flex-wrap:wrap; }
+  .mvc-page .figure .big{ font-size:clamp(56px,10vw,104px); font-weight:800; letter-spacing:-0.045em; line-height:0.86; font-variant-numeric:tabular-nums; color:#fff; }
+  .mvc-page .figure .per{ font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); padding-bottom:12px; }
+
+  .mvc-page .counter{
+    position:relative; margin-top:22px; padding:13px 18px; border-radius:14px;
+    background:rgba(255,255,255,0.12); border:0.5px solid rgba(255,255,255,0.22);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    font-size:13.5px; color:rgba(255,255,255,0.92); line-height:1.5; max-width:560px;
+  }
+  .mvc-page .counter b{ color:#fff; font-weight:600; }
+
+  /* layout */
+  .mvc-page .block{ margin-top:26px; }
+  .mvc-page .block-head{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .mvc-page .block-head h2{ font-size:13px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--brand); white-space:nowrap; }
+  .mvc-page .block-head::after{ content:""; flex:1; height:1px; background:var(--sep); }
+
+  /* column cards (input + result paired vertically) */
+  .mvc-page .vgrid{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:auto auto auto; column-gap:18px; row-gap:0; margin-top:16px; }
+  @media (max-width:840px){ .mvc-page .vgrid{ grid-template-columns:1fr; grid-template-rows:none; } }
+  .mvc-page .vcard{ background:var(--surface); border:1px solid var(--sep); border-radius:var(--r-card); overflow:hidden; display:grid; grid-template-rows:subgrid; grid-row:1 / span 2; }
+  @media (max-width:840px){ .mvc-page .vcard{ grid-row:auto; grid-template-rows:none; } }
+  .mvc-page .vcard.lead{ border:1.5px solid var(--accent-soft); box-shadow:0 8px 26px rgba(235,78,141,0.08); }
+  .mvc-page .vhead{ padding:17px 24px; border-bottom:1px solid var(--sep); }
+  .mvc-page .vhead .vt{ font-size:15px; font-weight:700; color:var(--accent); letter-spacing:-0.005em; }
+  .mvc-page .zone{ padding:22px 24px; }
+  .mvc-page .zone-label{ font-size:11px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; color:var(--label-3); margin-bottom:18px; }
+
+  /* the additional-value card sits below, connected by a notch */
+  .mvc-page .value-card{ grid-row:3; position:relative; margin-top:5px; background:var(--surface-2); border:1px solid var(--sep); border-radius:var(--r-card); padding:22px 24px; }
+  @media (max-width:840px){ .mvc-page .value-card{ grid-row:auto; } }
+  .mvc-page .value-card.lead{ border-color:var(--accent-soft); }
+  .mvc-page .value-card::before{ content:""; position:absolute; left:50%; top:-5px; width:2px; height:5px; background:var(--accent-soft); transform:translateX(-50%); }
+  .mvc-page .value-card .zone-label{ color:var(--accent); }
+  .mvc-page .value-card .onum{ font-size:32px; line-height:1; }
+  .mvc-page .value-card .rk{ color:var(--label-3); }
+  .mvc-page .value-card .rv-sm{ color:var(--label-2); font-weight:500; }
+
+  /* controls */
+  .mvc-page .field{ margin-top:18px; }
+  .mvc-page .field:first-of-type{ margin-top:0; }
+  .mvc-page .field .frow{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:9px; }
+  .mvc-page .field label{ font-size:14px; font-weight:590; color:var(--label-1); }
+  .mvc-page .field .val{ font-size:15px; font-weight:700; color:var(--brand); font-variant-numeric:tabular-nums; }
+  .mvc-page .field .hint{ font-size:11.5px; color:var(--label-2); margin-top:7px; }
+
+  .mvc-page input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:999px; background:var(--surface-tint); outline:none; margin:6px 0; }
+  .mvc-page input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:26px; height:26px; border-radius:50%; background:#fff; border:0.5px solid rgba(0,0,0,0.08); box-shadow:0 2px 8px rgba(26,43,95,0.25); cursor:pointer; }
+  .mvc-page input[type=range]::-moz-range-thumb{ width:26px; height:26px; border:0.5px solid rgba(0,0,0,0.08); border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(26,43,95,0.25); cursor:pointer; }
+  .mvc-page input[type=range]:focus-visible{ box-shadow:0 0 0 3px var(--accent-soft); }
+
+  /* segmented control */
+  .mvc-page .seg{ display:flex; gap:4px; background:var(--surface-tint); border-radius:12px; padding:4px; }
+  .mvc-page .seg button{
+    flex:1; border:0; background:transparent; cursor:pointer; font-family:var(--font);
+    font-size:13px; font-weight:590; color:var(--label-1); padding:9px 6px; border-radius:9px;
+    transition:background 140ms, box-shadow 140ms;
+  }
+  .mvc-page .seg button[aria-pressed=true]{ background:var(--surface); box-shadow:0 1px 3px rgba(26,43,95,0.16); }
+  .mvc-page .seg button:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  .mvc-page .seg-caption{ font-size:12px; color:var(--label-2); margin-top:9px; }
+  .mvc-page .seg-caption b{ color:var(--brand); font-weight:600; }
+
+  .mvc-page .onum{ font-variant-numeric:tabular-nums; color:var(--brand); font-weight:700; }
+  .mvc-page .rk{ font-size:11px; color:var(--label-2); text-transform:uppercase; letter-spacing:0.04em; }
+  .mvc-page .rv-sm{ font-size:15px; font-weight:600; color:var(--label-1); font-variant-numeric:tabular-nums; margin-top:2px; }
+
+  /* calculation breakdown (ledger) */
+  .mvc-page .ledger{ display:flex; flex-direction:column; gap:13px; }
+  .mvc-page .ledger .lrow{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+  .mvc-page .ledger .lrow.inline{ justify-content:flex-start; gap:6px; flex-wrap:wrap; }
+  .mvc-page .ledger .ldetail{ flex-basis:100%; font-size:12.5px; font-weight:400; color:var(--label-2); font-variant-numeric:tabular-nums; padding-left:14px; }
+  .mvc-page .ledger .lrow.inline::before{ content:"•"; color:var(--accent); font-weight:700; align-self:flex-start; line-height:1.45; }
+  .mvc-page .ledger .ll{ display:flex; flex-direction:column; gap:3px; font-size:14px; font-weight:500; color:var(--label-1); }
+  .mvc-page .ledger .ll small{ font-size:12.5px; font-weight:400; color:var(--label-2); font-variant-numeric:tabular-nums; }
+  .mvc-page .ledger .la{ font-size:15px; font-weight:600; color:var(--label-1); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .mvc-page .ledger .total{ border-top:1px solid var(--sep); padding-top:13px; margin-top:1px; }
+  .mvc-page .ledger .total .ll{ color:var(--brand); font-weight:700; }
+  .mvc-page .ledger .total .la{ font-size:20px; font-weight:700; color:var(--brand); }
+  .mvc-page .ledger .ledger-eq{ flex-direction:column; align-items:flex-start; gap:6px; }
+  .mvc-page .ledger .eqv{ font-size:15px; font-weight:600; color:var(--brand); font-variant-numeric:tabular-nums; }
+  .mvc-page .ledger .eqv b{ font-size:inherit; font-weight:700; }
+
+  /* actions */
+  .mvc-page .actions{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+  .mvc-page .btn{ height:46px; padding:0 22px; border-radius:var(--r-btn); border:0; font-family:var(--font); font-size:15px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
+  .mvc-page .btn-primary{ background:var(--brand); color:#fff; box-shadow:0 6px 18px rgba(26,43,95,0.22); }
+  .mvc-page .btn-primary:hover{ background:var(--brand-deep); }
+  .mvc-page .btn-ghost{ background:transparent; color:var(--brand); border:1px solid var(--sep); }
+  .mvc-page .btn-ghost:hover{ background:rgba(0,0,0,0.03); }
+
+  @media print{
+    .mvc-page{ background:#fff; }
+    .mvc-page .actions, .mvc-page .topbar .est, .mvc-page .back{ display:none; }
+    .mvc-page .hero{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+  @media (prefers-reduced-motion:reduce){ .mvc-page *{ transition:none !important; } }
+</style>
+
+<script>
+  (function(){
+    "use strict";
+    var DEFAULTS = { eligible:200, price:75, priceUnit:"wk", uptake:20, retain:10 };
+    var PRICE_RANGE = { wk:{ min:25, max:150, step:1 }, mo:{ min:100, max:650, step:5 } };
+    var state = Object.assign({}, DEFAULTS);
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    var aud0 = new Intl.NumberFormat("en-AU",{ style:"currency", currency:"AUD", maximumFractionDigits:0 });
+    var aud2 = new Intl.NumberFormat("en-AU",{ style:"currency", currency:"AUD", minimumFractionDigits:2, maximumFractionDigits:2 });
+    function num0(n){ return new Intl.NumberFormat("en-AU",{ maximumFractionDigits:0 }).format(n); }
+    var $ = function(id){ return document.getElementById(id); };
+
+    // animated count-up for the hero annual figure
+    var animCur = 0, animRAF = null;
+    function setAnnual(target){
+      var el = $("h-annual");
+      if(reduce){ animCur = target; el.textContent = aud0.format(target); return; }
+      if(animRAF) cancelAnimationFrame(animRAF);
+      var start = animCur, t0 = null, dur = 520;
+      function step(ts){
+        if(!t0) t0 = ts;
+        var p = Math.min((ts - t0)/dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        animCur = start + (target - start) * e;
+        el.textContent = aud0.format(animCur);
+        if(p < 1){ animRAF = requestAnimationFrame(step); } else { animCur = target; }
+      }
+      animRAF = requestAnimationFrame(step);
+    }
+
+    function compute(){
+      var upgraded = Math.round(state.eligible * state.uptake / 100);
+      var wk       = state.priceUnit === "wk";
+      var upFee    = wk ? 11 : 48;          // upgrade fee per member, on the chosen basis
+      var perYear  = wk ? 52 : 12;
+      var grossPer = upgraded * upFee;      // gross collected, per chosen period
+      var moosePer = grossPer / 3;          // Moose's one-third share
+      var keepPer  = grossPer - moosePer;   // your two-thirds, per chosen period
+      var feeYr    = keepPer * perYear;
+      var feeMo    = feeYr / 12;
+      var feeWk    = feeYr / 52;
+      var retainYr = state.retain * state.price * perYear;
+      return { upgraded:upgraded, wk:wk, upFee:upFee, grossPer:grossPer, moosePer:moosePer, keepPer:keepPer,
+               feeMo:feeMo, feeYr:feeYr, feeWk:feeWk,
+               retainYr:retainYr, retainMo:retainYr/12, retainWk:retainYr/52 };
+    }
+
+    function render(){
+      var c = compute();
+
+      // hero — fee income + retention value combined
+      setAnnual(c.feeYr + c.retainYr);
+
+      // output cards
+      $("o-fee-annual").textContent = aud0.format(c.feeYr);
+      $("o-fee-monthly").textContent = aud0.format(c.feeMo);
+      $("o-fee-weekly").textContent = aud0.format(c.feeWk);
+      $("o-retain").textContent = aud0.format(c.retainYr);
+      $("o-retain-monthly").textContent = aud0.format(c.retainMo);
+      $("o-retain-weekly").textContent = aud0.format(c.retainWk);
+
+      // input readouts
+      var unit = state.priceUnit === "wk" ? "/wk" : "/mo";
+      $("v-eligible").textContent = num0(state.eligible);
+      $("v-price").textContent = aud0.format(state.price) + unit;
+      $("v-uptake").textContent = state.uptake + "%";
+      $("v-retain").textContent = num0(state.retain);
+      $("cap-uptake").innerHTML = "<b style=\"font-size:20px;\">" + num0(c.upgraded) + "</b> " + (c.upgraded === 1 ? "member" : "members") + " upgraded";
+
+      // calculation breakdown
+      function lrow(label, detail, amount, total){
+        return '<div class="lrow inline' + (total ? ' total' : '') + '"><span class="ll">' + label + '</span><span class="la">' + amount + '</span>' + (detail ? '<small class="ldetail">' + detail + '</small>' : '') + '</div>';
+      }
+      var feeWord = c.wk ? "week" : "month";
+      function money(n){ return n % 1 === 0 ? aud0.format(n) : aud2.format(n); }
+      var studioShare = c.upFee * 2 / 3, mooseShare = c.upFee / 3;
+      var feeShort = c.wk ? "wk" : "mo";
+      var eq = num0(c.upgraded) + " upgrades × " + money(studioShare) + " = <b>" + aud0.format(c.keepPer) + "</b> per " + feeWord;
+      $("fee-ledger").innerHTML =
+        lrow("Upgrade fee:", "", money(c.upFee) + " / " + feeShort, false) +
+        lrow("Your share (two-thirds):", "Moose takes one-third (" + money(mooseShare) + ")", money(studioShare) + " / " + feeShort, false) +
+        '<div class="lrow ledger-eq"><span class="eqv">' + eq + '</span></div>';
+      var unitShort = state.priceUnit === "wk" ? "wk" : "mo";
+      $("retain-calc").innerHTML = "<b>" + num0(state.retain) + "</b> members @ <b>" + aud0.format(state.price) + " / " + unitShort + "</b>";
+    }
+
+    // wire sliders + text
+    function bindRange(id, key, asInt){
+      $(id).addEventListener("input", function(e){ state[key] = asInt ? parseInt(e.target.value,10) : parseFloat(e.target.value); render(); });
+    }
+    bindRange("eligible","eligible",true);
+    bindRange("price","price",true);
+    bindRange("uptake","uptake",true);
+    bindRange("retain","retain",true);
+
+    // pricing-period toggle (week / month) — converts the price into the new period
+    function applyPriceRange(){
+      var r = PRICE_RANGE[state.priceUnit];
+      var p = $("price");
+      p.min = r.min; p.max = r.max; p.step = r.step; p.value = state.price;
+    }
+    $("seg-period").addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return;
+      var unit = b.getAttribute("data-k");
+      if(unit !== state.priceUnit){
+        var conv = unit === "mo" ? 52/12 : 12/52;
+        var r = PRICE_RANGE[unit];
+        var np = Math.round(state.price * conv / r.step) * r.step;
+        state.price = Math.min(r.max, Math.max(r.min, np));
+        state.priceUnit = unit;
+        applyPriceRange();
+      }
+      Array.prototype.forEach.call(this.querySelectorAll("button"), function(btn){
+        btn.setAttribute("aria-pressed", btn === b ? "true" : "false");
+      });
+      render();
+    });
+
+    // reset
+    $("reset").addEventListener("click", function(){
+      state = Object.assign({}, DEFAULTS);
+      $("eligible").value = DEFAULTS.eligible;
+      applyPriceRange();
+      $("uptake").value = DEFAULTS.uptake;
+      $("retain").value = DEFAULTS.retain;
+      Array.prototype.forEach.call($("seg-period").querySelectorAll("button"), function(btn){
+        btn.setAttribute("aria-pressed", btn.getAttribute("data-k") === DEFAULTS.priceUnit ? "true" : "false");
+      });
+      animCur = 0;
+      render();
+    });
+
+    render();
+  })();
+</script>
