@@ -50,6 +50,7 @@ const steps = [
       <a href="/" class="claim-nav__brand" aria-label="Moose home">
         <img src="/brand/logo/moose-wordmark-twotone.svg" alt="Moose" class="claim-nav__logo" />
       </a>
+      <a href="https://studio.trainmoose.com" target="_blank" rel="noopener" class="claim-nav__portal">Studio login</a>
     </div>
   </header>
 
@@ -174,6 +175,22 @@ const steps = [
     height: 72px;
   }
   .claim-nav__logo { display: block; height: 30px; width: auto; }
+  /* Filled navy — matches the primary pill on the marketing page. */
+  .claim-nav__portal {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--navy);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: var(--r-pill);
+    box-shadow: var(--shadow-xs);
+    white-space: nowrap;
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast);
+  }
+  .claim-nav__portal:hover { background: var(--navy-lift); transform: translateY(-1px); }
 
   .claim {
     background: var(--paper);

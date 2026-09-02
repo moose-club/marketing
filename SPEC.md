@@ -103,7 +103,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 
 - Left: navy/pink Moose wordmark SVG.
 - Centre: anchor links — `The Moose model`, `Network`, `For studios`, `Studio members`.
-- Right: Instagram link (`@trainmoose`), pink-text on light bg; **navy pill CTA** "Get involved or hear more" → `#register`.
+- Right: **navy pill** "Studio login" → `https://studio.trainmoose.com` (external portal, opens in a new tab). It is the only CTA in the bar; "Get involved or hear more" → `#register` lives in the hero and footer instead.
 - Hamburger below 760px.
 - Fixed (`position: fixed`). Transparent over the cream hero, gains white/blur background once `scrollY > 16` via a 6-line vanilla JS handler. No backdrop over the hero so the headline starts at the top of the page.
 
