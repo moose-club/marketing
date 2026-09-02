@@ -13,10 +13,13 @@ const lastUpdated = '10 June 2026';
       <a href="/" class="legal-nav__brand" aria-label="Moose home">
         <img src="/brand/logo/moose-wordmark-twotone.svg" alt="Moose" class="legal-nav__logo" />
       </a>
-      <a href="/" class="legal-nav__back">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-        <span>Back to home</span>
-      </a>
+      <div class="legal-nav__actions">
+        <a href="/" class="legal-nav__back" aria-label="Back to home">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          <span>Back to home</span>
+        </a>
+        <a href="https://studio.trainmoose.com" target="_blank" rel="noopener" class="legal-nav__portal">Studio login</a>
+      </div>
     </div>
   </header>
 
@@ -331,6 +334,29 @@ const lastUpdated = '10 June 2026';
     transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast);
   }
   .legal-nav__back:hover { color: var(--ink); background: var(--navy-50); }
+  .legal-nav__actions { display: flex; align-items: center; gap: 8px; }
+  /* Filled navy — matches the primary pill on the marketing page. */
+  .legal-nav__portal {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--navy);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: var(--r-pill);
+    box-shadow: var(--shadow-xs);
+    white-space: nowrap;
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast);
+  }
+  .legal-nav__portal:hover { background: var(--navy-lift); transform: translateY(-1px); }
+
+  /* Narrow phones can't fit wordmark + both links on one 72px row, so the
+     back link drops to its arrow (the aria-label carries the name). */
+  @media (max-width: 560px) {
+    .legal-nav__back span { display: none; }
+    .legal-nav__back { padding: 9px 10px; }
+  }
 
   .legal { padding-block: clamp(48px, 7vw, 88px); background: var(--paper); }
   .legal__inner { max-width: 760px; }

@@ -8,7 +8,8 @@ export const NAV = {
     { href: "#value", label: "For studios" },
     { href: "#members", label: "Studio members" },
   ],
-  cta: { label: "Get involved or hear more", href: "#register" },
+  // External — the studio portal lives on its own subdomain.
+  portal: { label: "Studio login", href: "https://studio.trainmoose.com" },
 } as const;
 
 export const HERO = {
