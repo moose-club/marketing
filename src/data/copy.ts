@@ -20,9 +20,10 @@ export const HERO = {
   highlightWord: "variety.",
   subLines: [
     "Moose unlocks variety for fitness studios.",
-    "Don't build new modalities in-house. Form reciprocal partnerships with complementary, non-competing studios nearby — and let collaboration do the work.",
+    "A single modality offering just isn't cutting it anymore. But building new modalities in-house is hard yakka. This is the magic of collaboration. Form reciprocal partnerships with complementary, non-competing studios nearby to mutually elevate each other's offering.",
   ] as const,
   points: [
+    "You choose your partners.",
     "Your members stay yours.",
     "Your studio stays specialised.",
     "Your memberships level up.",
@@ -55,7 +56,7 @@ export const MODEL = {
   headHtml: "The <em>Moose</em> model.",
   // No pink highlight in this headline — the eyebrow already carries the
   // accent. Keeps to the 'one pink word per headline' rule.
-  lede: "Crossover between partner venues, offered on a rationed basis — enough to enrich a membership, while preserving the home-studio relationship.",
+  lede: "Crossover between partner venues is intentionally limited: enough variety to enrich a membership, while keeping members anchored to you as their home studio.",
   stepsTitle: "How it works.",
   steps: [
     {
@@ -63,7 +64,7 @@ export const MODEL = {
       eyebrow: "Formation",
       title: "Identify partners and form partnerships",
       body: [
-        "Partnerships are seamlessly facilitated through Moose.",
+        "You dictate who you partner with. Partnerships are seamlessly facilitated through Moose.",
         "Run a single partnership, or stack several across complementary modalities to broaden member variety. Each partner elevating the other's offering.",
       ] as const,
     },
@@ -72,28 +73,28 @@ export const MODEL = {
       eyebrow: "Offering",
       title: "Add a premium tier to your membership catalogue",
       body: [
-        'Unlock a new, premium tier offering at <span class="step__hl">$11/wk</span> extra with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.',
-        "You choose which of your memberships the upgrade is eligible on.",
+        "Unlock a new, premium tier of membership with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.",
+        'You sell it, you own it. Our only stipulation is that the upgrade fee is capped at <span class="step__hl">$11/wk (or $48/mo)</span> extra.',
       ] as const,
-      figure: "$11/wk",
     },
     {
       n: "03",
       eyebrow: "Usage",
-      title: "Controlled crossover",
+      title: "Rationed crossover",
       body: [
-        'The upgrade entitles members to <span class="step__hl">4 crossover sessions per month</span> at partner venues.',
-        "Capped by design — keeping members anchored to their home studio as their primary training destination.",
+        'The upgrade entitles members to a notional <span class="step__hl">four crossover sessions per month</span> at partner venues (in aggregate, not per partner).',
+        "Capped by design, keeping members anchored to their home studio as their primary training destination.",
+        "And then you return the favour to their members.",
       ] as const,
-      figure: "4 sessions / month",
     },
     {
       n: "04",
       eyebrow: "Balance",
-      title: "Even flow between partners",
+      title: "A balanced exchange",
       body: [
-        "Our backend systems monitor crossover both ways, keeping member flow balanced between partners.",
-        "No one studio carries the other — reciprocity is reconciled automatically.",
+        "Our backend systems monitor crossover both ways, ensuring a balanced exchange between partners.",
+        "No partner is left disproportionately shouldering the load.",
+        "Moose handles the reciprocity.",
       ] as const,
     },
   ] as const,
@@ -269,20 +270,17 @@ export const MEMBERS = {
   headHtml: "Finally, some (affordable) <em>variety</em>…",
   ledeLines: [
     "We don't sell Moose to members direct — it's available through the studios. We've just created the infrastructure.",
-    "If your home studio offers it, it's simple. If they don't, make the case to get them on board (or you'll have to consider a studio that does).",
   ] as const,
   commercials: [
     {
       k: "What you get",
-      v: "4",
-      u: "/ month",
-      d: "Crossover sessions at partner venues.",
+      body:
+        "Four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
     },
     {
       k: "What you pay",
-      v: "+$11",
-      u: "/ week",
-      d: "Bundled with your eligible membership through your home studio.",
+      body:
+        "Your home studio sets the upgrade fee for the premium tier. This is capped by Moose at a maximum of $11/wk (or $48/mo).",
     },
   ] as const,
   noteHtml:

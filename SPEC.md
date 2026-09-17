@@ -124,10 +124,10 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - `.section--cream`. Eyebrow "At a glance", h2 "The Moose model.", lede.
 - Inner white card (`.model__steps`) titled "How it works.", containing 4 columns:
   1. **Formation** — Identify partners and form partnerships
-  2. **Offering** — Add a premium tier ($11/wk)
-  3. **Usage** — Controlled crossover (4 sessions/month)
-  4. **Balance** — Even flow between partners
-- Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 1–2 paragraphs.
+  2. **Offering** — Add a premium tier (upgrade fee set by the studio, capped at $11/wk)
+  3. **Usage** — Rationed crossover (a notional four sessions/month, in aggregate across partners)
+  4. **Balance** — A balanced exchange
+- Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 2–3 paragraphs.
 
 ### 6.5 `MSNetwork.astro` — partner logo grid on navy
 
@@ -155,7 +155,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 ### 6.8 `MSMembers.astro` — for studio members + phone mock
 
 - `.section--cream`. Eyebrow "For studio members", h2 "Finally, some (affordable) _variety…_" (one pink word).
-- Left: 2-paragraph lede, two commercial cards ("What you get: 4 / month" + "What you pay: +$11 / week"), and a note linking back to the Register form with `data-register="member"` (which auto-selects the Member tab).
+- Left: single-paragraph lede, two commercial cards ("What you get" / "What you pay" — prose, no stat figures), and a note linking back to the Register form with `data-register="member"` (which auto-selects the Member tab).
 - Right: a **pure-CSS** phone mock with notch, status bar, greet block, member-at-studio chip, credits card (navy, "3 of 4 left"), filter chips, and 3 booking slots. Plus a callout reminding readers the Moose app is only for booking crossover sessions.
 
 ### 6.9 `MSRegister.astro` — contact form (studio / member tabs)
