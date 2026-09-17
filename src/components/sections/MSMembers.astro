@@ -16,8 +16,7 @@ import { MEMBERS } from '../../data/copy';
           {MEMBERS.commercials.map((c, i) => (
             <div class="mc" data-reveal="pop" style={`--ri:${3 + i}`}>
               <div class="mc__k">{c.k}</div>
-              <div class="mc__v"><span class="tnum" data-countup>{c.v}</span><span class="mc__u">{c.u}</span></div>
-              <div class="mc__d">{c.d}</div>
+              <p class="mc__body">{c.body}</p>
             </div>
           ))}
         </div>
@@ -93,28 +92,13 @@ import { MEMBERS } from '../../data/copy';
     text-transform: uppercase;
     color: var(--pink);
   }
-  .mc__v {
-    font-size: clamp(28px, 3vw, 36px);
-    font-weight: 800;
-    color: var(--navy);
-    margin-top: 8px;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-  }
-  .mc__u {
-    font-size: 13px;
-    color: var(--ink-mute);
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-  .mc__d {
-    font-size: 13px;
+  /* Body copy, not a stat figure — the numbers read inline at the same size
+     as the surrounding prose. */
+  .mc__body {
+    font-size: 15px;
+    line-height: 1.55;
     color: var(--ink-dim);
-    margin-top: 8px;
-    line-height: 1.4;
+    margin: 10px 0 0;
   }
 
   .members__note {

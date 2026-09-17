@@ -71,7 +71,7 @@ import { VALUE } from '../../data/copy';
     flex-direction: column;
     background: var(--navy);
     border-radius: var(--r-sheet);
-    padding: 26px 24px;
+    padding: 24px 20px;
     box-shadow: var(--shadow-sm);
     transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
   }
@@ -111,11 +111,13 @@ import { VALUE } from '../../data/copy';
     min-width: 0;
     background: var(--cream);
     border-radius: var(--r-card);
-    padding: 24px 22px 26px;
+    padding: 22px 18px 24px;
   }
   .value__stat {
     font-weight: 800;
-    font-size: clamp(24px, 2.4vw, 32px);
+    /* Sized so the longest stat word ("Stability") still fits the cream box
+       at the narrowest 5-up column width. */
+    font-size: clamp(22px, 1.9vw, 29px);
     color: var(--navy);
     letter-spacing: -0.02em;
     line-height: 1;
@@ -146,14 +148,11 @@ import { VALUE } from '../../data/copy';
     .value__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (min-width: 1280px) {
-    /* Break the 5-card row out wider than the 1240px container so each card
-       gets more width. Centred on the page; heading stays at container width. */
-    .value__cards--benefits {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      width: min(94vw, 1520px);
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    /* Stays inside .container so the row shares its left edge with the heading
+       above and with The Moose model section — no page-width breakout. */
+    .value__cards--benefits { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    /* Narrow 5-up columns push the longest captions to four lines — reserve
+       for that here only, so the single-column mobile boxes stay snug. */
+    .value__cards--benefits .value__cap { min-height: 6em; }
   }
 </style>

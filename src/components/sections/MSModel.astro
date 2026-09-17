@@ -102,9 +102,11 @@ import { MODEL } from '../../data/copy';
   }
   .step__body + .step__body { margin-top: 10px; }
 
-  /* Key figures ($11/wk, 4 sessions/month) get a soft pink fill chip with
-     bold navy text — pink as fill keeps small text WCAG-safe (SPEC §14). */
-  .step__hl {
+  /* Key figures ($11/wk, four sessions/month) get a soft pink fill chip with
+     bold navy text — pink as fill keeps small text WCAG-safe (SPEC §14).
+     The chips arrive via set:html from copy.ts, so they never carry Astro's
+     scope attribute — :global is required or the rule silently misses. */
+  .step__body :global(.step__hl) {
     background: var(--pink-100);
     color: var(--navy);
     font-weight: 700;
