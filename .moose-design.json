@@ -1,0 +1,12 @@
+{
+  "$comment": "Written by moose-design `pnpm sync`. The files below are generated: never hand-edit them.",
+  "consumer": "marketing",
+  "source": "moose-club/design@3595572",
+  "rules": {
+    "file": "RULES.md",
+    "hash": "ebf36c621e52caed"
+  },
+  "files": {
+    "src/styles/moose-design/tokens.css": "1b9193ba80201a74"
+  }
+}
