@@ -138,7 +138,7 @@ import { HERO } from '../../data/copy';
   }
   .btn--primary {
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     box-shadow: var(--shadow-md);
   }
   .btn svg { transition: transform var(--dur-base) var(--ease-out); }
@@ -149,7 +149,7 @@ import { HERO } from '../../data/copy';
   }
   .btn--primary:hover svg { transform: translateX(3px); }
   .btn--ghost {
-    background: #fff;
+    background: var(--card);
     color: var(--navy);
     box-shadow: var(--shadow-sm);
   }
@@ -180,7 +180,7 @@ import { HERO } from '../../data/copy';
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(105deg, var(--cream) 0%, rgba(247, 244, 239, 0.3) 30%, transparent 58%);
+    background: linear-gradient(105deg, var(--cream) 0%, color-mix(in srgb, var(--cream) 30%, transparent) 30%, transparent 58%);
   }
 
   @media (min-width: 760px) {

@@ -91,6 +91,8 @@ const serviceJsonLd = {
     <link rel="icon" type="image/png" sizes="76x76" href="/brand/icon/icon-76.png" />
     <link rel="icon" type="image/png" sizes="180x180" href="/brand/icon/icon-60@3x.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/brand/icon/icon-60@3x.png" />
+    {/* Literal by necessity: a meta tag can't read a CSS var. Keep in step
+        with --m-moose-navy. */}
     <meta name="theme-color" content="#1A2B5F" />
 
     {preloadImage && (

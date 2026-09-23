@@ -25,18 +25,19 @@
   --navy-on:     var(--m-on-brand);
   --navy-dim:    var(--m-on-brand-dim);
 
-  /* On-navy ink ramp. moose-design defines exactly these weights, but only
-     as the `.dark` overrides of `--m-ink-*`, and this site never applies
-     `.dark`. Proposed upstream as `on-brand-*`. */
-  --on-navy-strong:      rgba(255, 255, 255, 0.86); /* no token yet: proposed */
-  --on-navy-support:     rgba(255, 255, 255, 0.72); /* no token yet: proposed */
-  --on-navy-placeholder: rgba(255, 255, 255, 0.66); /* no token yet: proposed */
-  --on-navy-inert:       rgba(255, 255, 255, 0.60); /* no token yet: proposed */
-  --on-navy-muted:       rgba(255, 255, 255, 0.50); /* no token yet: proposed */
-  --on-navy-faint:       rgba(255, 255, 255, 0.45); /* no token yet: proposed */
-  --on-navy-tape:        rgba(255, 255, 255, 0.28); /* no token yet: proposed */
-  --on-navy-hairline:    rgba(255, 255, 255, 0.14); /* no token yet: proposed */
-  --on-navy-wash:        rgba(255, 255, 255, 0.08); /* no token yet: proposed */
+  /* Ink on the navy floor. moose-design already defines these weights — but
+     only as the `.dark` overrides of `--m-ink-*`, and nothing here applies
+     `.dark`. So they're mixed from `--m-on-brand` at the upstream weights,
+     which is what the site's ad-hoc whites have been rounded onto.
+     Proposed upstream as `on-brand-*`; delete this block once it lands.
+     `--navy-dim` above is the one weight that already has a token (65%). */
+  --on-navy-support:     color-mix(in srgb, var(--m-on-brand) 70%, transparent); /* no token yet: proposed */
+  --on-navy-placeholder: color-mix(in srgb, var(--m-on-brand) 66%, transparent); /* no token yet: proposed */
+  --on-navy-inert:       color-mix(in srgb, var(--m-on-brand) 60%, transparent); /* no token yet: proposed */
+  --on-navy-muted:       color-mix(in srgb, var(--m-on-brand) 50%, transparent); /* no token yet: proposed */
+  --on-navy-tape:        color-mix(in srgb, var(--m-on-brand) 24%, transparent); /* no token yet: proposed */
+  --on-navy-hairline:    color-mix(in srgb, var(--m-on-brand) 12%, transparent); /* no token yet: proposed */
+  --on-navy-wash:        color-mix(in srgb, var(--m-on-brand)  8%, transparent); /* no token yet: proposed */
   --navy-rule:   var(--on-navy-hairline);
 
   /* Brand — extended scales (used sparingly; pink at the strong end is
@@ -57,11 +58,16 @@
   --paper:       var(--m-bg);
   --cream:       var(--m-cream);
   --card:        var(--m-surface);
+  /* The scrolled nav's frosted bar over the page ground, and the scrim over
+     story photography. Both are a token at partial alpha, not new colours. */
+  --card-frosted: color-mix(in srgb, var(--m-surface) 86%, transparent); /* no token yet: proposed */
+  --scrim:        color-mix(in srgb, var(--m-ink) 70%, transparent);     /* no token yet: proposed */
   --ink:         var(--m-ink);            /* navy, never black — RULES 7 */
   --ink-dim:     var(--m-ink-support);
   --ink-mute:    var(--m-ink-placeholder);
   --rule:        var(--m-ink-hairline);
   --rule-strong: var(--m-ink-tape);
+  --ink-wash:    var(--m-ink-wash);       /* faintest navy tint on a light floor */
 
   /* Status — for status only (RULES 9) */
   --success:     var(--m-success);
@@ -228,7 +234,7 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--pink); }
   top: 16px;
   padding: 10px 14px;
   background: var(--ink);
-  color: #fff;
+  color: var(--navy-on);
   border-radius: var(--r-chip);
   z-index: 1000;
   transform: translateY(-150%);
@@ -272,7 +278,7 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   to   { opacity: 1; transform: none; }
 }
 
-::selection { background: var(--pink); color: #fff; }
+::selection { background: var(--pink); color: var(--pink-on); }
 
 /* ── Motion preference ───────────────────────────────────────── */
 

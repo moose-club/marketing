@@ -308,7 +308,7 @@ const lastUpdated = '10 June 2026';
      ships its own minimal nav instead of reusing MSNav. */
   .legal-nav {
     border-bottom: 1px solid var(--rule);
-    background: rgba(255, 255, 255, 0.86);
+    background: var(--card-frosted);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     position: sticky;
@@ -342,7 +342,7 @@ const lastUpdated = '10 June 2026';
     font-size: 14px;
     font-weight: 600;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     padding: 9px 16px;
     border-radius: var(--r-pill);
     box-shadow: var(--shadow-xs);
@@ -406,7 +406,7 @@ const lastUpdated = '10 June 2026';
 
   .legal-foot {
     background: var(--navy-900);
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--on-navy-muted);
     padding-block: 28px;
     font-size: 13px;
   }
@@ -418,8 +418,8 @@ const lastUpdated = '10 June 2026';
     gap: 12px;
   }
   .legal-foot a {
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--navy-dim);
     transition: color var(--dur-fast) var(--ease-out);
   }
-  .legal-foot a:hover { color: #fff; }
+  .legal-foot a:hover { color: var(--navy-on); }
 </style>

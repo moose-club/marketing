@@ -155,13 +155,13 @@ import { REGISTER } from '../../data/copy';
   .register__head h2 {
     font-size: var(--t-display-m);
     font-weight: 800;
-    color: #fff;
+    color: var(--navy-on);
     letter-spacing: -0.025em;
     margin-top: 18px;
   }
 
   .register__card {
-    background: #fff;
+    background: var(--card);
     color: var(--ink);
     border-radius: var(--r-sheet);
     padding: 32px clamp(20px, 4vw, 36px);
@@ -197,7 +197,7 @@ import { REGISTER } from '../../data/copy';
   }
   .choice:hover { border-color: var(--rule-strong); }
   .choice--active {
-    background: #fff;
+    background: var(--card);
     border-color: var(--navy);
     color: var(--navy);
     box-shadow: var(--shadow-sm);
@@ -208,7 +208,7 @@ import { REGISTER } from '../../data/copy';
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: rgba(26, 43, 95, 0.06);
+    background: var(--ink-wash);
   }
   .choice--active .choice__ic { background: var(--pink-50); color: var(--pink); }
   .choice__t { font-size: 13.5px; }
@@ -246,7 +246,7 @@ import { REGISTER } from '../../data/copy';
     font: inherit;
     font-size: 14.5px;
     color: var(--ink);
-    background: #fff;
+    background: var(--card);
     transition: border-color var(--dur-fast) var(--ease-out);
     resize: vertical;
   }
@@ -272,7 +272,7 @@ import { REGISTER } from '../../data/copy';
     gap: 8px;
     padding: 14px 24px;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     border-radius: var(--r-pill);
     font-size: 15px;
     font-weight: 600;

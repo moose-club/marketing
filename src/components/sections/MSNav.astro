@@ -74,7 +74,7 @@ import { NAV } from '../../data/copy';
     border-bottom: 1px solid transparent;
   }
   .nav[data-scrolled='true'] {
-    background: rgba(255, 255, 255, 0.86);
+    background: var(--card-frosted);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-bottom-color: var(--rule);
@@ -120,7 +120,7 @@ import { NAV } from '../../data/copy';
     display: none;
     align-items: center;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     padding: 11px 20px;
     border-radius: var(--r-pill);
     font-size: 14px;
@@ -147,7 +147,7 @@ import { NAV } from '../../data/copy';
     display: none;
     flex-direction: column;
     padding: 8px var(--container-px) 20px;
-    background: #fff;
+    background: var(--card);
     border-top: 1px solid var(--rule);
   }
   .nav__mobile[data-open='true'] {
@@ -169,7 +169,7 @@ import { NAV } from '../../data/copy';
   .nav__mobile-link--portal {
     margin-top: 12px;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     text-align: center;
     border-radius: var(--r-pill);
     border-bottom: none;

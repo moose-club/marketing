@@ -70,7 +70,7 @@ if (ariaLabel) extraProps['aria-label'] = ariaLabel;
     background: var(--pink);
     color: var(--pink-on);
   }
-  .btn--pink-primary:hover { background: #d63f7c; }
+  .btn--pink-primary:hover { background: var(--pink-press); }
 
   .btn--navy-primary {
     background: var(--navy);
@@ -84,8 +84,8 @@ if (ariaLabel) extraProps['aria-label'] = ariaLabel;
     border: 1px solid var(--navy-rule);
   }
   .btn--ghost-on-navy:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.28);
+    background: var(--on-navy-wash);
+    border-color: var(--on-navy-tape);
   }
 
   .btn--ghost-on-paper {
@@ -93,7 +93,7 @@ if (ariaLabel) extraProps['aria-label'] = ariaLabel;
     color: var(--ink);
     border: 1px solid var(--ink);
   }
-  .btn--ghost-on-paper:hover { background: rgba(15, 15, 18, 0.06); }
+  .btn--ghost-on-paper:hover { background: var(--ink-wash); }
 
   .btn__trailing { font-size: 0.9em; opacity: 0.85; }
   .btn__arrow { flex-shrink: 0; }

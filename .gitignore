@@ -29,3 +29,7 @@ pnpm-debug.log*
 .impeccable/mocks/
 .impeccable/build/
 .impeccable/config.local.json
+.impeccable/hook.cache.json
+
+# Migration review artifacts (regenerate with .context/tools/sheets.mjs)
+docs/migration/
