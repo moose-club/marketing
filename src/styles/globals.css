@@ -4,93 +4,120 @@
    this repo's CLAUDE.md. Everything below defines the site's own variable
    names from those `--m-*` tokens. */
 
-/* ── Moose marketing site — global tokens, reset, utilities ───────────
-   Tokens mirror src/data tokens and SPEC. Hex values are exact: do not
-   approximate. Display sizes are fluid via clamp(). System font stack
-   only — no remote fonts (brand discipline, SPEC §14). */
+/* ── Moose marketing site — variables, reset, utilities ───────────────
+   Every value below comes from a moose-design `--m-*` token. The site's
+   own names are kept so component CSS doesn't churn. Lines marked
+   "no token yet: proposed" are values moose-design doesn't carry yet —
+   they're listed in the migration PR; delete them once the token lands.
+   Display sizes stay local: type isn't tokenised (RULES 13). */
 
 :root {
   /* Brand — primary */
-  --pink:        #EB4E8D;
-  --pink-on:     #FFFFFF;
-  --pink-soft:   rgba(235, 78, 141, 0.10);
-  --pink-glow:   rgba(235, 78, 141, 0.16);
+  --pink:        var(--m-moose-pink);
+  --pink-press:  var(--m-moose-pink-press);
+  --pink-on:     var(--m-on-brand);
+  --pink-soft:   var(--m-moose-pink-soft);
+  --pink-glow:   var(--m-moose-pink-glow);
 
-  --navy:        #1A2B5F;
-  --navy-deep:   #13204A;
-  --navy-lift:   #2C3D78;
-  --navy-on:     #FFFFFF;
-  --navy-dim:    rgba(255, 255, 255, 0.65);
-  --navy-rule:   rgba(255, 255, 255, 0.14);
+  --navy:        var(--m-moose-navy);
+  --navy-deep:   var(--m-moose-navy-deep);
+  --navy-lift:   var(--m-moose-navy-lift);
+  --navy-on:     var(--m-on-brand);
+  --navy-dim:    var(--m-on-brand-dim);
+
+  /* On-navy ink ramp. moose-design defines exactly these weights, but only
+     as the `.dark` overrides of `--m-ink-*`, and this site never applies
+     `.dark`. Proposed upstream as `on-brand-*`. */
+  --on-navy-strong:      rgba(255, 255, 255, 0.86); /* no token yet: proposed */
+  --on-navy-support:     rgba(255, 255, 255, 0.72); /* no token yet: proposed */
+  --on-navy-placeholder: rgba(255, 255, 255, 0.66); /* no token yet: proposed */
+  --on-navy-inert:       rgba(255, 255, 255, 0.60); /* no token yet: proposed */
+  --on-navy-muted:       rgba(255, 255, 255, 0.50); /* no token yet: proposed */
+  --on-navy-faint:       rgba(255, 255, 255, 0.45); /* no token yet: proposed */
+  --on-navy-tape:        rgba(255, 255, 255, 0.28); /* no token yet: proposed */
+  --on-navy-hairline:    rgba(255, 255, 255, 0.14); /* no token yet: proposed */
+  --on-navy-wash:        rgba(255, 255, 255, 0.08); /* no token yet: proposed */
+  --navy-rule:   var(--on-navy-hairline);
 
   /* Brand — extended scales (used sparingly; pink at the strong end is
-     still the only accent — see SPEC §14, the 'one pink word' rule). */
-  --pink-50:   #fef2f7;
-  --pink-100:  #fde4ee;
-  --pink-300:  #f59bc0;
+     still the only accent — RULES 6, "pink is punctuation"). */
+  --pink-50:   #fef2f7;              /* no token yet: proposed */
+  --pink-100:  var(--m-moose-pink-soft);
+  --pink-300:  #f59bc0;              /* no token yet: proposed (unused) */
 
-  --navy-50:   #f3f5fa;
-  --navy-100:  #e6e9f2;
-  --navy-200:  #c2c9dd;
-  --navy-300:  #8b97bf;
-  --navy-400:  #5567a4;
-  --navy-800:  #14224C;
-  --navy-900:  #0F1A3C;
+  --navy-50:   var(--m-info-soft);
+  --navy-100:  #e6e9f2;              /* no token yet: proposed (unused) */
+  --navy-200:  #c2c9dd;              /* no token yet: proposed (unused) */
+  --navy-300:  #8b97bf;              /* no token yet: proposed (unused) */
+  --navy-400:  #5567a4;              /* no token yet: proposed */
+  --navy-800:  var(--m-moose-navy-press);
+  --navy-900:  var(--m-moose-navy-deep);
 
-  /* Paper / ink (light only) */
-  --paper:       #F0EEE9;
-  --cream:       #F7F4EF;     /* warmer secondary surface */
-  --card:        #FFFFFF;
-  --ink:         #0F0F12;
-  --ink-dim:     rgba(15, 15, 18, 0.62);
-  --ink-mute:    rgba(15, 15, 18, 0.42);
-  --rule:        rgba(15, 15, 18, 0.12);
-  --rule-strong: rgba(15, 15, 18, 0.20);
+  /* Paper / ink (light only — nothing applies `.dark`) */
+  --paper:       var(--m-bg);
+  --cream:       var(--m-cream);
+  --card:        var(--m-surface);
+  --ink:         var(--m-ink);            /* navy, never black — RULES 7 */
+  --ink-dim:     var(--m-ink-support);
+  --ink-mute:    var(--m-ink-placeholder);
+  --rule:        var(--m-ink-hairline);
+  --rule-strong: var(--m-ink-tape);
 
-  /* Semantic */
-  --success:     #34C759;
-  --warn:        #FF9F0A;
-  --danger:      #FF3B30;
-  --peak:        #FF9500;
+  /* Status — for status only (RULES 9) */
+  --success:     var(--m-success);
+  --warn:        var(--m-warning);
+  --danger:      var(--m-danger);
+  --peak:        var(--m-peak);
 
-  /* Type — Poppins, with system stack as fallback */
-  --font-sans: "Poppins", -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro",
-               system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  /* Type — Poppins is the brand typeface on every surface (RULES 12);
+     it loads from Google Fonts in Base.astro. */
+  --font-sans: var(--m-font-family-sans);
+  --font-mono: var(--m-font-family-mono);
 
-  /* Fluid type scale */
+  /* Fluid display sizes — local: the web role→size table isn't a token
+     yet (RULES 13, drift inventory D10). */
   --t-display-xl: clamp(48px, 8vw, 112px);
   --t-display-l:  clamp(40px, 6vw, 92px);
   --t-display-m:  clamp(28px, 4vw, 56px);
   --t-display-s:  clamp(24px, 3vw, 40px);
   --t-tnum-hero:  clamp(40px, 6vw, 76px);
 
-  /* Radii */
-  --r-pill:  999px;
-  --r-card:  22px;
-  --r-sheet: 28px;
-  --r-tile:  14px;
-  --r-chip:  9px;
-  --r-xs:    6px;
-  --r-sm:    10px;
-  --r-md:    16px;
+  /* Radii — the brand book's 6/9/10/14/22/28 are superseded (RULES 3) */
+  --r-pill:  var(--m-radius-full);
+  --r-card:  var(--m-radius-xl);
+  --r-sheet: var(--m-radius-xl);
+  --r-tile:  var(--m-radius-lg);
+  --r-chip:  var(--m-radius-sm);
+  --r-xs:    var(--m-radius-sm);
+  --r-sm:    var(--m-radius-md);
+  --r-md:    var(--m-radius-lg);
 
-  /* Spacing — 4pt grid */
-  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
-  --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px;
-  --s-12: 48px; --s-16: 64px; --s-20: 80px; --s-24: 96px;
+  /* Spacing. The token scale has no 12/20/40/64/80/96 — web layout
+     spacing is still an open decision (drift inventory D7). */
+  --s-1:  var(--m-spacing-xs);
+  --s-2:  var(--m-spacing-sm);
+  --s-3:  12px;                      /* no token yet: proposed */
+  --s-4:  var(--m-spacing-md);
+  --s-5:  20px;                      /* no token yet: proposed */
+  --s-6:  var(--m-spacing-lg);
+  --s-8:  var(--m-spacing-xl);
+  --s-10: 40px;                      /* no token yet: proposed */
+  --s-12: var(--m-spacing-xxl);
+  --s-16: 64px;                      /* no token yet: proposed */
+  --s-20: 80px;                      /* no token yet: proposed */
+  --s-24: 96px;                      /* no token yet: proposed */
 
-  /* Shadow scale */
-  --shadow-xs: 0 1px 2px  rgba(16, 26, 60, 0.06);
-  --shadow-sm: 0 2px 8px  rgba(16, 26, 60, 0.08);
-  --shadow-md: 0 8px 24px rgba(16, 26, 60, 0.10);
-  --shadow-lg: 0 18px 48px rgba(16, 26, 60, 0.14);
+  /* Shadow — navy-tinted, never black (RULES 10) */
+  --shadow-xs: var(--m-shadow-sm);
+  --shadow-sm: var(--m-shadow-sm);
+  --shadow-md: var(--m-shadow-md);
+  --shadow-lg: var(--m-shadow-lg);
 
-  /* Container — used by every section's inner wrapper */
+  /* Container — local: layout isn't tokenised */
   --container-max: 1240px;
   --container-px:  clamp(20px, 5vw, 56px);
 
-  /* Easings + durations */
+  /* Motion — local: motion isn't tokenised */
   --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast:   140ms;
   --dur-base:   220ms;
