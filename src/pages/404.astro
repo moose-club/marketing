@@ -78,7 +78,7 @@ import Base from '../layouts/Base.astro';
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #fff;
+    background: var(--card);
     color: var(--navy);
     padding: 14px 26px;
     border-radius: var(--r-pill);
@@ -97,7 +97,7 @@ import Base from '../layouts/Base.astro';
     color: var(--navy-dim);
     transition: color var(--dur-fast) var(--ease-out);
   }
-  .nf__link:hover { color: #fff; }
+  .nf__link:hover { color: var(--navy-on); }
 
   @media (min-width: 640px) {
     .nf__actions { flex-direction: row; }

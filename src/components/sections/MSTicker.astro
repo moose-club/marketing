@@ -30,6 +30,8 @@ const items = [...MODALITIES, ...MODALITIES];
   .ticker__viewport {
     width: 100%;
     overflow: hidden;
+    /* The #000 here is an alpha carrier for the mask, not a colour — a
+       token would be meaningless. */
     mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
   }
@@ -44,7 +46,7 @@ const items = [...MODALITIES, ...MODALITIES];
     align-items: center;
     font-size: 17px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.66);
+    color: var(--on-navy-placeholder);
     letter-spacing: 0.01em;
     text-transform: capitalize;
     white-space: nowrap;

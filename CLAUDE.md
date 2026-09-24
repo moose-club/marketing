@@ -110,3 +110,21 @@ These don't block development but need a human answer before launch:
 7. **Instagram handle / contact emails** — `partnerships@trainmoose.com`, `memberships@trainmoose.com`, `@trainmoose` are in `NAV` / `FOOTER`. Confirm these inboxes exist.
 
 Search for `TODO` to find each location in code.
+
+<!-- moose-design:rules -->
+## Design system (managed by moose-design — do not edit this block)
+
+This repo takes its design values and rules from **moose-design**
+(`../moose-design`, github.com/moose-club/design). `pnpm sync` there rewrites this block.
+
+- **Rules:** `../moose-design/RULES.md`. Read it before any UI change. Don't restate or
+  override it here. To change a rule, open a PR on moose-design.
+- **Values:** use only the design tokens. On the web these are the `--m-*` custom properties
+  from the generated `tokens.css`; on iOS the MooseUI accessors; in Figma the Moose Design
+  System library variables. No raw hex, no one-off sizes.
+- **Generated files** are listed in `.moose-design.json`. Never hand-edit them. Change the
+  token in moose-design, then `pnpm --dir ../moose-design sync marketing`, then commit
+  the result here.
+- **Drift:** `pnpm --dir ../moose-design check marketing` reports hand-edited or
+  out-of-date files and an out-of-date version of this block.
+<!-- /moose-design:rules -->

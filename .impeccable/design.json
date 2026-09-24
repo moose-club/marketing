@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-24T00:00:00Z",
+  "title": "Design System: Moose Marketing",
+  "extensions": {
+    "valueOwnership": {
+      "owner": "moose-design (github.com/moose-club/design)",
+      "rules": "moose-design/RULES.md",
+      "generated": ["src/styles/moose-design/tokens.css", ".moose-design.json"],
+      "note": "Colours, radius, spacing and shadow are --m-* tokens owned upstream. Never restate a value as a rule here, never hand-edit the generated files. Change the token upstream, run `pnpm sync marketing`, then re-run /impeccable document."
+    },
+    "colorMeta": {
+      "court-navy": { "role": "primary", "displayName": "Court Navy", "canonical": "var(--m-moose-navy)", "purpose": "The floor of the board. Section fills, headlines on cream, the primary button." },
+      "court-navy-deep": { "role": "primary", "displayName": "Court Navy Deep", "canonical": "var(--m-moose-navy-deep)", "purpose": "The deepest band: footer, modality ticker, legal-page footers." },
+      "court-navy-lift": { "role": "primary", "displayName": "Court Navy Lift", "canonical": "var(--m-moose-navy-lift)", "purpose": "Raised navy surface." },
+      "court-navy-press": { "role": "primary", "displayName": "Court Navy Press", "canonical": "var(--m-moose-navy-press)", "purpose": "Pressed navy, and the primary button's hover fill." },
+      "live-line-pink": { "role": "secondary", "displayName": "Live Line Pink", "canonical": "var(--m-moose-pink)", "purpose": "The member's path. One element per view: eyebrow, one headline word, a link, one stat, the focus ring." },
+      "live-line-pink-press": { "role": "secondary", "displayName": "Live Line Pink Press", "canonical": "var(--m-moose-pink-press)", "purpose": "Pressed pink. The only pink hover fill." },
+      "live-line-pink-soft": { "role": "secondary", "displayName": "Live Line Pink Soft", "canonical": "var(--m-moose-pink-soft)", "purpose": "The one permitted pink fill: small tinted chips on a light surface." },
+      "chalk-ground": { "role": "neutral", "displayName": "Chalk Ground", "canonical": "var(--m-bg)", "purpose": "The page floor under everything." },
+      "chalk-cream": { "role": "neutral", "displayName": "Chalk Cream", "canonical": "var(--m-cream)", "purpose": "The warmer band, alternating with white and navy." },
+      "surface-white": { "role": "neutral", "displayName": "Surface White", "canonical": "var(--m-surface)", "purpose": "Cards, the frosted nav, form fields." },
+      "tape-ink": { "role": "neutral", "displayName": "Tape Ink", "canonical": "var(--m-ink)", "purpose": "All primary text. Navy, never black." },
+      "tape-support": { "role": "neutral", "displayName": "Tape Support", "canonical": "var(--m-ink-support)", "purpose": "Body copy and ledes. Ink at 70%, 5.1:1 on cream." },
+      "tape-placeholder": { "role": "neutral", "displayName": "Tape Placeholder", "canonical": "var(--m-ink-placeholder)", "purpose": "Captions, meta, field placeholders. Ink at 66%." },
+      "tape-line": { "role": "neutral", "displayName": "Tape Line", "canonical": "var(--m-ink-tape)", "purpose": "Dividers. Ink at 24%." },
+      "tape-hairline": { "role": "neutral", "displayName": "Tape Hairline", "canonical": "var(--m-ink-hairline)", "purpose": "Card and field borders. Ink at 12%." },
+      "tape-wash": { "role": "neutral", "displayName": "Tape Wash", "canonical": "var(--m-ink-wash)", "purpose": "The faintest surface tint. Ink at 8%." },
+      "on-brand": { "role": "neutral", "displayName": "On Brand", "canonical": "var(--m-on-brand)", "purpose": "White ink on a navy or pink floor." },
+      "on-brand-dim": { "role": "neutral", "displayName": "On Brand Dim", "canonical": "var(--m-on-brand-dim)", "purpose": "Supporting text on navy. White at 65% — the only on-navy weight with a token." }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero h1, once per page." },
+      "headline": { "displayName": "Headline", "purpose": "Every section h2." },
+      "title": { "displayName": "Title", "purpose": "Sub-section heads." },
+      "lead": { "displayName": "Lead", "purpose": "The paragraph under a section heading. Capped at 640px." },
+      "body": { "displayName": "Body", "purpose": "Default copy, including long legal pages." },
+      "label": { "displayName": "Eyebrow", "purpose": "The pink uppercase kicker above a heading." }
+    },
+    "proposedTokens": {
+      "note": "Decided 2026-09-24, pending a moose-design PR. Until they land, these are local and marked `no token yet: proposed` in globals.css.",
+      "on-brand-ramp": "White-alpha ink on the navy floor at 70/66/60/50/24/12/8%. moose-design defines exactly these weights, but only as the .dark overrides of --m-ink-*, and nothing here applies .dark.",
+      "spacing": "64 and 96 for web page rhythm (drift-inventory D7). 12, 20, 40 and 80 round onto existing steps.",
+      "typeScale": "A hybrid web role→size table: fluid clamp() for screenTitle / focusTitle / sectionTitle / statFigure, fixed px for the other 11 roles (drift-inventory D10).",
+      "eyebrowTracking": "0.18em, matching the studio portal. globals.css currently sets 0.22em on the .eyebrow utility while MSFooter and MSModel hand-roll 0.18em.",
+      "surfaceAlpha": "--card-frosted (surface at 86%, the scrolled nav) and --scrim (ink at 70%, the photo caption scrim)."
+    },
+    "shadows": [
+      { "name": "legacy-sm", "value": "var(--m-shadow-sm)", "purpose": "Incumbent drift. Flat is the target (RULES 10); do not add to new surfaces." },
+      { "name": "legacy-md", "value": "var(--m-shadow-md)", "purpose": "Incumbent drift. Present on resting cards and the primary button." },
+      { "name": "legacy-lg", "value": "var(--m-shadow-lg)", "purpose": "Incumbent drift. The primary button's hover step." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default easing for every state transition. Local, not a token." },
+      { "name": "dur-fast", "value": "140ms", "purpose": "Colour and opacity changes on hover." },
+      { "name": "dur-base", "value": "220ms", "purpose": "Transform and shadow changes, and the nav's scroll state." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "760px" },
+      { "name": "lg", "value": "960px" },
+      { "name": "xl", "value": "1024px" },
+      { "name": "xxl", "value": "1280px" },
+      { "name": "wide", "value": "1600px" }
+    ],
+    "container": { "max": "1240px", "paddingInline": "clamp(20px, 5vw, 56px)" }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action a screen is for. Navy pill with a trailing arrow that advances on hover. One per screen, never beside a pink CTA.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#register\">Get involved or hear more<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--m-moose-navy); color: var(--m-on-brand); padding: 14px 24px; border-radius: var(--m-radius-full); font-family: var(--m-font-family-sans); font-size: 15px; font-weight: 600; letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; transition: background 220ms cubic-bezier(0.22,1,0.36,1), transform 220ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary svg { transition: transform 220ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary:hover { background: var(--m-moose-navy-press); transform: translateY(-2px); } .ds-btn-primary:hover svg { transform: translateX(3px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--m-moose-pink); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The secondary beside a primary. White pill with a navy label; never appears alone.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#how\">See how it works</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: var(--m-surface); color: var(--m-moose-navy); padding: 14px 24px; border-radius: var(--m-radius-full); font-family: var(--m-font-family-sans); font-size: 15px; font-weight: 600; letter-spacing: -0.01em; text-decoration: none; transition: transform 220ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-ghost:hover { transform: translateY(-2px); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--m-moose-pink); outline-offset: 2px; }"
+    },
+    {
+      "name": "Eyebrow",
+      "kind": "custom",
+      "refersTo": "eyebrow",
+      "description": "The pink uppercase kicker above a section heading. Tracked wide. Usually a section's only pink element.",
+      "html": "<p class=\"ds-eyebrow\">Studio operators</p>",
+      "css": ".ds-eyebrow { margin: 0; font-family: var(--m-font-family-sans); font-size: 12px; font-weight: 700; line-height: 1.2; letter-spacing: 0.22em; text-transform: uppercase; color: var(--m-moose-pink); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The default light surface on a cream band. Hairline border, no shadow on new instances.",
+      "html": "<div class=\"ds-card\"><h4>Your members stay yours</h4><p>Crossover is capped by design, so members stay anchored to their home studio.</p></div>",
+      "css": ".ds-card { background: var(--m-surface); color: var(--m-ink); border: 1px solid var(--m-ink-hairline); border-radius: var(--m-radius-xl); padding: 22px; font-family: var(--m-font-family-sans); max-width: 340px; } .ds-card h4 { margin: 0 0 10px; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2; } .ds-card p { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.55; color: var(--m-ink-support); }"
+    },
+    {
+      "name": "Navy Stat Card",
+      "kind": "card",
+      "refersTo": "card-navy",
+      "description": "The value-row card on the navy floor: an ordinal, a title, supporting copy, and one big tabular figure.",
+      "html": "<div class=\"ds-card-navy\"><span class=\"ds-card-navy__num\">01</span><h4>New revenue stream</h4><p>A premium Moose tier that lifts yield per member.</p><span class=\"ds-card-navy__stat\">+$15k</span></div>",
+      "css": ".ds-card-navy { background: var(--m-moose-navy); color: var(--m-on-brand); border-radius: var(--m-radius-xl); padding: 22px; font-family: var(--m-font-family-sans); max-width: 240px; } .ds-card-navy__num { display: block; font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; } .ds-card-navy h4 { margin: 20px 0 10px; font-size: 17px; font-weight: 700; line-height: 1.2; } .ds-card-navy p { margin: 0 0 18px; font-size: 13.5px; font-weight: 500; line-height: 1.55; color: color-mix(in srgb, var(--m-on-brand) 70%, transparent); } .ds-card-navy__stat { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Enquiry form field. White fill, hairline border, pink focus ring.",
+      "html": "<label class=\"ds-field\"><span>Studio name *</span><input type=\"text\" placeholder=\"Enter studio\" /></label>",
+      "css": ".ds-field { display: block; font-family: var(--m-font-family-sans); max-width: 320px; } .ds-field span { display: block; margin-bottom: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--m-ink-placeholder); } .ds-field input { width: 100%; background: var(--m-surface); color: var(--m-ink); border: 1px solid var(--m-ink-hairline); border-radius: var(--m-radius-lg); padding: 12px 14px; font-family: inherit; font-size: 14px; font-weight: 500; } .ds-field input::placeholder { color: var(--m-ink-placeholder); } .ds-field input:focus-visible { outline: 2px solid var(--m-moose-pink); outline-offset: 2px; }"
+    },
+    {
+      "name": "Scrolled Navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Fixed bar, transparent over the hero, gaining a frosted surface and hairline edge past 16px of scroll. One CTA only.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav__brand\">moose</span><div class=\"ds-nav__links\"><a href=\"#model\">The Moose model</a><a href=\"#value\">For studios</a><a href=\"#members\">Studio members</a></div><a class=\"ds-nav__cta\" href=\"#\">Studio login</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; height: 72px; padding: 0 24px; background: color-mix(in srgb, var(--m-surface) 86%, transparent); backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid var(--m-ink-hairline); font-family: var(--m-font-family-sans); } .ds-nav__brand { font-size: 22px; font-weight: 800; letter-spacing: -0.04em; color: var(--m-moose-navy); } .ds-nav__links { display: flex; gap: 20px; margin-left: auto; } .ds-nav__links a { font-size: 14px; font-weight: 600; color: var(--m-ink-support); text-decoration: none; padding: 8px 10px; border-radius: var(--m-radius-sm); transition: color 140ms, background 140ms; } .ds-nav__links a:hover { color: var(--m-ink); background: var(--m-info-soft); } .ds-nav__cta { background: var(--m-moose-navy); color: var(--m-on-brand); padding: 10px 18px; border-radius: var(--m-radius-full); font-size: 14px; font-weight: 600; text-decoration: none; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Partner Board",
+    "overview": "Two studios pairing up, drawn as a board of complementary venues. The site's whole job is to make one operator see themselves next to another and understand that the pairing costs them nothing they care about. So the page reads as a board rather than a brochure: paired columns, alternating cream and navy bands that group one argument at a time, and stat cards that sit in a row like venues on a roster.\n\nThe mood is considered, warm and direct. It argues carefully rather than boasting, it sounds like a person rather than a company, and it wastes no words — the same plain Australian register as the copy. Type does most of the work: 800-weight display headings set tight and fluid, over generous cream space, with real photography of real training rather than stock gym imagery.\n\nThe confirmed anti-reference is the aggregator — ClassPass and its lookalikes. Dense venue grids, discount badges, consumer-marketplace energy. Moose sells partnership to operators; it does not sell supply to consumers. Any composition that starts to feel like a search result page has gone wrong.",
+    "keyCharacteristics": [
+      "Alternating cream and navy bands as the structural rhythm; one argument per band",
+      "Fluid 800-weight display type, tightly tracked, doing the hierarchy work",
+      "Exactly one pink element per view — the live line marking the member's path",
+      "Real training photography, never stock or illustration",
+      "Flat by intent; tonal alternation conveys depth, not shadow",
+      "One primary action per screen, always the navy pill"
+    ],
+    "rules": [
+      { "name": "The One Live Line Rule", "body": "One pink element per view, and it marks the member's path — an eyebrow, one word in a headline, a link, one stat. Two pink things on one screen means one of them is decoration, and decoration is the failure mode. When a design mock arrives with several, sanitise to one.", "section": "colors" },
+      { "name": "The Never Black Rule", "body": "No text, scrim, shadow or border is black. Scrims are the floor colour at partial alpha. The only black left in the codebase is inside PhoneFrame, which draws a physical device rather than a Moose surface.", "section": "colors" },
+      { "name": "The Small Pink Ban", "body": "Pink text below 24px on a light floor fails contrast (3.19:1 on cream). Pink is for headings 24px and up, eyebrows at their tracked weight, or as a fill behind white. Never pink body copy.", "section": "colors" },
+      { "name": "The One Pink Word Rule", "body": "A headline highlights at most one word in pink, and it is the word the sentence turns on. If the eyebrow above already carries the accent, the headline takes none.", "section": "typography" },
+      { "name": "The Fluid Display Rule", "body": "Every display size is a clamp(). There is no fixed font-size on a heading. Web role→size is not yet a moose-design token, so these values are provisional and local.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "New surfaces get no shadow. Separation is a background change or an ink-hairline border. If a new element seems to need elevation to read, the surface alternation underneath it is wrong.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do take every colour, radius, spacing step and shadow from a --m-* token. A value the tokens lack is a PR on moose-design, not a local constant.",
+      "Do keep exactly one pink element per view, and make it the member's path.",
+      "Do alternate cream, white and navy bands so each argument is visually bounded.",
+      "Do set every display heading with clamp().",
+      "Do use --m-ink and --m-ink-support for text, and measure contrast rather than assuming it (RULES 16).",
+      "Do render icons as inline Lucide-style outline SVGs using currentColor (RULES 15).",
+      "Do keep hit targets at 44px or more (RULES 17)."
+    ],
+    "donts": [
+      "Don't write a raw hex, rgb() or rgba() into a component. The documented exceptions are device chrome in PhoneFrame, the ticker's mask, theme-color in Base.astro, and the vendored QR library's defaults.",
+      "Don't use black for text, scrims, shadows or borders.",
+      "Don't put pink text below 24px on a light floor, or pink on body copy anywhere.",
+      "Don't put a pink CTA and a navy CTA on the same screen.",
+      "Don't add a shadow to a new surface. Separate with a background change or a hairline.",
+      "Don't introduce a third brand colour, or a gradient on the pink.",
+      "Don't reach for SF Symbols or an icon library — the DS's iOS components (AppButton, FloorPlate, Icon/Placeholder) are explicitly not for the web.",
+      "Don't let a layout drift toward the aggregator: dense venue grids, discount badges, or anything that reads as a consumer search result.",
+      "Don't hand-edit src/styles/moose-design/tokens.css or .moose-design.json."
+    ]
+  }
+}

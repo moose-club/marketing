@@ -144,6 +144,8 @@ export class QrCode {
 
   /*-- Accessors for SVG output --*/
 
+  // Vendored library defaults. Both are overridden at the only call site,
+  // src/pages/claim.astro, which reads the real colours off the tokens.
   public toSvgString(border: int, lightColor: string = '#FFFFFF', darkColor: string = '#000000'): string {
     if (border < 0) throw new RangeError('Border must be non-negative');
     const parts: Array<string> = [];

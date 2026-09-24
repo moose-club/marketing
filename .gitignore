@@ -22,3 +22,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Impeccable working files
+.impeccable/review/
+.impeccable/questions/
+.impeccable/mocks/
+.impeccable/build/
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+
+# Migration review artifacts (regenerate with .context/tools/sheets.mjs)
+docs/migration/

@@ -34,7 +34,7 @@ import { VALUE } from '../../data/copy';
 <style>
   /* White background distinguishes this section from the cream sections that
      bracket it (the cards go cream to keep the surface separation). */
-  .section--white { background: #fff; }
+  .section--white { background: var(--card); }
 
   .value__head { max-width: 780px; margin-bottom: 48px; }
   .value__prize {
@@ -82,19 +82,19 @@ import { VALUE } from '../../data/copy';
   .value__num {
     font-weight: 800;
     font-size: clamp(28px, 2.4vw, 34px);
-    color: #fff;
+    color: var(--navy-on);
     line-height: 1;
   }
   .value__bcard h4 {
     font-size: 17px;
     font-weight: 700;
-    color: #fff;
+    color: var(--navy-on);
     margin: 20px 0 10px;
     line-height: 1.2;
   }
   .value__bcard > p {
     font-size: 13.5px;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--on-navy-support);
     line-height: 1.55;
     margin: 0;
     /* Guaranteed gap between the body copy and the stat box below it. */

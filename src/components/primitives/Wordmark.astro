@@ -27,8 +27,8 @@ const {
 // lockups; only the wordmark text colour changes.
 const palette = {
   cream: { glyph: 'var(--pink)', text: 'var(--navy)' },
-  navy:  { glyph: 'var(--pink)', text: '#FFFFFF'   },
-  pink:  { glyph: '#FFFFFF',     text: '#FFFFFF'   },
+  navy:  { glyph: 'var(--pink)', text: 'var(--navy-on)' },
+  pink:  { glyph: 'var(--pink-on)', text: 'var(--pink-on)' },
 }[variant];
 
 const computedTextSize = textSize ?? Math.round(size * 0.75);

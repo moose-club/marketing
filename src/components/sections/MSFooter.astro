@@ -66,7 +66,7 @@ const year = new Date().getFullYear();
 <style>
   .footer {
     background: var(--navy-900);
-    color: #fff;
+    color: var(--navy-on);
     padding-block: 64px 32px;
   }
   .footer__top {
@@ -82,7 +82,7 @@ const year = new Date().getFullYear();
   }
   .footer__tag {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--on-navy-inert);
     line-height: 1.55;
     max-width: 320px;
   }
@@ -93,11 +93,11 @@ const year = new Date().getFullYear();
     width: 40px;
     height: 40px;
     border-radius: 999px;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
+    color: var(--navy-on);
+    background: var(--on-navy-wash);
     transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast);
   }
-  .footer__ig:hover { background: var(--pink); color: #fff; }
+  .footer__ig:hover { background: var(--pink); color: var(--navy-on); }
 
   .footer__cols {
     display: grid;
@@ -110,26 +110,26 @@ const year = new Date().getFullYear();
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--navy-on);
     margin: 0 0 6px;
   }
   .footer__link {
     font-size: 13.5px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--on-navy-inert);
     transition: color var(--dur-fast) var(--ease-out);
   }
-  .footer__link:hover { color: #fff; }
+  .footer__link:hover { color: var(--navy-on); }
 
   .footer__bot {
     margin-top: 56px;
     padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--navy-rule);
     display: flex;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--on-navy-muted);
   }
   .footer__legal {
     display: flex;
@@ -138,13 +138,13 @@ const year = new Date().getFullYear();
     gap: 16px;
   }
   .footer__legal a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--on-navy-inert);
     transition: color var(--dur-fast) var(--ease-out);
   }
-  .footer__legal a:hover { color: #fff; }
+  .footer__legal a:hover { color: var(--navy-on); }
   .footer__links { display: flex; gap: 20px; }
-  .footer__links a { color: rgba(255, 255, 255, 0.6); }
-  .footer__links a:hover { color: #fff; }
+  .footer__links a { color: var(--on-navy-inert); }
+  .footer__links a:hover { color: var(--navy-on); }
 
   @media (min-width: 760px) {
     .footer__cols { grid-template-columns: repeat(3, 1fr); }

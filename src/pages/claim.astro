@@ -135,6 +135,11 @@ const steps = [
   const main = document.querySelector<HTMLElement>('.claim');
   if (main) main.dataset.platform = detectPlatform();
 
+  // The QR is generated as raw SVG, so its two colours can't be CSS vars.
+  // Read them off :root instead, so they still come from the design tokens.
+  const token = (name: string) =>
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
   // On desktop, render a QR for the current URL (pm included) so the visitor
   // can hop to their phone and land on this same page, which then shows the
   // right store button. Only runs on desktop — no QR weight on mobile.
@@ -144,7 +149,7 @@ const steps = [
       try {
         const qr = QrCode.encodeText(window.location.href, Ecc.MEDIUM);
         // border = 4 modules: the QR-spec quiet zone, required for reliable scanning.
-        host.innerHTML = qr.toSvgString(4, '#F7F4EF', '#1A2B5F');
+        host.innerHTML = qr.toSvgString(4, token('--cream'), token('--navy'));
         const svg = host.querySelector('svg');
         if (svg) {
           svg.setAttribute('width', '100%');
@@ -162,7 +167,7 @@ const steps = [
      own minimal nav rather than reusing MSNav (mirrors the legal pages). */
   .claim-nav {
     border-bottom: 1px solid var(--rule);
-    background: rgba(255, 255, 255, 0.86);
+    background: var(--card-frosted);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     position: sticky;
@@ -183,7 +188,7 @@ const steps = [
     font-size: 14px;
     font-weight: 600;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     padding: 9px 16px;
     border-radius: var(--r-pill);
     box-shadow: var(--shadow-xs);
@@ -233,7 +238,7 @@ const steps = [
     width: 100%;
     justify-content: center;
     background: var(--navy);
-    color: #fff;
+    color: var(--navy-on);
     padding: 15px 24px;
     border-radius: var(--r-pill);
     box-shadow: var(--shadow-sm);
@@ -350,7 +355,7 @@ const steps = [
   /* Footer — mirrors the legal pages' slim foot. */
   .claim-foot {
     background: var(--navy-900);
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--on-navy-muted);
     padding-block: 24px;
     font-size: 13px;
   }
@@ -361,6 +366,6 @@ const steps = [
     justify-content: space-between;
     gap: 12px;
   }
-  .claim-foot a { color: rgba(255, 255, 255, 0.65); transition: color var(--dur-fast) var(--ease-out); }
-  .claim-foot a:hover { color: #fff; }
+  .claim-foot a { color: var(--navy-dim); transition: color var(--dur-fast) var(--ease-out); }
+  .claim-foot a:hover { color: var(--navy-on); }
 </style>
