@@ -12,16 +12,30 @@ web
 venue — pilates, HIIT, cycle, yoga, strength, barre, martial arts — and are losing
 members to competitors offering more variety. Building new modalities in-house is
 expensive and slow. They arrive on `/` cold, having usually not heard of Moose, and the
-site's job is to move them to a filled-in studio enquiry form.
+site's job is to move them to list their studio at `studio.trainmoose.com`.
 
-**Secondary: members of a partner studio, post-purchase.** They reach `/claim` from a
-link after their studio has upgraded them, on a phone or via a desktop QR hop. They are
-not being sold to — they are activating something already bought. The liability waiver
-and member privacy/terms pages serve the same audience.
+**Second and now addressed directly: members of a studio, pre-purchase.** Since 24 Sep
+2026 `/` carries two floors behind an audience switch — **"I run a studio"** and
+**"I'm a member"**. The member floor is written to a member in the second person: what
+the upgrade gets them, what it costs, and how the app works once their studio sets them
+up. Its job is a member who understands the offer well enough to take it at their studio,
+or to put it in front of a studio that has not heard of Moose.
 
-Both audiences are durable. Members are never the audience of `/` — the marketing
-argument is addressed to operators throughout, and members are described in the third
-person ("Studio members", "your members stay yours").
+**Third: members of a partner studio, post-purchase.** They reach `/claim` from a link
+after their studio has upgraded them, on a phone or via a desktop QR hop. They are not
+being sold to — they are activating something already bought. The liability waiver and
+member privacy/terms pages serve the same audience.
+
+All three audiences are durable. The operator remains the commercial argument — the
+studio floor is unchanged and is still where the business case is made. What changed is
+that members are no longer only described in the third person: they now have a floor of
+their own, reached by a switch rather than by a separate URL.
+
+**Members cannot self-serve (confirmed by Max, 24 Sep 2026).** There is no path by which
+a member signs up to Moose on their own, picks a home studio and starts booking. Access
+arrives only through a studio that has joined Moose and sold them the upgrade. The member
+floor must never imply otherwise, and must not describe choosing a home studio as
+something the member initiates.
 
 ## Product Purpose
 
@@ -33,8 +47,11 @@ The studio gets a new premium membership tier and a new revenue line without bui
 new modalities. The member gets variety without leaving their home studio. Moose keeps
 the flow balanced across partners so no venue is disproportionately drawn on.
 
-Success for the site is one conversion: an operator who had not heard of Moose submits
-the studio enquiry form.
+Success for the site is an operator who had not heard of Moose listing their studio at
+`studio.trainmoose.com`. The member floor is measured against the same outcome one step
+removed: a member who understands the upgrade well enough to ask for it, or to put Moose
+in front of a studio that has not heard of it. It is not a second conversion funnel —
+members cannot buy anything here or in the app.
 
 ## Positioning
 
@@ -60,7 +77,11 @@ theirs and their studio stays specialised.
 - The studio-facing product lives elsewhere: the portal at `studio.trainmoose.com`,
   linked from the nav as "Studio login". This site never contains the portal.
 - The member-facing product is the iOS app. `/claim` exists to hand a member off to it.
+  **The app is iPhone only**, so the member floor's one action strands Android members —
+  an open product question, not a design one.
 - Enquiry currently arrives by email, not through a CRM.
+- The audience switch is a client-side state on `/`, not a route. Both floors ship in one
+  document; nothing navigates.
 
 ## Capabilities and Constraints
 
@@ -70,14 +91,20 @@ theirs and their studio stays specialised.
 - All on-page copy lives in `src/data/copy.ts`, never inline in components.
 - Design values come from **moose-design** (`RULES.md`, `tokens/`). See the managed block
   in `CLAUDE.md`. This repo does not decide colour, radius, spacing or shadow.
-- Routes: `/` (the marketing argument), `/claim` (member activation), `/404`, and six
+- Routes: `/` (both marketing floors), `/claim` (member activation), `/404`, and six
   legal pages. `/studio-terms`, `/studio-conduct` and `/claim` are excluded from the
-  sitemap — they are reached by link, not search.
+  sitemap — they are reached by link, not search. The member floor adds no route, so it
+  adds no sitemap entry and shares `/`'s title, description and canonical.
 - **Undecided:** `MSNetwork` and `MSStory` are fully built but commented out in
   `index.astro`. The live page is seven sections; `SPEC.md` still describes nine. Whether
   they return is an open decision — do not delete them, and do not assume they ship.
 - **Undecided:** both enquiry forms post to `mailto:` addresses. A real form destination
-  has not been chosen.
+  has not been chosen. The 24 Sep design round removes both forms entirely, which would
+  close this item rather than answer it.
+- **Decided 24 Sep 2026, not yet built:** the member content leaves the studio floor.
+  `MSMembers` — the "Finally, some (affordable) variety…" station with the commercials
+  and the app mock — is removed from the studio argument, because the member floor now
+  carries all of it in the second person. Do not render the same material twice.
 
 ## Brand Commitments
 
@@ -104,6 +131,12 @@ Real: nine marketing photographs in `public/photos/`, the wordmark and icon sets
 - **Partner logos.** `MSNetwork.astro` renders dashed `[Logo]` placeholders. No real
   partner has approved a logo.
 - **Contact inboxes and the Instagram handle**, per Brand Commitments.
+- **The App Store listing.** `claim.astro` carries a placeholder id
+  (`apps.apple.com/app/moose/id000000000`). Every "get the app" action points at a
+  listing that does not exist yet.
+- **The member app's home-studio screen.** `public/photos/` holds one member app
+  capture (`member-app-browse.webp`, the Browse floor). The member floor needs a
+  home-studio capture as well.
 
 There are no testimonials, no press, no customer names and no benchmarks. Do not invent
 any. Where a surface needs proof and none exists, the honest move is to omit the claim,
@@ -111,15 +144,23 @@ not to fill the slot.
 
 ## Product Principles
 
-1. **The operator is the reader.** Every argument on `/` is addressed to someone running
-   a studio. Member benefit is evidence for the operator's case, not the pitch.
+1. **One floor, one reader.** Each floor addresses exactly one audience and never hedges
+   between them. The studio floor is written to someone running a studio; the member
+   floor is written to a member in the second person. A sentence that would sit equally
+   well on both is doing its job on neither.
 2. **The limit is the product.** Capped crossover and non-competing partners are what
    make this safe for a studio to join. Never present Moose as unlimited access.
 3. **Their members stay theirs.** Moose is infrastructure between studios, not a
-   consumer brand competing for the member relationship.
-4. **Claim nothing we cannot show.** The network counts and the case study are
+   consumer brand competing for the member relationship. The member floor explains the
+   offer; it never sells around the studio, never lets a member transact, and never
+   presents venues as a catalogue to browse. **The moment it reads as a search result,
+   it has become the aggregator and contradicted the floor next to it.**
+4. **The studio is the door.** A member's access comes through their own studio, so the
+   member floor's honest endings are two: take the upgrade at your studio, or show your
+   studio the other floor. It must not invent a third.
+5. **Claim nothing we cannot show.** The network counts and the case study are
    unverified; the site must survive their removal.
-5. **`/` persuades, `/claim` gets out of the way.** The activation page is not a second
+6. **`/` persuades, `/claim` gets out of the way.** The activation page is not a second
    marketing surface — it is the shortest path to the app.
 
 ## Accessibility & Inclusion
