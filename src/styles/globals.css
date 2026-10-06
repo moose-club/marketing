@@ -329,7 +329,11 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   /* Lane Lines web type roles the token set doesn't carry yet — the Figma
      text styles `Lane Lines/Web/…`, proposed to moose-design (rule 13).
      Everything else reads `--m-type-*`. */
-  --ll-lettering-tracking: -0.04em;  /* no token yet: proposed */
+  /* Headline leading and tracking, opened up from the token's 0.86 and the
+     frames' −4% — at those the lines touched and the letters crowded.
+     Proposed to moose-design as the web floorLettering leading. */
+  --ll-lettering-leading:  1.02;     /* provisional: overrides --m-type-floor-lettering-leading */
+  --ll-lettering-tracking: -0.025em; /* no token yet: proposed */
   --ll-lead-size:    1.125rem;       /* no token yet: proposed (Lead 18/1.6) */
   --ll-lead-leading: 1.6;            /* no token yet: proposed */
   --ll-body-size:    0.9375rem;      /* no token yet: proposed (Body 15/1.55) */
@@ -398,13 +402,12 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
 .lettering {
   font-size: var(--m-type-floor-lettering-size);
   font-weight: var(--m-type-floor-lettering-weight);
-  line-height: var(--m-type-floor-lettering-leading);
+  line-height: var(--ll-lettering-leading);
   letter-spacing: var(--ll-lettering-tracking);
   color: var(--m-ink);
   text-wrap: balance;
-  /* The descent give-back: Poppins' descenders hang ~0.14em below the last
-     line's box at this leading. */
-  padding-bottom: 0.14em;
+  /* The descent give-back: room for the last line's descenders. */
+  padding-bottom: 0.06em;
 }
 .lettering--station {
   font-size: calc(var(--m-type-floor-lettering-size) * 0.889);
