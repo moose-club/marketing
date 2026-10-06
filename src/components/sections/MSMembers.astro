@@ -56,17 +56,20 @@ const APP = {
     <p class="lead">{MEMBERS.app.lede}</p>
   </div>
   <div class="lane--partner lane--indent">
-    <div class="app-lane">
-      <img
-        class="app-shot"
-        src={APP.src}
-        width={APP.width}
-        height={APP.height}
-        alt={APP.alt}
-        loading="lazy"
-        decoding="async"
-        fetchpriority="low"
-      />
+    <div class="phone">
+      <span class="phone__island" aria-hidden="true"></span>
+      <div class="app-lane">
+        <img
+          class="app-shot"
+          src={APP.src}
+          width={APP.width}
+          height={APP.height}
+          alt={APP.alt}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+        />
+      </div>
     </div>
   </div>
 </section>
@@ -106,7 +109,7 @@ const APP = {
     overflow: hidden;
     border-radius: 0;
     /* The app's own ground, so a sub-pixel gap on the last frame is invisible. */
-    background: var(--m-surface);
+    background: var(--m-bg);
   }
 
   .app-shot {
@@ -167,10 +170,38 @@ const APP = {
     to   { transform: translateY(var(--app-travel)); }
   }
 
-  .app-lane {
-    /* The lane's width: the drawn 340, and short enough on a short viewport
+  /* ───── The phone shell ─────────────────────────────────────────────
+     Device chrome around the capture, as drawn (Figma 54:287): a bezel, a
+     rounded screen and the Dynamic Island. Like PhoneFrame, the chrome is the
+     device, not a Moose surface, so it is the phone's own near-black rather
+     than a brand token — and flat, with no drop shadow (Flat Floor). */
+  .phone {
+    --bezel: 8px;
+    /* The screen's width: the drawn 323, and short enough on a short viewport
        that the whole window is under the fold, so the scrub has somewhere to
        happen. `svh`, never `dvh` — `dvh` would resize the lane mid-scroll. */
-    --lane-w: min(340px, calc(76svh * 402 / 874));
+    --lane-w: min(323px, calc(72svh * 402 / 874));
+    position: relative;
+    inline-size: min(100%, calc(var(--lane-w) + 2 * var(--bezel)));
+    padding: var(--bezel);
+    border-radius: 46px;
+    background: #0a0a0a; /* device chrome, not a brand colour */
+  }
+  .phone .app-lane {
+    inline-size: 100%;
+    border-radius: 38px;
+    /* The status-bar band: the island sits here, not over the capture. */
+    border-top: 40px solid var(--m-bg);
+  }
+  .phone__island {
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--bezel) + 10px);
+    left: 50%;
+    translate: -50% 0;
+    inline-size: 32%;
+    block-size: 30px;
+    border-radius: 15px;
+    background: #000; /* the island cut-out — device chrome */
   }
 </style>
