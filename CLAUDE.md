@@ -122,6 +122,9 @@ This repo takes its design values and rules from **moose-design**
 - **Values:** use only the design tokens. On the web these are the `--m-*` custom properties
   from the generated `tokens.css`; on iOS the MooseUI accessors; in Figma the Moose Design
   System library variables. No raw hex, no one-off sizes.
+- **`DESIGN.md`** describes how this surface uses the system. It names tokens and never
+  restates their values. A new value goes to moose-design first; until it lands, mark
+  the line `provisional` here. `check` warns on any other colour that isn't a token.
 - **Generated files** are listed in `.moose-design.json`. Never hand-edit them. Change the
   token in moose-design, then `pnpm --dir ../moose-design sync marketing`, then commit
   the result here.
