@@ -22,7 +22,7 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
   {lanes.map((group, li) => (
     <ul
       class:list={['roster', li === 1 && 'lane--partner']}
-      id={li === 0 ? 'roster' : undefined}
+      id={li === 0 ? 'roster' : 'roster-partner'}
       style={`--rows: ${Math.ceil(group.length / 2)}`}
     >
       {group.map((p, i) => {
@@ -43,7 +43,7 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
         type="button"
         class="plate plate--outline plate--station"
         aria-expanded="false"
-        aria-controls="roster"
+        aria-controls="roster roster-partner"
         data-roster-toggle
         data-show={NETWORK.showAll}
         data-hide={NETWORK.showLess}

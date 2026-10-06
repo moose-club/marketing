@@ -72,7 +72,7 @@ The floor is two lanes — yours (`.lanes > *`) and your partner's (`.lane--part
 
 ### Photos
 
-Marketing photos live under `public/photos/` (referenced via `url('/photos/…')` from inline `background-image` styles). They came from the design bundle and are unoptimised — `hero-pilates.png` is ~2.8MB. Worth running through a compressor before any production push.
+Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (`HeroPhoto`, the member app capture) — no `background-image` photos remain. The homepage hero is `hero-strength.webp`, preloaded via `Base.astro`'s `preloadImage` prop.
 
 ### Brand discipline (the hardest-to-relearn rules)
 
@@ -98,10 +98,9 @@ These are violations Claude will be tempted to make. Keep them top of mind:
 
 These don't block development but need a human answer before launch:
 
-1. **Photo optimisation** — `public/photos/hero-pilates.png` is 2.8MB. Run through squoosh / sharp before production push.
-2. **Real partner logos** — `MSNetwork.astro` sets each partner's name as its mark. Add single-ink SVGs to `NETWORK.partners` when partners approve them.
-3. **Legal pages** — no privacy / terms / partner agreement pages yet. Footer doesn't link to them; ABN / registered address also absent.
-4. **Instagram handle / contact emails** — `partnerships@trainmoose.com`, `memberships@trainmoose.com`, `@trainmoose` are in `NAV` / `FOOTER`. Confirm these inboxes exist.
+1. **Real partner logos** — `MSNetwork.astro` sets each partner's name as its mark. Add single-ink SVGs to `NETWORK.partners` when partners approve them.
+2. **Legal gaps** — privacy and terms pages exist and the footer links them, but there's no partner agreement page; ABN / registered address also absent.
+3. **Instagram handle / contact emails** — `partnerships@trainmoose.com`, `memberships@trainmoose.com`, `@trainmoose` are in `NAV` / `FOOTER`. Confirm these inboxes exist.
 
 Search for `TODO` to find each location in code.
 
