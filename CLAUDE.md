@@ -18,7 +18,7 @@ Audience: studio operators first, members second. Single page (`/`) with two flo
 - TypeScript strict
 - pnpm
 - **Node 24** required. Astro 6 needs ≥22.12; this repo standardises on 24 (`.nvmrc`)
-- System font stack only — no remote fonts loaded
+- Poppins (RULES 12), loaded from Google Fonts in `Base.astro`
 - Lucide-style icons rendered as **inline SVGs** in each section. No icon library.
 
 ## Commands

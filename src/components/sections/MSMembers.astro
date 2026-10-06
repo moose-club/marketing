@@ -94,12 +94,6 @@ const APP = {
      A window the shape of one phone screen, with the capture running taller
      than it behind a hard square crop. No bezel, no notch, no radius, no
      shadow — the app on the floor, not a stock device mock. */
-  .members__app {
-    display: grid;
-    justify-items: start;
-    gap: var(--s-4);
-  }
-
   .app-lane {
     /* The window's shape. Independent of the capture's total height. */
     --window-w: 402;
@@ -112,7 +106,7 @@ const APP = {
     overflow: hidden;
     border-radius: 0;
     /* The app's own ground, so a sub-pixel gap on the last frame is invisible. */
-    background: var(--card);
+    background: var(--m-surface);
   }
 
   .app-shot {
