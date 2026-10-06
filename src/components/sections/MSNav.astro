@@ -1,24 +1,27 @@
 ---
 import { NAV } from '../../data/copy';
+import Icon from '../primitives/Icon.astro';
+
+// 72px nav, transparent on the floor; once scrolled it takes a Surface/bg fill
+// and a Label/inkHairline bottom edge (no blur, no shadow). The wordmark's
+// first stem sits on lane 0, where the live line starts. Each floor has its
+// own link set; "Studio login" is the outline station action plate, so the
+// first viewport keeps one filled plate.
 ---
 
-<header class="nav" data-scrolled="false" id="siteHeader">
-  <div class="nav__inner container">
+<header class="nav" data-scrolled="false" id="top">
+  <div class="nav__inner">
     <a href="#top" class="nav__brand" aria-label="Moose home">
-      <img
-        src="/brand/logo/moose-wordmark-twotone.svg"
-        alt="Moose"
-        class="nav__logo"
-      />
+      <img src="/brand/logo/moose-wordmark-navy.svg" alt="Moose" class="nav__logo" width="120" height="23" />
     </a>
 
     <nav class="nav__links" aria-label="Primary">
-      {NAV.links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
+      {NAV.studioLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="studio">{l.label}</a>)}
+      {NAV.memberLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="member">{l.label}</a>)}
+      <a class="plate plate--outline plate--station nav__portal" href={NAV.portal.href} target="_blank" rel="noopener">
+        {NAV.portal.label}
+      </a>
     </nav>
-
-    <a class="nav__portal" href={NAV.portal.href} target="_blank" rel="noopener">
-      {NAV.portal.label}
-    </a>
 
     <button
       class="nav__toggle"
@@ -27,19 +30,20 @@ import { NAV } from '../../data/copy';
       aria-expanded="false"
       aria-controls="navMobile"
     >
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <Icon name="menu" />
     </button>
   </div>
 
   <nav class="nav__mobile" id="navMobile" aria-label="Mobile" data-open="false">
-    {NAV.links.map((l) => <a href={l.href} class="nav__mobile-link">{l.label}</a>)}
-    <a href={NAV.portal.href} target="_blank" rel="noopener" class="nav__mobile-link nav__mobile-link--portal">{NAV.portal.label}</a>
+    {NAV.studioLinks.map((l) => <a href={l.href} class="nav__mobile-link" data-floor-only="studio">{l.label}</a>)}
+    {NAV.memberLinks.map((l) => <a href={l.href} class="nav__mobile-link" data-floor-only="member">{l.label}</a>)}
+    <a href={NAV.portal.href} target="_blank" rel="noopener" class="plate plate--outline plate--station nav__mobile-portal">
+      {NAV.portal.label}
+    </a>
   </nav>
 </header>
 
 <script>
-  // Switch `data-scrolled` once past 16px so the header gains its blurred
-  // background. Saves us from a permanent translucent bar over the hero.
   const nav = document.querySelector<HTMLElement>('.nav');
   if (nav) {
     const handler = () => nav.setAttribute('data-scrolled', String(window.scrollY > 16));
@@ -54,11 +58,13 @@ import { NAV } from '../../data/copy';
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!open));
+      toggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
       mobile.dataset.open = String(!open);
     });
     mobile.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('a')) {
         toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
         mobile.dataset.open = 'false';
       }
     });
@@ -68,118 +74,83 @@ import { NAV } from '../../data/copy';
 <style>
   .nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
-    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base), backdrop-filter var(--dur-base);
     border-bottom: 1px solid transparent;
+    transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base);
   }
-  .nav[data-scrolled='true'] {
-    background: var(--card-frosted);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border-bottom-color: var(--rule);
-    box-shadow: var(--shadow-xs);
+  .nav[data-scrolled='true'],
+  .nav:has(.nav__mobile[data-open='true']) {
+    background: var(--m-bg);
+    border-bottom-color: var(--m-ink-hairline);
   }
+
+  /* The wordmark's first stem lands on lane 0: the floor's content edge, less
+     the line inset. */
   .nav__inner {
+    max-width: var(--floor-max);
+    margin-inline: auto;
+    height: var(--nav-h);
+    padding-inline: calc(var(--floor-pad-start) - var(--line-inset)) var(--floor-pad-end);
     display: flex;
     align-items: center;
-    gap: 24px;
-    height: 72px;
+    gap: var(--m-spacing-xl);
   }
-  .nav__brand {
-    display: inline-flex;
-    flex-shrink: 0;
-    /* Pull the wordmark closer to the screen edge than the container inset. */
-    margin-left: clamp(-32px, -3.5vw, -12px);
-  }
-  .nav__logo {
-    display: block;
-    height: 24px;
-    width: auto;
-  }
+  .nav__brand { display: inline-flex; flex-shrink: 0; }
+  .nav__logo { display: block; width: 120px; height: auto; }
 
   .nav__links {
     display: none;
     align-items: center;
-    gap: 6px;
+    gap: var(--m-spacing-xl);
     margin-left: auto;
   }
   .nav__link {
-    font-size: 14px;
+    font-size: var(--ll-body-size);
     font-weight: 500;
-    color: var(--ink-dim);
-    padding: 9px 14px;
-    border-radius: var(--r-sm);
-    transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast);
+    line-height: 1;
+    letter-spacing: var(--ll-tracking);
+    color: var(--m-ink-support);
     white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-out);
   }
-  .nav__link:hover { color: var(--ink); background: var(--navy-50); }
+  .nav__link:hover { color: var(--m-ink); }
 
-  /* Filled navy — the standard primary pill. It is the only CTA in the bar. */
-  .nav__portal {
-    display: none;
-    align-items: center;
-    background: var(--navy);
-    color: var(--navy-on);
-    padding: 11px 20px;
-    border-radius: var(--r-pill);
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: var(--shadow-xs);
-    white-space: nowrap;
-    margin-left: 8px;
-    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast);
-  }
-  .nav__portal:hover { background: var(--navy-lift); transform: translateY(-1px); }
+  /* Each floor shows its own links. */
+  [data-floor-only='member'] { display: none; }
+  :global(html[data-audience='member']) [data-floor-only='studio'] { display: none; }
+  :global(html[data-audience='member']) [data-floor-only='member'] { display: revert; }
 
   .nav__toggle {
     margin-left: auto;
     width: 44px;
     height: 44px;
+    margin-right: -10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--ink);
-    border-radius: var(--r-sm);
+    color: var(--m-ink);
   }
 
   .nav__mobile {
     display: none;
     flex-direction: column;
-    padding: 8px var(--container-px) 20px;
-    background: var(--card);
-    border-top: 1px solid var(--rule);
+    padding: var(--m-spacing-sm) var(--floor-pad-end) var(--m-spacing-lg) var(--floor-pad-start);
   }
-  .nav__mobile[data-open='true'] {
-    display: flex;
-    animation: nav-drop 0.26s var(--ease-out);
-  }
-  @keyframes nav-drop {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: none; }
-  }
+  .nav__mobile[data-open='true'] { display: flex; }
   .nav__mobile-link {
-    padding: 14px 4px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--ink);
-    border-bottom: 1px solid var(--rule);
+    padding: 14px 0;
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    color: var(--m-ink);
   }
-  .nav__mobile-link:last-child { border-bottom: none; }
-  .nav__mobile-link--portal {
-    margin-top: 12px;
-    background: var(--navy);
-    color: var(--navy-on);
-    text-align: center;
-    border-radius: var(--r-pill);
-    border-bottom: none;
-    padding: 14px 18px;
-  }
+  .nav__mobile-portal { align-self: flex-start; margin-top: var(--m-spacing-sm); }
 
-  @media (min-width: 760px) {
-    .nav__toggle  { display: none; }
-    .nav__mobile  { display: none !important; }
-    .nav__links   { display: inline-flex; }
-    .nav__portal  { display: inline-flex; }
+  @media (min-width: 1048px) {
+    .nav__toggle { display: none; }
+    .nav__mobile { display: none !important; }
+    .nav__links { display: inline-flex; }
   }
 </style>

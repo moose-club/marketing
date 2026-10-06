@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+
+// A Lane Lines plate rendered as a link. `primary` is the Floor plate (one per
+// screen, chevron-right); `outline` is its secondary; `station` is the small
+// inset action that trails a line of text.
+interface Props {
+  href: string;
+  variant?: 'primary' | 'outline' | 'station';
+  external?: boolean;
+  class?: string;
+  [key: `data-${string}`]: string | undefined;
+}
+
+const { href, variant = 'primary', external = false, class: className, ...rest } = Astro.props;
+const isFloor = variant === 'primary' || variant === 'outline';
+---
+
+<a
+  href={href}
+  class:list={['plate', `plate--${variant}`, isFloor && 'plate--floor', className]}
+  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+  {...rest}
+>
+  <span><slot /></span>
+  {isFloor && <Icon name="chevron-right" />}
+</a>

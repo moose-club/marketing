@@ -1,177 +1,118 @@
 ---
 import { NETWORK } from '../../data/copy';
 
-const initial = NETWORK.partners.slice(0, NETWORK.visibleCount);
-const rest    = NETWORK.partners.slice(NETWORK.visibleCount);
+// Station · Partner network — the studios already on Moose. Lettering, then
+// the roster: every studio on the floor, its name set as a mark (single ink,
+// no chip) until its approved SVG lands. Regular floor: four columns, two on
+// your lane and two on your partner's, the line running in the gutter between
+// them. Compact floor: one column, capped at `compactVisible` with the rest
+// revealing in place.
+const partners = NETWORK.partners;
+const half = Math.ceil(partners.length / 2);
+const lanes = [partners.slice(0, half), partners.slice(half)];
+const extra = Math.max(0, partners.length - NETWORK.compactVisible);
 ---
 
-<section class="section section--navy" id="network" aria-labelledby="networkHeading">
-  <div class="container">
-    <div class="network__head">
-      <span class="eyebrow">{NETWORK.eyebrow}</span>
-      <h2 id="networkHeading"><span class="pink">{NETWORK.headLead}</span> {NETWORK.head}</h2>
-      <p class="network__lede">
-        {NETWORK.ledeLines.map((line) => (
-          <span class="network__lede-line"><strong>{line.strong}</strong>{line.rest}</span>
-        ))}
-        <span class="network__lede-soft">{NETWORK.ledeSoft}</span>
-      </p>
-    </div>
-
-    <div class="network__logos">
-      {initial.map((p) => (
-        <div class="logo-chip">
-          <span class="logo-chip__mark">[Logo]</span>
-          <div class="logo-chip__meta">
-            <div class="logo-chip__name">{p.name}</div>
-            <div class="logo-chip__mod">{p.mod}</div>
-          </div>
-        </div>
-      ))}
-      {rest.map((p) => (
-        <div class="logo-chip logo-chip--more" hidden>
-          <span class="logo-chip__mark">[Logo]</span>
-          <div class="logo-chip__meta">
-            <div class="logo-chip__name">{p.name}</div>
-            <div class="logo-chip__mod">{p.mod}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div class="network__foot">
-      <button class="network__viewall" id="viewAllPartners" type="button" aria-expanded="false">
-        <span class="network__viewall-label">View all</span>
-        <svg class="network__viewall-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-    </div>
+<section class="station lanes network" id="network" aria-labelledby="networkHeading">
+  <div class="network__intro">
+    <h2 id="networkHeading" class="lettering lettering--station network__head">{NETWORK.head}</h2>
+    <p class="lead">{NETWORK.lede}</p>
   </div>
+
+  {lanes.map((group, li) => (
+    <ul
+      class:list={['roster', li === 1 && 'lane--partner']}
+      id={li === 0 ? 'roster' : 'roster-partner'}
+      style={`--rows: ${Math.ceil(group.length / 2)}`}
+    >
+      {group.map((p, i) => {
+        const index = li * half + i;
+        return (
+          <li class="roster__mark" data-extra={index >= NETWORK.compactVisible ? '' : undefined}>
+            <a class="plate-label roster__name" href={p.href} target="_blank" rel="noopener">{p.name}</a>
+          </li>
+        );
+      })}
+    </ul>
+  ))}
+
+  {extra > 0 && (
+    <p class="roster__more">
+      <span class="detail" data-more-count>{NETWORK.more(extra)}</span>
+      <button
+        type="button"
+        class="plate plate--outline plate--station"
+        aria-expanded="false"
+        aria-controls="roster roster-partner"
+        data-roster-toggle
+        data-show={NETWORK.showAll}
+        data-hide={NETWORK.showLess}
+      >
+        {NETWORK.showAll}
+      </button>
+    </p>
+  )}
 </section>
 
 <script>
-  const btn = document.getElementById('viewAllPartners');
-  const extras = document.querySelectorAll<HTMLElement>('.logo-chip--more');
-  const label = btn?.querySelector('.network__viewall-label');
-  if (btn && extras.length) {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!expanded));
-      extras.forEach((el) => { el.hidden = expanded; });
-      if (label) label.textContent = expanded ? 'View all' : 'View less';
-      btn.classList.toggle('is-open', !expanded);
+  const toggle = document.querySelector<HTMLButtonElement>('[data-roster-toggle]');
+  const station = toggle?.closest('.network');
+  if (toggle && station) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? toggle.dataset.hide ?? '' : toggle.dataset.show ?? '';
+      station.classList.toggle('is-open', open);
     });
   }
 </script>
 
 <style>
-  .network__head { text-align: left; max-width: 720px; margin: 0 0 60px; }
-  .network__head h2 {
-    font-size: var(--t-display-m);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.05;
-  }
-  .network__lede {
-    font-size: clamp(17px, 1.5vw, 19px);
-    line-height: 1.65;
-    color: var(--navy-dim);
-    max-width: 640px;
-    margin-top: 22px;
-  }
-  .network__lede-line {
-    display: block;
-  }
-  .network__lede-line + .network__lede-line { margin-top: 4px; }
-  .network__lede-line strong {
-    color: var(--pink);
-    font-weight: 700;
-    margin-right: 4px;
-  }
-  .network__lede-soft {
-    display: block;
-    color: var(--on-navy-muted);
-    margin-top: 8px;
-  }
 
-  .network__logos {
+  /* Rhythm 12 compact, 14 regular (Figma bands of 28). */
+  .roster {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px; /* no token yet: proposed */
   }
-  .logo-chip {
+  .network > .roster:first-of-type { margin-top: var(--m-spacing-md); }
+  .network > .roster + .roster { margin-top: calc(12px - var(--m-spacing-xl)); }
+
+  .roster__mark {
+    min-height: 28px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    background: var(--card);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-md);
-    padding: 18px 16px;
-    min-height: 66px;
-    transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
   }
-  .logo-chip:hover {
-    border-color: var(--rule-strong);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
+  .roster__name {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color var(--dur-fast) var(--ease-out);
   }
-  .logo-chip[hidden] { display: none !important; }
-  .logo-chip__mark {
-    display: grid;
-    place-items: center;
-    height: 32px;
-    width: 38%;
-    max-width: 110px;
-    border-radius: 7px;
-    border: 1px dashed var(--rule-strong);
-    color: var(--ink-mute);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-  }
-  .logo-chip__meta { text-align: right; min-width: 0; }
-  .logo-chip__name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1.2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .logo-chip__mod {
-    font-size: 12px;
-    color: var(--ink-mute);
-    margin-top: 2px;
-  }
+  .roster__name:hover { text-decoration-color: var(--m-ink-tape); }
 
-  .network__foot {
-    margin-top: 36px;
+  .roster__more {
     display: flex;
-    justify-content: center;
-  }
-  .network__viewall {
-    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    background: var(--on-navy-wash);
-    color: var(--navy-on);
-    border: 1.5px solid var(--on-navy-tape);
-    border-radius: var(--r-pill);
-    font-size: 14px;
-    font-weight: 600;
-    transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast);
+    gap: var(--m-spacing-md);
   }
-  .network__viewall:hover {
-    background: var(--on-navy-tape);
-    border-color: var(--on-navy-muted);
-  }
-  .network__viewall.is-open .network__viewall-icon { transform: rotate(180deg); }
-  .network__viewall-icon { transition: transform var(--dur-base) var(--ease-out); }
 
-  @media (min-width: 640px)  { .network__logos { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 960px)  { .network__logos { grid-template-columns: repeat(4, 1fr); } }
-  @media (min-width: 1280px) { .network__logos { grid-template-columns: repeat(5, 1fr); } }
+  /* Compact: cap the roster; the rest reveal in place. */
+  @media (max-width: 1047.98px) {
+    .roster__mark[data-extra] { display: none; }
+    .network.is-open .roster__mark[data-extra] { display: flex; }
+    .network.is-open [data-more-count] { display: none; }
+  }
+
+  @media (min-width: 1048px) {
+    .network > .roster {
+      grid-row: 2;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: column;
+      grid-template-rows: repeat(var(--rows), auto);
+      column-gap: var(--m-spacing-xl);
+      row-gap: 14px; /* no token yet: proposed */
+      margin-top: var(--m-spacing-xxl) !important;
+    }
+    .roster__more { display: none; }
+  }
 </style>

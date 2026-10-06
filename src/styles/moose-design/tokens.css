@@ -33,7 +33,7 @@
   --m-label-4: rgb(60 60 67 / 0.18);
   --m-sep: rgb(60 60 67 / 0.12);
   --m-ink-support: rgb(26 43 95 / 0.7);
-  --m-ink-placeholder: rgb(26 43 95 / 0.66);
+  --m-ink-placeholder: rgb(26 43 95 / 0.67);
   --m-ink-inert: rgb(26 43 95 / 0.6);
   --m-ink-disabled: rgb(26 43 95 / 0.3);
   --m-ink-tape: rgb(26 43 95 / 0.24);
@@ -87,6 +87,48 @@
   --m-spacing-xl: 32px;
   --m-spacing-xxl: 48px;
 
+  /* type */
+  --m-type-floor-lettering-size: clamp(2.75rem, 6vw, 4.5rem);
+  --m-type-floor-lettering-weight: 800;
+  --m-type-floor-lettering-leading: 0.86;
+  --m-type-floor-lettering-wide-size: clamp(4.5rem, 7vw, 7.5rem);
+  --m-type-floor-lettering-wide-weight: 800;
+  --m-type-floor-lettering-wide-leading: 0.86;
+  --m-type-figure-size: clamp(2.5rem, 5vw, 4.5rem);
+  --m-type-figure-weight: 800;
+  --m-type-figure-leading: 1;
+  --m-type-figure-tracking: -0.03em;
+  --m-type-figure-numeric: tabular-nums;
+  --m-type-section-head-size: 1.5rem;
+  --m-type-section-head-weight: 700;
+  --m-type-section-head-leading: 1.25;
+  --m-type-figure-small-size: 1.5rem;
+  --m-type-figure-small-weight: 700;
+  --m-type-figure-small-leading: 1.2;
+  --m-type-figure-small-numeric: tabular-nums;
+  --m-type-plate-label-size: 1.0625rem;
+  --m-type-plate-label-weight: 600;
+  --m-type-plate-label-leading: 1.294;
+  --m-type-body-size: 1.0625rem;
+  --m-type-body-weight: 400;
+  --m-type-body-leading: 1.294;
+  --m-type-row-label-size: 0.9375rem;
+  --m-type-row-label-weight: 500;
+  --m-type-row-label-leading: 1.4;
+  --m-type-code-digits-size: 1.375rem;
+  --m-type-code-digits-weight: 500;
+  --m-type-code-digits-leading: 1.273;
+  --m-type-code-digits-tracking: 0;
+  --m-type-code-digits-numeric: tabular-nums;
+  --m-type-detail-size: 0.8125rem;
+  --m-type-detail-weight: 400;
+  --m-type-detail-leading: 1.385;
+  --m-type-station-label-size: 0.6875rem;
+  --m-type-station-label-weight: 600;
+  --m-type-station-label-leading: 1.4;
+  --m-type-station-label-tracking: 0.18em;
+  --m-type-station-label-transform: uppercase;
+
   /* font */
   --m-font-family-sans: "Poppins", -apple-system, "BlinkMacSystemFont", "SF Pro Text", system-ui, "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif;
   --m-font-family-mono: ui-monospace, "SFMono-Regular", "SF Mono", "Menlo", "Consolas", monospace;
@@ -107,7 +149,7 @@
   --m-label-4: rgb(235 235 245 / 0.18);
   --m-sep: rgb(84 84 88 / 0.65);
   --m-ink-support: rgb(255 255 255 / 0.7);
-  --m-ink-placeholder: rgb(255 255 255 / 0.66);
+  --m-ink-placeholder: rgb(255 255 255 / 0.67);
   --m-ink-inert: rgb(255 255 255 / 0.6);
   --m-ink-disabled: rgb(255 255 255 / 0.3);
   --m-ink-tape: rgb(255 255 255 / 0.24);

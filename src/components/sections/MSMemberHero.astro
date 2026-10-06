@@ -1,0 +1,27 @@
+---
+import { HERO, MEMBERS } from '../../data/copy';
+import AudienceSwitch from '../primitives/AudienceSwitch.astro';
+import HeroPhoto from '../primitives/HeroPhoto.astro';
+import Plate from '../primitives/Plate.astro';
+
+// Member floor hero — the same split floor, addressed to the member.
+const { hero } = MEMBERS;
+---
+
+<section class="hero" id="members" aria-labelledby="memberHeroHeading">
+  <HeroPhoto src={HERO.photo.src} alt={HERO.photo.alt} />
+
+  <div class="lanes">
+    <div class="hero__work">
+      <AudienceSwitch current="member" />
+      <h1 id="memberHeroHeading" class="lettering member-hero__head">{hero.head}</h1>
+      <p class="lead">{hero.lede}</p>
+      <Plate href={hero.cta.href} external class="member-hero__cta">{hero.cta.label}</Plate>
+    </div>
+  </div>
+</section>
+
+<style>
+  .member-hero__head { margin-top: var(--m-spacing-xl); }
+  .member-hero__cta { margin-top: var(--m-spacing-xxl); }
+</style>

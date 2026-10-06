@@ -1,0 +1,44 @@
+---
+import Plate from '../primitives/Plate.astro';
+
+// The close — the navy floor (the token set's `.dark` mode, so ink, plates
+// and support text flip from one class). Your lane: the lettering. Partner
+// lane: the one action, out of the site. The live line ends in this plate.
+interface Props {
+  id: string;
+  head: string;
+  lede: string;
+  cta: { label: string; href: string };
+  detail: string;
+}
+
+const { id, head, lede, cta, detail } = Astro.props;
+const headingId = `${id}Heading`;
+---
+
+<section class="close dark" id={id} aria-labelledby={headingId}>
+  <div class="lanes">
+    <div>
+      <h2 id={headingId} class="lettering lettering--station">{head}</h2>
+      <p class="lead">{lede}</p>
+    </div>
+    <div class="lane--partner close__action">
+      <Plate href={cta.href} external data-line-end="">{cta.label}</Plate>
+      <p class="detail close__detail">{detail}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .close {
+    margin-top: var(--rhythm);
+    padding-top: var(--rhythm);
+    background: var(--m-bg);
+    color: var(--m-ink);
+  }
+  .close__detail { margin-top: var(--m-spacing-md); }
+
+  @media (min-width: 1048px) {
+    .close .lanes > * { grid-row: 1; }
+  }
+</style>

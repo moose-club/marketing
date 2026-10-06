@@ -1,0 +1,183 @@
+---
+// The live line — the floor's one pink element. 3px Brand/moosePink, square
+// ends, 20px turns. It leaves the wordmark on lane 0, crosses once to the
+// partner lane 48 above the station marked `data-line-cross`, and ends in the
+// left edge of the plate marked `data-line-end`. On the compact floor there is
+// no partner lane, so it keeps lane 0 and makes one turn, into the plate.
+//
+// The geometry is measured from the DOM (so it survives a fluid layout) and
+// the stroke draws with scroll. Under reduced motion it is fully drawn.
+// Place one inside each `.floor` wrapper; the wrapper must be the line's
+// offset parent.
+---
+
+<svg class="live-line" aria-hidden="true" focusable="false">
+  <path class="live-line__path" d="" />
+</svg>
+
+<style>
+  .live-line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    /* Above the stations' own floors (the navy close paints a background). */
+    z-index: 1;
+  }
+  .live-line__path {
+    fill: none;
+    stroke: var(--m-moose-pink);
+    stroke-width: 3;
+    stroke-linecap: square;
+    stroke-linejoin: round;
+  }
+</style>
+
+<script>
+  const RADIUS = 20;
+  const CROSS_ABOVE = 48;
+  const SAMPLE_STEP = 6;
+  // How far down the viewport the line has drawn to.
+  const READ_LINE = 0.62;
+
+  const regular = window.matchMedia('(min-width: 1048px)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  type Pt = [number, number];
+  type Line = {
+    floor: HTMLElement;
+    svg: SVGSVGElement;
+    path: SVGPathElement;
+    length: number;
+    // Sampled y at every SAMPLE_STEP of length; the path never climbs, so
+    // this is non-decreasing and can be binary-searched.
+    ys: number[];
+    top: number;
+  };
+
+  const lines: Line[] = [];
+
+  function contentLeft(el: Element): number {
+    const r = el.getBoundingClientRect();
+    return r.left + parseFloat(getComputedStyle(el).paddingLeft || '0');
+  }
+
+  function roundedPath(pts: Pt[]): string {
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length - 1; i++) {
+      const [px, py] = pts[i - 1];
+      const [cx, cy] = pts[i];
+      const [nx, ny] = pts[i + 1];
+      const inLen = Math.hypot(cx - px, cy - py);
+      const outLen = Math.hypot(nx - cx, ny - cy);
+      const r = Math.min(RADIUS, inLen / 2, outLen / 2);
+      if (r <= 0) continue;
+      const ax = cx - ((cx - px) / inLen) * r;
+      const ay = cy - ((cy - py) / inLen) * r;
+      const bx = cx + ((nx - cx) / outLen) * r;
+      const by = cy + ((ny - cy) / outLen) * r;
+      d += ` L ${ax} ${ay} Q ${cx} ${cy} ${bx} ${by}`;
+    }
+    const last = pts[pts.length - 1];
+    return d + ` L ${last[0]} ${last[1]}`;
+  }
+
+  function measure(line: Line) {
+    const { floor, path } = line;
+    const end = floor.querySelector<HTMLElement>('[data-line-end]');
+    const cross = floor.querySelector<HTMLElement>('[data-line-cross]');
+    if (!end || floor.offsetParent === null) {
+      line.length = 0;
+      path.setAttribute('d', '');
+      return;
+    }
+
+    const f = floor.getBoundingClientRect();
+    const rootStyle = getComputedStyle(document.documentElement);
+    const inset = parseFloat(rootStyle.getPropertyValue('--line-inset')) || 20;
+    const navH = parseFloat(rootStyle.getPropertyValue('--nav-h')) || 72;
+
+    const e = end.getBoundingClientRect();
+    const xe = e.left - f.left;
+    const ye = e.top - f.top + e.height / 2;
+
+    let pts: Pt[];
+    if (regular.matches && cross) {
+      const x0 = contentLeft(cross) - f.left - inset;
+      const x2 = xe - inset;
+      const yc = cross.getBoundingClientRect().top - f.top - CROSS_ABOVE;
+      pts = [[x0, navH], [x0, yc], [x2, yc], [x2, ye], [xe, ye]];
+    } else {
+      const x0 = xe - inset;
+      pts = [[x0, navH], [x0, ye], [xe, ye]];
+    }
+
+    path.setAttribute('d', roundedPath(pts));
+    line.length = path.getTotalLength();
+    line.top = f.top + window.scrollY;
+    line.ys = [];
+    for (let l = 0; l <= line.length; l += SAMPLE_STEP) {
+      line.ys.push(path.getPointAtLength(l).y);
+    }
+    path.style.strokeDasharray = `${line.length} ${line.length}`;
+  }
+
+  function drawnLength(line: Line): number {
+    const doc = document.documentElement;
+    const atBottom = window.scrollY + window.innerHeight >= doc.scrollHeight - 2;
+    if (reduceMotion.matches || atBottom) return line.length;
+    const target = window.scrollY + window.innerHeight * READ_LINE - line.top;
+    const ys = line.ys;
+    let lo = 0;
+    let hi = ys.length - 1;
+    if (ys[0] > target) return 0;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (ys[mid] <= target) lo = mid;
+      else hi = mid - 1;
+    }
+    return Math.min(line.length, (lo + 1) * SAMPLE_STEP);
+  }
+
+  function draw() {
+    for (const line of lines) {
+      if (!line.length) continue;
+      line.path.style.strokeDashoffset = String(line.length - drawnLength(line));
+    }
+  }
+
+  function layout() {
+    lines.forEach(measure);
+    draw();
+  }
+
+  let frame = 0;
+  function schedule(fn: () => void) {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      fn();
+    });
+  }
+
+  document.querySelectorAll<SVGSVGElement>('.live-line').forEach((svg) => {
+    const floor = svg.parentElement;
+    const path = svg.querySelector<SVGPathElement>('.live-line__path');
+    if (!floor || !path) return;
+    lines.push({ floor, svg, path, length: 0, ys: [], top: 0 });
+  });
+
+  if (lines.length) {
+    const ro = new ResizeObserver(() => schedule(layout));
+    lines.forEach((l) => ro.observe(l.floor));
+    window.addEventListener('scroll', () => schedule(draw), { passive: true });
+    regular.addEventListener('change', layout);
+    reduceMotion.addEventListener('change', draw);
+    document.addEventListener('audiencechange', layout);
+    document.fonts?.ready.then(layout);
+    window.addEventListener('load', layout);
+    layout();
+  }
+</script>

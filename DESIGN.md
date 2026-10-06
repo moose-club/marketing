@@ -1,350 +1,386 @@
 ---
 name: Moose Marketing
-description: The operator-facing web surface for Moose — a partner board where two studios pair up, drawn in court navy with one live pink line.
+description: The public web surface for Moose, drawn in Lane Lines — two lanes on one flat cream floor, a navy close, one ink, and one pink live line that crosses once.
 colors:
-  court-navy: "var(--m-moose-navy)"
-  court-navy-deep: "var(--m-moose-navy-deep)"
-  court-navy-lift: "var(--m-moose-navy-lift)"
-  court-navy-press: "var(--m-moose-navy-press)"
-  live-line-pink: "var(--m-moose-pink)"
-  live-line-pink-press: "var(--m-moose-pink-press)"
-  live-line-pink-soft: "var(--m-moose-pink-soft)"
-  chalk-cream: "var(--m-cream)"
-  chalk-ground: "var(--m-bg)"
-  surface-white: "var(--m-surface)"
-  tape-ink: "var(--m-ink)"
-  tape-support: "var(--m-ink-support)"
-  tape-placeholder: "var(--m-ink-placeholder)"
-  tape-line: "var(--m-ink-tape)"
-  tape-hairline: "var(--m-ink-hairline)"
-  tape-wash: "var(--m-ink-wash)"
-  on-brand: "var(--m-on-brand)"
-  on-brand-dim: "var(--m-on-brand-dim)"
+  floor: "var(--m-bg)"
+  ink: "var(--m-ink)"
+  ink-support: "var(--m-ink-support)"
+  ink-tape: "var(--m-ink-tape)"
+  ink-hairline: "var(--m-ink-hairline)"
+  ink-wash: "var(--m-ink-wash)"
+  surface: "var(--m-surface)"
+  live-line: "var(--m-moose-pink)"
+  plate-fill: "var(--m-button-primary)"
+  plate-fill-press: "var(--m-button-primary-press)"
+  plate-label: "var(--m-button-primary-label)"
 typography:
-  display:
+  floor-lettering:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "clamp(40px, 6vw, 92px)"
-    fontWeight: 800
-    lineHeight: 1.02
-    letterSpacing: "-0.03em"
-  headline:
+    fontSize: "var(--m-type-floor-lettering-size)"
+    fontWeight: "var(--m-type-floor-lettering-weight)"
+    lineHeight: "var(--m-type-floor-lettering-leading)"
+    letterSpacing: "var(--ll-lettering-tracking)" # provisional: proposed to moose-design
+  station-lettering:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "clamp(28px, 4vw, 56px)"
-    fontWeight: 800
-    lineHeight: 1.08
-    letterSpacing: "-0.025em"
+    fontSize: "calc(var(--m-type-floor-lettering-size) * 0.889)" # provisional: in-app size
+    fontWeight: "var(--m-type-floor-lettering-weight)"
+    lineHeight: "var(--m-type-floor-lettering-leading)"
+    letterSpacing: "var(--ll-lettering-tracking)"
   title:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "clamp(24px, 3vw, 40px)"
+    fontSize: "var(--ll-title-size)" # provisional: proposed
     fontWeight: 700
     lineHeight: 1.15
     letterSpacing: "-0.02em"
   lead:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "clamp(16px, 1.4vw, 18px)"
-    fontWeight: 500
-    lineHeight: 1.65
-    letterSpacing: "-0.01em"
+    fontSize: "var(--ll-lead-size)" # provisional: proposed
+    fontWeight: 400
+    lineHeight: "var(--ll-lead-leading)"
+    letterSpacing: "var(--ll-tracking)"
+  plate-label:
+    fontFamily: "var(--m-font-family-sans)"
+    fontSize: "var(--m-type-plate-label-size)"
+    fontWeight: "var(--m-type-plate-label-weight)"
+    lineHeight: "var(--m-type-plate-label-leading)"
+    letterSpacing: "var(--ll-tracking)"
   body:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "15px"
-    fontWeight: 500
-    lineHeight: 1.55
-    letterSpacing: "-0.01em"
-  label:
+    fontSize: "var(--ll-body-size)" # provisional: proposed, differs from --m-type-body-size
+    fontWeight: 400
+    lineHeight: "var(--ll-body-leading)"
+    letterSpacing: "var(--ll-tracking)"
+  detail:
     fontFamily: "var(--m-font-family-sans)"
-    fontSize: "12px"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "0.22em"
+    fontSize: "var(--m-type-detail-size)"
+    fontWeight: "var(--m-type-detail-weight)"
+    lineHeight: "var(--m-type-detail-leading)"
+  ordinal:
+    fontFamily: "var(--m-font-family-sans)"
+    fontSize: "var(--ll-ordinal-size)" # provisional: proposed
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+    fontFeature: "tnum"
+  figure:
+    fontFamily: "var(--m-font-family-sans)"
+    fontSize: "var(--ll-stat-size)" # provisional: pinned to the figure token's floor
+    fontWeight: "var(--m-type-figure-weight)"
+    lineHeight: "var(--m-type-figure-leading)"
+    letterSpacing: "var(--m-type-figure-tracking)"
+    fontFeature: "tnum"
 rounded:
-  pill: "var(--m-radius-full)"
-  sheet: "var(--m-radius-xl)"
-  card: "var(--m-radius-xl)"
-  tile: "var(--m-radius-lg)"
-  field: "var(--m-radius-md)"
-  chip: "var(--m-radius-sm)"
+  plate: "var(--m-radius-md)"
+  station-plate: "10px" # provisional: not on the radius scale
+  tick: "4px" # provisional: Web/Tick
+  photo: "0"
 spacing:
-  xs: "var(--m-spacing-xs)"
   sm: "var(--m-spacing-sm)"
   md: "var(--m-spacing-md)"
   lg: "var(--m-spacing-lg)"
   xl: "var(--m-spacing-xl)"
   xxl: "var(--m-spacing-xxl)"
+  rhythm: "var(--rhythm)" # provisional: 72 compact / 96 regular, drift D7
+  lane-gutter: "var(--lane-gutter)" # provisional: lane grid
+  line-inset: "var(--line-inset)" # provisional: lane grid
 components:
-  button-primary:
-    backgroundColor: "{colors.court-navy}"
-    textColor: "{colors.on-brand}"
-    rounded: "{rounded.pill}"
-    padding: "14px 24px"
-    typography: "{typography.body}"
-  button-primary-hover:
-    backgroundColor: "{colors.court-navy-press}"
-  button-ghost:
-    backgroundColor: "{colors.surface-white}"
-    textColor: "{colors.court-navy}"
-    rounded: "{rounded.pill}"
-    padding: "14px 24px"
-  card:
-    backgroundColor: "{colors.surface-white}"
-    textColor: "{colors.tape-ink}"
-    rounded: "{rounded.card}"
-    padding: "22px"
-  card-navy:
-    backgroundColor: "{colors.court-navy}"
-    textColor: "{colors.on-brand}"
-    rounded: "{rounded.card}"
-    padding: "22px"
-  input:
-    backgroundColor: "{colors.surface-white}"
-    textColor: "{colors.tape-ink}"
-    rounded: "{rounded.tile}"
-    padding: "12px 14px"
-  eyebrow:
-    textColor: "{colors.live-line-pink}"
-    typography: "{typography.label}"
+  plate-primary:
+    backgroundColor: "{colors.plate-fill}"
+    textColor: "{colors.plate-label}"
+    rounded: "{rounded.plate}"
+    typography: "{typography.plate-label}"
+    height: "56px"
+    width: "min(100%, 420px)"
+    padding: "0 var(--m-spacing-lg)"
+  plate-primary-press:
+    backgroundColor: "{colors.plate-fill-press}"
+  plate-outline:
+    textColor: "{colors.ink}"
+    rounded: "{rounded.plate}"
+    typography: "{typography.plate-label}"
+    height: "56px"
+    padding: "0 var(--m-spacing-lg)"
+  plate-outline-hover:
+    backgroundColor: "{colors.ink-wash}"
+  plate-station:
+    textColor: "{colors.ink}"
+    rounded: "{rounded.station-plate}"
+    typography: "{typography.plate-label}"
+    height: "44px"
+    padding: "0 14px" # provisional
+  switch-chosen:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.floor}"
+    rounded: "{rounded.plate}"
+    typography: "{typography.plate-label}"
+    height: "56px"
+  switch-unchosen:
+    textColor: "{colors.ink}"
+    rounded: "{rounded.plate}"
+    typography: "{typography.plate-label}"
+    height: "56px"
+  tick:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.tick}"
+    size: "24px"
 ---
 
 # Design System: Moose Marketing
 
 > **Values are owned by [moose-design](https://github.com/moose-club/design), not by this
-> file.** Every colour, radius, spacing step and shadow above is a reference to a `--m-*`
-> token defined in `moose-design/tokens/` and generated into
-> `src/styles/moose-design/tokens.css`. The rules that govern them live in
-> `moose-design/RULES.md`. **Do not restate a value as a rule here, and do not hand-edit
-> the generated file.** To change a value, open a PR on moose-design, then
-> `pnpm sync marketing` and re-run `/impeccable document`.
+> file** (RULES 18). Every colour, radius, spacing step and type role above names a
+> `--m-*` token generated into `src/styles/moose-design/tokens.css`, or a local
+> `--ll-*` / lane variable in `src/styles/globals.css` that is **provisional** and
+> proposed upstream. This file never restates a token's value. The rules live in
+> `moose-design/RULES.md`; this file records how the marketing site applies them.
 >
-> What *this* file owns: how those tokens are applied on the web — hierarchy, rhythm,
-> component behaviour, and the guardrails specific to this surface.
+> **Scope.** This describes `/`, the first Lane Lines surface on the web (the "Lane Lines"
+> layer at the foot of `globals.css`, and `src/components/{sections,primitives}`).
+> `/claim`, `/404` and the legal pages still render on the older card-world utilities
+> higher up in `globals.css` (bands, white cards, pink eyebrows, pill buttons, legacy
+> shadows). That is a **carve-out, not a second system**: leave it working, never extend
+> it, and move those pages to the lane floor when they are next redesigned.
 
 ## Overview
 
-**Creative North Star: "The Partner Board"**
+**Creative North Star: "The Pairing"**
 
-Two studios pairing up, drawn as a board of complementary venues. The site's whole job is
-to make one operator see themselves next to another and understand that the pairing costs
-them nothing they care about. So the page reads as a board rather than a brochure: paired
-columns, alternating cream and navy bands that group one argument at a time, and stat
-cards that sit in a row like venues on a roster.
+Every station on the page is two lanes: yours, and your partner studio's. Lettering and
+the argument sit on your lane; the matter that belongs to the partner (the later steps,
+the figures, half the roster, the one action) sits on the partner lane, level with it.
+One pink line, the member's crossover, starts under the wordmark, runs down your lane,
+crosses the gutter once just before The Moose model, and ends in the left edge of the
+close's one plate. The operator's own crossover is the last thing the line does.
 
-The mood is **considered, warm and direct**. It argues carefully rather than boasting, it
-sounds like a person rather than a company, and it wastes no words — the same plain
-Australian register as the copy ("hard yakka", "This is the magic of collaboration").
-Type does most of the work: 800-weight display headings set tight and fluid, over generous
-cream space, with real photography of real training rather than stock gym imagery.
+The world is Lane Lines and nothing added: one flat cream floor for the whole page, one
+navy floor for the close and footer, one ink at fixed weights, plates for actions,
+floor lettering in Poppins ExtraBold set tight. It is quiet and declarative, with mass
+coming from the lettering rather than from boxes. `/` carries two such floors behind an
+audience switch, the studio floor (default) and the member floor; both use exactly the
+same grammar.
 
-The confirmed anti-reference is **the aggregator** — ClassPass and its lookalikes. Dense
-venue grids, discount badges, "browse thousands of classes", consumer-marketplace energy.
-Moose sells partnership to operators; it does not sell supply to consumers. Any composition
-that starts to feel like a search result page has gone wrong.
+Two anti-references are confirmed: **the aggregator** (dense venue grids, discount
+badges, anything that reads as a consumer search result) and **the brand-book v2 web
+page this replaced** (cream and navy bands, white cards on shadows, a pink eyebrow over
+every heading, a pink word in every headline).
 
 **Key Characteristics:**
 
-- Alternating cream and navy bands as the structural rhythm; one argument per band
-- Fluid 800-weight display type, tightly tracked, doing the hierarchy work
-- Exactly one pink element per view — the live line marking the member's path
-- Real training photography, never stock or illustration
-- Flat by intent; tonal alternation conveys depth, not shadow
-- One primary action per screen, always the navy pill
+- Two lanes and a gutter from 1048px; one lane, with partner blocks stepped in, below it
+- One pink element per floor: the live line, drawn by scroll
+- Flat floors: no card, shadow, blur, pill or status colour
+- Actions are plates; exactly one filled plate per viewport
+- Floor lettering as the only display voice, sentence case with a trailing period
+- A full-bleed, square-cornered photograph as the hero's counterweight
 
 ## Colors
 
-Two brand colours and three surfaces. Navy leads everywhere; pink is punctuation.
+One ink on one floor, with the floor and ink flipping together for the navy close.
 
 ### Primary
-- **Court Navy** (`--m-moose-navy`): the floor of the board. Section backgrounds,
-  headlines on cream, the primary button fill, stat-card fills. This is the colour the
-  site is mostly made of.
-- **Court Navy Deep** (`--m-moose-navy-deep`): the deepest band — the footer, the modality
-  ticker, and the legal-page footers. One step below the standard navy section.
-- **Court Navy Lift / Press** (`--m-moose-navy-lift`, `--m-moose-navy-press`): raised and
-  pressed states of a navy surface. Press is the primary button's hover fill.
+- **Plate Fill** (`--m-button-primary`, press `--m-button-primary-press`, label
+  `--m-button-primary-label`): the Floor plate, the page's one filled action. Navy on
+  the cream floor; inside `.dark` the same tokens turn it white with a navy label.
 
 ### Secondary
-- **Live Line Pink** (`--m-moose-pink`): the member's path through the product. Eyebrows,
-  the single highlighted word in a headline, the ticker's separators, the focus ring.
-  Never a large fill and never body copy.
-- **Live Line Pink Soft** (`--m-moose-pink-soft`): the only permitted pink *fill* — small
-  tinted chips behind a numeral or icon, on a light surface.
+- **Live Line Pink** (`--m-moose-pink`): the 3px live line, and nothing else on the
+  floor. Never text, never a fill, never a second element.
 
 ### Neutral
-- **Chalk Ground** (`--m-bg`): the page floor under everything.
-- **Chalk Cream** (`--m-cream`): the warmer band, alternating with white and navy sections.
-- **Surface White** (`--m-surface`): cards, the frosted nav, form fields.
-- **Tape Ink** (`--m-ink`): all primary text. Navy, never black.
-- **Tape Support** (`--m-ink-support`): body copy and ledes. Ink at 70%, 5.1:1 on cream.
-- **Tape Placeholder** (`--m-ink-placeholder`): captions, meta, field placeholders. 66%.
-- **Tape Line / Hairline / Wash** (`--m-ink-tape`, `--m-ink-hairline`, `--m-ink-wash`):
-  dividers at 24%, card borders at 12%, and the faintest surface tint at 8%.
-
-### On the navy floor
-White ink at fixed weights. Only the 65% step has a token (`--m-on-brand-dim`); the rest
-are mixed locally from `--m-on-brand` at moose-design's dark `--m-ink-*` weights and are
-**proposed upstream as `on-brand-*`**. See `--on-navy-*` in `globals.css`.
+- **Floor** (`--m-bg`): the cream floor under the whole page. The close and footer carry
+  `.dark`, so the same token becomes the navy floor and every ink below flips with it.
+- **Ink** (`--m-ink`): lettering, plate labels, titles, figures, the outline plate's
+  edge, the tick box, the chosen switch.
+- **Ink Support** (`--m-ink-support`): leads, body copy, detail lines, nav links,
+  step ordinals.
+- **Ink Tape** (`--m-ink-tape`): the roster name's hover underline.
+- **Ink Hairline** (`--m-ink-hairline`): the scrolled nav's bottom edge, the only rule
+  drawn on the floor.
+- **Ink Wash** (`--m-ink-wash`): the hover fill of an outline plate or unchosen switch.
+- **Surface** (`--m-surface`): the check inside the tick box; the app lane's ground.
 
 ### Named Rules
 
-**The One Live Line Rule.** One pink element per view, and it marks the member's path —
-an eyebrow, one word in a headline, a link, one stat. Two pink things on one screen means
-one of them is decoration, and decoration is the failure mode. When a design mock arrives
-with several, sanitise to one.
+**The One Live Line Rule.** A floor spends its one pink on the live line. No pink word,
+pink eyebrow, pink stat or pink link appears anywhere on `/`.
 
-**The Never Black Rule.** No text, scrim, shadow or border is black. Scrims are the floor
-colour at partial alpha (`--scrim` is ink at 70%). The only black left in the codebase is
-inside `PhoneFrame`, which draws a physical device rather than a Moose surface.
-
-**The Small Pink Ban.** Pink text below 24px on a light floor fails contrast (3.19:1 on
-cream). Pink is for headings ≥24px, eyebrows at their tracked weight, or as a fill behind
-white. Never pink body copy.
+**The One Ink Rule.** Text and marks are `ink` at its token weights (`ink`,
+`inkSupport`, `inkTape`, `inkHairline`, `inkWash`), never a grey, never black, never a
+status colour. The navy floor gets its white ink by `.dark`, not by local overrides.
 
 ## Typography
 
-**Display / Body Font:** Poppins, with the system stack as fallback
-(`--m-font-family-sans`). Loaded from Google Fonts in `Base.astro`.
-**Mono:** `--m-font-family-mono`, used only for tabular figures.
+**Font:** Poppins via `--m-font-family-sans`, system stack as fallback (RULES 12). No
+second family.
 
-**Character:** Poppins' geometric roundness keeps a page that is mostly navy and mostly
-argument from reading as cold. Set at 800 and tracked tight, it has real authority at
-display sizes; at 500/15px it stays warm and readable in long legal copy.
+**Character:** a single geometric sans carrying two voices: floor lettering at
+ExtraBold, set very tight and short-leaded so a headline is a mass; and plain Poppins at
+400–600 under it for everything else.
 
 ### Hierarchy
-- **Display** (800, `clamp(40px, 6vw, 92px)`, lh 1.02, ls −0.03em): the hero `h1`, once
-  per page.
-- **Headline** (800, `clamp(28px, 4vw, 56px)`, lh 1.08, ls −0.025em): every section `h2`.
-- **Title** (700, `clamp(24px, 3vw, 40px)`, lh 1.15, ls −0.02em): sub-section heads.
-- **Card title** (700, 17–22px, ls −0.3px): card and step headings.
-- **Lead** (500, `clamp(16px, 1.4vw, 18px)`, lh 1.65): the paragraph under a section
-  heading. Capped at 640px.
-- **Body** (500, 15px, lh 1.55): default copy.
-- **Meta** (600, 12–13px): captions, labels, footnotes.
-- **Eyebrow** (700, 12px, uppercase, ls 0.22em): the pink kicker above a heading.
-- **Stat figure** (800, `clamp(40px, 6vw, 76px)`, tabular numerals): the one big number in
-  a value card.
+- **Floor lettering** (`--m-type-floor-lettering-*`, tracking `--ll-lettering-tracking`
+  provisional): the hero `h1` on each floor. Sentence case, a trailing period, balanced
+  wrap, never hand-broken, with a small descent give-back under the last line.
+- **Station lettering** (the same role at the in-app ratio, provisional): every station
+  `h2`, including the close.
+- **Title** (`--ll-title-size`, 700, provisional): the one sub-heading inside a station
+  ("How it works" in The Moose model).
+- **Lead** (`--ll-lead-size` / `--ll-lead-leading`, 400, `inkSupport`, provisional): the
+  paragraph under lettering, capped at the lane measure.
+- **Plate label** (`--m-type-plate-label-*`): plate and switch labels, step titles, hero
+  tick lines, roster names, footer column heads, the member commercials' keys.
+- **Body** (`--ll-body-size` / `--ll-body-leading`, 400, `inkSupport`, provisional):
+  step bodies, commercial rows, footer links. Strong ranges inside are 600 in `ink`.
+- **Detail** (`--m-type-detail-*`, `inkSupport`): figure units and captions, the line
+  under the close's plate, the roster count, the footer's legal row.
+- **Ordinal** (`--ll-ordinal-size`, 800, tabular, provisional): the 01–04 step numbers,
+  in `inkSupport`.
+- **Figure** (`--m-type-figure-*` weight/leading/tracking at `--ll-stat-size`,
+  provisional): the three value figures, each travelling with its row, never boxed.
 
 ### Named Rules
 
-**The One Pink Word Rule.** A headline highlights at most one word in pink, and it is the
-word the sentence turns on — "…with **variety**." If the eyebrow above already carries the
-accent, the headline takes none.
+**The Painted Line Rule.** Lettering is a sentence: sentence case, ends in a period,
+wraps where the measure says. No line breaks written into the copy.
 
-**The Fluid Display Rule.** Every display size is a `clamp()`. There is no fixed
-`font-size: 60px` anywhere on a heading. Web role→size is not yet a moose-design token
-(RULES 13, drift-inventory D10), so these values are provisional and local.
+**The Informative Label Rule.** Nothing sits above lettering. Lane Lines has no eyebrow;
+its station label (RULES 14) is allowed only when it carries a fact the reader would
+otherwise lose, and `/` currently needs none.
 
 ## Layout
 
-A single 1240px container (`--container-max`) with fluid horizontal padding
-(`clamp(20px, 5vw, 56px)`), centred, used by every section's inner wrapper.
+**The Lane Grid.** Every station is a `.lanes` grid inside the floor's maximum measure
+(`--floor-max`). From 1048px it is three columns: your lane, the gutter
+(`--lane-gutter`, provisional) and the partner lane, in roughly equal measure. Blocks
+default to your lane; partner blocks take the third column and are row-placed so paired
+blocks sit level (03 beside 01; the figures beside the Value lettering, resting on one
+tread). The live line runs `--line-inset` (provisional) before whichever lane it is on.
 
-Vertical rhythm comes from three section utilities rather than per-section padding:
-`.section` at `clamp(72px, 9vw, 104px)`, `.section--tight` at `clamp(56px, 7vw, 80px)`,
-and the `.section--cream` / `.section--navy` background modifiers.
+Below 1048px there is one lane, capped to a single reading measure and left-aligned.
+Partner blocks stack under yours and step in by the line inset, so the pairing still
+reads without a second lane, and the line keeps lane 0 with one turn into the close's
+plate.
 
-**The alternation is the structure.** Cream, white and navy bands trade off down the page
-so each argument is visually bounded without a single divider line. Keep it when adding a
-section; two navy bands in a row collapses two arguments into one.
+**Rhythm.** Stations are separated by `--rhythm` (provisional: compact and regular
+values, drift D7); inside a station, spacing is the token scale `sm`–`xxl`. Empty floor
+is always a stated measure, never what is left over. The nav is a fixed
+`--nav-h` (provisional) bar; the wordmark's first stem sits on lane 0, where the line
+starts.
 
-Mobile-first, layering up at 640 / 760 / 960 / 1024 / 1280 / 1600. Most two-column
-layouts collapse at 760px, with the photograph moving below the copy.
-
-Spacing uses the token scale (`--m-spacing-xs` 4 through `xxl` 48). Page-level rhythm
-above 48px is **not yet tokenised** — 64 and 96 are decided and proposed upstream
-(drift-inventory D7); 12, 20, 40 and 80 round onto existing steps.
+The footer's link columns wrap from 760px; otherwise 1048px is the only breakpoint the
+lane floor uses. The card-world breakpoints in `globals.css` belong to the carve-out.
 
 ## Elevation & Depth
 
-**Flat is the target; the current shadows are incumbent drift.** RULES 10 makes Lane Lines
-floors shadowless, and the web should follow. Depth is meant to come from tonal
-alternation — cream against white against navy — not from lifting things off the page.
-
-Four shadow steps remain in the codebase (`--shadow-xs/sm/md/lg`, all now resolving to
-`--m-shadow-sm/md/lg`, navy-tinted at `#101A3C`). Treat them as legacy: they are safe to
-leave where they are, and they should not spread.
+None. Both floors are flat; separation is position on the lane grid, the floor change at
+the close, and stated empty floor. The only depth is the hero photograph under the cream
+**floor scrim**: `--m-bg` at partial alpha, a head-and-foot fade on the compact band, plus
+a seam fade that dissolves the photograph's left edge into the work side on the regular
+floor. The scrim gradients are written inline in `HeroPhoto.astro` and are
+**provisional** until a named gradient token exists (RULES 11).
 
 ### Named Rules
 
-**The Flat-By-Default Rule.** New surfaces get no shadow. Separation is a background
-change or a `--m-ink-hairline` border. If a new element seems to need elevation to read,
-the surface alternation underneath it is wrong.
+**The Flat Floor Rule.** No shadow, blur, glass or gradient on the floor. The floor
+scrim over a photograph is the one exception, and it is always the floor colour, never
+black. The scrolled nav takes the solid floor colour and an `inkHairline` edge, not a
+frosted bar.
 
 ## Shapes
 
-Full-radius pills for every action, generous rounding for surfaces, and a hairline rather
-than a heavy border.
-
-- **Pill** (`--m-radius-full`): all buttons, chips and the nav CTA. No square buttons.
-- **Sheet / Card** (`--m-radius-xl`, 24px): large panels, form sheets, feature cards.
-- **Tile** (`--m-radius-lg`, 16px): smaller cards, logo chips, form fields.
-- **Field / Chip** (`--m-radius-md` 12px, `--m-radius-sm` 8px): inputs and the smallest chips.
-
-Borders are `1px solid var(--m-ink-hairline)` — present enough to define an edge, never to
-draw attention. The brand book's old CSS radii (6/9/10/14/22/28) are superseded (RULES 3).
+Square and plate-like. Plates and switch plates use `radius.md`; the tick box and the
+small station plate use provisional radii; the photograph and the app capture are square
+cut, no radius, bezel or notch. Edges are a 2px solid `ink` stroke on outline plates and
+unchosen switches; no hairline borders define boxes because there are no boxes. The live
+line has square ends and rounded turns.
 
 ## Components
 
-### Buttons
-- **Shape:** full-radius pill (`--m-radius-full`), 14px × 24px padding, 600 weight.
-- **Primary:** Court Navy fill, white label, with a trailing arrow that translates 3px on
-  hover. Hover fill steps to `--m-moose-navy-press`.
-- **Ghost:** white fill, navy label — the secondary beside a primary, never alone.
-- **On navy:** a white or cream fill, never pink (RULES 5).
-- **Focus:** 2px `--m-moose-pink` outline, 2px offset.
-- **One primary per screen.** A pink CTA and a navy CTA never share a viewport.
+### Plates
+- **Floor plate (primary):** solid `plate-fill`, plate-label typography, a fixed height
+  and capped width (provisional, see frontmatter), `spacing.lg` inline padding, label left and a Lucide chevron-right at the
+  far end. One per viewport: the hero's and the close's. Press darkens to the press fill.
+- **Outline plate:** a 2px `ink` edge, ink label, same size and chevron; hover is an
+  `inkWash` fill. It only appears in a set with a filled sibling, or trailing a row of
+  text.
+- **Station plate:** the small outline plate trailing a line of text — "Studio login" in
+  the nav, "See all / See less" after the compact roster count. 44 tall to clear the hit
+  floor (RULES 17), no chevron.
+- **Press:** every plate and switch scales to 0.98 over the fast duration.
 
-### Cards
-- **Corner:** `--m-radius-xl` (24px) for feature panels, `--m-radius-lg` (16px) for tiles.
-- **Light:** white fill on cream, 1px `--m-ink-hairline` border, 22px internal padding.
-- **Navy:** Court Navy fill, white heading, `--on-navy-support` body — the stat cards in
-  the value row.
-- **Shadow:** none on new cards. See Elevation.
+### Audience switch
+A set of two plates above the hero lettering on both floors: chosen is a solid `ink`
+fill with a `floor` label (the selection fill, outside the plate family); unchosen is
+the 2px ink edge. No chevron and no pink, because a switch does not go forward. It swaps
+floors in place, keeps `#members` in the URL for the member floor, and moves focus to
+the same switch on the newly shown floor.
 
-### Inputs
-- **Style:** white fill, `--m-ink-hairline` border, `--m-radius-lg`, 12–18px padding.
-- **Placeholder:** `--m-ink-placeholder` (66%).
-- **Focus:** the pink focus ring, as everywhere.
+### Hero
+A split floor: the work side on your lane (switch, lettering, lead, ticks, one Floor
+plate) and the photograph from lane 2 to the right edge under the floor scrim. Compact,
+the photograph becomes a band under the nav and the work side starts beneath it.
 
-### Navigation
-- Fixed, transparent over the hero so the headline starts at the top of the page.
-- Past 16px of scroll it gains `--card-frosted` (surface at 86%) with a 14px blur and a
-  `--m-ink-hairline` bottom edge.
-- One CTA only — the navy "Studio login" pill to the external portal. The page's own
-  "Get involved or hear more" lives in the hero and footer.
-- Collapses to a hamburger below 760px.
+### Assurance ticks
+A small solid-ink box (provisional size and corner) and a `surface` Lucide check, leading a
+plate-label line. Never status green, never pink.
 
-### Eyebrow
-Uppercase, 12px, 700, tracked, in pink (RULES 14). It sits above a section heading and is
-that section's only pink element unless the heading takes the one pink word instead.
+### Steps, rows and figures
+Steps are an ordinal in `inkSupport` beside a plate-label title and body copy, split
+across the lanes. Member commercials are open rows (plate-label key over body), not
+plates: non-actions never get plates. Value figures are open too: the figure and its
+unit on one baseline, a plate-label title and a detail caption.
 
-### Modality ticker
-A thin `--m-moose-navy-deep` band under the hero carrying an infinite CSS marquee of
-studio modalities separated by pink diamonds. Masked to transparent at both edges. Halts
-entirely under `prefers-reduced-motion`.
+### Partner roster
+Every partner on the floor at once, its name set as a mark in plate-label `ink` until an
+approved single-ink SVG replaces it in the same band. Regular: four columns, two per
+lane, the line running in the gutter between them. Compact: one column, capped, with a
+detail count and a station plate revealing the rest in place. No chip, box or card
+around a mark.
+
+### Live line
+One inline SVG per floor, `live-line` at the Lane Lines line weight, measured from the DOM and drawn with scroll
+(stroke-dashoffset tied to a read line partway down the viewport). It ends at the
+element marked `data-line-end`; it crosses where marked `data-line-cross`. Under
+`prefers-reduced-motion` it is fully drawn.
+
+### Member app capture
+A frameless capture of the app in a phone-screen-shaped window on the partner lane,
+square crop, scrubbed by a scroll-driven view timeline so the taller capture travels
+through the window. Under reduced motion the timeline declarations are absent and it
+sits still.
+
+### Navigation and footer
+The nav is transparent on the floor and takes the floor fill plus an `inkHairline`
+edge past a short scroll; links in `inkSupport`, the outline station plate as its only
+action, a Lucide menu icon below 1048px. The footer continues the navy floor from the
+close with no seam and no hairline: wordmark, tagline and Instagram on your lane, link
+columns on the partner lane, a detail-sized legal row.
+
+### Icons
+Lucide outline icons, inline, 2px stroke, `currentColor` (RULES 15): chevron-right,
+arrow-right, check, instagram, menu.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** take every colour, radius, spacing step and shadow from a `--m-*` token. A value
-  the tokens lack is a PR on moose-design, not a local constant.
-- **Do** keep exactly one pink element per view, and make it the member's path.
-- **Do** alternate cream, white and navy bands so each argument is visually bounded.
-- **Do** set every display heading with `clamp()`.
-- **Do** use `--m-ink` and `--m-ink-support` for text, and measure contrast rather than
-  assuming it (RULES 16).
-- **Do** render icons as inline Lucide-style outline SVGs using `currentColor` (RULES 15).
-- **Do** keep hit targets at 44px or more (RULES 17).
+- **Do** take every value from a `--m-*` token; a missing value goes to moose-design and
+  is marked provisional here until it lands.
+- **Do** put new stations on the lane grid: lettering on your lane, matter on the
+  partner lane, paired blocks level.
+- **Do** keep exactly one filled plate per viewport; any outline plate is in a set or
+  trailing a row of text.
+- **Do** set lettering in sentence case with a trailing period.
+- **Do** keep the live line the floor's one pink element, and mark where it crosses and
+  ends rather than drawing it by hand.
+- **Do** keep hit targets at 44px or more, and measure contrast (RULES 16, 17).
 
 ### Don't:
-- **Don't** write a raw hex, `rgb()` or `rgba()` into a component. The documented
-  exceptions are device chrome in `PhoneFrame`, the ticker's mask, `theme-color` in
-  `Base.astro`, and the vendored QR library's defaults.
-- **Don't** use black for text, scrims, shadows or borders.
-- **Don't** put pink text below 24px on a light floor, or pink on body copy anywhere.
-- **Don't** put a pink CTA and a navy CTA on the same screen.
-- **Don't** add a shadow to a new surface. Separate with a background change or a hairline.
-- **Don't** introduce a third brand colour, or a gradient on the pink.
-- **Don't** reach for SF Symbols or an icon library — the DS's iOS components
-  (`AppButton`, `FloorPlate`, `Icon/Placeholder`) are explicitly not for the web.
-- **Don't** let a layout drift toward the aggregator: dense venue grids, discount badges,
-  or anything that reads as a consumer search result.
+- **Don't** put a card, chip, pill, shadow, blur or status colour on a Lane Lines floor.
+- **Don't** put an eyebrow or kicker above lettering, or a pink word inside it.
+- **Don't** box a figure, a partner mark or a non-action; give plates only to actions.
+- **Don't** extend the card-world utilities (`.section`, `.eyebrow`, cards, pill buttons,
+  legacy shadows) to new surfaces; they exist for the carve-out pages only.
+- **Don't** let a layout drift toward the aggregator: dense venue grids, discount
+  badges, or anything that reads as a consumer search result.
 - **Don't** hand-edit `src/styles/moose-design/tokens.css` or `.moose-design.json`.

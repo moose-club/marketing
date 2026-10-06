@@ -1,0 +1,73 @@
+---
+// The hero photograph. Regular floor: lane 2 to the right edge, full hero
+// height, square corners, under two cream floorScrims — the seam (dissolves
+// its left edge into the work side) and head-and-foot. Compact floor: a 300px
+// band under the nav with the same head-and-foot scrim. The scrims are the
+// documented photograph exception to the Flat Floor rule; both are Surface/bg
+// at partial alpha.
+interface Props {
+  src: string;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<div class="hero-photo">
+  <img src={src} alt={alt} class="hero-photo__img" fetchpriority="high" decoding="async" />
+</div>
+
+<style>
+  .hero-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px; /* no token yet: proposed (compact photo band) */
+    overflow: hidden;
+  }
+  .hero-photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--m-bg) 60%, transparent) 0%,
+      color-mix(in srgb, var(--m-bg) 10%, transparent) 30%,
+      color-mix(in srgb, var(--m-bg) 0%, transparent) 50%,
+      var(--m-bg) 100%
+    );
+  }
+
+  @media (min-width: 1048px) {
+    .hero-photo {
+      top: var(--nav-h);
+      bottom: 0;
+      left: 50%;
+      height: auto;
+    }
+    .hero-photo::after {
+      background:
+        linear-gradient(
+          90deg,
+          var(--m-bg) 0%,
+          color-mix(in srgb, var(--m-bg) 60%, transparent) 10%,
+          color-mix(in srgb, var(--m-bg) 10%, transparent) 26%,
+          color-mix(in srgb, var(--m-bg) 0%, transparent) 42%
+        ),
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--m-bg) 90%, transparent) 0%,
+          color-mix(in srgb, var(--m-bg) 0%, transparent) 11%,
+          color-mix(in srgb, var(--m-bg) 0%, transparent) 86%,
+          var(--m-bg) 100%
+        );
+    }
+  }
+</style>
