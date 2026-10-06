@@ -269,13 +269,13 @@ export const MEMBERS = {
   // is ink-coloured to keep within one accent per headline.
   headHtml: "Finally, some (affordable) <em>variety</em>…",
   ledeLines: [
-    "We don't sell Moose to members direct — it's available through the studios. We've just created the infrastructure.",
+    "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
   ] as const,
   commercials: [
     {
       k: "What you get",
       body:
-        "Four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
+        "A notional four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
     },
     {
       k: "What you pay",
@@ -286,7 +286,6 @@ export const MEMBERS = {
   noteHtml:
     'Your studio not on Moose yet? <a href="#register" data-register="member">Let\'s help get them across →</a>',
   calloutLines: [
-    "The Moose app is used only for booking crossover sessions at partner venues.",
     "Members still book their home studio classes the way they always have.",
   ] as const,
 } as const;
@@ -324,7 +323,7 @@ export const REGISTER = {
 } as const;
 
 export const FOOTER = {
-  tagline: "Elevating memberships through local partner collaboration.",
+  tagline: "More ways to move.",
   cols: [
     {
       title: "Explore",

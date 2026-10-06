@@ -293,3 +293,22 @@ This **closes open item 3 of the roster round** — the roster was its own count
 That sentence uses both words as different things on purpose — you attend a venue, you are priced against a studio. **Open for Max:** collapse the distinction everywhere and rewrite that clause, or keep "venue" for the place and "studio" for the business? The lede no longer forces the question, but the page now says both.
 
 **Also open, and new:** if the real list is a handful, the compact reveal never fires — 12 is above the count — and the 27 placeholder names overstate by far more than they did when the lede claimed 120+. `MSNetwork.astro` renders the control only when there are extras, so the code handles it; the *comp* still shows 27 fake names, which is open item 1 of the roster round and is now more pressing, not less.
+
+## Changed 6 October 2026 — member floor copy (Max)
+
+Ten copy calls, applied to both member floors (`53:223` desktop, `56:260` compact) and, where the string comes from code, to `MEMBERS` in `src/data/copy.ts`. These replace the 24 Sep "Your studio sets you up" lines in full: the member floor no longer says the studio does the setting up. It says the Moose profile links to the home studio's system, and that downloading the app activates the account.
+
+1. Hero lede (`MEMBERS.ledeLines[0]`) → "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership."
+2. How it works lede → "Your studio stays your primary training destination, with a dash of variety at partner venues for a more well-rounded routine."
+3. What you get lede → "A little more variety, made affordable through local studio collaboration."
+4. Home-studio station head → "Book and manage crossover sessions at partner venues" (as given, **no trailing period**. The Painted Line Rule wants one; Max to confirm).
+5. Home-studio lede → "Your Moose profile automatically links to your membership in your home studio’s system."
+6. Home-studio note ("The Moose app is used only for booking…") **removed**, with its gap. Also removed from `MEMBERS.calloutLines`.
+7. Step 02 → "You upgrade your membership through your home studio for access to partner venues. Moose caps the upgrade fee at $11/wk." (the $48/mo figure is gone from this row but still appears in *What you pay*)
+8. Step 03 → "You receive a notional four credits each month to book sessions across the partner venues — in total, not per partner."
+9. What you get row (`MEMBERS.commercials[0].body`) → "A notional four crossover sessions per month…"
+10. Close lead → "Free on the App Store. Download the app to activate your account."
+
+**Reflow.** Desktop: *What you get* station +21 → floor **1440×3103**, line `55:302` final run +21. The hero work side `53:233` (fixed, clipped) grew 521 → 550 so the plate isn't cut by the three-line lede. Compact: hero +58, How it works +75, What you get +29, Home studio −23 → floor **390×4195**, line `57:390` +139. Station gaps unchanged; both lines still end in the App Store plate.
+
+**Footer tagline (same day).** `FOOTER.tagline` "Elevating memberships through local partner collaboration." → **"More ways to move."** Changed in all 7 places in Figma: the footers on all four floors plus the three samples in States & motion. The compact footers lose a line, so `20:167` / `57:362` drop 23px and the compact floors are now `4:89` **390×4688** and `56:260` **390×4172**. The desktop footers are fixed-height and unchanged.
