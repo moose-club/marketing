@@ -1,158 +1,55 @@
 ---
 import { VALUE } from '../../data/copy';
+
+// Station · For studios — lettering on your lane; the three figures on your
+// partner's, the figure travelling with its row (no boxes). The two masses
+// rest on one tread.
 ---
 
-<section class="section section--white" id="value" aria-labelledby="valueHeading">
-  <div class="container">
-    <div class="value__head">
-      <span class="eyebrow" data-reveal>{VALUE.eyebrow}</span>
-      <h2 id="valueHeading" class="value__prize" data-reveal style="--ri:1" set:html={VALUE.headHtml}></h2>
-      <p class="value__note" data-reveal style="--ri:2">{VALUE.prizeNote}</p>
-    </div>
-
-    <div class="value__table">
-      <div class="value__cards value__cards--benefits">
-        {VALUE.benefits.map((b, i) => (
-          <div class="value__bcard" data-reveal="pop" style={`--ri:${1 + i}`}>
-            <span class="value__num">{b.n}</span>
-            <h4>{b.title}</h4>
-            <p>{b.body}</p>
-            <div class="value__statbox">
-              <div class="value__stat">
-                <span class="tnum" data-countup>{b.stat}</span>
-                {b.unit && <span class="value__unit">{b.unit}</span>}
-              </div>
-              <p class="value__cap">{b.cap}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+<section class="station lanes value" id="value" aria-labelledby="valueHeading">
+  <div>
+    <h2 id="valueHeading" class="lettering lettering--station">{VALUE.head}</h2>
+    <p class="lead">{VALUE.prizeNote}</p>
   </div>
+
+  <ul class="lane--partner lane--indent figures">
+    {VALUE.benefits.map((b) => (
+      <li class="figure">
+        <p class="figure__row">
+          <span class="figure__stat">{b.stat}</span>
+          <span class="detail">{b.unit}</span>
+        </p>
+        <p class="plate-label figure__title">{b.title}</p>
+        <p class="detail figure__cap">{b.cap}</p>
+      </li>
+    ))}
+  </ul>
 </section>
 
 <style>
-  /* White background distinguishes this section from the cream sections that
-     bracket it (the cards go cream to keep the surface separation). */
-  .section--white { background: var(--card); }
-
-  .value__head { max-width: 780px; margin-bottom: 48px; }
-  .value__prize {
-    font-size: clamp(24px, 3.4vw, 46px);
-    font-weight: 700;
-    line-height: 1.18;
-    letter-spacing: -0.02em;
-    color: var(--navy);
-  }
-  .value__prize em {
-    color: var(--pink);
-    font-style: normal;
-  }
-  .value__note {
-    font-size: 17px;
-    color: var(--ink-dim);
-    margin-top: 22px;
-    max-width: 580px;
-    line-height: 1.55;
-  }
-
-  .value__table { width: 100%; }
-
-  .value__cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 22px;
-    align-items: stretch;
-  }
-
-  /* Navy benefit card with a cream quantification box pinned to the bottom. */
-  .value__bcard {
+  .figures { display: grid; gap: var(--m-spacing-lg); }
+  .figure__row {
     display: flex;
-    flex-direction: column;
-    background: var(--navy);
-    border-radius: var(--r-sheet);
-    padding: 24px 20px;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+    align-items: baseline;
+    gap: 6px; /* no token yet: proposed */
   }
-  .value__bcard:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+  .figure__stat {
+    font-size: var(--ll-stat-size);
+    font-weight: var(--m-type-figure-weight);
+    line-height: var(--m-type-figure-leading);
+    letter-spacing: var(--m-type-figure-tracking);
+    font-variant-numeric: var(--m-type-figure-numeric);
+    color: var(--m-ink);
   }
-  .value__num {
-    font-weight: 800;
-    font-size: clamp(28px, 2.4vw, 34px);
-    color: var(--navy-on);
-    line-height: 1;
-  }
-  .value__bcard h4 {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--navy-on);
-    margin: 20px 0 10px;
-    line-height: 1.2;
-  }
-  .value__bcard > p {
-    font-size: 13.5px;
-    color: var(--on-navy-support);
-    line-height: 1.55;
-    margin: 0;
-    /* Guaranteed gap between the body copy and the stat box below it. */
-    margin-bottom: 28px;
-  }
+  .figure__title { margin-top: var(--m-spacing-sm); }
+  .figure__cap { margin-top: 6px; max-width: 34ch; } /* no token yet: proposed (gap 6) */
 
-  /* Cream stat box — bottom-pinned via margin-top:auto. Constrained to the
-     card width (min-width:0) so a long stat word can't bulge it out, and given
-     a uniform min-height so every box is the same size. With equal-height cards
-     + bottom pinning, equal box height means the box tops line up too. */
-  .value__statbox {
-    margin-top: auto;
-    width: 100%;
-    min-width: 0;
-    background: var(--cream);
-    border-radius: var(--r-card);
-    padding: 22px 18px 24px;
-  }
-  .value__stat {
-    font-weight: 800;
-    /* Sized so the longest stat word ("Stability") still fits the cream box
-       at the narrowest 5-up column width. */
-    font-size: clamp(22px, 1.9vw, 29px);
-    color: var(--navy);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    display: flex;
-    align-items: flex-end;
-    min-width: 0;
-  }
-  .value__unit {
-    font-size: 0.42em;
-    color: var(--ink-dim);
-    font-weight: 600;
-    margin-left: 5px;
-    letter-spacing: 0;
-  }
-  .value__cap {
-    font-size: 11.5px;
-    color: var(--ink-dim);
-    margin-top: 12px;
-    line-height: 1.5;
-    /* Reserve space for the longest caption so all boxes match height. */
-    min-height: 4.5em;
-  }
-
-  @media (min-width: 640px) {
-    .value__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (min-width: 960px) {
-    .value__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
-  @media (min-width: 1280px) {
-    /* Stays inside .container so the row shares its left edge with the heading
-       above and with The Moose model section — no page-width breakout. */
-    .value__cards--benefits { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    /* Narrow 5-up columns push the longest captions to four lines — reserve
-       for that here only, so the single-column mobile boxes stay snug. */
-    .value__cards--benefits .value__cap { min-height: 6em; }
+  @media (min-width: 1048px) {
+    .value > * { grid-row: 1; }
+    .figures {
+      align-self: end;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--m-spacing-xl);
+    }
   }
 </style>

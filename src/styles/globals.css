@@ -302,3 +302,218 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   }
   html.js [data-reveal] { opacity: 1 !important; }
 }
+
+/* ══ Lane Lines — the `/` floor ═════════════════════════════════════════
+   The homepage is drawn in moose-design's Lane Lines world (Figma
+   a5SmvlBwlHP6sf0FAZfLpP; direction in .impeccable/surfaces/). One flat cream
+   floor, a navy close (`.dark` — the token set's own navy floor), one ink,
+   and one pink element: the live line. No card, shadow, blur, pill or eyebrow.
+
+   The floor is two lanes — yours and your partner's — with the line running
+   just before whichever lane it is on. Below 1048px there is room for one
+   lane only, so the partner blocks stack under yours and the line keeps
+   lane 0. */
+
+:root {
+  /* Lane geometry. Layout isn't tokenised; these are the Figma frame's
+     measures (1440: lanes 124→684 and 744→1316, the line 24 before each). */
+  --floor-max:       1440px;
+  --floor-pad-start: 44px;   /* no token yet: proposed (lane grid) */
+  --floor-pad-end:   var(--m-spacing-lg);
+  --lane-gutter:     60px;   /* no token yet: proposed (lane grid) */
+  --line-inset:      20px;   /* no token yet: proposed (lane grid) */
+  --nav-h:           72px;   /* no token yet: proposed (lane grid) */
+  /* Station rhythm: 72 compact, 96 regular. */
+  --rhythm:          72px;   /* no token yet: proposed (D7) */
+
+  /* Lane Lines web type roles the token set doesn't carry yet — the Figma
+     text styles `Lane Lines/Web/…`, proposed to moose-design (rule 13).
+     Everything else reads `--m-type-*`. */
+  --ll-lettering-tracking: -0.04em;  /* no token yet: proposed */
+  --ll-lead-size:    1.125rem;       /* no token yet: proposed (Lead 18/1.6) */
+  --ll-lead-leading: 1.6;            /* no token yet: proposed */
+  --ll-body-size:    0.9375rem;      /* no token yet: proposed (Body 15/1.55) */
+  --ll-body-leading: 1.55;           /* no token yet: proposed */
+  --ll-title-size:   1.75rem;        /* no token yet: proposed (Title 28/700) */
+  --ll-ordinal-size: 1.75rem;        /* no token yet: proposed (Ordinal 28/800) */
+  --ll-stat-size:    2.5rem;         /* = --m-type-figure-size's floor: proposed (Stat 40) */
+  --ll-tracking:     -0.01em;        /* no token yet: proposed (Figma −1%) */
+}
+
+@media (min-width: 1048px) {
+  :root {
+    --floor-pad-start: clamp(64px, 8.6vw, 124px);
+    --floor-pad-end:   var(--floor-pad-start);
+    --line-inset:      var(--m-spacing-lg);
+    --rhythm:          96px;   /* no token yet: proposed (D7) */
+  }
+}
+
+/* The two floors. The studio floor is the default; `html[data-audience]` is
+   set before first paint from the URL hash (index.astro) and by the switch. */
+[data-floor='member'] { display: none; }
+html[data-audience='member'] [data-floor='studio'] { display: none; }
+html[data-audience='member'] [data-floor='member'] { display: block; }
+
+.floor {
+  position: relative;
+  background: var(--m-bg);
+  color: var(--m-ink);
+  font-weight: 400;
+}
+
+/* Lane container: the floor's measure, with the two lanes side by side from
+   1048px. `.lanes > *` default to your lane; `.lane--partner` takes the
+   partner lane. Grid row placement keeps paired blocks level. */
+.lanes {
+  max-width: var(--floor-max);
+  margin-inline: auto;
+  padding-inline: var(--floor-pad-start) var(--floor-pad-end);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--m-spacing-xl);
+}
+@media (min-width: 1048px) {
+  .lanes {
+    grid-template-columns: minmax(0, 560fr) var(--lane-gutter) minmax(0, 572fr);
+    row-gap: 0;
+  }
+  .lanes > * { grid-column: 1; }
+  .lanes > .lane--partner { grid-column: 3; }
+}
+/* On the compact floor the partner's blocks step in, so the pairing still
+   reads without a second lane. */
+@media (max-width: 1047.98px) {
+  .lane--indent { padding-left: var(--line-inset); }
+  .lanes { max-width: calc(640px + var(--floor-pad-start) + var(--floor-pad-end)); margin-inline: 0; }
+}
+
+.station { margin-top: var(--rhythm); }
+
+/* ── Type roles ─────────────────────────────────────────────────── */
+
+/* Floor lettering: the page headline at full size, station heads in-app
+   (64 against the cover's 72 at 1440). Sentence case, trailing period, never
+   hand-broken. */
+.lettering {
+  font-size: var(--m-type-floor-lettering-size);
+  font-weight: var(--m-type-floor-lettering-weight);
+  line-height: var(--m-type-floor-lettering-leading);
+  letter-spacing: var(--ll-lettering-tracking);
+  color: var(--m-ink);
+  text-wrap: balance;
+  /* The descent give-back: Poppins' descenders hang ~0.14em below the last
+     line's box at this leading. */
+  padding-bottom: 0.14em;
+}
+.lettering--station {
+  font-size: calc(var(--m-type-floor-lettering-size) * 0.889);
+}
+
+.lead {
+  font-size: var(--ll-lead-size);
+  line-height: var(--ll-lead-leading);
+  letter-spacing: var(--ll-tracking);
+  color: var(--m-ink-support);
+  max-width: 560px;
+}
+.lettering + .lead { margin-top: var(--m-spacing-md); }
+.lead + .lead { margin-top: var(--m-spacing-md); }
+
+.title {
+  font-size: var(--ll-title-size);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--m-ink);
+}
+
+.plate-label {
+  font-size: var(--m-type-plate-label-size);
+  font-weight: var(--m-type-plate-label-weight);
+  line-height: var(--m-type-plate-label-leading);
+  letter-spacing: var(--ll-tracking);
+  color: var(--m-ink);
+}
+
+.body-copy {
+  font-size: var(--ll-body-size);
+  line-height: var(--ll-body-leading);
+  letter-spacing: var(--ll-tracking);
+  color: var(--m-ink-support);
+}
+.body-copy strong { font-weight: 600; color: var(--m-ink); }
+
+.detail {
+  font-size: var(--m-type-detail-size);
+  font-weight: var(--m-type-detail-weight);
+  line-height: var(--m-type-detail-leading);
+  color: var(--m-ink-support);
+}
+
+.ordinal {
+  font-size: var(--ll-ordinal-size);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Plates ─────────────────────────────────────────────────────────
+   Actions are plates on Radius/md: a solid fill (the Floor plate, one per
+   screen) or a 2px ink edge (secondary, switch, station action). Press is
+   0.98 over 140ms. */
+.plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m-spacing-md);
+  min-height: 56px;
+  padding-inline: var(--m-spacing-lg);
+  border-radius: var(--m-radius-md);
+  font-size: var(--m-type-plate-label-size);
+  font-weight: var(--m-type-plate-label-weight);
+  line-height: var(--m-type-plate-label-leading);
+  letter-spacing: var(--ll-tracking);
+  white-space: nowrap;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.plate:active { transform: scale(0.98); }
+.plate svg { flex-shrink: 0; }
+
+.plate--primary {
+  width: min(100%, 420px);
+  background: var(--m-button-primary);
+  color: var(--m-button-primary-label);
+}
+.plate--primary:hover,
+.plate--primary:active { background: var(--m-button-primary-press); }
+
+.plate--outline {
+  border: 2px solid var(--m-ink);
+  color: var(--m-ink);
+}
+.plate--outline:hover { background: var(--m-ink-wash); }
+
+/* Station action: a small inset plate trailing a line of text. 44 tall, not
+   the drawn 40 — RULES 17's hit-target floor. */
+.plate--station {
+  min-height: 44px;
+  padding-inline: 14px;
+  border-radius: 10px; /* no token yet: proposed (station action plate) */
+}
+
+/* ── Hero (both floors) ─────────────────────────────────────────── */
+.hero {
+  position: relative;
+  /* Compact: under the 300px photo band, then 40. */
+  padding-top: 340px;  /* no token yet: proposed */
+}
+.hero__work { position: relative; }
+@media (min-width: 1048px) {
+  .hero {
+    padding-top: calc(var(--nav-h) + 80px);         /* no token yet: proposed (top inset 80) */
+    padding-bottom: calc(var(--rhythm) + var(--m-spacing-xxl)); /* stated floor under the work side */
+    min-height: min(100svh, 962px);
+  }
+}

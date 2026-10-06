@@ -1,155 +1,97 @@
 ---
 import { FOOTER } from '../../data/copy';
+import Icon from '../primitives/Icon.astro';
 
+// The navy floor continues from the close, no seam and no hairline. Brand on
+// your lane, link columns on your partner's.
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <img
-          src="/brand/logo/moose-wordmark-white.svg"
-          alt="Moose"
-          class="footer__logo"
-        />
-        <p class="footer__tag">{FOOTER.tagline}</p>
-        <a
-          href={FOOTER.instagram.href}
-          class="footer__ig"
-          target="_blank"
-          rel="noopener"
-          aria-label={FOOTER.instagram.label}
-        >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5.5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"></circle>
-          </svg>
-        </a>
-      </div>
-
-      <div class="footer__cols">
-        {FOOTER.cols.map((c) => (
-          <div class="footer__col">
-            <h5>{c.title}</h5>
-            {c.items.map((it) => {
-              const isExternal = 'external' in it && it.external;
-              return (
-                <a
-                  href={it.h}
-                  class="footer__link"
-                  {...(isExternal ? { target: '_blank', rel: 'noopener' } : {})}
-                >
-                  {it.l}
-                </a>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+<footer class="footer dark">
+  <div class="lanes footer__top">
+    <div class="footer__brand">
+      <img src="/brand/logo/moose-wordmark-white.svg" alt="Moose" class="footer__logo" width="120" height="23" />
+      <p class="body-copy">{FOOTER.tagline}</p>
+      <a href={FOOTER.instagram.href} class="footer__ig" target="_blank" rel="noopener" aria-label={FOOTER.instagram.label}>
+        <Icon name="instagram" />
+      </a>
     </div>
 
-    <div class="footer__bot">
-      <div class="footer__legal">
-        <span>© {year} Moose Club. Made in Australia.</span>
-        {FOOTER.legal.map((l) => <a href={l.h}>{l.l}</a>)}
-      </div>
-      <div class="footer__links">
-        <a href="#register">Get involved or hear more</a>
-        <a href="#top">Back to top</a>
-      </div>
+    <div class="lane--partner footer__cols">
+      {FOOTER.cols.map((c) => (
+        <div class="footer__col">
+          <h2 class="plate-label">{c.title}</h2>
+          {c.items.map((it) => {
+            const external = 'external' in it && it.external;
+            return (
+              <a href={it.h} class="body-copy footer__link" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+                {it.l}
+              </a>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="footer__legal detail">
+    <div class="footer__row">
+      <span>© {year} Moose Club. Made in Australia.</span>
+      {FOOTER.legal.map((l) => <a href={l.h}>{l.l}</a>)}
+    </div>
+    <div class="footer__row">
+      <a href={FOOTER.register.h} target="_blank" rel="noopener">{FOOTER.register.l}</a>
+      <a href="#top">{FOOTER.backToTop}</a>
     </div>
   </div>
 </footer>
 
 <style>
   .footer {
-    background: var(--navy-900);
-    color: var(--navy-on);
-    padding-block: 64px 32px;
+    background: var(--m-bg);
+    color: var(--m-ink);
+    padding-top: calc(var(--rhythm) + var(--m-spacing-md));
+    padding-bottom: var(--m-spacing-xl);
   }
-  .footer__top {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  .footer__brand { display: grid; gap: 14px; }
-  .footer__logo {
-    display: block;
-    height: 36px;
-    width: auto;
-  }
-  .footer__tag {
-    font-size: 14px;
-    color: var(--on-navy-inert);
-    line-height: 1.55;
-    max-width: 320px;
-  }
-  .footer__ig {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    color: var(--navy-on);
-    background: var(--on-navy-wash);
-    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast);
-  }
-  .footer__ig:hover { background: var(--pink); color: var(--navy-on); }
+  .footer__top { row-gap: var(--m-spacing-xxl); }
 
-  .footer__cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px 24px;
-  }
-  .footer__col { display: grid; gap: 10px; align-content: start; }
-  .footer__col h5 {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--navy-on);
-    margin: 0 0 6px;
-  }
-  .footer__link {
-    font-size: 13.5px;
-    color: var(--on-navy-inert);
-    transition: color var(--dur-fast) var(--ease-out);
-  }
-  .footer__link:hover { color: var(--navy-on); }
+  .footer__brand { display: grid; justify-items: start; align-content: start; gap: var(--m-spacing-md); }
+  .footer__logo { display: block; width: 120px; height: auto; }
+  .footer__ig { color: var(--m-ink); display: inline-flex; }
+  .footer__ig:hover { color: var(--m-ink-support); }
 
-  .footer__bot {
-    margin-top: 56px;
-    padding-top: 24px;
-    border-top: 1px solid var(--navy-rule);
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    font-size: 12px;
-    color: var(--on-navy-muted);
-  }
+  .footer__cols { display: grid; gap: var(--m-spacing-lg); }
+  .footer__col { display: grid; align-content: start; gap: 10px; } /* no token yet: proposed */
+  .footer__link { transition: color var(--dur-fast) var(--ease-out); overflow-wrap: anywhere; }
+  .footer__link:hover { color: var(--m-ink); }
+
   .footer__legal {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 16px;
+    max-width: var(--floor-max);
+    margin: var(--m-spacing-xxl) auto 0;
+    padding-inline: var(--floor-pad-start) var(--floor-pad-end);
+    display: grid;
+    gap: var(--m-spacing-sm);
   }
-  .footer__legal a {
-    color: var(--on-navy-inert);
-    transition: color var(--dur-fast) var(--ease-out);
-  }
-  .footer__legal a:hover { color: var(--navy-on); }
-  .footer__links { display: flex; gap: 20px; }
-  .footer__links a { color: var(--on-navy-inert); }
-  .footer__links a:hover { color: var(--navy-on); }
+  .footer__row { display: flex; flex-wrap: wrap; gap: var(--m-spacing-sm) var(--m-spacing-lg); }
+  .footer__legal a { transition: color var(--dur-fast) var(--ease-out); }
+  .footer__legal a:hover { color: var(--m-ink); }
 
   @media (min-width: 760px) {
-    .footer__cols { grid-template-columns: repeat(3, 1fr); }
+    .footer__cols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--m-spacing-lg) var(--m-spacing-xl);
+    }
+    .footer__col { min-width: 170px; } /* no token yet: proposed */
+    .footer__link { overflow-wrap: normal; white-space: nowrap; }
   }
-  @media (min-width: 960px) {
-    .footer__top { grid-template-columns: 1.2fr 3fr; gap: 64px; }
+  @media (min-width: 1048px) {
+    .footer__top > * { grid-row: 1; }
+    .footer__legal {
+      margin-top: 96px; /* no token yet: proposed (Figma legal row at 271) */
+      padding-inline: calc(var(--floor-pad-start) - var(--line-inset)) calc(var(--floor-pad-end) - var(--line-inset));
+      display: flex;
+      justify-content: space-between;
+    }
   }
 </style>

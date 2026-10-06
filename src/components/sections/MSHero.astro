@@ -1,191 +1,64 @@
 ---
 import { HERO } from '../../data/copy';
+import AudienceSwitch from '../primitives/AudienceSwitch.astro';
+import HeroPhoto from '../primitives/HeroPhoto.astro';
+import Icon from '../primitives/Icon.astro';
+import Plate from '../primitives/Plate.astro';
+
+// Studio floor hero — a split floor: the work side on your lane, the
+// photograph from lane 2 to the edge. One filled plate.
 ---
 
-<section class="hero" id="top" aria-labelledby="heroHeading">
-  <div class="hero__grid">
-    <div class="hero__copy">
-      <span class="eyebrow" data-reveal>{HERO.eyebrow}</span>
-      <h1 id="heroHeading" class="hero__head display-l" data-reveal style="--ri:1">
-        {HERO.head} <em>{HERO.highlightWord}</em>
-      </h1>
+<section class="hero" aria-labelledby="heroHeading">
+  <HeroPhoto src={HERO.photo.src} alt={HERO.photo.alt} />
 
-      <p class="hero__lede body-l" data-reveal style="--ri:2">
-        {HERO.subLines.map((line) => <span class="hero__lede-line">{line}</span>)}
-      </p>
+  <div class="lanes">
+    <div class="hero__work">
+      <AudienceSwitch current="studio" />
+
+      <h1 id="heroHeading" class="lettering hero__head">{HERO.head}</h1>
+
+      {HERO.subLines.map((line) => <p class="lead">{line}</p>)}
 
       <ul class="hero__points">
-        {HERO.points.map((p, i) => (
-          <li data-reveal style={`--ri:${3 + i}`}>
-            <span class="hero__point-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
+        {HERO.points.map((p) => (
+          <li class="plate-label hero__point">
+            <span class="tick"><Icon name="check" size={16} /></span>
             {p}
           </li>
         ))}
       </ul>
 
-      <div class="hero__actions" data-reveal style="--ri:7">
-        <a class="btn btn--primary" href={HERO.ctaPrimary.href}>
-          {HERO.ctaPrimary.label}
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a class="btn btn--ghost" href={HERO.ctaSecondary.href}>{HERO.ctaSecondary.label}</a>
-      </div>
+      <Plate href={HERO.cta.href} external class="hero__cta">{HERO.cta.label}</Plate>
     </div>
-
-    <div
-      class="hero__photo"
-      role="img"
-      aria-label={HERO.photo.alt}
-      style={`background-image:url('${HERO.photo.src}')`}
-    ></div>
   </div>
 </section>
 
 <style>
-  /* Hero uses a light cream background per the new design's data-hero="light"
-     mode. Photo on the right with a soft fade into the cream. */
-  .hero {
-    position: relative;
-    background: var(--cream);
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .hero__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-  .hero__copy {
-    /* Top padding clears the fixed nav (~72px). The rest is tuned so the
-       four bullets + both CTAs still fit above the fold on a 1280x800
-       laptop viewport — trim here first if the hero copy grows again. */
-    padding: 104px clamp(20px, 5vw, 64px) 48px clamp(20px, 5vw, 64px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 760px;
-  }
-  .hero__head {
-    margin-top: 10px;
-    color: var(--navy);
-    /* A touch smaller than the global display-l scale. */
-    font-size: clamp(34px, 5vw, 76px);
-  }
-
-  .hero__head em {
-    position: relative;
-    display: inline-block;
-  }
-  .hero__lede {
-    margin-top: 18px;
-    max-width: 600px;
-    color: var(--ink-dim);
-  }
-  .hero__lede-line { display: block; }
-  .hero__lede-line + .hero__lede-line { margin-top: 0.75em; }
+  .hero__head { margin-top: var(--m-spacing-xl); }
 
   .hero__points {
-    list-style: none;
-    margin: 18px 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-width: 600px;
-  }
-  .hero__points li {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--navy);
-    display: flex;
-    align-items: center;
-    gap: 13px;
-  }
-  .hero__point-ic {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--pink-100);
-    color: var(--pink);
+    margin-top: var(--m-spacing-xl);
     display: grid;
-    place-items: center;
-    flex-shrink: 0;
+    gap: 12px; /* no token yet: proposed (Figma point rhythm) */
   }
-
-  .hero__actions {
+  .hero__point {
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 24px;
-  }
-
-  /* Inline button styles — kept local to the section because the button
-     primitive's styling doesn't yet support the pill + arrow pattern the
-     new design uses. */
-  .btn {
-    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 15px 28px;
-    border-radius: var(--r-pill);
-    border: 1.5px solid transparent;
-    transition: background var(--dur-base) var(--ease-out), color var(--dur-base), border-color var(--dur-base), transform var(--dur-base), box-shadow var(--dur-base);
-    white-space: nowrap;
+    gap: 12px; /* no token yet: proposed */
   }
-  .btn--primary {
-    background: var(--navy);
-    color: var(--navy-on);
-    box-shadow: var(--shadow-md);
-  }
-  .btn svg { transition: transform var(--dur-base) var(--ease-out); }
-  .btn--primary:hover {
-    background: var(--navy-800);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  .btn--primary:hover svg { transform: translateX(3px); }
-  .btn--ghost {
-    background: var(--card);
-    color: var(--navy);
-    box-shadow: var(--shadow-sm);
-  }
-  .btn--ghost:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+  /* Assurance tick: 24px solid ink box, 4px corner, surface check. Never
+     status green, never pink. */
+  .tick {
+    flex-shrink: 0;
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px; /* no token yet: proposed (Web/Tick) */
+    background: var(--m-ink);
+    color: var(--m-surface);
   }
 
-  .hero__photo {
-    position: relative;
-    min-height: 280px;
-    background-size: cover;
-    background-position: center;
-    animation: hero-photo-in 1.4s var(--ease-out) both,
-               hero-photo-settle 7s var(--ease-out) both;
-  }
-  @keyframes hero-photo-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  /* Slow ken-burns settle. The section's overflow:hidden clips the
-     temporary over-scale. */
-  @keyframes hero-photo-settle {
-    from { transform: scale(1.06); }
-    to   { transform: scale(1); }
-  }
-  .hero__photo::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, var(--cream) 0%, color-mix(in srgb, var(--cream) 30%, transparent) 30%, transparent 58%);
-  }
-
-  @media (min-width: 760px) {
-    .hero { min-height: 92vh; display: flex; align-items: stretch; }
-    .hero__grid { grid-template-columns: 1.05fr 0.95fr; }
-    .hero__photo { min-height: auto; }
-  }
+  .hero__cta { margin-top: var(--m-spacing-xl); }
 </style>

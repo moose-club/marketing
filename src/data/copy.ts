@@ -1,324 +1,198 @@
 // Source of truth for marketing copy. All on-page text lives here — never
 // inline copy in section components (per CLAUDE.md). Copy is verbatim from
-// the 2026 redesign brief.
+// the Lane Lines frames (Figma a5SmvlBwlHP6sf0FAZfLpP, "Home · / — working")
+// and the decisions logged in .impeccable/surfaces/src-pages-index-astro.md.
+//
+// `/` carries two floors behind the audience switch: the studio floor (the
+// default) and the member floor. Exports are grouped the same way.
+
+// Outbound destinations, shared with /claim.
+export const LINKS = {
+  studioPortal: "https://studio.trainmoose.com",
+  appStore: "https://apps.apple.com/au/app/moose-studio-crossover/id6780323407",
+} as const;
 
 export const NAV = {
-  links: [
+  // Each floor has its own link set; "Studio members" opens the member floor.
+  studioLinks: [
     { href: "#model", label: "The Moose model" },
     { href: "#value", label: "For studios" },
     { href: "#members", label: "Studio members" },
   ],
+  memberLinks: [
+    { href: "#member-how", label: "How it works" },
+    { href: "#member-get", label: "What you get" },
+    { href: "#member-app", label: "The app" },
+  ],
   // External — the studio portal lives on its own subdomain.
-  portal: { label: "Studio login", href: "https://studio.trainmoose.com" },
+  portal: { label: "Studio login", href: LINKS.studioPortal },
+} as const;
+
+// The audience switch, drawn above the hero lettering on both floors.
+export const SWITCH = {
+  label: "Who is this page for?",
+  studio: "I run a studio",
+  member: "I'm a member",
 } as const;
 
 export const HERO = {
-  eyebrow: "Studio operators",
-  // The headline reads "Elevate your memberships with variety." with
-  // `highlightWord` rendered in pink. One pink word per headline (SPEC §14).
-  head: "Elevate your memberships with",
-  highlightWord: "variety.",
+  head: "Elevate your memberships with variety.",
   subLines: [
     "Moose unlocks variety for fitness studios.",
-    "A single modality offering just isn't cutting it anymore. But building new modalities in-house is hard yakka. This is the magic of collaboration. Form reciprocal partnerships with complementary, non-competing studios nearby to mutually elevate each other's offering.",
+    "Form reciprocal partnerships with complementary, non-competing studios nearby.",
   ] as const,
   points: [
     "You choose your partners.",
     "Your members stay yours.",
     "Your studio stays specialised.",
     "Your memberships level up.",
+    "Class packs become memberships.",
   ] as const,
-  ctaPrimary: { label: "Get involved or hear more", href: "#register" },
-  ctaSecondary: { label: "See how it works", href: "#how" },
+  cta: { label: "Register your studio", href: LINKS.studioPortal },
   photo: {
     src: "/photos/hero-strength.webp",
     alt: "Member training with a kettlebell in warm, golden studio light",
   },
 } as const;
 
-// Marquee of modalities under the hero. Last item rendered in pink.
-export const MODALITIES = [
-  "Pilates Studios",
-  "Functional fitness Gyms",
-  "HIIT Studios",
-  "Cycle & Spin Studios",
-  "Strength & conditioning Studios",
-  "Yoga Studios",
-  "Martial arts & combat fitness",
-  "Barre Studios",
-  "Dance fitness Studios",
-  "CrossFit",
-  "& more",
-] as const;
-
 export const MODEL = {
-  eyebrow: "At a glance",
-  headHtml: "The <em>Moose</em> model.",
-  // No pink highlight in this headline — the eyebrow already carries the
-  // accent. Keeps to the 'one pink word per headline' rule.
+  head: "The Moose model.",
   lede: "Crossover between partner venues is intentionally limited: enough variety to enrich a membership, while keeping members anchored to you as their home studio.",
   stepsTitle: "How it works.",
+  // 01–02 sit on your lane, 03–04 on your partner's. `<strong>` ranges render
+  // as Semibold ink, not chips.
   steps: [
     {
       n: "01",
-      eyebrow: "Formation",
       title: "Identify partners and form partnerships",
-      body: [
+      bodyHtml:
         "You dictate who you partner with. Partnerships are seamlessly facilitated through Moose.",
-        "Run a single partnership, or stack several across complementary modalities to broaden member variety. Each partner elevating the other's offering.",
-      ] as const,
     },
     {
       n: "02",
-      eyebrow: "Offering",
       title: "Add a premium tier to your membership catalogue",
-      body: [
-        "Unlock a new, premium tier of membership with access to your partner venue or venues. More revenue, with no extra cost or operational lift required.",
-        'You sell it, you own it. Our only stipulation is that the upgrade fee is capped at <span class="step__hl">$11/wk (or $48/mo)</span> extra.',
-      ] as const,
+      bodyHtml:
+        "You sell it, you own it. Our only stipulation is that the upgrade fee is capped at <strong>$11/wk (or $48/mo)</strong> extra.",
     },
     {
       n: "03",
-      eyebrow: "Usage",
       title: "Rationed crossover",
-      body: [
-        'The upgrade entitles members to a notional <span class="step__hl">four crossover sessions per month</span> at partner venues (in aggregate, not per partner).',
-        "Capped by design, keeping members anchored to their home studio as their primary training destination.",
-        "And then you return the favour to their members.",
-      ] as const,
+      bodyHtml:
+        "The upgrade entitles members to a notional <strong>four crossover sessions per month</strong> at partner venues (in aggregate, not per partner).",
     },
     {
       n: "04",
-      eyebrow: "Balance",
       title: "A balanced exchange",
-      body: [
+      bodyHtml:
         "Our backend systems monitor crossover both ways, ensuring a balanced exchange between partners.",
-        "No partner is left disproportionately shouldering the load.",
-        "Moose handles the reciprocity.",
-      ] as const,
     },
   ] as const,
 } as const;
 
-export const NETWORK = {
-  eyebrow: "Partner network",
-  // Heading uses pink on a navy surface — single pink word, brand-compliant.
-  head: "On the loose.",
-  headLead: "Moose",
-  ledeLines: [
-    { strong: "120+", rest: " partner venues" },
-    { strong: "30+", rest: " unique brands" },
-  ] as const,
-  ledeSoft: "... and counting, across Australia",
-  // First 9 partners are visible by default. The rest reveal on "View all".
-  partners: [
-    { name: "Form Pilates", mod: "Pilates" },
-    { name: "Forge Strength Co.", mod: "Strength" },
-    { name: "Haus of Movement", mod: "Mobility" },
-    { name: "Tempo Ride", mod: "Cycle" },
-    { name: "Northside Boxing", mod: "Boxing" },
-    { name: "Stillwater Yoga", mod: "Yoga" },
-    { name: "Reform Lab", mod: "Reformer" },
-    { name: "Base Run Club", mod: "Running" },
-    { name: "Ember Hot Yoga", mod: "Hot Yoga" },
-    // ↓ extras, hidden until "View all" is pressed
-    { name: "Pulse Reformer", mod: "Reformer" },
-    { name: "Iron & Oak", mod: "Strength" },
-    { name: "Lotus Flow", mod: "Yoga" },
-    { name: "Cadence Cycle", mod: "Cycle" },
-    { name: "Glasshouse Pilates", mod: "Pilates" },
-    { name: "Westside Boxing", mod: "Boxing" },
-    { name: "Range Mobility", mod: "Mobility" },
-    { name: "Coastal Run Co.", mod: "Running" },
-    { name: "Summit Strength", mod: "Strength" },
-    { name: "Vault Athletic", mod: "Functional" },
-    { name: "Bend & Flow", mod: "Yoga" },
-    { name: "Ride House", mod: "Cycle" },
-    { name: "Knockout Club", mod: "Boxing" },
-    { name: "Studio Lagree", mod: "Pilates" },
-    { name: "Terra Movement", mod: "Mobility" },
-    { name: "Pace Run Co.", mod: "Running" },
-    { name: "Hot House Yoga", mod: "Hot Yoga" },
-    { name: "Apex HIIT", mod: "HIIT" },
-  ] as const,
-  visibleCount: 9,
-} as const;
-
 export const VALUE = {
-  eyebrow: "For the studios",
-  // Both emphases ("reason to join" / "reason to stay") are rendered in pink
-  // — a deliberate matched pair framing the join/stay value, per the operator's
-  // request.
-  headHtml:
-    "Variety gives new members a compelling <em>reason to join</em>, and existing members another <em>reason to stay</em>.",
+  head: "Variety: a reason to join, and a reason to stay.",
   prizeNote:
     "Moose adds a nice new revenue stream. But the real prize is a bigger, stickier membership base.",
-  // Each benefit card carries its own quantification box (stat + unit + cap).
-  // unit is optional — cards 4/5 use a word/percentage with no "p.a." suffix.
+  // Illustrative figures, AUD.
   benefits: [
     {
-      n: "01",
       title: "New revenue stream",
-      body: "A premium Moose tier that lifts yield per member — direct, incremental, recurring.",
       stat: "+$15k",
       unit: "p.a.",
       cap: "Additional studio profit (net of Moose fees) at 40 upgraders.",
     },
     {
-      n: "02",
       title: "Attract new members",
-      body: "Variety is a compelling reason for new members to choose you over competitors.",
       stat: "+$18k",
       unit: "p.a.",
       cap: "Attracting 5 new members per year (assuming $70/wk memberships).",
     },
     {
-      n: "03",
       title: "Reduce churn",
-      body: "Monotony drives churn; variety combats it. Average tenure goes up.",
       stat: "+$18k",
       unit: "p.a.",
       cap: "Preserving 5 members per year (assuming $70/wk memberships).",
     },
-    {
-      n: "04",
-      title: "Recurring memberships",
-      body: "Convert customers from casual class-pack buyers to recurring memberships.",
-      stat: "Stability",
-      unit: "",
-      cap: "Recurring memberships for better operational predictability.",
-    },
-    {
-      n: "05",
-      title: "Zero-friction adoption",
-      body: "No cost, no integration work. Embedded into your existing systems.",
-      stat: "100%",
-      unit: "",
-      cap: "New revenue flows straight to your bottom line.",
-    },
   ] as const,
 } as const;
 
-export const STORY = {
-  eyebrow: "On the ground",
-  head: "Featured partnership.",
-  case: {
-    titleLeft: "VRTUS",
-    titleRight: "Body by Berner",
-    location: "Bondi, NSW",
-    studios: [
-      {
-        name: "VRTUS",
-        mod: "Strength & conditioning",
-        photo: {
-          src: "/photos/hero-boxing.webp",
-          alt: "Kickboxing studio",
-          position: "46% center",
-        },
-        quote:
-          '"Our members live for the cardio and some lifting — but slotting in a Pilates session gives them a more well-rounded routine, and their bodies thank them for it."',
-        upgradedPct: "22%",
-        crossovers: 128,
-      },
-      {
-        name: "Body by Berner",
-        mod: "Reformer Pilates",
-        photo: {
-          src: "/photos/hero-pilates.webp",
-          alt: "Reformer Pilates studio",
-          position: "4% 34%",
-        },
-        quote:
-          '"Reformer stays their home and their focus — but having the flexibility to fold in some functional training now and then is a really nice bit of variety for them."',
-        upgradedPct: "31%",
-        crossovers: 143,
-      },
-    ] as const,
-    credits: [
-      "Because of the price difference between studios, a VRTUS → BBB visit counts as 1.14 credits, while a BBB → VRTUS visit counts as 0.88 credits — so the value evens out both ways.",
-      "Weighted by those values, that's ~146 credits sent from VRTUS and ~126 credits from BBB each month.",
-      "The compensatory fee mechanism settles that net difference — BBB hosted more net sessions on a weighted basis, so it receives a larger share of the pooled funds to compensate.",
-    ] as const,
-  },
-  voicesHead: "From some other studios who get it.",
-  voices: [
-    {
-      q: "I was sceptical about sharing members. Then I understood the caps — it's a quarter of their sessions, max. We've actually retained people we'd have lost to boredom.",
-      initials: "SR",
-      name: "Sarah Reid",
-      role: "Owner · Form Pilates, Fitzroy",
-    },
-    {
-      q: "The revenue is nice, but the real win is stickiness. Members who cross over churn far less. Setup was an afternoon and then it just runs.",
-      initials: "MT",
-      name: "Marcus Tran",
-      role: "Owner · Forge Strength Co., Collingwood",
-    },
-    {
-      q: "It only works because they pair you with complementary studios, not rivals. My members are still mine — they just get a little more variety in their week.",
-      initials: "PN",
-      name: "Priya Nair",
-      role: "Owner · Haus of Movement",
-    },
+export const NETWORK = {
+  head: "Moose on the loose.",
+  lede: "The studios already on Moose, across Australia — and counting.",
+  // Each name is set as a mark until the partner's approved SVG logo lands.
+  // TODO: add `logo` (single-ink SVG) per partner once approved.
+  partners: [
+    { name: "One Hot Yoga", href: "https://www.onehotyoga.com.au" },
+    { name: "Shape Shift", href: "https://shapeshift.fitness" },
+    { name: "Pando Society", href: "https://www.pandosociety.com" },
+    { name: "Essential Studio", href: "https://essentialsstudio.com.au" },
+    { name: "ACTV", href: "https://actvstrengthco.com" },
+    { name: "s30", href: "https://www.s30studio.com.au" },
+    { name: "REVL Prospect", href: "https://revltraining.com.au" },
+    { name: "@Pilates 24/7", href: "https://atpilates.studio/" },
   ] as const,
+  // On the compact floor the roster caps here and the rest reveal in place.
+  compactVisible: 12,
+  more: (n: number) => `${n} more`,
+  showAll: "See all",
+  showLess: "See less",
 } as const;
 
-export const MEMBERS = {
-  eyebrow: "For studio members",
-  // Headline keeps pink on the ellipsis only — the strong word ("variety")
-  // is ink-coloured to keep within one accent per headline.
-  headHtml: "Finally, some (affordable) <em>variety</em>…",
-  ledeLines: [
-    "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
-  ] as const,
-  commercials: [
-    {
-      k: "What you get",
-      body:
-        "A notional four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
-    },
-    {
-      k: "What you pay",
-      body:
-        "Your home studio sets the upgrade fee for the premium tier. This is capped by Moose at a maximum of $11/wk (or $48/mo).",
-    },
-  ] as const,
-  noteHtml:
-    'Your studio not on Moose yet? <a href="#register" data-register="member">Let\'s help get them across →</a>',
-  calloutLines: [
-    "Members still book their home studio classes the way they always have.",
-  ] as const,
-} as const;
-
-// All forms POST to mailto: per CLAUDE.md decision — placeholders until
-// a real CRM/Typeform endpoint is wired.
+// The studio floor's close — the navy floor. Registering happens in the
+// studio portal, so there is no form on this site.
 export const REGISTER = {
-  eyebrow: "Reach out",
-  head: "Get in touch with the Moose.",
-  prompt: "Who are you?",
-  tabs: [
-    { id: "studio", label: "I run a studio" },
-    { id: "member", label: "I'm a member" },
-  ] as const,
-  studioForm: {
-    title: "Get involved or hear more.",
-    sub: "Leave your details and we'll reach out to fill in the gaps.",
-    mailto:
-      "mailto:partnerships@trainmoose.com?subject=Studio%20enquiry%20from%20the%20Moose%20site",
+  head: "Get your studio on Moose.",
+  lede: "No cost, no integration work. You choose your partners.",
+  cta: { label: "Register your studio", href: LINKS.studioPortal },
+  detail: "Opens the studio portal at studio.trainmoose.com.",
+} as const;
+
+// The member floor, addressed to the member in the second person.
+export const MEMBERS = {
+  hero: {
+    head: "Finally, some (affordable) variety.",
+    lede: "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
+    cta: { label: "Get the Moose app", href: LINKS.appStore },
   },
-  memberForm: {
-    title: "Find out more or get your studio on Moose",
-    sub: "Leave your details and we'll take it from there.",
-    mailto:
-      "mailto:memberships@trainmoose.com?subject=Member%20enquiry%20from%20the%20Moose%20site",
+  how: {
+    head: "How it works for you.",
+    lede: "Your studio stays your primary training destination, with a dash of variety at partner venues for a more well-rounded routine.",
+    steps: [
+      { n: "01", body: "Your studio partners with complementary, non-competing studios nearby." },
+      {
+        n: "02",
+        body: "You upgrade your membership through your home studio for access to partner venues. Moose caps the upgrade fee at $11/wk.",
+      },
+      {
+        n: "03",
+        body: "You receive a notional four credits each month to book sessions across the partner venues — in total, not per partner.",
+      },
+    ] as const,
   },
-  successStudio: {
-    title: "Thanks — message received.",
-    body: "We'll be in touch to chat with you about Moose.",
+  commercials: {
+    head: "What you get, what you pay.",
+    lede: "A little more variety, made affordable through local studio collaboration.",
+    rows: [
+      {
+        k: "What you get",
+        body: "A notional four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
+      },
+      {
+        k: "What you pay",
+        body: "Your home studio sets the upgrade fee for the premium tier. This is capped by Moose at a maximum of $11/wk (or $48/mo).",
+      },
+    ] as const,
   },
-  successMember: {
-    title: "Thanks — message received.",
-    body: "We'll be in touch to help you or your home studio with Moose.",
+  app: {
+    // As given by Max: no trailing period (the Painted Line Rule wants one).
+    head: "Book and manage crossover sessions at partner venues",
+    lede: "Your Moose profile automatically links to your membership in your home studio’s system.",
+  },
+  close: {
+    head: "Get the Moose app.",
+    lede: "Free on the App Store. Download the app to activate your account.",
+    cta: { label: "Download on the App Store", href: LINKS.appStore },
+    detail: "Opens the App Store listing for Moose. iPhone only for now.",
   },
 } as const;
 
@@ -336,7 +210,7 @@ export const FOOTER = {
       title: "More",
       items: [
         { l: "For studio members", h: "#members" },
-        { l: "Get involved or hear more", h: "#register" },
+        { l: "Register your studio", h: LINKS.studioPortal, external: true },
       ],
     },
     {
@@ -355,4 +229,6 @@ export const FOOTER = {
     { l: "Privacy", h: "/privacy" },
     { l: "Terms & Conditions", h: "/terms" },
   ] as const,
+  register: { l: "Register your studio", h: LINKS.studioPortal },
+  backToTop: "Back to top",
 } as const;

@@ -1,0 +1,60 @@
+---
+import { SWITCH } from '../../data/copy';
+
+// The audience switch: a set of two plates above the hero lettering. Chosen
+// is a solid ink fill with a Surface/bg label; the other a 2px ink edge. No
+// chevron — a switch does not go forward. Behaviour lives in index.astro.
+interface Props {
+  current: 'studio' | 'member';
+}
+
+const { current } = Astro.props;
+const options = [
+  { id: 'studio', label: SWITCH.studio },
+  { id: 'member', label: SWITCH.member },
+] as const;
+---
+
+<div class="switch" role="group" aria-label={SWITCH.label}>
+  {options.map((o) => (
+    <button
+      type="button"
+      class="switch__plate"
+      data-audience-set={o.id}
+      aria-pressed={String(o.id === current)}
+    >
+      {o.label}
+    </button>
+  ))}
+</div>
+
+<style>
+  .switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m-spacing-sm);
+  }
+  .switch__plate {
+    min-height: 56px;
+    padding-inline: var(--m-spacing-md);
+    border: 2px solid var(--m-ink);
+    border-radius: var(--m-radius-md);
+    color: var(--m-ink);
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    letter-spacing: var(--ll-tracking);
+    white-space: nowrap;
+    transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .switch__plate:hover { background: var(--m-ink-wash); }
+  .switch__plate:active { transform: scale(0.98); }
+  .switch__plate[aria-pressed='true'] {
+    background: var(--m-ink);
+    color: var(--m-bg);
+    cursor: default;
+  }
+  @media (min-width: 1048px) {
+    .switch__plate { padding-inline: var(--m-spacing-lg); }
+  }
+</style>

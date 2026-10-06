@@ -1,32 +1,109 @@
 ---
 import Base from '../layouts/Base.astro';
+import { MEMBERS, REGISTER } from '../data/copy';
 
-import MSNav      from '../components/sections/MSNav.astro';
-import MSHero     from '../components/sections/MSHero.astro';
-import MSTicker   from '../components/sections/MSTicker.astro';
-import MSModel    from '../components/sections/MSModel.astro';
-// Hidden until we have enough content:
-// import MSNetwork  from '../components/sections/MSNetwork.astro';
-// import MSStory    from '../components/sections/MSStory.astro';
-import MSValue    from '../components/sections/MSValue.astro';
-import MSMembers  from '../components/sections/MSMembers.astro';
-import MSRegister from '../components/sections/MSRegister.astro';
-import MSFooter   from '../components/sections/MSFooter.astro';
+import LiveLine      from '../components/primitives/LiveLine.astro';
+import MSNav         from '../components/sections/MSNav.astro';
+import MSHero        from '../components/sections/MSHero.astro';
+import MSModel       from '../components/sections/MSModel.astro';
+import MSValue       from '../components/sections/MSValue.astro';
+import MSNetwork     from '../components/sections/MSNetwork.astro';
+import MSMemberHero  from '../components/sections/MSMemberHero.astro';
+import MSMembers     from '../components/sections/MSMembers.astro';
+import MSClose       from '../components/sections/MSClose.astro';
+import MSFooter      from '../components/sections/MSFooter.astro';
+
+// `/` carries two floors behind the audience switch — "I run a studio" (the
+// default) and "I'm a member". Both render; one is hidden by
+// `html[data-audience]`, which is set before first paint from the URL hash so
+// a link to a member anchor (`#members`, `#member-how`, …) opens that floor.
 ---
 
 <Base
   title="Moose - Elevate your memberships with variety."
-  description="Moose let's boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade. Members stay anchored to you. You gain a new recurring revenue stream and a stickier membership base."
+  description="Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade. Members stay anchored to you. You gain a new recurring revenue stream and a stickier membership base."
   preloadImage="/photos/hero-strength.webp"
 >
+  <script is:inline>
+    if (/^#member/.test(location.hash)) document.documentElement.dataset.audience = 'member';
+  </script>
+
   <MSNav />
   <main id="main">
-    <MSHero />
-    <MSTicker />
-    <MSModel />
-    <MSValue />
-    <MSMembers />
-    <MSRegister />
+    <div class="floor" data-floor="studio">
+      <LiveLine />
+      <MSHero />
+      <MSModel />
+      <MSValue />
+      <MSNetwork />
+      <MSClose id="register" {...REGISTER} />
+    </div>
+
+    <div class="floor" data-floor="member">
+      <LiveLine />
+      <MSMemberHero />
+      <MSMembers />
+      <MSClose id="member-close" {...MEMBERS.close} />
+    </div>
   </main>
   <MSFooter />
 </Base>
+
+<script>
+  type Audience = 'studio' | 'member';
+  const root = document.documentElement;
+
+  const current = (): Audience => (root.dataset.audience === 'member' ? 'member' : 'studio');
+
+  function setAudience(next: Audience) {
+    if (next === current()) return;
+    root.dataset.audience = next;
+    document.querySelectorAll<HTMLButtonElement>('[data-audience-set]').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.audienceSet === next));
+    });
+    document.dispatchEvent(new CustomEvent('audiencechange', { detail: next }));
+  }
+
+  // Sync the server-rendered aria-pressed with a floor chosen by the hash.
+  document.querySelectorAll<HTMLButtonElement>('[data-audience-set]').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.audienceSet === current()));
+  });
+
+  // The switch: swap floors in place, keep the URL shareable, and hand focus
+  // to the same switch on the floor that is now showing.
+  document.addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-audience-set]');
+    if (!button) return;
+    const next = button.dataset.audienceSet as Audience;
+    setAudience(next);
+    history.replaceState(null, '', next === 'member' ? '#members' : location.pathname + location.search);
+    document
+      .querySelector<HTMLButtonElement>(`[data-floor="${next}"] [data-audience-set="${next}"]`)
+      ?.focus({ preventScroll: true });
+  });
+
+  // In-page links into the other floor ("Studio members", the footer's "For
+  // studio members"): show that floor first, so the browser's own fragment
+  // scroll finds a rendered target.
+  function floorFor(hash: string): Audience | null {
+    if (!hash || hash === '#' || hash === '#top') return null;
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    const floor = target?.closest<HTMLElement>('[data-floor]')?.dataset.floor;
+    return floor === 'member' || floor === 'studio' ? floor : null;
+  }
+
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+      const floor = link && floorFor(link.getAttribute('href') ?? '');
+      if (floor) setAudience(floor);
+    },
+    true,
+  );
+
+  window.addEventListener('hashchange', () => {
+    const floor = floorFor(location.hash);
+    if (floor) setAudience(floor);
+  });
+</script>

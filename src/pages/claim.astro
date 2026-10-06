@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { LINKS } from '../data/copy';
 
 /*
  * Member claim landing — the web fallback for the ChottuLink deep link emailed
@@ -20,9 +21,9 @@ import Base from '../layouts/Base.astro';
  * pages (404, liability-waiver, privacy) — copy.ts is for the marketing page.
  */
 
-// TODO(launch): replace with the real App Store id once the listing is live.
-// Bundle id is com.trainmoose.moose, Apple Team ID 333876Z7UM.
-const APP_STORE_URL = 'https://apps.apple.com/app/moose/id000000000';
+// Bundle id is com.trainmoose.moose, Apple Team ID 333876Z7UM. Shared with
+// the member floor's App Store plates on `/`.
+const APP_STORE_URL = LINKS.appStore;
 
 const steps = [
   {
