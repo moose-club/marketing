@@ -150,7 +150,7 @@ export const REGISTER = {
 // The member floor, addressed to the member in the second person.
 export const MEMBERS = {
   hero: {
-    head: "Finally, some (affordable) variety.",
+    head: "Finally, some variety.",
     lede: "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
     cta: { label: "Get the Moose app", href: LINKS.appStore },
   },
