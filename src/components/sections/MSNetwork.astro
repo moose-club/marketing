@@ -2,14 +2,14 @@
 import { NETWORK } from '../../data/copy';
 
 // Station · Partner network — the studios already on Moose. Lettering, then
-// the roster: every studio on the floor, its name set as a mark (single ink,
-// no chip) until its approved SVG lands. Regular floor: four columns, two on
-// your lane and two on your partner's, the line running in the gutter between
-// them. Compact floor: one column, capped at `compactVisible` with the rest
-// revealing in place.
+// the roster: every studio on the floor, its logo beside its name. Logos are
+// single-ink masks filled with --m-ink, so every brand reads in navy; a fixed
+// logo box keeps the names aligned (an empty box where no logo has landed yet,
+// see NETWORK.partners). Regular floor: the lettering on your lane, the whole
+// roster on your partner's (two columns from 1280), the line running in the gutter
+// between them. Compact floor: one column under the lettering, capped at
+// `compactVisible` with the rest revealing in place.
 const partners = NETWORK.partners;
-const half = Math.ceil(partners.length / 2);
-const lanes = [partners.slice(0, half), partners.slice(half)];
 const extra = Math.max(0, partners.length - NETWORK.compactVisible);
 ---
 
@@ -19,22 +19,17 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
     <p class="lead">{NETWORK.lede}</p>
   </div>
 
-  {lanes.map((group, li) => (
-    <ul
-      class:list={['roster', li === 1 && 'lane--partner']}
-      id={li === 0 ? 'roster' : 'roster-partner'}
-      style={`--rows: ${Math.ceil(group.length / 2)}`}
-    >
-      {group.map((p, i) => {
-        const index = li * half + i;
-        return (
-          <li class="roster__mark" data-extra={index >= NETWORK.compactVisible ? '' : undefined}>
-            <a class="plate-label roster__name" href={p.href} target="_blank" rel="noopener">{p.name}</a>
-          </li>
-        );
-      })}
-    </ul>
-  ))}
+  <ul class="roster lane--partner" id="roster" style={`--rows: ${Math.ceil(partners.length / 2)}`}>
+    {partners.map((p, index) => {
+      const logo = 'logo' in p ? p.logo : undefined;
+      return (
+        <li class="roster__mark" data-extra={index >= NETWORK.compactVisible ? '' : undefined}>
+          <span class="roster__logo" aria-hidden="true" style={logo ? `--logo: url(${logo})` : undefined}></span>
+          <a class="plate-label roster__name" href={p.href} target="_blank" rel="noopener">{p.name}</a>
+        </li>
+      );
+    })}
+  </ul>
 
   {extra > 0 && (
     <p class="roster__more">
@@ -43,7 +38,7 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
         type="button"
         class="plate plate--outline plate--station"
         aria-expanded="false"
-        aria-controls="roster roster-partner"
+        aria-controls="roster"
         data-roster-toggle
         data-show={NETWORK.showAll}
         data-hide={NETWORK.showLess}
@@ -69,18 +64,28 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
 
 <style>
 
-  /* Rhythm 12 compact, 14 regular (Figma bands of 28). */
+  /* Rhythm 16 compact, 24 regular. */
   .roster {
     display: grid;
-    gap: 12px; /* no token yet: proposed */
+    gap: var(--m-spacing-md);
   }
-  .network > .roster:first-of-type { margin-top: var(--m-spacing-md); }
-  .network > .roster + .roster { margin-top: calc(12px - var(--m-spacing-xl)); }
+  .network > .roster { margin-top: var(--m-spacing-md); }
 
   .roster__mark {
-    min-height: 28px;
+    min-height: 40px; /* no token yet: proposed */
     display: flex;
     align-items: center;
+    gap: var(--m-spacing-md);
+  }
+  .roster__logo {
+    flex: none;
+    width: 80px; /* no token yet: proposed */
+    height: 40px; /* no token yet: proposed */
+  }
+  .roster__logo[style] {
+    background-color: var(--m-ink);
+    -webkit-mask: var(--logo) left center / contain no-repeat;
+    mask: var(--logo) left center / contain no-repeat;
   }
   .roster__name {
     text-decoration: underline;
@@ -104,15 +109,23 @@ const extra = Math.max(0, partners.length - NETWORK.compactVisible);
   }
 
   @media (min-width: 1048px) {
+    /* Lettering left, roster right, level with each other; the line runs
+       down the gutter between them. */
     .network > .roster {
-      grid-row: 2;
+      grid-row: 1;
+      align-self: center;
+      row-gap: var(--m-spacing-lg);
+      margin-top: 0;
+    }
+    .roster__more { display: none; }
+  }
+  /* Two columns once the partner lane is wide enough that no name wraps. */
+  @media (min-width: 1280px) {
+    .network > .roster {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-auto-flow: column;
       grid-template-rows: repeat(var(--rows), auto);
-      column-gap: var(--m-spacing-xl);
-      row-gap: 14px; /* no token yet: proposed */
-      margin-top: var(--m-spacing-xxl) !important;
+      column-gap: var(--m-spacing-lg);
     }
-    .roster__more { display: none; }
   }
 </style>

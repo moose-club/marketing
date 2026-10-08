@@ -332,9 +332,11 @@ plates: non-actions never get plates. Value figures are open too: the figure and
 unit on one baseline, a plate-label title and a detail caption.
 
 ### Partner roster
-Every partner on the floor at once, its name set as a mark in plate-label `ink` until an
-approved single-ink SVG replaces it in the same band. Regular: four columns, two per
-lane, the line running in the gutter between them. Compact: one column, capped, with a
+Every partner on the floor at once: its logo, then its name in plate-label `ink`. Logos
+are single-ink masks (shape only) filled with `ink`, in a fixed 80×40 box (provisional) so
+the names align; a partner with no logo yet keeps the empty box. Regular: the lettering
+on your lane, the roster level with it on the partner's lane (one column, two from
+1280), the line running in the gutter between them. Compact: one column, capped, with a
 detail count and a station plate revealing the rest in place. No chip, box or card
 around a mark.
 

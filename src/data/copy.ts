@@ -36,7 +36,7 @@ export const SWITCH = {
 } as const;
 
 export const HERO = {
-  head: "Elevate your memberships with variety.",
+  head: "Level up your memberships.",
   subLines: [
     "Moose unlocks variety for fitness studios.",
     "Form reciprocal partnerships with complementary, non-competing studios nearby.",
@@ -46,7 +46,6 @@ export const HERO = {
     "Your members stay yours.",
     "Your studio stays specialised.",
     "Your memberships level up.",
-    "Class packs become memberships.",
   ] as const,
   cta: { label: "Register your studio", href: LINKS.studioPortal },
   photo: {
@@ -117,19 +116,20 @@ export const VALUE = {
 } as const;
 
 export const NETWORK = {
-  head: "Moose on the loose.",
-  lede: "The studios already on Moose, across Australia — and counting.",
-  // Each name is set as a mark until the partner's approved SVG logo lands.
-  // TODO: add `logo` (single-ink SVG) per partner once approved.
+  head: "The studios already on Moose.",
+  lede: "Across Australia — and counting.",
+  // Each partner's logo sits beside its name as a single-ink mask (only its
+  // shape is kept; the ink comes from CSS). Files live in public/partners/;
+  // a partner without one keeps an empty logo box until it lands.
   partners: [
-    { name: "One Hot Yoga", href: "https://www.onehotyoga.com.au" },
-    { name: "Shape Shift", href: "https://shapeshift.fitness" },
-    { name: "Pando Society", href: "https://www.pandosociety.com" },
-    { name: "Essential Studio", href: "https://essentialsstudio.com.au" },
-    { name: "ACTV", href: "https://actvstrengthco.com" },
-    { name: "s30", href: "https://www.s30studio.com.au" },
-    { name: "REVL Prospect", href: "https://revltraining.com.au" },
-    { name: "@Pilates 24/7", href: "https://atpilates.studio/" },
+    { name: "One Hot Yoga", href: "https://www.onehotyoga.com.au", logo: "/partners/one-hot-yoga.png" },
+    { name: "Shape Shift", href: "https://shapeshift.fitness", logo: "/partners/shape-shift.png" },
+    { name: "Pando Society", href: "https://www.pandosociety.com", logo: "/partners/pando-society.png" },
+    { name: "Essential Studio", href: "https://essentialsstudio.com.au", logo: "/partners/essential-studio.png" },
+    { name: "ACTV", href: "https://actvstrengthco.com", logo: "/partners/actv.png" },
+    { name: "s30", href: "https://www.s30studio.com.au", logo: "/partners/s30.png" },
+    { name: "REVL Prospect", href: "https://revltraining.com.au", logo: "/partners/revl.svg" },
+    { name: "@Pilates 24/7", href: "https://atpilates.studio/", logo: "/partners/at-pilates.png" },
   ] as const,
   // On the compact floor the roster caps here and the rest reveal in place.
   compactVisible: 12,
