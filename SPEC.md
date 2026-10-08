@@ -109,7 +109,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 
 ### 6.2 `MSHero.astro` — cream split layout
 
-- Left column: eyebrow "Studio operators", h1 "Elevate your memberships with **variety.**" (single pink word), 2-paragraph lede, 3 ticked support points, two CTAs (navy primary "Get involved or hear more", white-ghost "See how it works").
+- Left column: eyebrow "Studio operators", h1 "Level up your memberships.", 2-paragraph lede, 3 ticked support points, two CTAs (navy primary "Get involved or hear more", white-ghost "See how it works").
 - Right column: full-bleed photo (hero-strength.png — kettlebell training) with a soft cream gradient mask blending into the left.
 - Mobile (<760px): single column, photo below the copy.
 
@@ -129,13 +129,12 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
   4. **Balance** — A balanced exchange
 - Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 2–3 paragraphs.
 
-### 6.5 `MSNetwork.astro` — partner logo grid on navy
+### 6.5 `MSNetwork.astro` — partner roster
 
-- `.section--navy`. Eyebrow "Partner network", h2 "**Moose** on the loose." (Moose in pink, single accent word).
-- Lede: "120+ partner venues / 30+ unique brands … and counting".
-- Logo grid: 9 visible white chips by default; **View all** pill reveals an additional 18 (hidden via `[hidden]` attribute, toggled by vanilla JS).
-- Each chip shows a dashed `[Logo]` placeholder (TODO: real partner logos) + studio name + modality.
-- Grid: 2 → 3 → 4 → 5 columns across breakpoints.
+- h2 "The studios already on Moose.", lede "Across Australia — and counting." Each roster row is the partner's logo (single-ink mask in `--m-ink`, from `public/partners/`) beside its name.
+- All 8 partners come from `NETWORK.partners` in `copy.ts`; each name links out to the studio's site. No chip, box or card around a row.
+- Regular floor: lettering on your lane, the roster level with it on the partner's lane; one column from 1048px, two from 1280px, the live line running in the gutter between the lanes.
+- Compact floor: one column under the lettering, capped at `NETWORK.compactVisible` with a count and a **See all** station plate revealing the rest in place (currently dormant: 8 partners < the cap of 12).
 
 ### 6.6 `MSValue.astro` — "For the studios" benefit cards + quantification
 
@@ -244,7 +243,7 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 
 **Required:**
 
-- `<title>`: "Moose - Elevate your memberships with variety."
+- `<title>`: "Moose - Level up your memberships."
 - `<meta name="description">`: see `src/pages/index.astro`.
 - Open Graph + Twitter card meta. OG image: `public/og.png` (regenerate when brand assets change).
 - `<link rel="canonical">`
@@ -363,8 +362,8 @@ The site is "good" when all of these are true:
 
 1. **Photo optimisation** — `public/photos/hero-pilates.png` is 2.8MB. Compress before production push (target < 200KB at delivered resolution).
 2. **Form destination** — both forms in `MSRegister.astro` `action="mailto:partnerships@trainmoose.com"` / `…@trainmoose.com`. Replace with a real Typeform / CRM endpoint.
-3. **Partner counts** — `NETWORK.ledeLines` claims "120+ partner venues / 30+ unique brands". Confirm.
+3. **Partner counts** — resolved: the lede no longer claims counts ("Across Australia — and counting").
 4. **Featured case study** (VRTUS × Body by Berner, Bondi) — confirm partnership and metrics are accurate to publish.
-5. **Real partner logos** — currently dashed `[Logo]` placeholders. Replace with SVG logos.
+5. **Real partner logos** — done: all eight partners have one.
 6. **Contact inboxes** — `partnerships@trainmoose.com`, `memberships@trainmoose.com`, `@trainmoose` IG handle. Confirm all exist.
 7. **Legal pages** — no privacy / terms / partner agreement pages exist. ABN / registered address absent from footer.

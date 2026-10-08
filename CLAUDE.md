@@ -98,7 +98,7 @@ These are violations Claude will be tempted to make. Keep them top of mind:
 
 These don't block development but need a human answer before launch:
 
-1. **Real partner logos** — `MSNetwork.astro` sets each partner's name as its mark. Add single-ink SVGs to `NETWORK.partners` when partners approve them.
+1. **Partner logos** — every partner has a logo beside their name (`public/partners/`, rendered as a single-ink mask in `--m-ink`). For a new partner, add the file and a `logo` path in `NETWORK.partners`.
 2. **Legal gaps** — privacy and terms pages exist and the footer links them, but there's no partner agreement page; ABN / registered address also absent.
 3. **Instagram handle / contact emails** — `partnerships@trainmoose.com`, `memberships@trainmoose.com`, `@trainmoose` are in `NAV` / `FOOTER`. Confirm these inboxes exist.
 
