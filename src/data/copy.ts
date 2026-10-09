@@ -122,13 +122,13 @@ export const NETWORK = {
   // shape is kept; the ink comes from CSS). Files live in public/partners/;
   // a partner without one keeps an empty logo box until it lands.
   partners: [
-    { name: "One Hot Yoga", href: "https://www.onehotyoga.com.au", logo: "/partners/one-hot-yoga.png" },
-    { name: "Shape Shift", href: "https://shapeshift.fitness", logo: "/partners/shape-shift.png" },
+    { name: "One Hot Yoga & Pilates", href: "https://www.onehotyoga.com.au", logo: "/partners/one-hot-yoga.png" },
+    { name: "ShapeShift", href: "https://shapeshift.fitness", logo: "/partners/shape-shift.png" },
     { name: "Pando Society", href: "https://www.pandosociety.com", logo: "/partners/pando-society.png" },
-    { name: "Essential Studio", href: "https://essentialsstudio.com.au", logo: "/partners/essential-studio.png" },
-    { name: "ACTV", href: "https://actvstrengthco.com", logo: "/partners/actv.png" },
-    { name: "s30", href: "https://www.s30studio.com.au", logo: "/partners/s30.png" },
-    { name: "REVL Prospect", href: "https://revltraining.com.au", logo: "/partners/revl.svg" },
+    { name: "Essentials Studio Pilates", href: "https://essentialsstudio.com.au", logo: "/partners/essential-studio.png" },
+    { name: "ACTV Strength Co.", href: "https://actvstrengthco.com", logo: "/partners/actv.png" },
+    { name: "S30", href: "https://www.s30studio.com.au", logo: "/partners/s30.png" },
+    { name: "REVL", href: "https://revltraining.com.au", logo: "/partners/revl.svg" },
     { name: "@Pilates 24/7", href: "https://atpilates.studio/", logo: "/partners/at-pilates.png" },
   ] as const,
   // On the compact floor the roster caps here and the rest reveal in place.
