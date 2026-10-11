@@ -243,14 +243,20 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 
 **Required:**
 
-- `<title>`: "Moose - Level up your memberships."
-- `<meta name="description">`: see `src/pages/index.astro`.
+- `<title>` and `<meta name="description">`: `SITE` in `src/data/copy.ts`.
 - Open Graph + Twitter card meta. OG image: `public/og.png` (regenerate when brand assets change).
 - `<link rel="canonical">`
-- JSON-LD `Organization` schema with name, url, logo, sameAs links (placeholder).
-- All photos referenced via `background-image: url('/photos/…')`. **TODO:** optimise — `hero-pilates.png` is 2.8MB and dominates page weight.
-- No remote fonts (system stack).
+- Photos are compressed `.webp` under `public/photos/`, served as `<img>`; the hero is preloaded.
+- Poppins from Google Fonts (RULES 12).
 - No third-party scripts in v1. (Add Plausible later via a single `<script defer data-domain>` line if desired.)
+
+**Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
+
+- JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade capped at $11/wk, 4 sessions/month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
+- `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`.
+- `robots.txt` names the AI crawlers explicitly as allowed. The host must not block them at the edge (Cloudflare blocks AI bots by default on new zones).
+- The site is registered with Google Search Console and Bing Webmaster Tools (ChatGPT search draws on Bing).
+- Off-site, the same one-line description of Moose is used on the App Store listing, LinkedIn, Google Business Profile and partner sites.
 
 ---
 

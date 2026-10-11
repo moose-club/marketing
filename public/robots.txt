@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Answer engines and AI assistants are welcome — named so the intent is explicit.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://www.trainmoose.com/sitemap-index.xml
