@@ -12,6 +12,23 @@ export const LINKS = {
   appStore: "https://apps.apple.com/au/app/moose-studio-crossover/id6780323407",
 } as const;
 
+// What Moose is, in one breath — the homepage title and meta description, and
+// the company description in the JSON-LD and /llms.txt. Answer engines quote
+// this, so keep it plain and in step with the model below.
+export const SITE = {
+  title: "Moose - Level up your memberships.",
+  description:
+    "Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade. Members stay anchored to you. You gain a new recurring revenue stream and a stickier membership base.",
+  // The third-person line: the company description in structured data.
+  entity:
+    "Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade.",
+  legalName: "Blubby Pty Ltd",
+  alternateNames: ["Moose Club", "Train Moose"],
+  abn: "11 690 645 106",
+  foundingYear: "2026",
+  linkedin: "https://www.linkedin.com/company/trainmoose/",
+} as const;
+
 export const NAV = {
   // Each floor has its own link set; "Studio members" opens the member floor.
   studioLinks: [

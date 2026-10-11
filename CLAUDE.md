@@ -52,7 +52,7 @@ Footer (navy, continues the close)
 
 Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. Each floor owns a `LiveLine`: the one pink element, measured from the DOM (`data-line-cross` marks the station it crosses above, `data-line-end` the plate it ends in) and drawn with scroll.
 
-`src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD Organization schema, and the skip-link. Page-level metadata flows in as props.
+`src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD and the skip-link. Page-level metadata flows in as props; a page adds JSON-LD nodes through `jsonLd`. The structured data (`src/data/schema.ts`) and `/llms.txt` (`src/pages/llms.txt.ts`) are both built from `copy.ts`, so a copy edit updates what answer engines read too (SPEC §9).
 
 ### Primitives (`src/components/primitives/`)
 
@@ -62,7 +62,8 @@ Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, �
 
 ### Content & data (`src/data/`)
 
-- `copy.ts` — single source of truth for all on-page text and section data, grouped by floor, plus `LINKS` (studio portal, App Store — shared with `/claim`). **Copy edits go in this file** — never inline in sections. Wording is Max's: take it from the frames verbatim.
+- `copy.ts` — single source of truth for all on-page text and section data, grouped by floor, plus `SITE` (title, description, the company line) and `LINKS` (studio portal, App Store — shared with `/claim`). **Copy edits go in this file** — never inline in sections. Wording is Max's: take it from the frames verbatim.
+- `schema.ts` — the JSON-LD graph: site-wide nodes and the homepage-only ones.
 
 ### Styling
 
