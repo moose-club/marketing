@@ -24,6 +24,9 @@ export const SITE = {
     "Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade.",
   legalName: "Blubby Pty Ltd",
   alternateNames: ["Moose Club", "Train Moose"],
+  abn: "11 690 645 106",
+  foundingYear: "2026",
+  linkedin: "https://www.linkedin.com/company/trainmoose/",
 } as const;
 
 export const NAV = {

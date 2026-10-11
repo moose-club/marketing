@@ -25,6 +25,9 @@ export const siteNodes: Node[] = [
     name: 'Moose',
     alternateName: SITE.alternateNames,
     legalName: SITE.legalName,
+    taxID: SITE.abn,
+    identifier: { '@type': 'PropertyValue', propertyID: 'ABN', value: SITE.abn },
+    foundingDate: SITE.foundingYear,
     url: SITE_URL,
     logo: `${SITE_URL}/brand/logo/moose-wordmark-twotone.svg`,
     description: SITE.entity,
@@ -35,7 +38,7 @@ export const siteNodes: Node[] = [
       contactType: email.startsWith('partnerships') ? 'partnerships' : 'customer support',
       areaServed: 'AU',
     })),
-    sameAs: [FOOTER.instagram.href],
+    sameAs: [FOOTER.instagram.href, SITE.linkedin],
   },
   {
     '@type': 'WebSite',

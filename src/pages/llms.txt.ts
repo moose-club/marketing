@@ -15,7 +15,7 @@ const body = `# Moose
 
 > ${SITE.entity}
 
-Moose operates in Australia. Operated by ${SITE.legalName} (trading as ${SITE.alternateNames[0]}).
+Moose operates in Australia. Founded ${SITE.foundingYear}. Operated by ${SITE.legalName} (trading as ${SITE.alternateNames[0]}), ABN ${SITE.abn}.
 
 ## For studios
 
@@ -65,6 +65,7 @@ ${NETWORK.partners.map((p) => `- [${p.name}](${p.href})`).join('\n')}
 - [Privacy policy](${SITE_URL}/privacy)
 - [Terms of use](${SITE_URL}/terms)
 - [Instagram](${FOOTER.instagram.href})
+- [LinkedIn](${SITE.linkedin})
 ${emails.map((e) => `- Contact: ${e}`).join('\n')}
 `;
 
