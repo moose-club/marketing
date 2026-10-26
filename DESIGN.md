@@ -627,7 +627,7 @@ Still open: none.
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Network | options for Max: A one row `148:610`/`148:643`, B printed grid `148:678`/`148:721`, C moving strip `148:766`/`148:827`; first draft (logos + names) `147:570`/`147:621` | Max: centred text, logos only; choosing |
+| `/`, studio floor: Network | options for Max. Still: A one row `148:610`, B printed grid `148:678`, C moving strip `148:766`. Animated (section `151:798`, prototypes): D the deck of partner-issued cards, E press-out reveal, F two-way traffic, G the loop (storyboard). First draft `147:570` | Max: centred text, logos only, fun motion; choosing |
 | `/`, studio floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
