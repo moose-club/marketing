@@ -81,7 +81,7 @@ export const MODEL = {
       n: "01",
       title: "Register and connect your booking system",
       bodyHtml:
-        "Sign up in the studio portal and connect your booking system. Moose links your members’ memberships automatically, so there’s no integration work for you.",
+        "Sign up in the studio portal and connect your booking system.",
     },
     {
       n: "02",
