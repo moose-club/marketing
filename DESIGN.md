@@ -551,10 +551,17 @@ floor, and moves focus to the same switch on the newly shown floor.
 
 ### Navigation and footer
 
-The nav is transparent on the floor. Past a short scroll it takes the floor fill and an
-`inkRule` edge. Links are `ink` (underlined on hover and focus), with the outline
-"Studio login" as its only action and a Lucide menu icon on phone. The footer continues
-the close: wordmark, tagline and Instagram, link columns, and a `detail` legal row.
+The nav is transparent on the floor; past a short scroll it takes the floor fill and an
+`inkRule` edge. Links are `inkSupport` (`ink` and underlined on hover and focus), the
+outline "Studio login" is its only action, and a Lucide menu icon stands in on phone. The
+wordmark is an `ink` mask, so it flips with dark mode.
+
+The footer continues the close's navy band with no seam (`.dark` scoped). On the left
+are the wordmark, "More ways to move." (`body`, `inkSupport`) and Instagram (Lucide,
+`ink`). On the right are three columns, Explore, More and Contact, each a `printedLabel`
+head over `body` links in `ink`. Then a printed rule (`inkRule`) and the legal row in
+`detail`: © line, Privacy and Terms on the left, Register your studio and Back to top on
+the right. On phone everything stacks, and the legal row becomes three lines.
 
 ### Icons
 
@@ -662,7 +669,8 @@ Still open: none.
 | `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
-| Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
+| Nav and audience switch | in every hero frame | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav drawn in the hero frames |
+| Footer | `159:984` (1440), `159:1018` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | Legal pages (privacy, terms, studio-terms, studio-privacy, studio-conduct, liability-waiver) | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
