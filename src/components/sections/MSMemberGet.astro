@@ -1,5 +1,6 @@
 ---
 import { MEMBERS } from '../../data/copy';
+import AnswerLink from '../answer/AnswerLink.astro';
 
 // What you get, what you pay (Member Card; Figma `168:683` / `168:700`). The
 // words on the left; on the right the app's own membership panel, floating
@@ -12,6 +13,7 @@ const { commercials } = MEMBERS;
   <div class="mget__words">
     <h2 id="memberGetHeading" class="page-lettering page-lettering--compact">{commercials.head}</h2>
     <p class="body-text mget__lede">{commercials.lede}</p>
+    <AnswerLink {...commercials.compare} class="mget__compare" />
   </div>
 
   <dl class="mget__panel">
@@ -31,6 +33,7 @@ const { commercials } = MEMBERS;
     padding-top: var(--rhythm);
   }
   .mget__lede { margin-top: var(--m-spacing-md); }
+  .mget :global(.mget__compare) { margin-top: var(--m-spacing-md); }
 
   .mget__panel {
     border-radius: var(--m-radius-lg);

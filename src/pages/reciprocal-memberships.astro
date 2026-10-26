@@ -1,0 +1,75 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import PrintedLists from '../components/answer/PrintedLists.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import { MODEL, RECIPROCAL as P } from '../data/copy';
+
+// What is a reciprocal studio membership? The category, defined in the first
+// sentence, then an example, Moose's four steps (the home page's Model) and
+// what keeps the exchange fair. Built from the agreed answer-page frames.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  close="studio"
+>
+  <AnswerSection head={P.example.head} id="example">
+    <p class="body-text">{P.example.body}</p>
+  </AnswerSection>
+
+  <AnswerSection head={P.stepsHead} id="how-it-works">
+    <ol class="steps">
+      {MODEL.steps.map((s) => (
+        <li class="steps__step">
+          <span class="page-lettering steps__n" aria-hidden="true">{s.n}</span>
+          <h3 class="steps__title">{s.title}</h3>
+          <p class="body-text steps__body" set:html={s.bodyHtml} />
+        </li>
+      ))}
+    </ol>
+  </AnswerSection>
+
+  <AnswerSection head={P.fair.head} id="fair">
+    <PrintedLists lists={P.fair.lists} />
+  </AnswerSection>
+
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  /* As the home page's Model: four printed columns, stacked on phone. */
+  .steps { display: grid; gap: var(--m-spacing-lg); }
+  .steps__step {
+    padding-top: var(--m-spacing-lg);
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .steps__n {
+    display: block;
+    font-size: 2.25rem; /* = --m-type-page-lettering-compact-size's floor */
+    font-variant-numeric: tabular-nums;
+  }
+  .steps__title {
+    margin-top: 12px; /* no token yet: proposed (as the Model) */
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .steps__body { margin-top: 12px; } /* no token yet: proposed */
+  .steps__body :global(strong) { font-weight: 600; color: var(--m-ink); }
+
+  @media (min-width: 760px) {
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--m-spacing-xl); }
+  }
+  @media (min-width: 1048px) {
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>

@@ -794,6 +794,11 @@ Still open: none.
 | `/`, member floor: Close | `172:817` (1440), `172:882` (390) | agreed and coded 26 Oct 2026 (`MSMemberClose.astro`) |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
+| Answer pages: `/compare/classpass`, `/faq` | page "AEO · Compare + FAQ — working": `184:270` (1440), `186:462` (390, top), `185:390` (FAQ 1440); components `AEO/Ledger row` `183:271`, `… · phone` `186:454`, `AEO/Question` `183:278` | agreed and coded 26 Oct 2026 (`Answer.astro`, `components/answer/`), facts updated per Max |
+| Answer pages: `/compare/second-membership`, `/reciprocal-memberships`, `/studios`, `/studios/<slug>` | none: built from the agreed answer-page frames and blocks | coded 26 Oct 2026 at Max's request; draw them back to Figma when they next change |
+| Social images (`og:image`) for the answer and studio pages | page "AEO · Compare + FAQ — working", section "Social images" `191:483` (1200 × 630, navy band) | agreed and exported 27 Oct 2026 to `public/og/`, one per page path (`Answer.astro`) |
+| Home: links to the answer pages | Model `135:570` / `135:662` ("How is Moose different from ClassPass?"), member Get `168:683` / `168:700` ("Weighing up a second membership?") | drawn and coded 27 Oct 2026 (`AnswerLink.astro`) |
+| Footer "Learn" column | none: the footer frame has three columns | coded 26 Oct 2026; two by two from 760, one row from 1280 |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | Legal pages (privacy, terms, studio-terms, studio-privacy, studio-conduct, liability-waiver) | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

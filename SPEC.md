@@ -249,7 +249,10 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 **Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
 
 - JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade priced by the studio, credits each month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
-- `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`.
+- `SITE.description` (the home page's meta description) is the hero's line, under 160 characters; `SITE.entity` is the third-person company line in the JSON-LD and `/llms.txt`.
+- Each answer and studio page has its own social image at `public/og/<path>.png` (drawn in Figma, section "Social images"); the sitemap gives those pages a `lastmod` of `REVIEWED`.
+- `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`, including the answer pages and the full FAQ.
+- **Answer pages** (`src/layouts/Answer.astro`, copy in `copy.ts` under "Answer pages"): `/compare/classpass`, `/compare/second-membership`, `/reciprocal-memberships`, `/studios`, `/studios/<slug>` (one per studio in a live partnership, from `PARTNERSHIPS`) and `/faq`, linked from the footer's "Learn" column. Each asks its question as the h1, answers it in the first sentence, and carries a dated "Last reviewed" (`REVIEWED`), an `FAQPage` (or `WebPage`) node and a `BreadcrumbList`. Every claim about another company is sourced on the page; re-check those sources and bump `REVIEWED` when the copy changes. A location appears only where a partnership is live (`PARTNERSHIPS`, from Max): several partners are multi-site.
 - `robots.txt` names the AI crawlers explicitly as allowed. The host must not block them at the edge (Cloudflare blocks AI bots by default on new zones).
 - The site is registered with Google Search Console and Bing Webmaster Tools (ChatGPT search draws on Bing).
 - Off-site, the same one-line description of Moose is used on the App Store listing, LinkedIn, Google Business Profile and partner sites.

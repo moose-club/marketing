@@ -1,0 +1,28 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import { FAQ as P } from '../data/copy';
+
+// Questions, answered (Figma `185:390`): one group for studios, one for
+// members, every answer leading with the answer. The whole page is one
+// FAQPage in the JSON-LD.
+const questions = P.groups.flatMap((g) => g.items);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={questions}
+  close="studio"
+>
+  {P.groups.map((g) => (
+    <AnswerSection head={g.head} id={slug(g.head)}>
+      <QuestionList items={g.items} />
+    </AnswerSection>
+  ))}
+</Answer>

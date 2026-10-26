@@ -7,17 +7,25 @@ import Icon from '../primitives/Icon.astro';
 // no shadow). It sits on the page measure. Each floor has its own link set;
 // "Studio login" is the outline plate, so the first view keeps one filled
 // plate (RULES 5).
+//
+// `home={false}` on any page but `/`: the section anchors then lead back to
+// the home page, and the wordmark goes home instead of to the top.
+interface Props {
+  home?: boolean;
+}
+const { home = true } = Astro.props;
+const to = (href: string) => (home ? href : `/${href}`);
 ---
 
 <header class="nav" data-scrolled="false" id="top">
   <div class="nav__inner">
-    <a href="#top" class="nav__brand" aria-label="Moose home">
+    <a href={home ? '#top' : '/'} class="nav__brand" aria-label="Moose home">
       <span class="nav__logo" aria-hidden="true"></span>
     </a>
 
     <nav class="nav__links" aria-label="Primary">
-      {NAV.studioLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="studio">{l.label}</a>)}
-      {NAV.memberLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="member">{l.label}</a>)}
+      {NAV.studioLinks.map((l) => <a href={to(l.href)} class="nav__link" data-floor-only="studio">{l.label}</a>)}
+      {NAV.memberLinks.map((l) => <a href={to(l.href)} class="nav__link" data-floor-only="member">{l.label}</a>)}
       <a class="plate plate--outline plate--station nav__portal" href={NAV.portal.href} target="_blank" rel="noopener">
         <span>{NAV.portal.label}</span>
         <Icon name="chevron-right" size={18} />
@@ -36,8 +44,8 @@ import Icon from '../primitives/Icon.astro';
   </div>
 
   <nav class="nav__mobile" id="navMobile" aria-label="Mobile" data-open="false">
-    {NAV.studioLinks.map((l) => <a href={l.href} class="nav__mobile-link" data-floor-only="studio">{l.label}</a>)}
-    {NAV.memberLinks.map((l) => <a href={l.href} class="nav__mobile-link" data-floor-only="member">{l.label}</a>)}
+    {NAV.studioLinks.map((l) => <a href={to(l.href)} class="nav__mobile-link" data-floor-only="studio">{l.label}</a>)}
+    {NAV.memberLinks.map((l) => <a href={to(l.href)} class="nav__mobile-link" data-floor-only="member">{l.label}</a>)}
     <a href={NAV.portal.href} target="_blank" rel="noopener" class="plate plate--outline plate--station nav__mobile-portal">
       {NAV.portal.label}
     </a>

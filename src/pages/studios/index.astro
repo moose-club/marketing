@@ -1,0 +1,144 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import { NETWORK, PARTNERSHIPS, STUDIOS as P, studioPath } from '../../data/copy';
+import { partnerList } from '../../data/schema';
+
+const live = new Map(PARTNERSHIPS.flat().map((s) => [s.name as string, s]));
+
+// Studios on Moose: every partner, what it offers (in its own words, from its
+// website) and a link to it, then the live partnerships. A location shows only
+// where a partnership is live (several studios are multi-site). Logos are
+// single-ink masks, as on the home page's deck.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  jsonLd={[partnerList]}
+  close="studio"
+>
+  <section class="page roster" aria-label={P.head}>
+    <ul class="roster__list">
+      {NETWORK.partners.map((p) => {
+        const site = live.get(p.name);
+        return (
+          <li class="roster__studio">
+            <span class="roster__logo" style={`--logo: url('${p.logo}')`} aria-hidden="true"></span>
+            <div class="roster__words">
+              <h2 class="roster__name">{site ? <a href={studioPath(p.name)}>{p.name}</a> : p.name}</h2>
+              <p class="body-text roster__kind">{p.kind}</p>
+              {site && <p class="roster__where">{P.page}: {site.where}</p>}
+            </div>
+            <a class="roster__site" href={p.href} rel="noopener" target="_blank">
+              {P.website}<span class="visually-hidden">: {p.name}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <p class="roster__note">{P.note}</p>
+  </section>
+
+  <AnswerSection head={P.live.head} id="live">
+    <p class="body-text">{P.live.lede}</p>
+    <ul class="pairs">
+      {PARTNERSHIPS.map(([a, b]) => (
+        <li class="pairs__pair">
+          <a href={studioPath(a.name)}>{a.name}</a>, {a.where}
+          <span class="pairs__and">{P.live.and}</span>
+          <a href={studioPath(b.name)}>{b.name}</a>, {b.where}
+        </li>
+      ))}
+    </ul>
+  </AnswerSection>
+
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .roster { padding-top: var(--rhythm); }
+  .roster__studio {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr); /* no token yet: proposed (logo box) */
+    grid-template-areas: 'logo words' '. site';
+    column-gap: var(--m-spacing-lg);
+    row-gap: var(--m-spacing-xs);
+    align-items: start;
+    padding: 24px 0 28px; /* no token yet: proposed (as the ledger's rows) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .roster__studio:last-child { border-bottom: 1px solid var(--m-ink-rule); }
+  .roster__logo {
+    grid-area: logo;
+    width: 80px;
+    height: 40px; /* no token yet: proposed (logo box) */
+    background: var(--m-ink);
+    -webkit-mask: var(--logo) left center / contain no-repeat;
+    mask: var(--logo) left center / contain no-repeat;
+  }
+  .roster__words { grid-area: words; }
+  .roster__name {
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .roster__kind { margin-top: 4px; }
+  .roster__name a,
+  .pairs__pair a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .roster__where {
+    margin-top: 4px;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink);
+  }
+  .pairs { margin-top: var(--m-spacing-lg); max-width: 760px; } /* no token yet: proposed */
+  .pairs__pair {
+    padding: 20px 0 22px; /* no token yet: proposed (as the ledger's rows) */
+    border-top: 1px solid var(--m-ink-rule);
+    font-size: var(--m-type-body-size);
+    line-height: 1.5; /* provisional: as .body-text */
+    color: var(--m-ink);
+  }
+  .pairs__pair:last-child { border-bottom: 1px solid var(--m-ink-rule); }
+  .pairs__and { margin-inline: 0.35em; color: var(--m-ink-support); }
+  .roster__site {
+    grid-area: site;
+    justify-self: start;
+    padding-block: 10px; /* RULES 17: a 44px hit row */
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .roster__note {
+    margin-top: var(--m-spacing-md);
+    max-width: 46em;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  @media (min-width: 760px) {
+    .roster__studio {
+      grid-template-columns: 120px minmax(0, 1fr) auto; /* no token yet: proposed (logo box) */
+      grid-template-areas: 'logo words site';
+      align-items: center;
+    }
+    .roster__logo { width: 120px; height: 48px; }
+  }
+</style>

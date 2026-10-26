@@ -1,0 +1,50 @@
+---
+import { ANSWER } from '../../data/copy';
+
+// Where every outside fact on the page came from, linked, then a note.
+interface Props {
+  items: readonly { label: string; href: string }[];
+  note?: string;
+}
+const { items, note } = Astro.props;
+---
+
+<section class="page sources" aria-labelledby="sourcesHeading">
+  <h2 id="sourcesHeading" class="sources__head">{ANSWER.sources}</h2>
+  <ol class="sources__list">
+    {items.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
+  </ol>
+  {note && <p class="sources__note">{note}</p>}
+</section>
+
+<style>
+  .sources { padding-top: var(--rhythm); }
+  .sources__head {
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .sources__list {
+    margin-top: var(--m-spacing-sm);
+    display: grid;
+    gap: var(--m-spacing-xs);
+    list-style: decimal;
+    padding-left: 1.25em;
+  }
+  .sources__list,
+  .sources__note {
+    max-width: 46em;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .sources__list a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .sources__list a:hover,
+  .sources__list a:focus-visible { color: var(--m-ink); }
+  .sources__note { margin-top: var(--m-spacing-md); }
+</style>

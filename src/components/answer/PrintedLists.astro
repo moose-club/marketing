@@ -1,0 +1,46 @@
+---
+// Side-by-side printed lists ("Which suits your studio"): a plate-label title
+// over items, each under a printed rule. Stacked on phone, in columns from
+// 760.
+interface Props {
+  lists: readonly { title: string; items: readonly string[] }[];
+}
+const { lists } = Astro.props;
+---
+
+<div class="lists" style={`--n: ${lists.length}`}>
+  {lists.map((l) => (
+    <div class="lists__col">
+      <h3 class="lists__title">{l.title}</h3>
+      <ul>
+        {l.items.map((it) => <li class="body-text lists__item">{it}</li>)}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<style>
+  .lists { display: grid; gap: var(--m-spacing-xl); }
+  .lists__title {
+    margin-bottom: var(--m-spacing-md);
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .lists__item {
+    max-width: none;
+    padding: 16px 0 18px; /* no token yet: proposed (the frame's item rhythm) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+
+  @media (min-width: 760px) {
+    .lists {
+      grid-template-columns: repeat(min(var(--n), 2), minmax(0, 1fr));
+      column-gap: 64px; /* no token yet: proposed (page gutter) */
+    }
+  }
+  @media (min-width: 1048px) {
+    .lists { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+  }
+</style>

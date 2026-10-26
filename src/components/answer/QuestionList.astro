@@ -1,0 +1,43 @@
+---
+// Questions and their answers (Figma `AEO/Question`): the question in the
+// plate label, the answer in body text, each under a printed rule. The
+// answer leads with the direct answer, which is what answer engines quote.
+// An answer may carry a link (`aHtml`), drawn in ink and underlined.
+interface Props {
+  items: readonly { q: string; aHtml: string }[];
+  /** The questions' heading level: h3 under a section's h2 (default), h2 at the top level. */
+  level?: 2 | 3;
+}
+const { items, level = 3 } = Astro.props;
+const Q = level === 2 ? 'h2' : 'h3';
+---
+
+<div class="qa-list">
+  {items.map((i) => (
+    <div class="qa">
+      <Q class="qa__q">{i.q}</Q>
+      <p class="body-text qa__a" set:html={i.aHtml} />
+    </div>
+  ))}
+</div>
+
+<style>
+  .qa-list { max-width: 760px; } /* no token yet: proposed (the frames' question column) */
+  .qa {
+    padding: 24px 0 28px; /* no token yet: proposed (the frames' question rhythm) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .qa__q {
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .qa__a { margin-top: 10px; max-width: none; } /* no token yet: proposed */
+  .qa__a :global(a) {
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+</style>
