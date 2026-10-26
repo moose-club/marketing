@@ -492,8 +492,8 @@ coded, because `MODEL` feeds the live page until then):** 01 Register and connec
 booking system · 02 Choose your partners · 03 Select your eligible memberships (Max:
 members upgrade in the app and Moose handles the payments; no price cap in this step) ·
 04 Members book, Moose keeps it balanced (credits each month). Confirmed by Max: it's
-credits, not "four sessions"; every studio connects a booking system; partners can be
-changed any time.
+credits, not "four sessions"; every studio connects a booking system. Step bodies were
+trimmed by Max to one sentence each for 01 and 02.
 
 ### Audience switch
 

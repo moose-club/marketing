@@ -87,7 +87,7 @@ export const MODEL = {
       n: "02",
       title: "Choose your partners",
       bodyHtml:
-        "Pick the complementary, non-competing studios nearby that your members can visit. Partnerships are reciprocal, and you can change them any time.",
+        "Pick the complementary, non-competing studios nearby that your members can visit.",
     },
     {
       n: "03",
