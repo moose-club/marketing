@@ -64,10 +64,9 @@
   --scrim:        color-mix(in srgb, var(--m-ink) 70%, transparent);     /* no token yet: proposed */
   --ink:         var(--m-ink);            /* navy, never black — RULES 7 */
   --ink-dim:     var(--m-ink-support);
-  --ink-mute:    var(--m-ink-placeholder);
-  --rule:        var(--m-ink-hairline);
-  --rule-strong: var(--m-ink-tape);
-  --ink-wash:    var(--m-ink-wash);       /* faintest navy tint on a light floor */
+  --ink-mute:    var(--m-ink-hint);       /* placeholders: The One Ink Rule's 45% (RULES 7) */
+  --rule:        var(--m-ink-rule);       /* printed rules: 16% */
+  --rule-strong: var(--m-ink-rule);
 
   /* Status — for status only (RULES 9) */
   --success:     var(--m-success);
@@ -75,8 +74,8 @@
   --danger:      var(--m-danger);
   --peak:        var(--m-peak);
 
-  /* Type — Poppins is the brand typeface on every surface (RULES 12);
-     it loads from Google Fonts in Base.astro. */
+  /* Type — Poppins on the web (RULES 12), self-hosted from
+     @fontsource/poppins in Base.astro. */
   --font-sans: var(--m-font-family-sans);
   --font-mono: var(--m-font-family-mono);
 
@@ -303,11 +302,11 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   html.js [data-reveal] { opacity: 1 !important; }
 }
 
-/* ══ Lane Lines — the `/` floor ═════════════════════════════════════════
-   The homepage is drawn in moose-design's Lane Lines world (Figma
-   a5SmvlBwlHP6sf0FAZfLpP; direction in .impeccable/surfaces/). One flat cream
-   floor, a navy close (`.dark` — the token set's own navy floor), one ink,
-   and one pink element: the live line. No card, shadow, blur, pill or eyebrow.
+/* ══ Lane Lines — the `/` floor (retired) ═══════════════════════════════
+   Lane Lines is retired (moose-design RULES 0): this layer stays only until
+   each section of `/` is redrawn on the Member Card, and is deleted then.
+   One flat cream floor, a navy close (`.dark` — the token set's own navy
+   floor), one ink. Its pink live line is already gone (RULES 6).
 
    The floor is two lanes — yours and your partner's — with the line running
    just before whichever lane it is on. Below 1048px there is room for one
@@ -496,7 +495,6 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
   border: 2px solid var(--m-ink);
   color: var(--m-ink);
 }
-.plate--outline:hover { background: var(--m-ink-wash); }
 
 /* Station action: a small inset plate trailing a line of text. 44 tall, not
    the drawn 40 — RULES 17's hit-target floor. */

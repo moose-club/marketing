@@ -194,6 +194,14 @@ order is set by `moose-design/docs/handoffs/marketing-site.md`: dark mode and
 self-hosted Poppins first, then the shared objects in a dev gallery, then the sections
 one at a time. **Screens** shows each page's state.
 
+**26 Oct 2026: foundations built (brief Phase 2).** Dark mode follows the system on `/`
+(an inline `<head>` script sets `.dark` on `<html>` before first paint). The carve-out
+pages opt out with `followSystemDark={false}` until each is redrawn, because their
+shipped CSS uses colours that don't flip. Poppins is self-hosted from
+`@fontsource/poppins`. The retired ink weights (`inkTape`, `inkHairline`, `inkWash`,
+`inkPlaceholder`) are gone from the site's CSS, and the pink live line is removed, so `/`
+has no pink until the card objects arrive. The nav wordmark is an `ink` mask.
+
 ## Overview
 
 **Creative North Star: "The Member Card"**
@@ -334,8 +342,7 @@ Depth belongs only to objects on it:
 
 Separation on the floor comes from printed rules (`inkRule`), space and type weight. The
 scrolled nav takes the solid floor and an `inkRule` edge, never a frosted bar. Gradients
-are named tokens only (RULES 11). If the hero photograph survives (Open decision 1),
-its floor scrim needs a gradient token first.
+are named tokens only (RULES 11), so the studio hero's photograph takes no scrim.
 
 ## Shapes
 
@@ -422,6 +429,13 @@ The legal text on one floating `paper` column (`radius.lg`, `shadow.paper`) cent
 the floor. `printedLabel` section labels and `inkRule` between sections. No bands,
 cards or eyebrows.
 
+### Hero photograph (studio floor)
+
+`hero-strength.webp`, square cut, no radius, no scrim. Desktop: it fills the hero's
+second column and the issued card overlaps its lower edge. Phone: a band under the nav
+with the card overlapping its foot, and the words below. It's a photo cover, so it reads
+the same in light and dark.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a solid `ink` fill with a
@@ -499,18 +513,24 @@ only where it breaks RULES 6 or 20, and list each change old → new in the PR.
 
 ## Open decisions
 
-1. **The hero photograph.** Does `hero-strength.webp` survive on the studio floor beside
-   the card, or does the card replace it? If it stays, its scrim needs a gradient token
-   (RULES 11). Max decides at the studio hero's review.
-2. **The studio floor's hero object.** The issued card's front, or its back with the
-   partner lines. Max decides at the studio hero's review.
-3. **Sections per floor.** Whether Model, Value and the member commercials keep their
-   current split once "how it works" is told as marks. Max decides at the member hero's
-   review.
-4. **Sticker radius.** iOS draws 5–6px. Propose a `radius.component.sticker` token to
-   moose-design (owner: whoever builds the gallery).
-5. **Section rhythm.** Re-measure `--rhythm` for the new sections and propose it as a
-   token (owner: whoever builds the first section).
+Decided 26 Oct 2026 (Max delegated these to the redesign):
+
+1. ~~The hero photograph.~~ **It stays, on the studio floor only**, as a plain
+   photograph: square cut, no scrim, no gradient, with the issued card laid on it (the
+   iOS intro's structure: a photo band with the card on it). The member floor has no
+   photograph; the card in its sleeve is its hero.
+2. ~~The studio floor's hero object.~~ **The card's front**, issued by a sample studio to
+   a sample member. The back, with the partner lines, is the Network section, so the
+   two never repeat.
+3. ~~Sections per floor.~~ **Studio:** Hero → Model (how it works) → Value (the figures,
+   open rows) → Network (the card's back) → Close. **Member:** Hero (the card in its
+   sleeve) → How it works (the card's marks) → Get and pay (open rows) → Close. The
+   member app capture is dropped: the card replaces it as the floor's object.
+4. ~~Sticker radius and section rhythm.~~ Both stay local and `provisional` (6px; 72
+   compact / 96 regular) and are listed as proposed tokens in the PR
+   (`radius.component.sticker`, `spacing.section`).
+
+Still open: none.
 
 ## Screens
 

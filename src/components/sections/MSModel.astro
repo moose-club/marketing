@@ -2,13 +2,12 @@
 import { MODEL } from '../../data/copy';
 
 // Station · The Moose model — two lanes. Lettering, lede and 01–02 on your
-// lane; 03–04 on your partner's. The live line crosses to the partner lane
-// 48 above this station (`data-line-cross`).
+// lane; 03–04 on your partner's.
 const yours = MODEL.steps.slice(0, 2);
 const partners = MODEL.steps.slice(2);
 ---
 
-<section class="station lanes model" id="model" aria-labelledby="modelHeading" data-line-cross>
+<section class="station lanes model" id="model" aria-labelledby="modelHeading">
   <div class="model__intro">
     <h2 id="modelHeading" class="lettering lettering--station">{MODEL.head}</h2>
     <p class="lead">{MODEL.lede}</p>

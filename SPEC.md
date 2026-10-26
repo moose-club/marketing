@@ -75,7 +75,7 @@ Hex values are exact — **do not approximate**.
 
 Plus the full set of radii (`--r-pill / -sheet / -card / -md / -sm / -xs`), spacing tokens (`--s-1` through `--s-24`, 4pt grid), and shadow scale (`--shadow-xs/sm/md/lg`).
 
-**Type:** system stack only (`-apple-system`, etc). No remote fonts.
+**Type:** Poppins 400–800, self-hosted from `@fontsource/poppins` (RULES 12: Poppins on the web, SF on iOS). No font is loaded from a third party.
 
 ---
 
@@ -247,7 +247,7 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 - Open Graph + Twitter card meta. OG image: `public/og.png` (regenerate when brand assets change).
 - `<link rel="canonical">`
 - Photos are compressed `.webp` under `public/photos/`, served as `<img>`; the hero is preloaded.
-- Poppins from Google Fonts (RULES 12).
+- Poppins self-hosted (RULES 12); the Latin 400 and 800 files are preloaded.
 - No third-party scripts in v1. (Add Plausible later via a single `<script defer data-domain>` line if desired.)
 
 **Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
@@ -338,7 +338,7 @@ The current site was rebuilt in a single pass during the 2026-06 redesign:
 The site is "good" when all of these are true:
 
 - [ ] All 9 sections from §6 render in order without horizontal scroll at 375/414/768/1024/1280/1440.
-- [ ] No remote fonts loaded; system stack throughout.
+- [ ] No third-party font requests; Poppins is served from the site.
 - [ ] No third-party JS (no analytics, no icon libraries, no UI kits).
 - [ ] Build output is static HTML + per-section inline scripts only. No hydrated React.
 - [ ] All copy from `src/data/copy.ts` appears verbatim — no paraphrasing.
@@ -352,7 +352,7 @@ The site is "good" when all of these are true:
 
 - ❌ Don't introduce Tailwind, CSS-in-JS, or any UI kit.
 - ❌ Don't add an icon library (`lucide-react`, `astro-icon`, etc). Inline SVGs only.
-- ❌ Don't load remote fonts — the system font stack _is_ the brand.
+- ❌ Don't load fonts from a third party (Google Fonts included) — Poppins is self-hosted.
 - ❌ Don't combine the wordmark and the loop icon in the same lockup.
 - ❌ Don't introduce a third brand colour or a gradient on the pink.
 - ❌ Don't put a pink CTA and a navy CTA on the same screen.

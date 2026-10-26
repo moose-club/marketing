@@ -1,4 +1,13 @@
 ---
+// Poppins, self-hosted at 400–800 (RULES 12). Each file covers its subsets by
+// unicode-range, so a Latin page downloads only the Latin files.
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/800.css';
+import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
+import poppins800 from '@fontsource/poppins/files/poppins-latin-800-normal.woff2?url';
 import '../styles/globals.css';
 import { SITE } from '../data/copy';
 import { SITE_URL, graph, siteNodes } from '../data/schema';
@@ -12,6 +21,9 @@ interface Props {
   noindex?: boolean;
   /** Extra JSON-LD nodes for this page, joined to the site-wide graph. */
   jsonLd?: Record<string, unknown>[];
+  /** Follow the system's dark mode (RULES 8). Off only for a page that isn't
+      redrawn on the Member Card yet: its shipped CSS doesn't flip. */
+  followSystemDark?: boolean;
 }
 
 const {
@@ -22,6 +34,7 @@ const {
   preloadImage,
   noindex = false,
   jsonLd = [],
+  followSystemDark = true,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? SITE_URL;
@@ -42,12 +55,23 @@ const structuredData = graph([...siteNodes, ...jsonLd]);
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalUrl} />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-    />
+    <meta name="color-scheme" content={followSystemDark ? 'light dark' : 'light'} />
+    {followSystemDark && (
+      <script is:inline>
+        // Dark mode follows the system (RULES 8): the generated tokens' dark
+        // values live on `.dark`. Inline in <head> so it lands before first
+        // paint, and it follows a change while the page is open.
+        (() => {
+          const dark = matchMedia('(prefers-color-scheme: dark)');
+          const apply = () => document.documentElement.classList.toggle('dark', dark.matches);
+          apply();
+          dark.addEventListener('change', apply);
+        })();
+      </script>
+    )}
+
+    <link rel="preload" as="font" type="font/woff2" href={poppins400} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={poppins800} crossorigin />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="40x40" href="/brand/icon/Icon-40.png" />

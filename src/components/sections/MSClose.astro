@@ -3,7 +3,7 @@ import Plate from '../primitives/Plate.astro';
 
 // The close — the navy floor (the token set's `.dark` mode, so ink, plates
 // and support text flip from one class). Your lane: the lettering. Partner
-// lane: the one action, out of the site. The live line ends in this plate.
+// lane: the one action, out of the site.
 interface Props {
   id: string;
   head: string;
@@ -23,7 +23,7 @@ const headingId = `${id}Heading`;
       <p class="lead">{lede}</p>
     </div>
     <div class="lane--partner close__action">
-      <Plate href={cta.href} external data-line-end="">{cta.label}</Plate>
+      <Plate href={cta.href} external>{cta.label}</Plate>
       <p class="detail close__detail">{detail}</p>
     </div>
   </div>

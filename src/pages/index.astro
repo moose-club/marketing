@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import { MEMBERS, REGISTER, SITE } from '../data/copy';
 import { homeNodes } from '../data/schema';
 
-import LiveLine      from '../components/primitives/LiveLine.astro';
 import MSNav         from '../components/sections/MSNav.astro';
 import MSHero        from '../components/sections/MSHero.astro';
 import MSModel       from '../components/sections/MSModel.astro';
@@ -33,7 +32,6 @@ import MSFooter      from '../components/sections/MSFooter.astro';
   <MSNav />
   <main id="main">
     <div class="floor" data-floor="studio">
-      <LiveLine />
       <MSHero />
       <MSModel />
       <MSValue />
@@ -42,7 +40,6 @@ import MSFooter      from '../components/sections/MSFooter.astro';
     </div>
 
     <div class="floor" data-floor="member">
-      <LiveLine />
       <MSMemberHero />
       <MSMembers />
       <MSClose id="member-close" {...MEMBERS.close} />

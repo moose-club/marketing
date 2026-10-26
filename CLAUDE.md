@@ -13,12 +13,12 @@ Audience: studio operators first, members second. Single page (`/`) with two flo
 ## Stack
 
 - **Astro 6** with `output: 'static'` — ships zero JS by default
-- **No React islands at present.** The member app capture is pure CSS (a scroll-driven scrub); the switch, live line, nav and roster reveal are small inline scripts. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
+- **No React islands at present.** The member app capture is pure CSS (a scroll-driven scrub); the switch, dark-mode toggle, nav and roster reveal are small inline scripts. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
 - Hand-rolled CSS via CSS custom properties — **no Tailwind, no CSS-in-JS, no UI kit**
 - TypeScript strict
 - pnpm
 - **Node 24** required. Astro 6 needs ≥22.12; this repo standardises on 24 (`.nvmrc`)
-- Poppins (RULES 12), loaded from Google Fonts in `Base.astro`
+- Poppins (RULES 12), self-hosted from `@fontsource/poppins` (400–800) and imported in `Base.astro`
 - Lucide-style icons rendered as **inline SVGs** in each section. No icon library.
 
 ## Commands
@@ -50,7 +50,7 @@ Nav
 Footer (navy, continues the close)
 ```
 
-Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. In the shipped (retired) build each floor owns a `LiveLine`, a pink line measured from the DOM (`data-line-cross` marks the station it crosses above, `data-line-end` the plate it ends in) and drawn with scroll.
+Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. The old pink live line is retired and removed (RULES 6).
 
 `src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD and the skip-link. Page-level metadata flows in as props; a page adds JSON-LD nodes through `jsonLd`. The structured data (`src/data/schema.ts`) and `/llms.txt` (`src/pages/llms.txt.ts`) are both built from `copy.ts`, so a copy edit updates what answer engines read too (SPEC §9).
 
@@ -59,7 +59,7 @@ Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, �
 Shipped today (the retired Lane Lines set, replaced as each section is redrawn):
 
 - `Plate`: `primary`, `outline`, `station` (small inset action).
-- `AudienceSwitch`, `HeroPhoto` (photo + cream floorScrims), `LiveLine`, `Icon` (inline Lucide).
+- `AudienceSwitch`, `HeroPhoto` (photo + cream floorScrims), `Icon` (inline Lucide).
 
 The Member Card objects (member card front/back/sleeve, sticker, punch marks, class card with stub, plates, printed field, paper column) are built here once, each matching its reference PNG in light and dark, and shown on a dev-only gallery page (see `DESIGN.md` Components).
 - `Wordmark`, `Button`, `Eyebrow`, `PhoneFrame` are the older card-world library, unused on `/`. The nav and footer use the wordmark SVGs in `public/brand/logo/` directly.
@@ -71,7 +71,7 @@ The Member Card objects (member card front/back/sleeve, sticker, punch marks, cl
 
 ### Styling
 
-Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. Dark mode on every page (RULES 8) isn't built yet. The redesign's first step adds it: `.dark` on `<html>` from `prefers-color-scheme`, set before first paint. `globals.css` still holds the retired Lane Lines layer (`--ll-*`, lanes grid, type roles, plates, hero) and the older card-world utilities that `/claim` and the legal pages use. Delete each part when the last page using it is redrawn; never extend either. Values with no token yet are marked `/* no token yet: proposed */`.
+Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. Dark mode follows the system (RULES 8): an inline script in `Base.astro`'s `<head>` sets `.dark` on `<html>` from `prefers-color-scheme` before first paint and follows changes. There is no theme picker. A page whose shipped CSS doesn't flip yet (`/claim`, `/404`, legal) passes `followSystemDark={false}` until it is redrawn; drop the prop when you redraw it. `globals.css` still holds the retired Lane Lines layer (`--ll-*`, lanes grid, type roles, plates, hero) and the older card-world utilities that `/claim` and the legal pages use. Delete each part when the last page using it is redrawn; never extend either. Values with no token yet are marked `/* no token yet: proposed */`.
 
 The Flat Page Rule (RULES 10): the page never takes a shadow, tint, gradient or glass. Depth belongs only to the objects on it: the member card and its sleeve (`--m-shadow-card`, `--m-shadow-card-behind`), the sticker (`--m-shadow-card-mini`) and floating paper (`--m-shadow-paper`). No eyebrows (RULES 14), no pills.
 
@@ -88,7 +88,7 @@ These are violations Claude will be tempted to make. Keep them top of mind:
 - **The card shown is a sample (RULES 19).** A sample member at a sample studio, never a "Valid" sticker on a real studio's card.
 - **Copy (RULES 20).** Never "Passport" or "Pass", never network-wide or travel-anywhere access, no design words ("punch", "sticker", "mark"), credits to two decimals. "Reciprocal" is the studio-side word.
 - **No third brand colour.** Navy and Pink are it. Plus paper / cream / ink for surfaces.
-- **Poppins on the web, SF on iOS, by design** (RULES 12). Display lettering is `--m-font-family-display` at 800. Poppins is loaded from Google Fonts in `Base.astro` for now; the redesign self-hosts it (400–800).
+- **Poppins on the web, SF on iOS, by design** (RULES 12). Display lettering is `--m-font-family-display` at 800. Self-hosted (400–800); never load a font from a third party.
 - **No CSS-in-JS, no Tailwind, no UI kit.** Hand-rolled CSS. The brand discipline is the point.
 - **Icons are inline SVGs.** Don't reach for `lucide-react`, `astro-icon`, or a runtime icon library — the new design already paid the cost of inlining them.
 
