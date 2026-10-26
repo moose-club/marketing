@@ -454,8 +454,9 @@ the same in light and dark.
 
 ### Audience switch
 
-Two plates above the hero headline on both floors. Chosen: a solid `ink` fill with a
-`floor` label. Unchosen: the 2px ink outline. No chevron and no pink, because a switch
+Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
+`ink` label. Unchosen: a 2px `inkRule` edge and an `inkSupport` label. Never a fill:
+the view's one filled plate is its primary action (RULES 5). No chevron and no pink, because a switch
 doesn't go forward. It swaps floors in place, keeps `#members` in the URL for the member
 floor, and moves focus to the same switch on the newly shown floor.
 
@@ -553,8 +554,9 @@ Still open: none.
 | Page | Source | State |
 | --- | --- | --- |
 | `/`, studio floor (Hero, Model, Value, Network, Close) | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
-| `/`, member floor (MemberHero, Members, Close) | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
-| Nav, audience switch and footer | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: MemberHero | before/after in `.impeccable/review/` | redrawn 26 Oct 2026 (card in its sleeve, the arrival); awaiting Max's review |
+| `/`, member floor: Members, Close | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
+| Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | Legal pages (privacy, terms, studio-terms, studio-privacy, studio-conduct, liability-waiver) | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

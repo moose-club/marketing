@@ -170,6 +170,21 @@ export const MEMBERS = {
     head: "Finally, some variety.",
     lede: "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
     cta: { label: "Get the Moose app", href: LINKS.appStore },
+    // The hero object: a sample card in its sleeve (RULES 19). Nothing on it is
+    // a real studio or member; the accessible name says every fact it shows.
+    card: {
+      label:
+        "A sample Moose member card coming out of its sleeve, issued by a sample studio to a sample member: valid, with 4.00 credits to spend, refreshed every month.",
+      caption: "Sample card. Yours is issued by your home studio.",
+      issuer: "Sample Studio Co.",
+      member: "Alex Sample",
+      credits: "4.00",
+      creditsNote: "to spend",
+      sticker: "Valid",
+      footnote: "Refreshes every month",
+      sleeveKicker: "Moose Club",
+      sleeveTitle: "Partner access card",
+    },
   },
   how: {
     head: "How it works for you.",

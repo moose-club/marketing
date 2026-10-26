@@ -24,7 +24,8 @@ type Punched = 'attended' | 'booked' | 'next';
 interface Partner { name: string; logo?: string }
 
 interface Props {
-  /** The accessible name: every fact the card shows, in words. */
+  /** The accessible name: every fact the card shows, in words. Empty when an
+      enclosing scene names it; the card is then hidden from assistive tech. */
   label: string;
   face?: 'front' | 'back';
   layout?: 'in-use' | 'printed';
@@ -83,7 +84,11 @@ const holeMask = holes
 const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
 ---
 
-<div class:list={['mc', className]} role="img" aria-label={label} style={`--tilt: ${tilt}deg`}>
+<div
+  class:list={['mc', className]}
+  {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' })}
+  style={`--tilt: ${tilt}deg`}
+>
   <div class:list={['mc__body', `mc__body--${face}`]}>
     <div class:list={['mc__face', holes.length > 1 && 'mc__face--holes']} style={faceStyle}>
       {face === 'front' && <span class="mc__edge"></span>}

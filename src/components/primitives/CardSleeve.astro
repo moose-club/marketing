@@ -9,21 +9,34 @@ import MooseLoop from './MooseLoop.astro';
 //
 // Geometry in sleeve units (1/362 of the width): the card is 354 wide and
 // stands 104 clear of the mouth; the sleeve is 362 × 236.
+//
+// `arrive`: the site's one authored motion (RULES 17b), the web echo of the
+// app's arrival. On load the sleeve drops away and fades while the card
+// settles at −3° (about 900 ms after a short hold). In the sleeve the card
+// shows its printed face, the number in the notch, as the app's does; it
+// turns to its in-use face as it comes clear. It runs again whenever the scene is shown (the member floor). Under
+// `prefers-reduced-motion` the card is already out and still.
 interface Props {
   /** The accessible name of the scene. */
   label: string;
   kicker?: string;
   title?: string;
   card?: Record<string, unknown>;
+  arrive?: boolean;
   class?: string;
 }
-const { label, kicker = 'Moose Club', title = 'Partner access card', card = {}, class: className } = Astro.props;
+const { label, kicker = 'Moose Club', title = 'Partner access card', card = {}, arrive = false, class: className } = Astro.props;
 ---
 
-<div class:list={['cs', className]} role="img" aria-label={label}>
+<div class:list={['cs', arrive && 'cs--arrive', className]} role="img" aria-label={label}>
   <div class="cs__scene">
     <div class="cs__card">
-      <MemberCard label="" layout="printed" {...card} />
+      <MemberCard label="" {...card} layout={arrive ? 'in-use' : 'printed'} />
+      {arrive && (
+        <div class="cs__printed">
+          <MemberCard label="" {...card} layout="printed" />
+        </div>
+      )}
     </div>
     <div class="cs__sleeve">
       <div class="cs__paper">
@@ -105,5 +118,54 @@ const { label, kicker = 'Moose Club', title = 'Partner access card', card = {}, 
     right: calc(var(--u) * 22);
     bottom: calc(var(--u) * 34);
     width: calc(var(--u) * 38);
+  }
+
+  /* Arrival. The scene is the resting card's height (260 units). It opens
+     on the card in its sleeve at 0.74, the pair centred; the sleeve drops
+     away and fades while the card grows to full size and settles at −3°.
+     Transforms pivot on the top centre, the pair's shared axis. */
+  .cs--arrive .cs__scene { aspect-ratio: 362 / 260; }
+  .cs--arrive .cs__card,
+  .cs--arrive .cs__sleeve { transform-origin: 50% 0; }
+  .cs--arrive .cs__card {
+    top: calc(var(--u) * 18);
+    transform: rotate(-3deg);
+    animation: cs-card 880ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both; /* ease-out-quint: it lands, no bounce */
+  }
+  .cs--arrive .cs__sleeve {
+    top: calc(var(--u) * 81);
+    bottom: auto;
+    transform: scale(0.74);
+    opacity: 0;
+    visibility: hidden;
+    animation: cs-sleeve 440ms cubic-bezier(0.55, 0, 0.75, 0.2) 300ms both;
+  }
+  @keyframes cs-card {
+    from { transform: translateY(calc(var(--u) * -14)) scale(0.74) rotate(0deg); }
+    to   { transform: rotate(-3deg); }
+  }
+  /* The sleeve falls on an ease-in but fades early, so it has cleared before
+     the card grows into its place. */
+  @keyframes cs-sleeve {
+    0%   { transform: scale(0.74); opacity: 1; visibility: visible; }
+    45%  { opacity: 0.5; }
+    70%  { opacity: 0; }
+    100% { transform: translateY(calc(var(--u) * 150)) scale(0.74); opacity: 0; visibility: hidden; }
+  }
+  .cs__printed {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: cs-printed 260ms ease-out 620ms both;
+  }
+  @keyframes cs-printed {
+    from { opacity: 1; }
+    to   { opacity: 0; visibility: hidden; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs--arrive .cs__card,
+    .cs--arrive .cs__sleeve { animation: none; }
+    .cs--arrive .cs__sleeve,
+    .cs__printed { display: none; }
   }
 </style>

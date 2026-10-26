@@ -1,27 +1,89 @@
 ---
-import { HERO, MEMBERS } from '../../data/copy';
+import { MEMBERS } from '../../data/copy';
 import AudienceSwitch from '../primitives/AudienceSwitch.astro';
-import HeroPhoto from '../primitives/HeroPhoto.astro';
+import CardSleeve from '../primitives/CardSleeve.astro';
 import Plate from '../primitives/Plate.astro';
 
-// Member floor hero — the same split floor, addressed to the member.
+// Member floor hero (Member Card). The card in its sleeve is the hero: on
+// load the sleeve drops away and the card settles at −3°, the web echo of
+// the app's arrival and the site's one authored motion (RULES 17b). Desktop:
+// the words on the left, the scene on the right. Phone: switch, card, words.
+// The card is a sample (RULES 19). One primary plate (RULES 5).
 const { hero } = MEMBERS;
+const { card } = hero;
 ---
 
-<section class="hero" id="members" aria-labelledby="memberHeroHeading">
-  <HeroPhoto src={HERO.photo.src} alt={HERO.photo.alt} />
+<section class="mhero page" id="members" aria-labelledby="memberHeroHeading">
+  <div class="mhero__switch">
+    <AudienceSwitch current="member" />
+  </div>
 
-  <div class="lanes">
-    <div class="hero__work">
-      <AudienceSwitch current="member" />
-      <h1 id="memberHeroHeading" class="lettering member-hero__head">{hero.head}</h1>
-      <p class="lead">{hero.lede}</p>
-      <Plate href={hero.cta.href} external class="member-hero__cta">{hero.cta.label}</Plate>
-    </div>
+  <div class="mhero__scene">
+    <CardSleeve
+      arrive
+      label={card.label}
+      kicker={card.sleeveKicker}
+      title={card.sleeveTitle}
+      card={{
+        layout: 'in-use',
+        issuer: card.issuer,
+        member: card.member,
+        credits: card.credits,
+        creditsNote: card.creditsNote,
+        sticker: { label: card.sticker },
+        footnote: card.footnote,
+      }}
+    />
+    <p class="mhero__caption">{card.caption}</p>
+  </div>
+
+  <div class="mhero__words">
+    <h1 id="memberHeroHeading" class="page-lettering page-lettering--compact">{hero.head}</h1>
+    <p class="body-text mhero__lede">{hero.lede}</p>
+    <Plate href={hero.cta.href} external class="mhero__cta">{hero.cta.label}</Plate>
   </div>
 </section>
 
 <style>
-  .member-hero__head { margin-top: var(--m-spacing-xl); }
-  .member-hero__cta { margin-top: var(--m-spacing-xxl); }
+  .mhero {
+    display: grid;
+    grid-template-areas: 'switch' 'scene' 'words';
+    row-gap: var(--m-spacing-xl);
+    padding-top: calc(var(--nav-h) + var(--m-spacing-lg));
+    padding-bottom: var(--rhythm);
+  }
+  .mhero__switch { grid-area: switch; }
+  .mhero__scene {
+    grid-area: scene;
+    justify-self: center;
+    width: min(100%, 400px);
+    --cs-width: 100%;
+    /* Room for the card's −3° and its shadow. */
+    padding-inline: var(--m-spacing-sm);
+  }
+  .mhero__caption {
+    margin-top: var(--m-spacing-md);
+    text-align: center;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .mhero__words { grid-area: words; }
+  .mhero__lede { margin-top: var(--m-spacing-md); }
+  .mhero__cta { margin-top: var(--m-spacing-xl); }
+
+  @media (min-width: 1048px) {
+    .mhero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas: 'switch .' 'words scene';
+      grid-template-rows: auto auto;
+      column-gap: var(--m-spacing-xxl);
+      row-gap: var(--m-spacing-xl);
+      align-items: center;
+      align-content: start;
+      padding-top: calc(var(--nav-h) + 80px); /* no token yet: proposed (hero top inset) */
+    }
+    .mhero__switch { align-self: start; }
+    .mhero__scene { width: min(100%, 520px); }
+  }
 </style>
