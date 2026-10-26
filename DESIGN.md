@@ -463,7 +463,9 @@ cards or eyebrows.
 
 ### Hero photograph and the issued card (studio floor)
 
-`hero-strength.webp`, square cut, no radius, no scrim. Over its lower half, the studio's
+`hero-pilates.webp` (26 Oct 2026, replacing `hero-strength.webp`, which was dark and
+fought the cream floor): a cream, arched reformer studio, square cut, no radius, no
+scrim. Its warm tones sit in the floor's palette. Over its lower half, the studio's
 card: the **back** (+4°, `shadow.cardBehind`) reads over the photo with "Valid at" and
 every studio on Moose, and the **front** (−3°, "Issued by Your studio", smaller) overlaps
 only the back's lower-left corner. A detail caption beside it reads "Sample card. Your
@@ -580,7 +582,7 @@ Still open: none.
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `120:505` (1440), `120:680` (390) | drawn 26 Oct 2026; right column re-staged (card front + back listing the partners); awaiting Max |
+| `/`, studio floor: Hero | `120:505` (1440), `120:680` (390) | drawn 26 Oct 2026; right column re-staged (card front + back listing the partners) on `hero-pilates`; awaiting Max |
 | `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
