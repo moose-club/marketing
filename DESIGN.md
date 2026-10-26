@@ -483,9 +483,9 @@ Type-led, with no card: the heroes carry the object. The headline sits on the le
 the lede beside it. Under "How it works." are four printed columns (stacked on phone),
 each with a printed rule (`inkRule`) on top, the ordinal in `pageLetteringCompact` at its
 phone size, the step title in `plateLabel` and the body in `body`. Each step's bold range
-is `ink` SemiBold, and prices never break at the slash (word joiners in the copy). Step 04
-ends with the one card-world detail: four empty press-out rings in `inkHint` for classes
-booked. They're empty because nothing on this page belongs to the reader (RULES 6, 19).
+is `ink` SemiBold, and prices never break at the slash (word joiners in the copy). There
+is no card-world detail: the section is type only (Max removed the step 04 rings, 26 Oct
+2026).
 
 **Step copy (26 Oct 2026, in the Figma frames; goes into `copy.ts` when the section is
 coded, because `MODEL` feeds the live page until then):** 01 Register and connect your
