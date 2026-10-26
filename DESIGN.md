@@ -466,9 +466,11 @@ cards or eyebrows.
 No photograph (Max, 26 Oct 2026: it competed with the card and the page wants one
 object, RULES 0). The hero's second column is the studio's card on the floor: the
 **back** (+4°, `shadow.cardBehind`) with "Valid at" and every studio on Moose, and the
-**front** (−3°, "Issued by Your studio", smaller) overlapping only the back's lower-left
-corner. A detail caption beside it reads "Sample card. Your studio issues it; its back
-lists the partners you choose." Phone: switch, then the pair, the caption and the words,
+**front** (−3°, smaller) overlapping only the back's lower-left corner. The front's
+"Issued by" cycles through the live studios on Moose, as on the member hero (see Motion).
+In code, the back leaves out whichever studio is issuing, so a studio never lists itself.
+A detail caption beside it reads "Sample card. Every studio on Moose issues its own; the
+back lists the partners it chooses." Phone: switch, then the pair, the caption and the words,
 the same order as the member floor.
 
 ### Audience switch
@@ -501,7 +503,7 @@ the scroll-drawn live line and the app capture's scroll scrub are retired with t
 sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
 
-**The cycling issuer** (Max, 26 Oct 2026). Once the card has landed, its "Issued by"
+**The cycling issuer** (Max, 26 Oct 2026), on both heroes' cards. Once the card is shown, its "Issued by"
 line cycles through the studios already on Moose (`NETWORK.partners`), one every 1.5s
 with a 200ms fade. It's a quiet text change, not a second authored moment. It pauses
 while the card is hidden or the tab is in the background, and under
@@ -579,7 +581,7 @@ Still open: what the studio floor's Network section shows, now the hero carries 
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390); not taken: `120:505`, `120:680` (with photo) | drawn 26 Oct 2026, no photo, the card front + back; awaiting Max |
+| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo (agreed), the card front + back, issuer cycling; awaiting Max |
 | `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
