@@ -495,6 +495,17 @@ members upgrade in the app and Moose handles the payments; no price cap in this 
 credits, not "four sessions"; every studio connects a booking system. Step bodies were
 trimmed by Max to one sentence each for 01 and 02.
 
+### Value (studio floor)
+
+The headline (`pageLetteringCompact`) and the prize note (`body`), then the three figures
+as a **printed read-back ledger**, the way the app prints "Cost / Free cancel until".
+Each cell has a `printedLabel` title above the figure (`pageLetteringCompact`, `ink`), the
+unit in `detail`, and the caption in `detail` (`inkSupport`). Printed rules (`inkRule`)
+run above and below the ledger and between cells; on phone the cells stack with a rule
+between each. Figures travel open, never boxed. A `detail` line under it reads
+"Illustrative figures, AUD." (new copy, proposed: the figures are illustrative, per
+PRODUCT.md).
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -605,7 +616,8 @@ Still open: what the studio floor's Network section shows, now the hero carries 
 | --- | --- | --- |
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
