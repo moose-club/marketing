@@ -233,11 +233,7 @@ const TILT = [-2, 2, -2];
     100% { opacity: 0; transform: translateY(64px) rotate(50deg); }
   }
 
-  /* The sticker lands: from a touch large, settling (the app's slap). */
-  @keyframes mhow-sticker {
-    from { opacity: 0; scale: 1.15; }
-    to   { opacity: 1; scale: 1; }
-  }
+  /* The sticker lands with MemberCard's `mc-sticker-land`. */
   /* The partner lines print in, one after another. */
   @keyframes mhow-print {
     from { opacity: 0; transform: translateY(2px); }
@@ -256,7 +252,7 @@ const TILT = [-2, 2, -2];
   .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(7)) { animation-delay: 420ms; }
   .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(8)) { animation-delay: 490ms; }
   .is-moving .mhow__step[data-n='2'].is-played :global(.sticker) {
-    animation: mhow-sticker 260ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+    animation: mc-sticker-land 260ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
   }
 
   /* ── The one card (desktop, with motion) ───────────────────────────── */
@@ -333,7 +329,7 @@ const TILT = [-2, 2, -2];
     }
     .mhow[data-step='1'] .mhow__scene :global(.sticker) { opacity: 0; }
     .mhow[data-step='2'] .mhow__scene :global(.sticker) {
-      animation: mhow-sticker 260ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+      animation: mc-sticker-land 260ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
     }
   }
 </style>

@@ -491,6 +491,16 @@ No caption (Max, 26 Oct 2026); the member name "Alex Sample" keeps the card read
 as a sample (RULES 19). Phone: switch, then the pair and the words,
 the same order as the member floor.
 
+**The card is issued (Max, 26 Oct 2026; Figma "Hero · the card is issued" `179:820`).**
+On load, once: the back rises in and turns to +4° (~520 ms), the front slides up over
+its corner and tips to −3° (~560 ms, both ease-out-quint), "Your studio" presses in
+from the hint weight (the Close's press, `mc-press`) and the "Valid" sticker lands
+(1.15 → 1, 260 ms). About 1.4 s in all, CSS only. **Then the pair follows the pointer**
+(Figma `179:1420`): on desktop with a fine pointer, each card leans toward it in 3D
+(front up to 6° and 14 scene units, the back half that, so it reads deeper) and eases
+back on leave (400 ms). No lean while the arrival plays. Under
+`prefers-reduced-motion` the pair is at rest and still; on touch there's no lean.
+
 ### The Moose model (studio floor)
 
 Type-led, with no card: the heroes carry the object. The headline sits on the left with
@@ -682,6 +692,11 @@ once, and are still under `prefers-reduced-motion`:
   and settles into the press-out ring, the pink edge runs down the card and "BOOKED"
   prints (~1.2 s). Figma: "Motion · The app" (`174:1065` → `174:1203`).
 
+**The studio hero: the card is issued, then follows the pointer** (Max, 26 Oct 2026,
+a deliberate stretch of RULES 17b's one-per-flow like the member floor's; details under
+the issued card above). It plays once on load and uses the app's own motions (the
+press, the sticker); the lean is a response to the pointer, not an ambient loop.
+
 **The studio floor's authored moment: the deck** (Network, above). The Register press
 (Close) is feedback on the floor's one action rather than a second ambient moment: it
 plays only when pressed, and only once. The member floor's is
@@ -767,6 +782,7 @@ Still open: none.
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | agreed and coded 26 Oct 2026 (`MSHero.astro`) |
+| `/`, studio floor: Hero motion | issued `179:820` (prototype), pointer `179:1420` | coded 26 Oct 2026 (`MSHero.astro`) |
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | agreed and coded 26 Oct 2026 (`MSModel.astro`) |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | agreed and coded 26 Oct 2026 (`MSValue.astro`), without the footnote |
 | `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | agreed and coded 26 Oct 2026 (`MSNetwork.astro`; the partner card is `MemberCard layout="partner"`) |

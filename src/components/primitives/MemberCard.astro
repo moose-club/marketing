@@ -51,8 +51,9 @@ interface Props {
       box of `logoSize` card units (width × height, balanced by the caller). */
   logo?: string;
   logoSize?: [number, number];
-  /** The issuer not yet pressed in (the studio Close): drawn in the hint
-      weight until an ancestor takes `.is-issued`. */
+  /** The issuer not yet pressed in (the studio Close, the studio hero):
+      drawn in the hint weight until an ancestor takes `.is-issued`, then it
+      presses in. */
   ghostIssuer?: boolean;
   /** Degrees; the card at rest in a scene is −3. */
   tilt?: number;
@@ -118,7 +119,7 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
           {issuers.length > 1
             ? <p class="mc__issuer"><span class="mc__cycle" data-cycle={JSON.stringify(issuers)}>{firstIssuer}</span></p>
             : firstIssuer
-              ? <p class="mc__issuer">{firstIssuer}</p>
+              ? <p class:list={['mc__issuer', ghostIssuer && 'mc__issuer--ghost']}>{firstIssuer}</p>
               : <p class="mc__issuer mc__hint mc__dashed">Your home studio</p>}
           <div class="mc__sticker">
             {sticker
@@ -295,6 +296,12 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
   }
   .mc__cycle.is-out { opacity: 0; transform: translateY(calc(var(--u) * -3)); }
   .mc__sticker { top: calc(var(--u) * 52); right: calc(var(--u) * 22); }
+  /* The sticker lands: from a touch large, settling (the app's slap). Shared
+     by the scenes that play it (member How it works, the studio hero). */
+  @keyframes mc-sticker-land {
+    from { opacity: 0; scale: 1.15; }
+    to   { opacity: 1; scale: 1; }
+  }
   /* Not yet issued: the name in the hint weight. On issue it presses in, a
      brief pink impression (the card is the reader's here, RULES 6) rising to
      the card's lettering. */
