@@ -523,6 +523,15 @@ lettering and its name). No other names or logos on the page.
 - These studios offer Moose, so showing their cards is true (RULES 19). No sticker, no
   member: these are the studios' own cards.
 
+### Close (studio floor)
+
+The navy cover band (`.dark` scoped, RULES 8): "Get your studio on Moose.", the lede,
+the floor's last primary plate ("Register your studio", white with a navy label) and
+the `detail` line under it. Beside the words (below them on phone), a fresh card in its
+sleeve, "Issued by Your studio": the operator's own card, waiting to be issued. It
+mirrors the member hero's sleeve and is still (the deck is the floor's motion). In the
+band the card turns cream and the sleeve raised navy, as in dark mode.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -639,7 +648,7 @@ Still open: none.
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | drawn 26 Oct 2026: the deck (Max's pick); awaiting final review |
-| `/`, studio floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, studio floor: Close | `156:870` (1440), `156:902` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
