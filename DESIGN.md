@@ -529,8 +529,17 @@ The navy cover band (`.dark` scoped, RULES 8): "Get your studio on Moose.", the 
 the floor's last primary plate ("Register your studio", white with a navy label) and
 the `detail` line under it. Beside the words (below them on phone), a fresh card in its
 sleeve, "Issued by Your studio": the operator's own card, waiting to be issued. It
-mirrors the member hero's sleeve and is still (the deck is the floor's motion). In the
-band the card turns cream and the sleeve raised navy, as in dark mode.
+mirrors the member hero's sleeve. In the band the card turns cream and the sleeve
+raised navy, as in dark mode.
+
+**On "Register your studio" (Max, 26 Oct 2026):** the card is issued. Before the press,
+"Your studio" under "Issued by" is ghosted (`cardHint`), because it isn't issued yet.
+On press (~450 ms, ease-out) the plate scales to 0.98, the studio name *presses in*
+(a brief pink impression and the name rising to card lettering, the app's "press"), and
+the card slides up out of its sleeve and tips to −3° as the sleeve drops away. After
+~400 ms it settles, issued, and the studio portal opens in a new tab. Under
+`prefers-reduced-motion` it goes straight to the issued card. Figma: `158:918` → `158:971`
+→ `158:1024` (click the plate in Present).
 
 ### Audience switch
 
@@ -562,7 +571,9 @@ the scroll-drawn live line and the app capture's scroll scrub are retired with t
 sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
 
-**The studio floor's authored moment: the deck** (Network, above). The member floor's is
+**The studio floor's authored moment: the deck** (Network, above). The Register press
+(Close) is feedback on the floor's one action rather than a second ambient moment: it
+plays only when pressed, and only once. The member floor's is
 the card arriving; the studio floor's is the deck fanning out and shuffling. One each
 (RULES 17b).
 
@@ -648,7 +659,7 @@ Still open: none.
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | drawn 26 Oct 2026: the deck (Max's pick); awaiting final review |
-| `/`, studio floor: Close | `156:870` (1440), `156:902` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
