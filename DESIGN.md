@@ -640,6 +640,22 @@ the scroll-drawn live line and the app capture's scroll scrub are retired with t
 sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
 
+**The member floor's further moments (Max, 26 Oct 2026; a deliberate stretch of RULES
+17b's one-per-flow, decided by the rule owner).** Both use the app's own motions, play
+once, and are still under `prefers-reduced-motion`:
+- **How it works: one card earns its marks.** On desktop the three static cards become
+  one sample card held in view while the steps scroll past (scroll-driven: a step
+  activates as it crosses the middle of the viewport; the inactive steps sit in
+  `inkHint`). 01: the back, "Valid at". 02: the card turns to its front and the "Valid"
+  sticker lands (1.15 → 1, ~250 ms). 03: the credits count down 4.00 → 1.46, one class
+  is punched (the hole appears and the disc drops) and the next gets its booked ring. On
+  phone each step's card plays its moment once as it enters. Figma: Member floor page,
+  "Motion · How it works" (`173:856` → `173:1147`).
+- **The app: a class books itself.** When the section enters, the top class card's
+  "Book" stub is tapped (0.98, a faint press), a thin pink arc draws round a faint ring
+  and settles into the press-out ring, the pink edge runs down the card and "BOOKED"
+  prints (~1.2 s). Figma: "Motion · The app" (`174:1065` → `174:1203`).
+
 **The studio floor's authored moment: the deck** (Network, above). The Register press
 (Close) is feedback on the floor's one action rather than a second ambient moment: it
 plays only when pressed, and only once. The member floor's is
