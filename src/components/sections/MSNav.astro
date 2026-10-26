@@ -52,6 +52,19 @@ import Icon from '../primitives/Icon.astro';
     window.addEventListener('scroll', handler, { passive: true });
   }
 
+  // "Back to top" (and the wordmarks): `#top` is this fixed bar, which is
+  // always in view, so the browser won't scroll to it. Scroll the page to the
+  // top instead (smooth unless reduced motion, from the root's
+  // scroll-behavior) and hand focus to the wordmark. The URL keeps its hash,
+  // so the member floor stays the member floor on reload.
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href="#top"]');
+    if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    window.scrollTo({ top: 0 });
+    document.querySelector<HTMLElement>('.nav__brand')?.focus({ preventScroll: true });
+  });
+
   // Mobile menu toggle + auto-close on link tap.
   const toggle = document.getElementById('navToggle');
   const mobile = document.getElementById('navMobile');
