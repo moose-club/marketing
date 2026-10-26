@@ -64,14 +64,8 @@ export const homeNodes: Node[] = [
     offers: {
       '@type': 'Offer',
       priceCurrency: 'AUD',
-      // The studio sets the upgrade fee; Moose caps it.
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        maxPrice: 11,
-        priceCurrency: 'AUD',
-        unitText: 'WEEK',
-      },
-      eligibleQuantity: { '@type': 'QuantitativeValue', value: 4, unitText: 'sessions per month' },
+      // The studio sets the upgrade fee; members get credits each month.
+      eligibleQuantity: { '@type': 'QuantitativeValue', value: 4, unitText: 'credits per month' },
     },
   },
   {

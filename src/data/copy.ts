@@ -75,32 +75,31 @@ export const MODEL = {
   head: "The Moose model.",
   lede: "Crossover between partner venues is intentionally limited: enough variety to enrich a membership, while keeping members anchored to you as their home studio.",
   stepsTitle: "How it works.",
-  // 01–02 sit on your lane, 03–04 on your partner's. `<strong>` ranges render
-  // as Semibold ink, not chips.
+  // Confirmed by Max, 26 Oct 2026. `<strong>` ranges render as Semibold ink.
   steps: [
     {
       n: "01",
-      title: "Identify partners and form partnerships",
+      title: "Register and connect your booking system",
       bodyHtml:
-        "You dictate who you partner with. Partnerships are seamlessly facilitated through Moose.",
+        "Sign up in the studio portal and connect your booking system. Moose links your members’ memberships automatically, so there’s no integration work for you.",
     },
     {
       n: "02",
-      title: "Add a premium tier to your membership catalogue",
+      title: "Choose your partners",
       bodyHtml:
-        "You sell it, you own it. Our only stipulation is that the upgrade fee is capped at <strong>$11/wk (or $48/mo)</strong> extra.",
+        "Pick the complementary, non-competing studios nearby that your members can visit. Partnerships are reciprocal, and you can change them any time.",
     },
     {
       n: "03",
-      title: "Rationed crossover",
+      title: "Select your eligible memberships",
       bodyHtml:
-        "The upgrade entitles members to a notional <strong>four crossover sessions per month</strong> at partner venues (in aggregate, not per partner).",
+        "Choose which of your memberships can add Moose. Members upgrade in the Moose app and Moose handles the payments.",
     },
     {
       n: "04",
-      title: "A balanced exchange",
+      title: "Members book, Moose keeps it balanced",
       bodyHtml:
-        "Our backend systems monitor crossover both ways, ensuring a balanced exchange between partners.",
+        "Upgraded members get <strong>credits each month</strong> to book classes at your partners in the Moose app. Moose tracks visits both ways, so no studio carries the network.",
     },
   ] as const,
 } as const;
@@ -193,7 +192,7 @@ export const MEMBERS = {
       { n: "01", body: "Your studio partners with complementary, non-competing studios nearby." },
       {
         n: "02",
-        body: "You upgrade your membership through your home studio for access to partner venues. Moose caps the upgrade fee at $11/wk.",
+        body: "You upgrade your membership through your home studio for access to partner venues.",
       },
       {
         n: "03",
@@ -211,7 +210,7 @@ export const MEMBERS = {
       },
       {
         k: "What you pay",
-        body: "Your home studio sets the upgrade fee for the premium tier. This is capped by Moose at a maximum of $11/wk (or $48/mo).",
+        body: "Your home studio sets the upgrade fee for the premium tier.",
       },
     ] as const,
   },

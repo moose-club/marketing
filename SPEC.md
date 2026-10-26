@@ -1,6 +1,6 @@
 # Moose Marketing Site — Build Spec
 
-A spec for the public marketing site for **Moose**, a network for boutique fitness studios. Members of a partner studio can pay a small upgrade ($11/wk extra) for the right to attend 4 sessions/month at complementary, non-competing partner venues nearby. Audience: studio owners and operators — not end-member consumers.
+A spec for the public marketing site for **Moose**, a network for boutique fitness studios. Members of a partner studio can add a small upgrade (priced by their studio, paid through Moose) for credits each month to book classes at complementary, non-competing partner venues nearby. Audience: studio owners and operators — not end-member consumers.
 
 This document tracks the _2026-06 redesign_ (the only design in production). It supersedes the original 12-section v1 spec. If anything in the source files contradicts this spec, the running code is the tiebreaker.
 
@@ -124,7 +124,7 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - `.section--cream`. Eyebrow "At a glance", h2 "The Moose model.", lede.
 - Inner white card (`.model__steps`) titled "How it works.", containing 4 columns:
   1. **Formation** — Identify partners and form partnerships
-  2. **Offering** — Add a premium tier (upgrade fee set by the studio, capped at $11/wk)
+  2. **Offering** — Add a premium tier (upgrade fee set by the studio)
   3. **Usage** — Rationed crossover (a notional four sessions/month, in aggregate across partners)
   4. **Balance** — A balanced exchange
 - Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 2–3 paragraphs.
@@ -252,7 +252,7 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 
 **Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
 
-- JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade capped at $11/wk, 4 sessions/month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
+- JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade priced by the studio, credits each month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
 - `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`.
 - `robots.txt` names the AI crawlers explicitly as allowed. The host must not block them at the edge (Cloudflare blocks AI bots by default on new zones).
 - The site is registered with Google Search Console and Bing Webmaster Tools (ChatGPT search draws on Bing).

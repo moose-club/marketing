@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Public marketing site for **Moose**, a B2B network for boutique fitness studios. Members of a Moose-partner studio can pay a small upgrade ($11/wk extra) for the right to attend 4 sessions/month at complementary, non-competing partner venues nearby. Studios get a new premium tier, members get variety, and Moose keeps the flow balanced across partners.
+Public marketing site for **Moose**, a B2B network for boutique fitness studios. Members of a Moose-partner studio can add a small upgrade (priced by their studio, paid through Moose) for credits each month to book classes at complementary, non-competing partner venues nearby. Studios get a new premium tier, members get variety, and Moose keeps the flow balanced across partners.
 
 Audience: studio operators first, members second. Single page (`/`) with two floors behind an audience switch ("I run a studio" / "I'm a member"). The studio floor's primary action is "Register your studio" (out to the studio portal, studio.trainmoose.com); the member floor's is the App Store. There is no form on the site.
 

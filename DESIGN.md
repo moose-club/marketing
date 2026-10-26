@@ -234,7 +234,7 @@ switch and tells the same card to each reader.
 card in its sleeve, the web echo of the app's arrival: on load it slides out and lands
 at −3°. Below it, "how it works" is told as the card's marks, in order: your name
 prints, the code ticks it, your studio is pressed in, Moose puts the sticker on, and each
-crossover class is punched. The commercials ($11 a week, 4 classes a month) and the App
+crossover class is punched. The commercials (what you get, what you pay) and the App
 Store plate follow.
 
 **The studio floor** sells being the issuer. The studio hands out the card, its back
