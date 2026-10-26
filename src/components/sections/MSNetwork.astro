@@ -38,6 +38,21 @@ const cards = await Promise.all(
 );
 // A small, fixed lean for each card in the stack and the phone row.
 const JITTER = [-2, 1.5, -1, 2, -1.5, 1, -2, 1.5];
+
+// The fan's slots, one per card, so the arc holds whatever the roster counts.
+// From the drawn 8 (Figma `151:879`): 150 units and 5° per step from the
+// centre, and a drop that steepens by a constant 17 per card out (0 / 28 /
+// 73 / 135). Cards move between slots at runtime (`data-slot`), so the slots
+// are a generated stylesheet, not per-card inline styles.
+const slotCss = [
+  `.deck__cards { --mid: ${(cards.length - 1) / 2}; }`,
+  ...cards.map((_, i) => {
+    const t = i - (cards.length - 1) / 2;
+    const k = Math.max(0, Math.abs(t) - 0.5);
+    const y = 19.5 * k + 8.5 * k * k;
+    return `.deck__card[data-slot='${i}'] { --x: ${150 * t}; --y: ${+y.toFixed(1)}; --r: ${+(5 * t).toFixed(1)}deg; --z: ${i}; }`;
+  }),
+].join('\n');
 ---
 
 <section class="network" id="network" aria-labelledby="networkHeading">
@@ -62,6 +77,10 @@ const JITTER = [-2, 1.5, -1, 2, -1.5, 1, -2, 1.5];
     </ul>
   </div>
 </section>
+
+{/* The slots are custom properties only; the desktop media query consumes
+    them, so declaring them everywhere is inert on the phone row. */}
+<style is:inline set:html={slotCss}></style>
 
 <script>
   const FAN = 3000; // a shuffle every 3 s
@@ -183,20 +202,14 @@ const JITTER = [-2, 1.5, -1, 2, -1.5, 1, -2, 1.5];
       transform: translate(calc(var(--s) * var(--x)), calc(var(--s) * (var(--y) - var(--lift, 0)))) rotate(var(--r));
       transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
     }
-    .deck__card[data-slot='0'] { --x: -525; --y: 135; --r: -17.5deg; --z: 0; }
-    .deck__card[data-slot='1'] { --x: -375; --y: 73;  --r: -12.5deg; --z: 1; }
-    .deck__card[data-slot='2'] { --x: -225; --y: 28;  --r: -7.5deg;  --z: 2; }
-    .deck__card[data-slot='3'] { --x: -75;  --y: 0;   --r: -2.5deg;  --z: 3; }
-    .deck__card[data-slot='4'] { --x: 75;   --y: 0;   --r: 2.5deg;   --z: 4; }
-    .deck__card[data-slot='5'] { --x: 225;  --y: 28;  --r: 7.5deg;   --z: 5; }
-    .deck__card[data-slot='6'] { --x: 375;  --y: 73;  --r: 12.5deg;  --z: 6; }
-    .deck__card[data-slot='7'] { --x: 525;  --y: 135; --r: 17.5deg;  --z: 7; }
+    /* Each slot's --x / --y / --r / --z come from the generated slot
+       stylesheet above, one per card in the roster. */
     .deck__card:hover { --lift: 16; }
 
     /* Arriving: a neat stack in the middle, each card a step up and a small
        lean, until the deck scrolls into view. */
     .deck.is-stacked .deck__card {
-      transform: translate(calc(var(--s) * (var(--z) - 3.5) * 2), calc(var(--s) * (60 - var(--z) * 2))) rotate(var(--jit));
+      transform: translate(calc(var(--s) * (var(--z) - var(--mid)) * 2), calc(var(--s) * (60 - var(--z) * 2))) rotate(var(--jit));
     }
     /* The tucking card rises and passes behind the fan on its way to the
        back. */

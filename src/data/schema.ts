@@ -61,11 +61,11 @@ export const homeNodes: Node[] = [
     areaServed: { '@type': 'Country', name: 'Australia' },
     description: [MODEL.lede, ...MODEL.steps.slice(1, 3).map((s) => stripTags(s.bodyHtml))].join(' '),
     audience: { '@type': 'BusinessAudience', audienceType: 'Boutique fitness studio operators' },
+    // The studio sets the upgrade fee and the credit amount varies by studio
+    // (Max, 26 Oct 2026), so no figure here — the copy states none either.
     offers: {
       '@type': 'Offer',
       priceCurrency: 'AUD',
-      // The studio sets the upgrade fee; members get credits each month.
-      eligibleQuantity: { '@type': 'QuantitativeValue', value: 4, unitText: 'credits per month' },
     },
   },
   {

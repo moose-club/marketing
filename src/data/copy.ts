@@ -54,9 +54,11 @@ export const SWITCH = {
 
 export const HERO = {
   head: "Level up your memberships.",
+  // Reworked with Max, 26 Oct 2026: mechanism first, then the payoff.
+  // "Paid upgrade", not "pay you" — priced by the studio, paid through Moose.
   subLines: [
-    "Moose unlocks variety for fitness studios.",
-    "Form reciprocal partnerships with complementary, non-competing studios nearby.",
+    "Moose partners your studio with complementary studios nearby, and your members add their classes as a paid upgrade.",
+    "More revenue, less churn — and your members stay yours.",
   ] as const,
   points: [
     "You choose your partners.",
