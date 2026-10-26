@@ -594,6 +594,15 @@ the App Store plate is the member Close's.
 class at a partner studio and book it with your credits." This replaces "Book and manage
 crossover sessions at partner venues" and its lede.
 
+### Close (member floor)
+
+The navy cover band, as on the studio floor (`.dark` scoped): "Get the Moose app.", the
+lede, the floor's last primary plate ("Download on the App Store") and the `detail` line
+("…iPhone only for now.", kept together on one line). Beside the words (below them on
+phone), the sample card in use, "Issued by Your home studio", "Alex Sample", 4.00, the
+"Valid" sticker, cream in the band, at −3°. The card lives in the app. It is still. The
+footer follows (shared).
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -724,7 +733,7 @@ Still open: none.
 | `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: What you get, what you pay | `168:683` (1440), `168:700` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: the app | `171:1248` (1440), `171:1314` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: Close | `172:817` (1440), `172:882` (390), Member floor page | drawn 26 Oct 2026, awaiting Max. Member floor complete in Figma |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
