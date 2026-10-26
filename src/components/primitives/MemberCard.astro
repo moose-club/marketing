@@ -29,7 +29,9 @@ interface Props {
   label: string;
   face?: 'front' | 'back';
   layout?: 'in-use' | 'printed';
-  issuer?: string;
+  /** One studio, or several to cycle through on the in-use face (about one a
+      second and a half; still under reduced motion, showing the first). */
+  issuer?: string | readonly string[];
   member?: string;
   number?: string;
   credits?: string;
@@ -71,6 +73,9 @@ const {
 // The punch row (in-use front): 18-unit marks, 8 apart, from the left margin,
 // centred on y 195. An attended punch is a hole: the face's mask cuts it out,
 // and a ring of inner shadow gives it depth.
+const issuers = typeof issuer === 'string' ? [issuer] : issuer ? [...issuer] : [];
+const firstIssuer = issuers[0];
+
 const PUNCH = { x: 22, y: 186, size: 18, gap: 8 };
 const punchAt = (i: number) => PUNCH.x + i * (PUNCH.size + PUNCH.gap);
 const holes = face === 'front' && layout === 'in-use'
@@ -97,9 +102,11 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
         <>
           <span class="mc__loop"><MooseLoop /></span>
           <p class="mc__label mc__issued-label">Issued by</p>
-          {issuer
-            ? <p class="mc__issuer">{issuer}</p>
-            : <p class="mc__issuer mc__hint mc__dashed">Your home studio</p>}
+          {issuers.length > 1
+            ? <p class="mc__issuer"><span class="mc__cycle" data-cycle={JSON.stringify(issuers)}>{firstIssuer}</span></p>
+            : firstIssuer
+              ? <p class="mc__issuer">{firstIssuer}</p>
+              : <p class="mc__issuer mc__hint mc__dashed">Your home studio</p>}
           <div class="mc__sticker">
             {sticker
               ? <Sticker label={sticker.label} dashed={sticker.dashed} />
@@ -129,8 +136,8 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
         <>
           <span class="mc__loop mc__loop--printed"><MooseLoop /></span>
           <p class="mc__label mc__p-issued-label">Issued by</p>
-          {issuer
-            ? <p class="mc__issuer mc__p-issuer">{issuer}</p>
+          {firstIssuer
+            ? <p class="mc__issuer mc__p-issuer">{firstIssuer}</p>
             : <p class="mc__issuer mc__p-issuer mc__hint mc__dashed">Your home studio</p>}
           <p class="mc__number mc__emboss">{number}</p>
           <p class="mc__label mc__p-member-label">Member</p>
@@ -245,8 +252,8 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
   .mc__issuer {
     top: calc(var(--u) * 59);
     left: calc(var(--u) * 22);
-    max-width: calc(var(--u) * 186);
-    font-size: calc(var(--u) * 17);
+    max-width: calc(var(--u) * 192); /* clear of the sticker */
+    font-size: calc(var(--u) * 15);  /* holds the longest studio on Moose on one line */
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.01em;
@@ -254,6 +261,12 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  /* A cycling issuer fades out, changes, and fades back in. */
+  .mc__cycle {
+    display: inline-block;
+    transition: opacity 200ms ease-out, transform 200ms ease-out;
+  }
+  .mc__cycle.is-out { opacity: 0; transform: translateY(calc(var(--u) * -3)); }
   .mc__sticker { top: calc(var(--u) * 52); right: calc(var(--u) * 22); }
   .mc__member-label { top: calc(var(--u) * 103); left: calc(var(--u) * 22); }
   .mc__member {
@@ -408,3 +421,27 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
     color: var(--mc-support);
   }
 </style>
+
+<script>
+  // The cycling issuer: the studios already on Moose, one at a time. Waits for
+  // the card's arrival, skips while the card is hidden (the other floor) or
+  // the tab is in the background, and stays still under reduced motion.
+  const STEP = 1500;
+  const FADE = 200;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((el) => {
+    const names: string[] = JSON.parse(el.dataset.cycle ?? '[]');
+    let i = 0;
+    window.setTimeout(() => {
+      window.setInterval(() => {
+        if (reduce.matches || document.hidden || !el.offsetParent) return;
+        el.classList.add('is-out');
+        window.setTimeout(() => {
+          i = (i + 1) % names.length;
+          el.textContent = names[i];
+          el.classList.remove('is-out');
+        }, FADE);
+      }, STEP);
+    }, 1600);
+  });
+</script>

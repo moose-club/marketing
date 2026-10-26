@@ -482,6 +482,14 @@ the scroll-drawn live line and the app capture's scroll scrub are retired with t
 sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
 
+**The cycling issuer** (Max, 26 Oct 2026). Once the card has landed, its "Issued by"
+line cycles through the studios already on Moose (`NETWORK.partners`), one every 1.5s
+with a 200ms fade. It's a quiet text change, not a second authored moment. It pauses
+while the card is hidden or the tab is in the background, and under
+`prefers-reduced-motion` it stays on the first studio. The member stays a sample
+("Alex Sample"), and these studios do offer Moose, so the "Valid" sticker is true of
+them (RULES 19). The issuer line is sized so the longest name holds one line.
+
 ## Copy
 
 RULES 20, plus this site's words. Copy lives in `src/data/copy.ts` and is Max's: change it
