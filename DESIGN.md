@@ -477,6 +477,17 @@ No caption (Max, 26 Oct 2026); the member name "Alex Sample" keeps the card read
 as a sample (RULES 19). Phone: switch, then the pair and the words,
 the same order as the member floor.
 
+### The Moose model (studio floor)
+
+Type-led, with no card: the heroes carry the object. The headline sits on the left with
+the lede beside it. Under "How it works." are four printed columns (stacked on phone),
+each with a printed rule (`inkRule`) on top, the ordinal in `pageLetteringCompact` at its
+phone size, the step title in `plateLabel` and the body in `body`. Each step's bold range
+is `ink` SemiBold, and prices never break at the slash (word joiners in the copy). Step 03
+carries the one card-world detail: four empty press-out rings in `inkHint` for "four
+crossover sessions per month". They're empty because nothing on this page belongs to the
+reader (RULES 6, 19).
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -586,7 +597,8 @@ Still open: what the studio floor's Network section shows, now the hero carries 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
-| `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
