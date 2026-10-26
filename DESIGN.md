@@ -358,7 +358,7 @@ Depth belongs only to objects on it:
 
 Separation on the floor comes from printed rules (`inkRule`), space and type weight. The
 scrolled nav takes the solid floor and an `inkRule` edge, never a frosted bar. Gradients
-are named tokens only (RULES 11), so the studio hero's photograph takes no scrim.
+are named tokens only (RULES 11).
 
 ## Shapes
 
@@ -461,17 +461,15 @@ The legal text on one floating `paper` column (`radius.lg`, `shadow.paper`) cent
 the floor. `printedLabel` section labels and `inkRule` between sections. No bands,
 cards or eyebrows.
 
-### Hero photograph and the issued card (studio floor)
+### The issued card (studio floor hero)
 
-`hero-pilates.webp` (26 Oct 2026, replacing `hero-strength.webp`, which was dark and
-fought the cream floor): a cream, arched reformer studio, square cut, no radius, no
-scrim. Its warm tones sit in the floor's palette. Over its lower half, the studio's
-card: the **back** (+4°, `shadow.cardBehind`) reads over the photo with "Valid at" and
-every studio on Moose, and the **front** (−3°, "Issued by Your studio", smaller) overlaps
-only the back's lower-left corner. A detail caption beside it reads "Sample card. Your
-studio issues it; its back lists the partners you choose." Phone: the photo is a band
-under the nav with the same pair over its foot, then the caption, then the words. It's a
-photo cover, so it reads the same in light and dark.
+No photograph (Max, 26 Oct 2026: it competed with the card and the page wants one
+object, RULES 0). The hero's second column is the studio's card on the floor: the
+**back** (+4°, `shadow.cardBehind`) with "Valid at" and every studio on Moose, and the
+**front** (−3°, "Issued by Your studio", smaller) overlapping only the back's lower-left
+corner. A detail caption beside it reads "Sample card. Your studio issues it; its back
+lists the partners you choose." Phone: switch, then the pair, the caption and the words,
+the same order as the member floor.
 
 ### Audience switch
 
@@ -561,13 +559,12 @@ only where it breaks RULES 6 or 20, and list each change old → new in the PR.
 
 Decided 26 Oct 2026 (Max delegated these to the redesign):
 
-1. ~~The hero photograph.~~ **It stays, on the studio floor only**, as a plain
-   photograph: square cut, no scrim, no gradient, with the issued card laid on it (the
-   iOS intro's structure: a photo band with the card on it). The member floor has no
-   photograph; the card in its sleeve is its hero.
-2. ~~The studio floor's hero object.~~ **The card's front**, issued by a sample studio to
-   a sample member. The back, with the partner lines, is the Network section, so the
-   two never repeat.
+1. ~~The hero photograph.~~ **No photograph on either floor** (Max, 26 Oct 2026,
+   revising the first call to keep it on the studio floor). The card is each hero's one
+   object. People may come back lower on the page, ideally real partner-studio photos.
+2. ~~The studio floor's hero object.~~ **The card's front and back, fanned**: the front
+   issued by "Your studio", the back listing the studios on Moose. The Network section
+   then must not repeat the back. What it shows instead is open until it's drawn.
 3. ~~Sections per floor.~~ **Studio:** Hero → Model (how it works) → Value (the figures,
    open rows) → Network (the card's back) → Close. **Member:** Hero (the card in its
    sleeve) → How it works (the card's marks) → Get and pay (open rows) → Close. The
@@ -576,13 +573,13 @@ Decided 26 Oct 2026 (Max delegated these to the redesign):
    compact / 96 regular) and are listed as proposed tokens in the PR
    (`radius.component.sticker`, `spacing.section`).
 
-Still open: none.
+Still open: what the studio floor's Network section shows, now the hero carries the card's back (Max, when it's drawn).
 
 ## Screens
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `120:505` (1440), `120:680` (390) | drawn 26 Oct 2026; right column re-staged (card front + back listing the partners) on `hero-pilates`; awaiting Max |
+| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390); not taken: `120:505`, `120:680` (with photo) | drawn 26 Oct 2026, no photo, the card front + back; awaiting Max |
 | `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
