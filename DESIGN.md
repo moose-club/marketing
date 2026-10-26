@@ -490,10 +490,10 @@ booked. They're empty because nothing on this page belongs to the reader (RULES 
 **Step copy (26 Oct 2026, in the Figma frames; goes into `copy.ts` when the section is
 coded, because `MODEL` feeds the live page until then):** 01 Register and connect your
 booking system · 02 Choose your partners · 03 Select your eligible memberships (Max:
-members upgrade in the app and Moose handles the payments; capped at $11/wk or $48/mo) ·
-04 Members book, Moose keeps it balanced (credits each month). Still to confirm with Max:
-credits vs "four sessions", whether every studio connects a booking system, and whether
-partners can be changed any time.
+members upgrade in the app and Moose handles the payments; no price cap in this step) ·
+04 Members book, Moose keeps it balanced (credits each month). Confirmed by Max: it's
+credits, not "four sessions"; every studio connects a booking system; partners can be
+changed any time.
 
 ### Audience switch
 
