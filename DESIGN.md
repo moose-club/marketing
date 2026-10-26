@@ -199,7 +199,7 @@ one at a time. **Screens** shows each page's state.
 pages opt out with `followSystemDark={false}` until each is redrawn, because their
 shipped CSS uses colours that don't flip. Poppins is self-hosted from
 `@fontsource/poppins`. The retired ink weights (`inkTape`, `inkHairline`, `inkWash`,
-`inkPlaceholder`) are gone from the site's CSS, and the pink live line is removed, so `/`
+`inkPlaceholder`) are gone from the site's CSS, and the pink line is dropped (retired), so `/`
 has no pink until the card objects arrive. The nav wordmark is an `ink` mask.
 
 ## Overview
