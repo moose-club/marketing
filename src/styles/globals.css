@@ -141,8 +141,8 @@ html {
 
 /* Do not add `overflow-x: hidden` here (or `content-visibility` to a section
    wrapper) to chase a horizontal scrollbar: either makes this element the
-   scroll container for everything below it, which freezes MSMembers' app
-   scrub. Fix the overflowing child instead. */
+   scroll container for everything below it, which breaks the sticky card in
+   MSMemberHow. Fix the overflowing child instead. */
 body {
   margin: 0;
   background: var(--paper);
@@ -203,7 +203,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Section padding — vertical rhythm across the page. */
 /* `--section-pad` names the padding so a section's own children can bleed into
-   it (MSMembers' pink spine) without restating the clamp as a one-off size. */
+   it without restating the clamp as a one-off size. */
 .section { --section-pad: clamp(72px, 9vw, 104px); padding-block: var(--section-pad); }
 .section--tight { --section-pad: clamp(56px, 7vw, 80px); }
 .section--cream { background: var(--cream); }
@@ -290,8 +290,7 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
 /* NB: this clamp does not disable a *scroll-driven* animation — a progress
    timeline with `fill-mode: both` would snap to its end frame and hold. Any
    `animation-timeline` rule must therefore be nested in
-   `@media (prefers-reduced-motion: no-preference)` so it never exists here.
-   See MSMembers.astro. */
+   `@media (prefers-reduced-motion: no-preference)` so it never exists here. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -345,52 +344,14 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   max-width: 34em;
 }
 
-/* ══ Lane Lines — the `/` floor (retired) ═══════════════════════════════
-   Lane Lines is retired (moose-design RULES 0): this layer stays only until
-   each section of `/` is redrawn on the Member Card, and is deleted then.
-   One flat cream floor, a navy close (`.dark` — the token set's own navy
-   floor), one ink. Its pink live line is already gone (RULES 6).
-
-   The floor is two lanes — yours and your partner's — with the line running
-   just before whichever lane it is on. Below 1048px there is room for one
-   lane only, so the partner blocks stack under yours and the line keeps
-   lane 0. */
-
+/* Page geometry and rhythm on `/`. Layout isn't tokenised. */
 :root {
-  /* Lane geometry. Layout isn't tokenised; these are the Figma frame's
-     measures (1440: lanes 124→684 and 744→1316, the line 24 before each). */
-  --floor-max:       1440px;
-  --floor-pad-start: 44px;   /* no token yet: proposed (lane grid) */
-  --floor-pad-end:   var(--m-spacing-lg);
-  --lane-gutter:     60px;   /* no token yet: proposed (lane grid) */
-  --line-inset:      20px;   /* no token yet: proposed (lane grid) */
-  --nav-h:           72px;   /* no token yet: proposed (lane grid) */
-  /* Station rhythm: 72 compact, 96 regular. */
-  --rhythm:          72px;   /* no token yet: proposed (D7) */
-
-  /* Lane Lines web type roles the token set doesn't carry yet — the Figma
-     text styles `Lane Lines/Web/…`, proposed to moose-design (rule 13).
-     Everything else reads `--m-type-*`. */
-  /* Headline leading and tracking, opened up from the token's 0.86 and the
-     frames' −4% — at those the lines touched and the letters crowded.
-     Proposed to moose-design as the web floorLettering leading. */
-  --ll-lettering-leading:  1.02;     /* provisional: overrides --m-type-floor-lettering-leading */
-  --ll-lettering-tracking: -0.025em; /* no token yet: proposed */
-  --ll-lead-size:    1.125rem;       /* no token yet: proposed (Lead 18/1.6) */
-  --ll-lead-leading: 1.6;            /* no token yet: proposed */
-  --ll-body-size:    0.9375rem;      /* no token yet: proposed (Body 15/1.55) */
-  --ll-body-leading: 1.55;           /* no token yet: proposed */
-  --ll-ordinal-size: 1.75rem;        /* no token yet: proposed (Ordinal 28/800) */
-  --ll-tracking:     -0.01em;        /* no token yet: proposed (Figma −1%) */
+  --nav-h:  72px;  /* no token yet: proposed */
+  --rhythm: 72px;  /* no token yet: proposed (section rhythm: 72 compact, 96 regular) */
+  --plate-tracking: -0.01em; /* no token yet: proposed (Figma −1%) */
 }
-
 @media (min-width: 1048px) {
-  :root {
-    --floor-pad-start: clamp(64px, 8.6vw, 124px);
-    --floor-pad-end:   var(--floor-pad-start);
-    --line-inset:      var(--m-spacing-lg);
-    --rhythm:          96px;   /* no token yet: proposed (D7) */
-  }
+  :root { --rhythm: 96px; } /* no token yet: proposed */
 }
 
 /* The two floors. The studio floor is the default; `html[data-audience]` is
@@ -406,98 +367,9 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
   font-weight: 400;
 }
 
-/* Lane container: the floor's measure, with the two lanes side by side from
-   1048px. `.lanes > *` default to your lane; `.lane--partner` takes the
-   partner lane. Grid row placement keeps paired blocks level. */
-.lanes {
-  max-width: var(--floor-max);
-  margin-inline: auto;
-  padding-inline: var(--floor-pad-start) var(--floor-pad-end);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: var(--m-spacing-xl);
-}
-@media (min-width: 1048px) {
-  .lanes {
-    grid-template-columns: minmax(0, 560fr) var(--lane-gutter) minmax(0, 572fr);
-    row-gap: 0;
-  }
-  .lanes > * { grid-column: 1; }
-  .lanes > .lane--partner { grid-column: 3; }
-}
-/* On the compact floor the partner's blocks step in, so the pairing still
-   reads without a second lane. */
-@media (max-width: 1047.98px) {
-  .lane--indent { padding-left: var(--line-inset); }
-  .lanes { max-width: calc(640px + var(--floor-pad-start) + var(--floor-pad-end)); margin-inline: 0; }
-}
-
-.station { margin-top: var(--rhythm); }
-
-/* ── Type roles ─────────────────────────────────────────────────── */
-
-/* Floor lettering: the page headline at full size, station heads in-app
-   (64 against the cover's 72 at 1440). Sentence case, trailing period, never
-   hand-broken. */
-.lettering {
-  font-size: var(--m-type-floor-lettering-size);
-  font-weight: var(--m-type-floor-lettering-weight);
-  line-height: var(--ll-lettering-leading);
-  letter-spacing: var(--ll-lettering-tracking);
-  color: var(--m-ink);
-  text-wrap: balance;
-  /* The descent give-back: room for the last line's descenders. */
-  padding-bottom: 0.06em;
-}
-.lettering--station {
-  font-size: calc(var(--m-type-floor-lettering-size) * 0.889);
-}
-
-.lead {
-  font-size: var(--ll-lead-size);
-  line-height: var(--ll-lead-leading);
-  letter-spacing: var(--ll-tracking);
-  color: var(--m-ink-support);
-  max-width: 560px;
-}
-.lettering + .lead { margin-top: var(--m-spacing-md); }
-.lead + .lead { margin-top: var(--m-spacing-md); }
-
-.plate-label {
-  font-size: var(--m-type-plate-label-size);
-  font-weight: var(--m-type-plate-label-weight);
-  line-height: var(--m-type-plate-label-leading);
-  letter-spacing: var(--ll-tracking);
-  color: var(--m-ink);
-}
-
-.body-copy {
-  font-size: var(--ll-body-size);
-  line-height: var(--ll-body-leading);
-  letter-spacing: var(--ll-tracking);
-  color: var(--m-ink-support);
-}
-.body-copy strong { font-weight: 600; color: var(--m-ink); }
-
-.detail {
-  font-size: var(--m-type-detail-size);
-  font-weight: var(--m-type-detail-weight);
-  line-height: var(--m-type-detail-leading);
-  color: var(--m-ink-support);
-}
-
-.ordinal {
-  font-size: var(--ll-ordinal-size);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ── Plates ─────────────────────────────────────────────────────────
-   Actions are plates on Radius/md: a solid fill (the Floor plate, one per
-   screen) or a 2px ink edge (secondary, switch, station action). Press is
-   0.98 over 140ms. */
+   Actions are plates: a solid fill (the primary, one per view, RULES 5) or a
+   2px ink edge (outline, station action). Press is 0.98 over 140ms. */
 .plate {
   display: inline-flex;
   align-items: center;
@@ -509,7 +381,7 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
   font-size: var(--m-type-plate-label-size);
   font-weight: var(--m-type-plate-label-weight);
   line-height: var(--m-type-plate-label-leading);
-  letter-spacing: var(--ll-tracking);
+  letter-spacing: var(--plate-tracking);
   white-space: nowrap;
   transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
