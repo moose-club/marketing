@@ -1,61 +1,87 @@
 ---
 import { MODEL } from '../../data/copy';
 
-// Station · The Moose model — two lanes. Lettering, lede and 01–02 on your
-// lane; 03–04 on your partner's.
-const yours = MODEL.steps.slice(0, 2);
-const partners = MODEL.steps.slice(2);
+// The Moose model (Member Card; Figma `135:570` / `135:662`). Type-led, with no
+// card: the heroes carry the object. The headline with the lede beside it,
+// then "How it works." over four printed columns, each under a printed rule
+// (stacked on phone). Step bodies may carry a `<strong>` range (ink SemiBold).
 ---
 
-<section class="station lanes model" id="model" aria-labelledby="modelHeading">
+<section class="model page" id="model" aria-labelledby="modelHeading">
   <div class="model__intro">
-    <h2 id="modelHeading" class="lettering lettering--station">{MODEL.head}</h2>
-    <p class="lead">{MODEL.lede}</p>
-    <h3 class="title model__title" id="how">{MODEL.stepsTitle}</h3>
+    <h2 id="modelHeading" class="page-lettering page-lettering--compact">{MODEL.head}</h2>
+    <p class="body-text model__lede">{MODEL.lede}</p>
   </div>
 
-  <ol class="steps model__you">
-    {yours.map((s) => (
-      <li class="step">
-        <span class="ordinal step__n">{s.n}</span>
-        <div>
-          <p class="plate-label">{s.title}</p>
-          <p class="body-copy step__body" set:html={s.bodyHtml} />
-        </div>
-      </li>
-    ))}
-  </ol>
-
-  <ol class="lane--partner lane--indent steps model__partner" start="3">
-    {partners.map((s) => (
-      <li class="step">
-        <span class="ordinal step__n">{s.n}</span>
-        <div>
-          <p class="plate-label">{s.title}</p>
-          <p class="body-copy step__body" set:html={s.bodyHtml} />
-        </div>
+  <h3 class="model__title" id="how">{MODEL.stepsTitle}</h3>
+  <ol class="model__steps">
+    {MODEL.steps.map((s) => (
+      <li class="model__step">
+        <span class="page-lettering model__n">{s.n}</span>
+        <p class="model__step-title">{s.title}</p>
+        <p class="body-text model__body" set:html={s.bodyHtml} />
       </li>
     ))}
   </ol>
 </section>
 
 <style>
-  .model__title { margin-top: var(--m-spacing-xxl); }
+  .model { padding-top: var(--rhythm); }
 
-  .steps { display: grid; gap: var(--m-spacing-xl); }
-  .step {
+  .model__intro {
     display: grid;
-    grid-template-columns: 48px minmax(0, 1fr);
-    align-items: start;
+    gap: var(--m-spacing-md);
   }
-  .step__n { color: var(--m-ink-support); }
-  .step__body { margin-top: var(--m-spacing-sm); max-width: 516px; }
+
+  .model__title {
+    margin-top: 40px; /* no token yet: proposed (the 390 frame's intro → steps) */
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+
+  .model__steps {
+    display: grid;
+    gap: var(--m-spacing-lg);
+    margin-top: var(--m-spacing-lg);
+  }
+  .model__step {
+    padding-top: var(--m-spacing-lg);
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  /* The ordinal: display lettering at the compact role's phone size. */
+  .model__n {
+    display: block;
+    font-size: 2.25rem; /* = --m-type-page-lettering-compact-size's floor */
+    font-variant-numeric: tabular-nums;
+  }
+  .model__step-title {
+    margin-top: 12px; /* no token yet: proposed (Figma step rhythm) */
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .model__body { margin-top: 12px; } /* no token yet: proposed */
+  .model__body :global(strong) { font-weight: 600; color: var(--m-ink); }
+
+  @media (min-width: 760px) {
+    .model__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--m-spacing-xl);
+      row-gap: var(--m-spacing-xl);
+    }
+  }
 
   @media (min-width: 1048px) {
-    .step { grid-template-columns: 56px minmax(0, 1fr); }
-    /* 03 sits level with 01: the partner has nothing to say until the
-       crossover, so the floor above it is stated, not filled. */
-    .model { row-gap: var(--m-spacing-xl); }
-    .model__you, .model__partner { grid-row: 2; }
+    .model__intro {
+      grid-template-columns: minmax(0, 560px) minmax(0, 520px);
+      column-gap: 64px; /* no token yet: proposed (page gutter) */
+      align-items: end;
+    }
+    .model__lede { max-width: none; }
+    .model__title { margin-top: 64px; } /* no token yet: proposed */
+    .model__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 </style>
