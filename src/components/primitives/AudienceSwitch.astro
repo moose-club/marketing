@@ -1,9 +1,11 @@
 ---
 import { SWITCH } from '../../data/copy';
 
-// The audience switch: a set of two plates above the hero lettering. Chosen
-// is a solid ink fill with a Surface/bg label; the other a 2px ink edge. No
-// chevron — a switch does not go forward. Behaviour lives in index.astro.
+// The audience switch: two options above the hero headline. Chosen is a 2px
+// ink edge with an ink label; the other a printed-rule edge with a support
+// label. Never a fill: the view's one filled plate is its primary action
+// (RULES 5). No chevron — a switch does not go forward. Behaviour lives in
+// index.astro.
 interface Props {
   current: 'studio' | 'member';
 }
@@ -37,21 +39,20 @@ const options = [
   .switch__plate {
     min-height: 56px;
     padding-inline: var(--m-spacing-md);
-    border: 2px solid var(--m-ink);
-    border-radius: var(--m-radius-md);
-    color: var(--m-ink);
+    border: 2px solid var(--m-ink-rule);
+    border-radius: var(--m-radius-component-plate);
+    color: var(--m-ink-support);
     font-size: var(--m-type-plate-label-size);
     font-weight: var(--m-type-plate-label-weight);
     line-height: var(--m-type-plate-label-leading);
-    letter-spacing: var(--ll-tracking);
     white-space: nowrap;
     transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
   }
-  .switch__plate:hover { background: var(--m-ink-wash); }
-  .switch__plate:active { transform: scale(0.98); }
+    .switch__plate:active { transform: scale(0.98); }
+  .switch__plate:hover { color: var(--m-ink); }
   .switch__plate[aria-pressed='true'] {
-    background: var(--m-ink);
-    color: var(--m-bg);
+    border-color: var(--m-ink);
+    color: var(--m-ink);
     cursor: default;
   }
   @media (min-width: 1048px) {

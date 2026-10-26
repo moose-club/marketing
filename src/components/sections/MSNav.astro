@@ -2,24 +2,25 @@
 import { NAV } from '../../data/copy';
 import Icon from '../primitives/Icon.astro';
 
-// 72px nav, transparent on the floor; once scrolled it takes a Surface/bg fill
-// and a Label/inkHairline bottom edge (no blur, no shadow). The wordmark's
-// first stem sits on lane 0, where the live line starts. Each floor has its
-// own link set; "Studio login" is the outline station action plate, so the
-// first viewport keeps one filled plate.
+// 72px nav (Member Card; drawn in the hero frames), transparent on the floor;
+// once scrolled it takes the floor fill and an inkRule bottom edge (no blur,
+// no shadow). It sits on the page measure. Each floor has its own link set;
+// "Studio login" is the outline plate, so the first view keeps one filled
+// plate (RULES 5).
 ---
 
 <header class="nav" data-scrolled="false" id="top">
   <div class="nav__inner">
     <a href="#top" class="nav__brand" aria-label="Moose home">
-      <img src="/brand/logo/moose-wordmark-navy.svg" alt="Moose" class="nav__logo" width="120" height="23" />
+      <span class="nav__logo" aria-hidden="true"></span>
     </a>
 
     <nav class="nav__links" aria-label="Primary">
       {NAV.studioLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="studio">{l.label}</a>)}
       {NAV.memberLinks.map((l) => <a href={l.href} class="nav__link" data-floor-only="member">{l.label}</a>)}
       <a class="plate plate--outline plate--station nav__portal" href={NAV.portal.href} target="_blank" rel="noopener">
-        {NAV.portal.label}
+        <span>{NAV.portal.label}</span>
+        <Icon name="chevron-right" size={18} />
       </a>
     </nav>
 
@@ -50,6 +51,19 @@ import Icon from '../primitives/Icon.astro';
     handler();
     window.addEventListener('scroll', handler, { passive: true });
   }
+
+  // "Back to top" (and the wordmarks): `#top` is this fixed bar, which is
+  // always in view, so the browser won't scroll to it. Scroll the page to the
+  // top instead (smooth unless reduced motion, from the root's
+  // scroll-behavior) and hand focus to the wordmark. The URL keeps its hash,
+  // so the member floor stays the member floor on reload.
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href="#top"]');
+    if (!link || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    window.scrollTo({ top: 0 });
+    document.querySelector<HTMLElement>('.nav__brand')?.focus({ preventScroll: true });
+  });
 
   // Mobile menu toggle + auto-close on link tap.
   const toggle = document.getElementById('navToggle');
@@ -84,22 +98,29 @@ import Icon from '../primitives/Icon.astro';
   .nav[data-scrolled='true'],
   .nav:has(.nav__mobile[data-open='true']) {
     background: var(--m-bg);
-    border-bottom-color: var(--m-ink-hairline);
+    border-bottom-color: var(--m-ink-rule);
   }
 
-  /* The wordmark's first stem lands on lane 0: the floor's content edge, less
-     the line inset. */
   .nav__inner {
-    max-width: var(--floor-max);
+    max-width: calc(var(--page-max) + 2 * var(--page-pad));
     margin-inline: auto;
     height: var(--nav-h);
-    padding-inline: calc(var(--floor-pad-start) - var(--line-inset)) var(--floor-pad-end);
+    padding-inline: var(--page-pad);
     display: flex;
     align-items: center;
     gap: var(--m-spacing-xl);
   }
   .nav__brand { display: inline-flex; flex-shrink: 0; }
-  .nav__logo { display: block; width: 120px; height: auto; }
+  /* One ink (RULES 7): the wordmark is a mask filled with `ink`, so it is navy
+     in light and white in dark. */
+  .nav__logo {
+    display: block;
+    width: 120px;
+    aspect-ratio: 120 / 23;
+    background: var(--m-ink);
+    -webkit-mask: url('/brand/logo/moose-wordmark-navy.svg') center / contain no-repeat;
+    mask: url('/brand/logo/moose-wordmark-navy.svg') center / contain no-repeat;
+  }
 
   .nav__links {
     display: none;
@@ -108,15 +129,17 @@ import Icon from '../primitives/Icon.astro';
     margin-left: auto;
   }
   .nav__link {
-    font-size: var(--ll-body-size);
+    font-size: 0.9375rem; /* no token yet: proposed (nav link, 15) */
     font-weight: 500;
     line-height: 1;
-    letter-spacing: var(--ll-tracking);
+    letter-spacing: var(--plate-tracking);
     color: var(--m-ink-support);
     white-space: nowrap;
     transition: color var(--dur-fast) var(--ease-out);
   }
-  .nav__link:hover { color: var(--m-ink); }
+  .nav__link:hover,
+  .nav__link:focus-visible { color: var(--m-ink); text-decoration: underline; text-underline-offset: 4px; }
+  .nav__portal { gap: var(--m-spacing-sm); padding-inline-end: 10px; } /* no token yet: proposed (chevron inset) */
 
   /* Each floor shows its own links. */
   [data-floor-only='member'] { display: none; }
@@ -137,7 +160,7 @@ import Icon from '../primitives/Icon.astro';
   .nav__mobile {
     display: none;
     flex-direction: column;
-    padding: var(--m-spacing-sm) var(--floor-pad-end) var(--m-spacing-lg) var(--floor-pad-start);
+    padding: var(--m-spacing-sm) var(--page-pad) var(--m-spacing-lg);
   }
   .nav__mobile[data-open='true'] { display: flex; }
   .nav__mobile-link {

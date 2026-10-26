@@ -1,55 +1,80 @@
 ---
 import { VALUE } from '../../data/copy';
 
-// Station · For studios — lettering on your lane; the three figures on your
-// partner's, the figure travelling with its row (no boxes). The two masses
-// rest on one tread.
+// Value (Member Card; Figma `143:570` / `143:594`). The headline and the prize
+// note, then the three figures as a printed read-back ledger, the way the app
+// prints "Cost / Free cancel until": a printed label, the figure, its caption.
+// Printed rules above, below and between the cells (stacked on phone). Figures
+// travel open, never boxed.
 ---
 
-<section class="station lanes value" id="value" aria-labelledby="valueHeading">
-  <div>
-    <h2 id="valueHeading" class="lettering lettering--station">{VALUE.head}</h2>
-    <p class="lead">{VALUE.prizeNote}</p>
-  </div>
+<section class="value page" id="value" aria-labelledby="valueHeading">
+  <h2 id="valueHeading" class="page-lettering page-lettering--compact value__head">{VALUE.head}</h2>
+  <p class="body-text value__note">{VALUE.prizeNote}</p>
 
-  <ul class="lane--partner lane--indent figures">
+  <ul class="value__ledger">
     {VALUE.benefits.map((b) => (
-      <li class="figure">
-        <p class="figure__row">
-          <span class="figure__stat">{b.stat}</span>
-          <span class="detail">{b.unit}</span>
+      <li class="value__cell">
+        <p class="value__label">{b.title}</p>
+        <p class="value__figure">
+          <span class="page-lettering page-lettering--compact value__stat">{b.stat}</span>
+          <span class="value__unit">{b.unit}</span>
         </p>
-        <p class="plate-label figure__title">{b.title}</p>
-        <p class="detail figure__cap">{b.cap}</p>
+        <p class="value__cap">{b.cap}</p>
       </li>
     ))}
   </ul>
 </section>
 
 <style>
-  .figures { display: grid; gap: var(--m-spacing-lg); }
-  .figure__row {
+  .value { padding-top: var(--rhythm); }
+  .value__head { max-width: 820px; } /* no token yet: proposed (section headline measure) */
+  .value__note { margin-top: var(--m-spacing-md); max-width: 560px; }
+
+  .value__ledger {
+    display: grid;
+    margin-top: var(--m-spacing-xl);
+    border-block: 1px solid var(--m-ink-rule);
+  }
+  .value__cell { padding-block: 28px; } /* no token yet: proposed (read-back cell) */
+  .value__cell + .value__cell { border-top: 1px solid var(--m-ink-rule); }
+
+  .value__label {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  .value__figure {
     display: flex;
     align-items: baseline;
     gap: 6px; /* no token yet: proposed */
+    margin-top: 10px; /* no token yet: proposed */
   }
-  .figure__stat {
-    font-size: var(--ll-stat-size);
-    font-weight: var(--m-type-figure-weight);
-    line-height: var(--m-type-figure-leading);
-    letter-spacing: var(--m-type-figure-tracking);
-    font-variant-numeric: var(--m-type-figure-numeric);
-    color: var(--m-ink);
+  .value__stat { padding-bottom: 0; font-variant-numeric: tabular-nums; }
+  .value__unit,
+  .value__cap {
+    font-size: var(--m-type-detail-size);
+    font-weight: var(--m-type-detail-weight);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
   }
-  .figure__title { margin-top: var(--m-spacing-sm); }
-  .figure__cap { margin-top: 6px; max-width: 34ch; } /* no token yet: proposed (gap 6) */
+  .value__cap { margin-top: 10px; } /* no token yet: proposed */
+
+  @media (min-width: 760px) {
+    .value__ledger { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .value__cell { padding-inline-end: var(--m-spacing-lg); }
+    .value__cell + .value__cell {
+      border-top: 0;
+      border-left: 1px solid var(--m-ink-rule);
+      padding-inline-start: 28px; /* no token yet: proposed */
+    }
+  }
 
   @media (min-width: 1048px) {
-    .value > * { grid-row: 1; }
-    .figures {
-      align-self: end;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--m-spacing-xl);
-    }
+    .value__note { margin-top: 20px; } /* no token yet: proposed */
+    .value__ledger { margin-top: var(--m-spacing-xxl); }
   }
 </style>

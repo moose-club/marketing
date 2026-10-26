@@ -61,17 +61,11 @@ export const homeNodes: Node[] = [
     areaServed: { '@type': 'Country', name: 'Australia' },
     description: [MODEL.lede, ...MODEL.steps.slice(1, 3).map((s) => stripTags(s.bodyHtml))].join(' '),
     audience: { '@type': 'BusinessAudience', audienceType: 'Boutique fitness studio operators' },
+    // The studio sets the upgrade fee and the credit amount varies by studio
+    // (Max, 26 Oct 2026), so no figure here — the copy states none either.
     offers: {
       '@type': 'Offer',
       priceCurrency: 'AUD',
-      // The studio sets the upgrade fee; Moose caps it.
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        maxPrice: 11,
-        priceCurrency: 'AUD',
-        unitText: 'WEEK',
-      },
-      eligibleQuantity: { '@type': 'QuantitativeValue', value: 4, unitText: 'sessions per month' },
     },
   },
   {

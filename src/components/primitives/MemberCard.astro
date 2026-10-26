@@ -1,0 +1,530 @@
+---
+import MooseLoop from './MooseLoop.astro';
+import Sticker from './Sticker.astro';
+import Punch from './Punch.astro';
+
+// The member card (RULES 0): the card a home studio issues and its partners
+// accept. An illustration at a fixed proportion (354 : 224): every measure
+// below is in card units (`--u`, 1/354 of the card's width), so it scales as
+// one picture and never reflows. Navy with cream lettering in light; cream
+// with navy lettering in dark, so it never sinks into the floor (RULES 8).
+//
+// On the marketing site the card is always a sample (RULES 19). A slot left
+// undefined draws as its empty, dashed "not yet" state.
+//
+// Faces:
+// - `front`, `layout="in-use"` (default): issued by, the sticker, member,
+//   credits, a printed rule, then the punch row and a footnote.
+// - `front`, `layout="printed"`: issued by, the embossed number, member and a
+//   small credits line. What shows in the sleeve.
+// - `back`: the signature panel, the card number, and "Valid at" over one line
+//   per partner.
+// - `front`, `layout="partner"`: a studio's own card (the studio Network's
+//   deck): "Issued by", the studio's logo in card lettering and its name. No
+//   member and no sticker, so it never reads as anyone's valid card.
+
+type Punched = 'attended' | 'booked' | 'next';
+interface Partner { name: string; logo?: string }
+
+interface Props {
+  /** The accessible name: every fact the card shows, in words. Empty when an
+      enclosing scene names it; the card is then hidden from assistive tech. */
+  label: string;
+  face?: 'front' | 'back';
+  layout?: 'in-use' | 'printed' | 'partner';
+  /** One studio, or several to cycle through on the in-use face (about one a
+      second and a half; still under reduced motion, showing the first). */
+  issuer?: string | readonly string[];
+  member?: string;
+  number?: string;
+  credits?: string;
+  creditsNote?: string;
+  sticker?: { label: string; dashed?: boolean };
+  punches?: Punched[];
+  footnote?: string;
+  cardNo?: string;
+  partners?: Partner[];
+  partnerColumns?: 1 | 2;
+  addedBy?: string;
+  belongs?: string;
+  /** `partner` layout: the studio's logo, drawn as a card-lettering mask in a
+      box of `logoSize` card units (width × height, balanced by the caller). */
+  logo?: string;
+  logoSize?: [number, number];
+  /** The issuer not yet pressed in (the studio Close, the studio hero):
+      drawn in the hint weight until an ancestor takes `.is-issued`, then it
+      presses in. */
+  ghostIssuer?: boolean;
+  /** Degrees; the card at rest in a scene is −3. */
+  tilt?: number;
+  class?: string;
+}
+
+const {
+  label,
+  face = 'front',
+  layout = 'in-use',
+  issuer,
+  member,
+  number = 'MOOSE  0000  0001',
+  credits,
+  creditsNote = 'to spend',
+  sticker,
+  punches = [],
+  footnote,
+  cardNo = 'NO. 0001',
+  partners = [],
+  partnerColumns = 1,
+  addedBy,
+  belongs = 'This card belongs to your home studio.',
+  ghostIssuer = false,
+  logo,
+  logoSize = [200, 64],
+  tilt = 0,
+  class: className,
+} = Astro.props;
+
+// The punch row (in-use front): 18-unit marks, 8 apart, from the left margin,
+// centred on y 195. An attended punch is a hole: the face's mask cuts it out,
+// and a ring of inner shadow gives it depth.
+const issuers = typeof issuer === 'string' ? [issuer] : issuer ? [...issuer] : [];
+const firstIssuer = issuers[0];
+
+const PUNCH = { x: 22, y: 186, size: 18, gap: 8 };
+const punchAt = (i: number) => PUNCH.x + i * (PUNCH.size + PUNCH.gap);
+const holes = face === 'front' && layout === 'in-use'
+  ? punches.map((p, i) => (p === 'attended' ? punchAt(i) : null)).filter((x): x is number => x !== null)
+  : [];
+const r = PUNCH.size / 2;
+const holeMask = holes
+  .map((x) => `radial-gradient(circle calc(var(--u) * ${r}) at calc(var(--u) * ${x + r}) calc(var(--u) * ${PUNCH.y + r}), transparent 98%, #000 100%)`)
+  .join(', ');
+// Declared on the face, where `--u` is defined, so the gradients resolve.
+const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
+---
+
+<div
+  class:list={['mc', className]}
+  {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' })}
+  style={`--tilt: ${tilt}deg`}
+>
+  <div class:list={['mc__body', `mc__body--${face}`]}>
+    <div class:list={['mc__face', holes.length > 1 && 'mc__face--holes']} style={faceStyle}>
+      {face === 'front' && <span class="mc__edge"></span>}
+
+      {face === 'front' && layout === 'in-use' && (
+        <>
+          <span class="mc__loop"><MooseLoop /></span>
+          <p class="mc__label mc__issued-label">Issued by</p>
+          {issuers.length > 1
+            ? <p class="mc__issuer"><span class="mc__cycle" data-cycle={JSON.stringify(issuers)}>{firstIssuer}</span></p>
+            : firstIssuer
+              ? <p class:list={['mc__issuer', ghostIssuer && 'mc__issuer--ghost']}>{firstIssuer}</p>
+              : <p class="mc__issuer mc__hint mc__dashed">Your home studio</p>}
+          <div class="mc__sticker">
+            {sticker
+              ? <Sticker label={sticker.label} dashed={sticker.dashed} />
+              : <Sticker label="Not yet valid" dashed />}
+          </div>
+          <p class="mc__label mc__member-label">Member</p>
+          {member
+            ? <p class="mc__member mc__emboss">{member}</p>
+            : <p class="mc__member mc__hint mc__dashed">Your name</p>}
+          <p class="mc__label mc__credits-label">Credits</p>
+          {credits
+            ? <p class="mc__credits"><span class="mc__figure">{credits}</span> <span class="mc__note">{creditsNote}</span></p>
+            : <p class="mc__credits mc__hint">None yet</p>}
+          <span class="mc__rule"></span>
+          {punches.length > 0 && (
+            <div class="mc__punches">
+              {punches.map((p) => (p === 'attended'
+                ? <span class="mc__slot"><Punch state="next" /></span>
+                : <Punch state={p} />))}
+            </div>
+          )}
+          {footnote && <p class:list={['mc__footnote', punches.length > 0 && 'mc__footnote--end']}>{footnote}</p>}
+        </>
+      )}
+
+      {face === 'front' && layout === 'partner' && (
+        <>
+          <span class="mc__loop"><MooseLoop /></span>
+          <p class="mc__label mc__pt-label">Issued by</p>
+          {logo && (
+            <span
+              class="mc__pt-logo"
+              style={`--logo: url('${logo}'); width: calc(var(--u) * ${logoSize[0]}); height: calc(var(--u) * ${logoSize[1]})`}
+            ></span>
+          )}
+          <p class="mc__pt-name">{firstIssuer}</p>
+        </>
+      )}
+
+      {face === 'front' && layout === 'printed' && (
+        <>
+          <span class="mc__loop mc__loop--printed"><MooseLoop /></span>
+          <p class="mc__label mc__p-issued-label">Issued by</p>
+          {firstIssuer
+            ? <p class:list={['mc__issuer mc__p-issuer', ghostIssuer && 'mc__issuer--ghost']}>{firstIssuer}</p>
+            : <p class="mc__issuer mc__p-issuer mc__hint mc__dashed">Your home studio</p>}
+          <p class="mc__number mc__emboss">{number}</p>
+          <p class="mc__label mc__p-member-label">Member</p>
+          {member
+            ? <p class="mc__member mc__p-member mc__emboss">{member}</p>
+            : <p class="mc__member mc__p-member mc__hint">Your name</p>}
+          <p class="mc__label mc__p-credits-label">Credits</p>
+          <p class="mc__p-credits">{credits ?? '—'}</p>
+        </>
+      )}
+
+      {face === 'back' && (
+        <>
+          <span class="mc__signature">Member’s signature</span>
+          <p class="mc__label mc__no">{cardNo}</p>
+          <p class="mc__label mc__valid-label">Valid at{addedBy && <span class="mc__added"> · Added by {addedBy}</span>}</p>
+          <ul class:list={['mc__partners', partnerColumns === 2 && 'mc__partners--two']} style={partnerColumns === 2 ? `--rows: ${Math.ceil(Math.max(partners.length, 3) / 2)}` : undefined}>
+            {(partners.length ? partners : [{ name: 'A partner studio' }, { name: 'A partner studio' }, { name: 'A partner studio' }]).map((p) => (
+              <li class:list={['mc__partner', !partners.length && 'mc__hint']}>
+                {p.logo && <span class="mc__logo" style={`--logo: url('${p.logo}')`}></span>}
+                <span class="mc__partner-name">{p.name}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="mc__belongs">{belongs}</p>
+        </>
+      )}
+    </div>
+    {holes.map((x) => (
+      <span class="mc__hole" style={`left: calc(var(--u) * ${x}); top: calc(var(--u) * ${PUNCH.y})`}></span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .mc {
+    container-type: inline-size;
+    width: 100%;
+    max-width: var(--mc-width, 354px);
+    transform: rotate(var(--tilt));
+  }
+  .mc__body {
+    --u: calc(100cqw / 354);
+    position: relative;
+    aspect-ratio: 354 / 224;
+    border-radius: calc(var(--u) * 16); /* radius.component.card at full size */
+    box-shadow: var(--m-shadow-card);
+  }
+  .mc__body--back { box-shadow: var(--m-shadow-card-behind); }
+
+  .mc__face {
+    /* The card's own ink weights: its lettering at the One Ink weights
+       (RULES 7), mixed because the card's lettering has no weight tokens. */
+    --mc-ink: var(--m-card-lettering);
+    --mc-support: color-mix(in srgb, var(--m-card-lettering) 70%, transparent); /* provisional: card ink weights, proposed */
+    --mc-hint: color-mix(in srgb, var(--m-card-lettering) 45%, transparent);    /* provisional */
+    --mc-rule: color-mix(in srgb, var(--m-card-lettering) 22%, transparent);    /* provisional */
+    --sticker-hint: var(--mc-hint);
+    --punch-hint: var(--mc-hint);
+    --sticker-size: calc(var(--u) * 10);
+    --punch-size: calc(var(--u) * 18);
+
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    background: var(--m-card-face);
+    color: var(--mc-ink);
+    font-family: var(--m-font-family-sans);
+    -webkit-mask-image: var(--holes, none);
+    mask-image: var(--holes, none);
+  }
+  .mc__face--holes {
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .mc__body--back .mc__face { background: var(--m-card-back); }
+
+  .mc__face > * { position: absolute; margin: 0; }
+
+  .mc__edge {
+    inset: 0 auto 0 0;
+    width: calc(var(--u) * 6);
+    background: var(--m-moose-pink);
+  }
+
+  /* Card lettering (RULES 13: cardLabel, cardFigure), in card units. */
+  .mc__label {
+    font-size: calc(var(--u) * 9);
+    font-weight: var(--m-type-card-label-weight);
+    line-height: var(--m-type-card-label-leading);
+    letter-spacing: var(--m-type-card-label-tracking);
+    text-transform: var(--m-type-card-label-transform);
+    color: var(--mc-support);
+    white-space: nowrap;
+  }
+  .mc__hint { color: var(--mc-hint); }
+  .mc__dashed {
+    padding-bottom: calc(var(--u) * 2);
+    border-bottom: 1px dashed var(--mc-hint);
+  }
+  .mc__emboss { text-shadow: 0 calc(var(--u) * 1) 0 var(--m-card-emboss); }
+
+  .mc__loop {
+    top: calc(var(--u) * 16);
+    right: calc(var(--u) * 23);
+    width: calc(var(--u) * 33);
+  }
+
+  /* In use */
+  .mc__issued-label { top: calc(var(--u) * 46); left: calc(var(--u) * 22); }
+  .mc__issuer {
+    top: calc(var(--u) * 59);
+    left: calc(var(--u) * 22);
+    max-width: calc(var(--u) * 192); /* clear of the sticker */
+    font-size: calc(var(--u) * 15);  /* holds the longest studio on Moose on one line */
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* A cycling issuer fades out, changes, and fades back in. */
+  .mc__cycle {
+    display: inline-block;
+    transition: opacity 200ms ease-out, transform 200ms ease-out;
+  }
+  .mc__cycle.is-out { opacity: 0; transform: translateY(calc(var(--u) * -3)); }
+  .mc__sticker { top: calc(var(--u) * 52); right: calc(var(--u) * 22); }
+  /* The sticker lands: from a touch large, settling (the app's slap). Shared
+     by the scenes that play it (member How it works, the studio hero). */
+  @keyframes mc-sticker-land {
+    from { opacity: 0; scale: 1.15; }
+    to   { opacity: 1; scale: 1; }
+  }
+  /* Not yet issued: the name in the hint weight. On issue it presses in, a
+     brief pink impression (the card is the reader's here, RULES 6) rising to
+     the card's lettering. */
+  .mc__issuer--ghost {
+    translate: calc(var(--u) * -4) 0;
+    padding-inline: calc(var(--u) * 4);
+    border-radius: calc(var(--u) * 3);
+    color: var(--mc-hint);
+  }
+  :global(.is-issued) .mc__issuer--ghost {
+    color: var(--mc-ink);
+    animation: mc-press 520ms ease-out both;
+  }
+  @keyframes mc-press {
+    0%   { color: var(--mc-hint); background: transparent; transform: scale(1); }
+    30%  { color: var(--mc-ink); background: color-mix(in srgb, var(--m-moose-pink) 35%, transparent); transform: scale(0.97); } /* provisional: the press impression */
+    100% { color: var(--mc-ink); background: transparent; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.is-issued) .mc__issuer--ghost { animation: none; }
+  }
+  .mc__member-label { top: calc(var(--u) * 103); left: calc(var(--u) * 22); }
+  .mc__member {
+    top: calc(var(--u) * 116);
+    left: calc(var(--u) * 22);
+    font-size: calc(var(--u) * 14);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .mc__credits-label { top: calc(var(--u) * 103); left: calc(var(--u) * 206); }
+  .mc__credits {
+    top: calc(var(--u) * 113);
+    left: calc(var(--u) * 206);
+    font-size: calc(var(--u) * 14);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .mc__figure {
+    font-family: var(--m-font-family-display);
+    font-size: calc(var(--u) * 34);
+    font-weight: var(--m-type-card-figure-weight);
+    line-height: var(--m-type-card-figure-leading);
+    letter-spacing: var(--m-type-card-figure-tracking);
+    font-variant-numeric: var(--m-type-card-figure-numeric);
+  }
+  .mc__note {
+    font-size: calc(var(--u) * 11);
+    font-weight: 400;
+    color: var(--mc-support);
+  }
+  .mc__rule {
+    top: calc(var(--u) * 172);
+    left: calc(var(--u) * 22);
+    right: calc(var(--u) * 22);
+    height: 1px;
+    background: var(--mc-rule);
+  }
+  .mc__punches {
+    top: calc(var(--u) * 186);
+    left: calc(var(--u) * 22);
+    display: flex;
+    gap: calc(var(--u) * 8);
+  }
+  .mc__slot { width: calc(var(--u) * 18); height: calc(var(--u) * 18); }
+  /* The slot's faint ring, the punch "not yet": hidden under the hole. A scene
+     that draws the card before the class is attended (the member floor's
+     "how it works") lifts the mask and sets `--slot-ring: 1`. */
+  .mc__slot :global(.punch) { opacity: var(--slot-ring, 0); }
+  /* Drawn over the face (outside its mask) at the hole's place: the card's
+     thickness, shade on the top edge and a hairline of light on the bottom.
+     The hole itself is the face's mask. */
+  .mc__hole {
+    position: absolute;
+    width: calc(var(--u) * 18);
+    height: calc(var(--u) * 18);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 calc(var(--u) * 2.5) calc(var(--u) * 2.5) color-mix(in srgb, var(--m-moose-navy-deep) 55%, transparent), /* provisional: hole shade */
+      inset 0 calc(var(--u) * -0.75) 0 color-mix(in srgb, var(--m-on-brand) 55%, transparent);  /* provisional: hole edge */
+  }
+  .mc__footnote {
+    top: calc(var(--u) * 188);
+    left: calc(var(--u) * 22);
+    font-size: calc(var(--u) * 10.5);
+    line-height: 1.3;
+    color: var(--mc-support);
+    white-space: nowrap;
+  }
+  .mc__footnote--end { left: auto; right: calc(var(--u) * 22); top: calc(var(--u) * 189); }
+
+  /* Printed (in the sleeve) */
+  .mc__loop--printed { top: calc(var(--u) * 24); right: calc(var(--u) * 24); width: calc(var(--u) * 44); }
+  .mc__p-issued-label { top: calc(var(--u) * 24); left: calc(var(--u) * 24); }
+  .mc__p-issuer { top: calc(var(--u) * 36); left: calc(var(--u) * 24); }
+  .mc__number {
+    top: calc(var(--u) * 104);
+    left: calc(var(--u) * 24);
+    font-size: calc(var(--u) * 16);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    white-space: pre;
+  }
+  .mc__p-member-label { top: calc(var(--u) * 158); left: calc(var(--u) * 24); }
+  .mc__p-member { top: calc(var(--u) * 170); left: calc(var(--u) * 24); }
+  .mc__p-credits-label { top: calc(var(--u) * 158); right: calc(var(--u) * 26); }
+  .mc__p-credits {
+    top: calc(var(--u) * 170);
+    right: calc(var(--u) * 26);
+    font-size: calc(var(--u) * 13);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Partner (a studio's own card) */
+  .mc__pt-label { top: calc(var(--u) * 21); left: calc(var(--u) * 22); }
+  .mc__pt-logo {
+    top: calc(var(--u) * 121);
+    left: calc(var(--u) * 180);
+    translate: -50% -50%;
+    background: var(--mc-ink);
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+  .mc__pt-name {
+    top: calc(var(--u) * 191);
+    left: calc(var(--u) * 22);
+    font-size: calc(var(--u) * 10.5);
+    line-height: 1.3;
+    color: var(--mc-support);
+    white-space: nowrap;
+  }
+
+  /* Back */
+  .mc__signature {
+    top: calc(var(--u) * 22);
+    left: calc(var(--u) * 22);
+    width: calc(var(--u) * 214);
+    height: calc(var(--u) * 34);
+    padding: calc(var(--u) * 5) calc(var(--u) * 8);
+    border-radius: calc(var(--u) * 4);
+    /* The panel is paper on the card in both appearances: cream on the navy
+       card, white on the cream one. Its hint is navy at 45% either way. */
+    background: var(--m-cream-deep);
+    color: color-mix(in srgb, var(--m-moose-navy) 45%, transparent); /* provisional: inkHint, fixed navy */
+    font-size: calc(var(--u) * 8.5);
+    line-height: 1.2;
+  }
+  :global(.dark) .mc__signature { background: var(--m-on-brand); }
+  .mc__no { top: calc(var(--u) * 34); left: calc(var(--u) * 252); }
+  .mc__valid-label { top: calc(var(--u) * 72); left: calc(var(--u) * 22); }
+  .mc__added { letter-spacing: 0.04em; text-transform: none; font-weight: 400; }
+  .mc__partners {
+    top: calc(var(--u) * 84);
+    left: calc(var(--u) * 22);
+    right: calc(var(--u) * 22);
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: calc(var(--u) * 16);
+    list-style: none;
+    padding: 0;
+  }
+  /* Two columns read down, then across. */
+  .mc__partners--two {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(var(--rows), auto);
+    grid-auto-flow: column;
+  }
+  .mc__partner {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--u) * 7);
+    height: calc(var(--u) * 24);
+    border-bottom: 1px dashed var(--mc-hint);
+    font-size: calc(var(--u) * 11);
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .mc__partners--two .mc__partner { font-size: calc(var(--u) * 9.5); }
+  .mc__partner-name { overflow: hidden; text-overflow: ellipsis; }
+  .mc__logo {
+    flex: none;
+    width: calc(var(--u) * 26);
+    height: calc(var(--u) * 13);
+    background: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+  .mc__belongs {
+    bottom: calc(var(--u) * 16);
+    left: calc(var(--u) * 22);
+    font-size: calc(var(--u) * 8.5);
+    line-height: 1.2;
+    color: var(--mc-support);
+  }
+</style>
+
+<script>
+  // The cycling issuer: the studios already on Moose, one at a time. Waits for
+  // the card's arrival, skips while the card is hidden (the other floor) or
+  // the tab is in the background, and stays still under reduced motion.
+  const STEP = 1500;
+  const FADE = 200;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach((el) => {
+    const names: string[] = JSON.parse(el.dataset.cycle ?? '[]');
+    let i = 0;
+    window.setTimeout(() => {
+      window.setInterval(() => {
+        if (reduce.matches || document.hidden || !el.offsetParent) return;
+        el.classList.add('is-out');
+        window.setTimeout(() => {
+          i = (i + 1) % names.length;
+          el.textContent = names[i];
+          el.classList.remove('is-out');
+        }, FADE);
+      }, STEP);
+    }, 1600);
+  });
+</script>

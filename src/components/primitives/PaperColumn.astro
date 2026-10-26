@@ -1,0 +1,23 @@
+---
+// Floating paper on the floor (RULES 10): the legal pages' one column. The
+// page stays flat; only the paper takes a shadow.
+interface Props {
+  as?: 'article' | 'section' | 'div';
+  class?: string;
+}
+const { as: Tag = 'article', class: className } = Astro.props;
+---
+
+<Tag class:list={['paper', className]}><slot /></Tag>
+
+<style>
+  .paper {
+    max-width: 760px;
+    margin-inline: auto;
+    padding: clamp(24px, 5vw, 56px);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-paper);
+    box-shadow: var(--m-shadow-paper);
+    color: var(--m-ink);
+  }
+</style>

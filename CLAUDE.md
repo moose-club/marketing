@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Public marketing site for **Moose**, a B2B network for boutique fitness studios. Members of a Moose-partner studio can pay a small upgrade ($11/wk extra) for the right to attend 4 sessions/month at complementary, non-competing partner venues nearby. Studios get a new premium tier, members get variety, and Moose keeps the flow balanced across partners.
+Public marketing site for **Moose**, a B2B network for boutique fitness studios. Members of a Moose-partner studio can add a small upgrade (priced by their studio, paid through Moose) for credits each month to book classes at complementary, non-competing partner venues nearby. Studios get a new premium tier, members get variety, and Moose keeps the flow balanced across partners.
 
 Audience: studio operators first, members second. Single page (`/`) with two floors behind an audience switch ("I run a studio" / "I'm a member"). The studio floor's primary action is "Register your studio" (out to the studio portal, studio.trainmoose.com); the member floor's is the App Store. There is no form on the site.
 
@@ -13,12 +13,12 @@ Audience: studio operators first, members second. Single page (`/`) with two flo
 ## Stack
 
 - **Astro 6** with `output: 'static'` — ships zero JS by default
-- **No React islands at present.** The member app capture is pure CSS (a scroll-driven scrub); the switch, live line, nav and roster reveal are small inline scripts. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
+- **No React islands at present.** The switch, dark-mode follow, nav, the deck, the Register press and the member floor's moments (the card earning its marks, a class booking itself) are small inline scripts over CSS. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
 - Hand-rolled CSS via CSS custom properties — **no Tailwind, no CSS-in-JS, no UI kit**
 - TypeScript strict
 - pnpm
 - **Node 24** required. Astro 6 needs ≥22.12; this repo standardises on 24 (`.nvmrc`)
-- Poppins (RULES 12), loaded from Google Fonts in `Base.astro`
+- Poppins (RULES 12), self-hosted from `@fontsource/poppins` (400–800) and imported in `Base.astro`
 - Lucide-style icons rendered as **inline SVGs** in each section. No icon library.
 
 ## Commands
@@ -39,25 +39,27 @@ There are no unit tests. Verification is visual: open `pnpm dev` at the breakpoi
 
 ### Composition
 
-The homepage is drawn in moose-design's **Lane Lines** world. The source of truth is the Figma file `a5SmvlBwlHP6sf0FAZfLpP` (page "Home · / — working"); the direction and every decision log live in `.impeccable/surfaces/src-pages-index-astro.md`. Build from the frames, not from prose.
+The target world is the **Member Card** (RULES 0): the site sells the card to two readers. The studio floor shows a studio that it issues the card, and the member floor shows a member what their studio's card would do. **Figma first, then code** (Max, 26 Oct 2026): the source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, pages "Member Card · Components" (the shared objects), "Home · Studio floor — working" and "Home · Member floor — working" (the section frames). Don't code a section until Max has agreed its frame. The objects follow `../moose-design/docs/reference/member-card/`, and the order of work follows `../moose-design/docs/handoffs/marketing-site.md`. A page not yet redrawn keeps what it ships: today all of `/` (both floors, the nav and the footer) is on the Member Card (the file's old "Home · / — working" page and `.impeccable/surfaces/src-pages-index-astro.md` are Lane Lines history, not a source), and `/claim`, `/404` and the legal pages are the older card world. `DESIGN.md`'s Screens table says which page is in which state.
 
 `src/pages/index.astro` composes two floors; `html[data-audience]` (set before first paint from the URL hash, and by the switch) shows one:
 
 ```
 Nav
-  studio floor: Hero → Model → Value → Network → Close (navy)
-  member floor: MemberHero → Members (how · get/pay · app) → Close (navy)
+  studio floor: Hero → Model → Value → Network (the deck) → StudioClose (navy)
+  member floor: MemberHero → MemberHow → MemberGet → MemberApp → MemberClose (navy)
 Footer (navy, continues the close)
 ```
 
-Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. Each floor owns a `LiveLine`: the one pink element, measured from the DOM (`data-line-cross` marks the station it crosses above, `data-line-end` the plate it ends in) and drawn with scroll.
+Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. The old pink live line is retired and removed (RULES 6).
 
 `src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD and the skip-link. Page-level metadata flows in as props; a page adds JSON-LD nodes through `jsonLd`. The structured data (`src/data/schema.ts`) and `/llms.txt` (`src/pages/llms.txt.ts`) are both built from `copy.ts`, so a copy edit updates what answer engines read too (SPEC §9).
 
 ### Primitives (`src/components/primitives/`)
 
-- `Plate` — the Lane Lines action: `primary` (the Floor plate, one per screen), `outline`, `station` (small inset action).
-- `AudienceSwitch`, `HeroPhoto` (photo + cream floorScrims), `LiveLine`, `Icon` (inline Lucide).
+- `Plate`: `primary`, `outline`, `station` (small inset action).
+- `AudienceSwitch`, `Icon` (inline Lucide).
+
+The Member Card objects: `MemberCard` (front in use / printed / partner, back), `CardSleeve`, `Sticker`, `Punch`, `ClassCard`, `PrintedField`, `PaperColumn`, `MooseLoop`. Each matches its reference PNG in light and dark, and all render on the dev-only gallery at `/dev/gallery` (`src/pages/dev/[page].astro`, no path in a build). Card objects scale in object units (`--u`) through a container query; see `DESIGN.md` Components.
 - `Wordmark`, `Button`, `Eyebrow`, `PhoneFrame` are the older card-world library, unused on `/`. The nav and footer use the wordmark SVGs in `public/brand/logo/` directly.
 
 ### Content & data (`src/data/`)
@@ -67,23 +69,24 @@ Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, �
 
 ### Styling
 
-Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. `globals.css` holds the Lane Lines layer (lanes grid, type roles, plates, hero) plus the older card-world utilities that `/claim` and the legal pages still use. Values with no token yet are marked `/* no token yet: proposed */`.
+Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. Dark mode follows the system (RULES 8): an inline script in `Base.astro`'s `<head>` sets `.dark` on `<html>` from `prefers-color-scheme` before first paint and follows changes. There is no theme picker. A page whose shipped CSS doesn't flip yet (`/claim`, `/404`, legal) passes `followSystemDark={false}` until it is redrawn; drop the prop when you redraw it. The Lane Lines layer is gone from `globals.css`; it still holds the older card-world utilities that `/claim` and the legal pages use. Delete them when the last page using them is redrawn; never extend them. Values with no token yet are marked `/* no token yet: proposed */`.
 
-The floor is two lanes — yours (`.lanes > *`) and your partner's (`.lane--partner`) — side by side from **1048px**; below that the partner blocks stack and step in (`.lane--indent`) and the line keeps lane 0. No card, shadow, blur, pill, gradient (except the photo scrims) or eyebrow on `/`.
+The Flat Page Rule (RULES 10): the page never takes a shadow, tint, gradient or glass. Depth belongs only to the objects on it: the member card and its sleeve (`--m-shadow-card`, `--m-shadow-card-behind`), the sticker (`--m-shadow-card-mini`) and floating paper (`--m-shadow-paper`). No eyebrows (RULES 14), no pills.
 
 ### Photos
 
-Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (`HeroPhoto`, the member app capture) — no `background-image` photos remain. The homepage hero is `hero-strength.webp`, preloaded via `Base.astro`'s `preloadImage` prop.
+Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (none on `/` today) — no `background-image` photos remain. Neither hero has a photo (Max, 26 Oct 2026); `Base.astro`'s `preloadImage` prop is there for a page that needs one.
 
 ### Brand discipline (the hardest-to-relearn rules)
 
 These are violations Claude will be tempted to make. Keep them top of mind:
 
-- **One pink element per floor: the live line.** No pink words in headlines, no pink chips, no pink eyebrows on `/` (RULES 6).
-- **One Floor plate per screen.** Secondary actions are outline plates (RULES 5).
-- **Pink text < 24px on light background fails WCAG.** Use pink for headings ≥24px or as background fill on CTAs / chips. Never pink body copy on cream.
+- **The Yours Rule (RULES 6).** Pink marks only what belongs to the person looking. On this site that means the card objects drawn on the page (the card's edge, its sticker, punches and ticks), plus the caret and the 2px `:focus-visible` ring. Never pink words in headlines, pink chips, eyebrows, links, fills or plates.
+- **One primary plate per view (RULES 5).** Navy (white in dark), label left, chevron right. The alternative is an outline plate.
+- **The card shown is a sample (RULES 19).** A sample member at a sample studio, never a "Valid" sticker on a real studio's card.
+- **Copy (RULES 20).** Never "Passport" or "Pass", never network-wide or travel-anywhere access, no design words ("punch", "sticker", "mark"), credits to two decimals. "Reciprocal" is the studio-side word.
 - **No third brand colour.** Navy and Pink are it. Plus paper / cream / ink for surfaces.
-- **Poppins is the typeface** (RULES 12), loaded from Google Fonts in `Base.astro`.
+- **Poppins on the web, SF on iOS, by design** (RULES 12). Display lettering is `--m-font-family-display` at 800. Self-hosted (400–800); never load a font from a third party.
 - **No CSS-in-JS, no Tailwind, no UI kit.** Hand-rolled CSS. The brand discipline is the point.
 - **Icons are inline SVGs.** Don't reach for `lucide-react`, `astro-icon`, or a runtime icon library — the new design already paid the cost of inlining them.
 
@@ -112,13 +115,22 @@ This repo takes its design values and rules from **moose-design**
 (`../moose-design`, github.com/moose-club/design). `pnpm sync` there rewrites this block.
 
 - **Rules:** `../moose-design/RULES.md`. Read it before any UI change. Don't restate or
-  override it here. To change a rule, open a PR on moose-design.
+  override it here; cite a rule by number and name. To change a rule, open a PR on
+  moose-design.
+- **World:** the Member Card on every surface (RULES 0). Lane Lines, the Passport and the
+  old card world are retired. A page not yet redrawn keeps what it ships until it is.
+  What the shared objects look like: `../moose-design/docs/reference/member-card/`.
+- **Typeface:** Poppins on the web, SF on iOS, by design (RULES 12). Never add a third
+  face.
+- **Dark mode:** every surface follows the system setting (RULES 8).
 - **Values:** use only the design tokens. On the web these are the `--m-*` custom properties
   from the generated `tokens.css`; on iOS the MooseUI accessors; in Figma the Moose Design
   System library variables. No raw hex, no one-off sizes.
-- **`DESIGN.md`** describes how this surface uses the system. It names tokens and never
-  restates their values. A new value goes to moose-design first; until it lands, mark
-  the line `provisional` here. `check` warns on any other colour that isn't a token.
+- **`DESIGN.md`** describes how this surface uses the system, in the shared shape (RULES
+  18; `../moose-design/docs/handoffs/design-md-member-card.md` §3). It names tokens and
+  never restates their values. A new value goes to moose-design first; until it lands,
+  mark the line `provisional` here. `check` warns on any other colour that isn't a token,
+  on a retired world, and on missing frontmatter keys.
 - **Generated files** are listed in `.moose-design.json`. Never hand-edit them. Change the
   token in moose-design, then `pnpm --dir ../moose-design sync marketing`, then commit
   the result here.

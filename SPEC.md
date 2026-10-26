@@ -1,6 +1,6 @@
 # Moose Marketing Site — Build Spec
 
-A spec for the public marketing site for **Moose**, a network for boutique fitness studios. Members of a partner studio can pay a small upgrade ($11/wk extra) for the right to attend 4 sessions/month at complementary, non-competing partner venues nearby. Audience: studio owners and operators — not end-member consumers.
+A spec for the public marketing site for **Moose**, a network for boutique fitness studios. Members of a partner studio can add a small upgrade (priced by their studio, paid through Moose) for credits each month to book classes at complementary, non-competing partner venues nearby. Audience: studio owners and operators — not end-member consumers.
 
 This document tracks the _2026-06 redesign_ (the only design in production). It supersedes the original 12-section v1 spec. If anything in the source files contradicts this spec, the running code is the tiebreaker.
 
@@ -75,7 +75,7 @@ Hex values are exact — **do not approximate**.
 
 Plus the full set of radii (`--r-pill / -sheet / -card / -md / -sm / -xs`), spacing tokens (`--s-1` through `--s-24`, 4pt grid), and shadow scale (`--shadow-xs/sm/md/lg`).
 
-**Type:** system stack only (`-apple-system`, etc). No remote fonts.
+**Type:** Poppins 400–800, self-hosted from `@fontsource/poppins` (RULES 12: Poppins on the web, SF on iOS). No font is loaded from a third party.
 
 ---
 
@@ -101,17 +101,16 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 
 ### 6.1 `MSNav.astro` — fixed top nav
 
-- Left: navy/pink Moose wordmark SVG.
-- Centre: anchor links — `The Moose model`, `Network`, `For studios`, `Studio members`.
-- Right: **navy pill** "Studio login" → `https://studio.trainmoose.com` (external portal, opens in a new tab). It is the only CTA in the bar; "Get involved or hear more" → `#register` lives in the hero and footer instead.
-- Hamburger below 760px.
-- Fixed (`position: fixed`). Transparent over the cream hero, gains white/blur background once `scrollY > 16` via a 6-line vanilla JS handler. No backdrop over the hero so the headline starts at the top of the page.
+- Left: the Moose wordmark (an `ink` mask, so it flips with dark mode), on the page measure.
+- Right: each floor's own anchor links, then the outline plate "Studio login" (with a chevron) → `https://studio.trainmoose.com` (new tab). It is the bar's only action, so the first view keeps one filled plate.
+- Hamburger below 1048px.
+- Fixed. Transparent on the floor; past `scrollY > 16` it takes the floor fill and an `inkRule` bottom edge (no blur, no shadow).
 
-### 6.2 `MSHero.astro` — cream split layout
+### 6.2 `MSHero.astro` — the studio's card
 
-- Left column: eyebrow "Studio operators", h1 "Level up your memberships.", 2-paragraph lede, 3 ticked support points, two CTAs (navy primary "Get involved or hear more", white-ghost "See how it works").
-- Right column: full-bleed photo (hero-strength.png — kettlebell training) with a soft cream gradient mask blending into the left.
-- Mobile (<760px): single column, photo below the copy.
+- Left: the audience switch, h1 "Level up your memberships.", one supporting paragraph, the primary plate "Register your studio". No eyebrow, points or photo.
+- Right: the studio's own card, its back (+4°, "Valid at" every studio on Moose) with its front (−3°, "Issued by Your studio", the sample member "Alex Sample") over the back's lower-left corner. One `role="img"` with a full accessible name.
+- Below 1048px: switch, the card pair, then the words.
 
 ### 6.3 `MSTicker.astro` — modality marquee
 
@@ -121,28 +120,25 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 
 ### 6.4 `MSModel.astro` — "The Moose model" + 4-step how-it-works
 
-- `.section--cream`. Eyebrow "At a glance", h2 "The Moose model.", lede.
-- Inner white card (`.model__steps`) titled "How it works.", containing 4 columns:
-  1. **Formation** — Identify partners and form partnerships
-  2. **Offering** — Add a premium tier (upgrade fee set by the studio, capped at $11/wk)
-  3. **Usage** — Rationed crossover (a notional four sessions/month, in aggregate across partners)
-  4. **Balance** — A balanced exchange
-- Each step has an oversized navy ordinal (`01`–`04`), a thin pink rule, an uppercase navy-400 eyebrow, title, and 2–3 paragraphs.
+- h2 "The Moose model." with the lede beside it (stacked on phone), then "How it works." over four printed columns, each under an `inkRule`: the ordinal in display lettering, the step title, one short body (`MODEL.steps`).
+  1. Register and connect your booking system
+  2. Choose your partners
+  3. Select your eligible memberships
+  4. Members book, Moose keeps it balanced (credits each month)
+- 1 col → 2 cols (≥760) → 4 cols (≥1048). Type only: no card here.
 
-### 6.5 `MSNetwork.astro` — partner roster
+### 6.5 `MSNetwork.astro` — the deck
 
-- h2 "The studios already on Moose.", lede "Across Australia — and counting." Each roster row is the partner's logo (single-ink mask in `--m-ink`, from `public/partners/`) beside its name.
-- All 8 partners come from `NETWORK.partners` in `copy.ts`; each name links out to the studio's site. No chip, box or card around a row.
-- Regular floor: lettering on your lane, the roster level with it on the partner's lane; one column from 1048px, two from 1280px, the live line running in the gutter between the lanes.
-- Compact floor: one column under the lettering, capped at `NETWORK.compactVisible` with a count and a **See all** station plate revealing the rest in place (currently dormant: 8 partners < the cap of 12).
+- h2 "The studios already on Moose.", lede "Across Australia — and counting.", centred.
+- A deck of cards, one issued by each studio in `NETWORK.partners` (`MemberCard layout="partner"`: "Issued by", the studio's logo as a card-lettering mask from `public/partners/`, its name). Logos are balanced by area at build time.
+- ≥1048px: the deck rests fanned in an arc. With motion it arrives stacked, fans out on scroll into view, then every 3 s the front card tucks behind the fan to the back. Hover lifts a card and holds the shuffle.
+- Below 1048px: a swipeable, snapping row (250px cards, the next one peeking) that moves on one card every ~3 s until the reader swipes.
+- Pauses off-screen, on the other floor and in a background tab. Under reduced motion: the fan or the row, still. This is the studio floor's one authored moment (RULES 17b).
 
-### 6.6 `MSValue.astro` — "For the studios" benefit cards + quantification
+### 6.6 `MSValue.astro` — the figures as a printed ledger
 
-- `.section--cream`. Eyebrow "For the studios". H2 (`.value__prize`): "Variety gives new members a compelling **reason to join**, and existing members another reason to stay." (one pink emphasis).
-- Two card grids:
-  1. **The benefits** — 5 numbered white cards (New revenue stream / Attract new members / Reduce churn / Recurring memberships / Zero-friction adoption).
-  2. **Quantification** — 3 stat cards: `+$15k p.a.`, `+$18k p.a.`, `+$18k p.a.` with explanatory captions.
-- On ≥1024px, 3 down-arrows visually link the benefit cards to the quantification row.
+- h2 "Variety: a reason to join, and a reason to stay." and the prize note.
+- Three printed read-backs (`VALUE.benefits`): a printed label, the figure in display lettering with its unit, and a caption. Printed rules above, below and between the cells; 1 col (rules between) → 3 cols (≥760). No boxes, no arrows.
 
 ### 6.7 `MSStory.astro` — featured partnership + voices
 
@@ -151,19 +147,19 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - Metrics row: per-studio quote, per-studio % of members upgraded (22% / 31%), and a centre block showing 128 ↔ 143 crossovers/month with explanatory bullets about credit weighting.
 - Below: "From some other studios who get it." with 3 quote cards (Sarah Reid / Marcus Tran / Priya Nair).
 
-### 6.8 `MSMembers.astro` — for studio members + phone mock
+### 6.8 The member floor (`MSMemberHero` → `MSMemberHow` → `MSMemberGet` → `MSMemberApp` → `MSMemberClose`)
 
-- `.section--cream`. Eyebrow "For studio members", h2 "Finally, some (affordable) _variety…_" (one pink word).
-- Left: single-paragraph lede, two commercial cards ("What you get" / "What you pay" — prose, no stat figures), and a note linking back to the Register form with `data-register="member"` (which auto-selects the Member tab).
-- Right: a **pure-CSS** phone mock with notch, status bar, greet block, member-at-studio chip, credits card (navy, "3 of 4 left"), filter chips, and 3 booking slots. Plus a callout reminding readers the Moose app is only for booking crossover sessions.
+- **Hero:** the switch, h1 "Finally, some variety.", one line, the primary plate "Get the Moose app". The sample card in its sleeve arrives on load (the floor's first authored moment); its issuer cycles through the studios on Moose.
+- **How it works for you:** three short steps, each with the same sample card at that moment (its back; the front made valid; credits spent, one class punched and one booked). ≥1048 with motion: one card held in view while the steps scroll past (it turns, the sticker lands, the credits count down and a class is punched). Phone with motion: each card plays its moment once in view. Reduced motion: the three cards, still.
+- **What you get, what you pay:** the words, and a floating paper panel of rows (You get · Valid at · You pay). No figures: the credit amount varies by studio.
+- **The app:** "Book in the Moose app." and three class cards (Book, Booked, Free) at "A partner studio". No screenshot. The first time they come into view the top one books itself (once; still under reduced motion).
+- **Close:** the navy cover band, "Get the Moose app.", the App Store plate and the sample card in use, still.
 
-### 6.9 `MSRegister.astro` — contact form (studio / member tabs)
+### 6.9 `MSStudioClose.astro` — the studio close
 
-- `.section--navy`. Eyebrow "Get on board", h2 "Get in touch with the Moose."
-- White card with two-tab toggle (I run a studio / I'm a member). Tabs swap which `<form>` is visible (vanilla JS).
-- Studio form fields: studio name*, your name*, email\*, phone, suburb, message.
-- Member form fields: your name*, email*, phone, your home studio\*, suburb, message.
-- Both forms `action="mailto:…@trainmoose.com"` — placeholder until a real CRM/Typeform endpoint is wired (see §15).
+- The navy cover band (a scoped `.dark`). "Get your studio on Moose.", "No cost to join. You choose your partners.", the primary plate "Register your studio" (new tab to the studio portal) and the line naming the portal. There is no form on the site.
+- Beside the words (below on phone): a fresh card in its sleeve, "Issued by Your studio" ghosted.
+- On press the portal opens straight away and the card issues on the page behind it (the name presses in, the card rises out of the sleeve and settles at −3°). Reduced motion shows the issued card.
 
 ### 6.10 `MSFooter.astro`
 
@@ -211,11 +207,11 @@ Copy edits go here, never inline in section files. Sections destructure their da
 
 **Mobile-specific rules:**
 
-- Hero photo moves _below_ the copy on `<760px`.
+- Hero: switch, the card pair, then the words, below 1048px.
 - Nav collapses to a hamburger below `760px`. Navy pill CTA stays visible inside the mobile menu.
-- Model: 1 col → 2 cols (≥760) → 4 cols (≥1024).
-- Network logos: 2 → 3 → 4 → 5 cols across 640/960/1280.
-- Value benefits: 2 cols → 3 cols (≥760) → 5 cols (≥1024). Quantification: 1 col → 3 cols (≥760).
+- Model: 1 col → 2 cols (≥760) → 4 cols (≥1048).
+- Network: the swipeable row below 1048px, the fanned deck from 1048px.
+- Value: 1 col → 3 cols (≥760).
 - Story case card: stacked → side-by-side (≥760). Voices: 1 col → 3 cols.
 - Members: copy + phone stack → side-by-side (≥960).
 - Register: stacked → side-by-side (≥960). Form field-row goes 1 → 2 cols at 760.
@@ -246,13 +242,13 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 - `<title>` and `<meta name="description">`: `SITE` in `src/data/copy.ts`.
 - Open Graph + Twitter card meta. OG image: `public/og.png` (regenerate when brand assets change).
 - `<link rel="canonical">`
-- Photos are compressed `.webp` under `public/photos/`, served as `<img>`; the hero is preloaded.
-- Poppins from Google Fonts (RULES 12).
+- Photos are compressed `.webp` under `public/photos/`, served as `<img>`. Neither hero has a photo, so none is preloaded.
+- Poppins self-hosted (RULES 12); the Latin 400 and 800 files are preloaded.
 - No third-party scripts in v1. (Add Plausible later via a single `<script defer data-domain>` line if desired.)
 
 **Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
 
-- JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade capped at $11/wk, 4 sessions/month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
+- JSON-LD is one `@graph` built in `src/data/schema.ts` from `copy.ts`. Every page carries `Organization` (fixed description, legal name, contact points, `sameAs`) and `WebSite`; `/` adds `Service` (upgrade priced by the studio, credits each month), `MobileApplication` (iOS) and an `ItemList` of partner studios.
 - `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`.
 - `robots.txt` names the AI crawlers explicitly as allowed. The host must not block them at the edge (Cloudflare blocks AI bots by default on new zones).
 - The site is registered with Google Search Console and Bing Webmaster Tools (ChatGPT search draws on Bing).
@@ -302,7 +298,7 @@ moose-marketing/
 │   │   │   ├── MSNetwork.astro
 │   │   │   ├── MSValue.astro
 │   │   │   ├── MSStory.astro
-│   │   │   ├── MSMembers.astro
+│   │   │   ├── MSMemberHero / How / Get / App / Close.astro
 │   │   │   ├── MSRegister.astro
 │   │   │   └── MSFooter.astro
 │   │   └── primitives/
@@ -338,7 +334,7 @@ The current site was rebuilt in a single pass during the 2026-06 redesign:
 The site is "good" when all of these are true:
 
 - [ ] All 9 sections from §6 render in order without horizontal scroll at 375/414/768/1024/1280/1440.
-- [ ] No remote fonts loaded; system stack throughout.
+- [ ] No third-party font requests; Poppins is served from the site.
 - [ ] No third-party JS (no analytics, no icon libraries, no UI kits).
 - [ ] Build output is static HTML + per-section inline scripts only. No hydrated React.
 - [ ] All copy from `src/data/copy.ts` appears verbatim — no paraphrasing.
@@ -352,7 +348,7 @@ The site is "good" when all of these are true:
 
 - ❌ Don't introduce Tailwind, CSS-in-JS, or any UI kit.
 - ❌ Don't add an icon library (`lucide-react`, `astro-icon`, etc). Inline SVGs only.
-- ❌ Don't load remote fonts — the system font stack _is_ the brand.
+- ❌ Don't load fonts from a third party (Google Fonts included) — Poppins is self-hosted.
 - ❌ Don't combine the wordmark and the loop icon in the same lockup.
 - ❌ Don't introduce a third brand colour or a gradient on the pink.
 - ❌ Don't put a pink CTA and a navy CTA on the same screen.

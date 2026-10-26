@@ -6,6 +6,11 @@ import { FOOTER, HERO, LINKS, MEMBERS, MODEL, NETWORK, REGISTER, SITE, VALUE } f
 import { SITE_URL } from '../data/schema';
 
 const stripTags = (html: string) => html.replace(/<[^>]+>/g, '');
+// copy.ts carries presentational Unicode — U+00A0 no-break spaces and U+2060
+// word joiners that steer line breaks on the page. This file is plain text
+// for machines, so flatten them wherever they appear (applied to the whole
+// body, so a future copy edit can't leak one through).
+const plain = (s: string) => s.replace(/ /g, ' ').replace(/⁠/g, '');
 const emails = FOOTER.cols
   .flatMap((c) => c.items)
   .filter((i) => i.h.startsWith('mailto:'))
@@ -43,13 +48,17 @@ ${REGISTER.lede} Register at ${LINKS.studioPortal}.
 
 ${MEMBERS.hero.lede}
 
-${MEMBERS.how.lede}
+### ${MEMBERS.how.head.replace(/\.$/, '')}
 
-${MEMBERS.how.steps.map((s) => `${s.n}. ${s.body}`).join('\n')}
+${MEMBERS.how.steps.map((s) => `${s.n}. **${s.title}** ${s.body}`).join('\n')}
+
+### ${MEMBERS.commercials.head.replace(/\.$/, '')}
 
 ${MEMBERS.commercials.rows.map((r) => `- **${r.k}:** ${r.body}`).join('\n')}
 
-${MEMBERS.app.head}. ${MEMBERS.app.lede} ${MEMBERS.close.detail.replace(/^Opens the App Store listing for Moose\. /, '')}
+### ${MEMBERS.app.head.replace(/\.$/, '')}
+
+${MEMBERS.app.lede} ${MEMBERS.close.lede} ${MEMBERS.close.detail.replace(/^Opens the App Store listing for Moose\. /, '')}
 
 ## Partner studios
 
@@ -70,4 +79,4 @@ ${emails.map((e) => `- Contact: ${e}`).join('\n')}
 `;
 
 export const GET: APIRoute = () =>
-  new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  new Response(plain(body), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

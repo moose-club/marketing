@@ -1,0 +1,30 @@
+---
+// A punch mark's ring (RULES 19). Booked: a press-out ring of sixteen pink
+// dots, each about 11% of the diameter, never touching. Next: the same ring in
+// the hint ink. The attended punch is a real hole, so it isn't drawn here: the
+// member card cuts it out of its own face.
+interface Props {
+  state: 'booked' | 'next';
+  class?: string;
+}
+const { state, class: className } = Astro.props;
+const DOTS = 16;
+const dots = Array.from({ length: DOTS }, (_, i) => {
+  const a = (i / DOTS) * Math.PI * 2 - Math.PI / 2;
+  return { cx: +(50 + 44 * Math.cos(a)).toFixed(2), cy: +(50 + 44 * Math.sin(a)).toFixed(2) };
+});
+---
+
+<svg class:list={['punch', `punch--${state}`, className]} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+  {dots.map((d) => <circle cx={d.cx} cy={d.cy} r="5.5" />)}
+</svg>
+
+<style>
+  .punch {
+    display: block;
+    width: var(--punch-size, 20px);
+    height: var(--punch-size, 20px);
+  }
+  .punch--booked { fill: var(--m-moose-pink); }
+  .punch--next { fill: var(--punch-hint, var(--m-ink-hint)); }
+</style>

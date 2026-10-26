@@ -1,0 +1,81 @@
+---
+import { MEMBERS } from '../../data/copy';
+import MemberCard from '../primitives/MemberCard.astro';
+import Plate from '../primitives/Plate.astro';
+
+// The member floor's close (Member Card; Figma `172:817` / `172:882`). The
+// navy cover band, as on the studio floor: the token set's own `.dark`,
+// scoped, so ink, the plate and the card flip from one class (RULES 8). The
+// words and the floor's last primary plate; beside them (below on phone) the
+// sample card in use, as it lives in the app, cream in the band. Still: the
+// hero's arrival is this floor's motion.
+const { close } = MEMBERS;
+const { card } = close;
+---
+
+<section class="mclose dark" id="member-close" aria-labelledby="memberCloseHeading">
+  <div class="page mclose__inner">
+    <div class="mclose__words">
+      <h2 id="memberCloseHeading" class="page-lettering page-lettering--compact">{close.head}</h2>
+      <p class="body-text mclose__lede">{close.lede}</p>
+      <Plate href={close.cta.href} external class="mclose__cta">{close.cta.label}</Plate>
+      <p class="mclose__detail">{close.detail}</p>
+    </div>
+
+    <div class="mclose__scene">
+      <MemberCard
+        label={card.label}
+        issuer={card.issuer}
+        member={card.member}
+        credits={card.credits}
+        creditsNote={card.creditsNote}
+        sticker={{ label: card.sticker }}
+        footnote={card.footnote}
+        tilt={-3}
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .mclose {
+    margin-top: var(--rhythm);
+    background: var(--m-floor);
+    color: var(--m-ink);
+  }
+  .mclose__inner {
+    display: grid;
+    gap: var(--m-spacing-xxl);
+    padding-block: var(--rhythm);
+  }
+  .mclose__lede { margin-top: 20px; } /* no token yet: proposed */
+  .mclose__cta { margin-top: 20px; } /* no token yet: proposed */
+  .mclose__detail {
+    margin-top: 20px; /* no token yet: proposed */
+    font-size: var(--m-type-detail-size);
+    font-weight: var(--m-type-detail-weight);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  .mclose__scene {
+    justify-self: center;
+    width: min(100%, 310px); /* no token yet: proposed (the 390 frame's card) */
+    padding: var(--m-spacing-md) var(--m-spacing-sm);
+    --mc-width: 100%;
+  }
+
+  @media (min-width: 760px) {
+    .mclose__scene { width: min(100%, 400px); }
+  }
+
+  @media (min-width: 1048px) {
+    .mclose__inner {
+      grid-template-columns: minmax(0, 540px) minmax(0, 475px);
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 112px; /* no token yet: proposed (cover band inset) */
+    }
+    .mclose__scene { width: 100%; }
+  }
+</style>

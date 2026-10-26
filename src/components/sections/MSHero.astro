@@ -1,64 +1,199 @@
 ---
-import { HERO } from '../../data/copy';
+import { HERO, NETWORK } from '../../data/copy';
 import AudienceSwitch from '../primitives/AudienceSwitch.astro';
-import HeroPhoto from '../primitives/HeroPhoto.astro';
-import Icon from '../primitives/Icon.astro';
+import MemberCard from '../primitives/MemberCard.astro';
 import Plate from '../primitives/Plate.astro';
 
-// Studio floor hero — a split floor: the work side on your lane, the
-// photograph from lane 2 to the edge. One filled plate.
+// Studio floor hero (Member Card; Figma `127:570` / `127:653`). The studio is
+// shown that it issues the card: its back (+4°, "Valid at" the studios on
+// Moose) with the front (−3°, "Issued by Your studio") over its lower-left
+// corner. No photo, no points, no caption (Max, 26 Oct 2026). The member is a
+// sample (RULES 19). One primary plate (RULES 5). Desktop: the words on the
+// left, the pair on the right. Phone: switch, pair, words.
+//
+// Motion (Max, 26 Oct 2026; Figma "Hero · the card is issued" `179:820`, "the
+// pair follows the pointer" `179:1420`). On load the card is issued: the back
+// rises in to +4°, the front slides up over its corner to −3°, "Your studio"
+// presses in and the sticker lands (CSS only, ~1.4 s, once). Then, on desktop
+// with a fine pointer, the pair leans toward the pointer, the back at half
+// depth. Each card sits in a wrapper that carries both, so the card's own tilt
+// stays. Reduced motion: the pair at rest, still.
+const { card } = HERO;
+const partners = NETWORK.partners.map((p) => ({ name: p.name }));
 ---
 
-<section class="hero" aria-labelledby="heroHeading">
-  <HeroPhoto src={HERO.photo.src} alt={HERO.photo.alt} />
+<section class="shero page" aria-labelledby="heroHeading">
+  <div class="shero__switch">
+    <AudienceSwitch current="studio" />
+  </div>
 
-  <div class="lanes">
-    <div class="hero__work">
-      <AudienceSwitch current="studio" />
-
-      <h1 id="heroHeading" class="lettering hero__head">{HERO.head}</h1>
-
-      {HERO.subLines.map((line) => <p class="lead">{line}</p>)}
-
-      <ul class="hero__points">
-        {HERO.points.map((p) => (
-          <li class="plate-label hero__point">
-            <span class="tick"><Icon name="check" size={16} /></span>
-            {p}
-          </li>
-        ))}
-      </ul>
-
-      <Plate href={HERO.cta.href} external class="hero__cta">{HERO.cta.label}</Plate>
+  <div class="shero__scene is-issued" role="img" aria-label={card.label} data-lean>
+    <div class="shero__card shero__card--back" style="--depth: 0.5">
+      <MemberCard
+        label=""
+        face="back"
+        tilt={4}
+        partners={partners}
+        partnerColumns={2}
+        addedBy={card.addedBy}
+      />
     </div>
+    <div class="shero__card shero__card--front" style="--depth: 1">
+      <MemberCard
+        label=""
+        tilt={-3}
+        issuer={card.issuer}
+        member={card.member}
+        credits={card.credits}
+        creditsNote={card.creditsNote}
+        sticker={{ label: card.sticker }}
+        footnote={card.footnote}
+        ghostIssuer
+      />
+    </div>
+  </div>
+
+  <div class="shero__words">
+    <h1 id="heroHeading" class="page-lettering">{HERO.head}</h1>
+    <p class="body-text shero__lede">{HERO.subLines.join(' ')}</p>
+    <Plate href={HERO.cta.href} external class="shero__cta">{HERO.cta.label}</Plate>
   </div>
 </section>
 
+<script>
+  // The pair follows the pointer: desktop with a fine pointer, with motion,
+  // once the card is issued (no lean while the arrival is still playing).
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-lean]').forEach((scene) => {
+    let frame = 0;
+    const arriving = () =>
+      scene.getAnimations({ subtree: true }).some((a) => a instanceof CSSAnimation && a.playState === 'running');
+    const set = (px: number, py: number) => {
+      scene.style.setProperty('--px', px.toFixed(3));
+      scene.style.setProperty('--py', py.toFixed(3));
+    };
+
+    scene.addEventListener('pointermove', (e) => {
+      if (!fine.matches || reduce.matches || e.pointerType !== 'mouse' || arriving()) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const r = scene.getBoundingClientRect();
+        const clamp = (v: number) => Math.max(-1, Math.min(1, v));
+        scene.classList.add('is-leaning');
+        set(clamp(((e.clientX - r.left) / r.width) * 2 - 1), clamp(((e.clientY - r.top) / r.height) * 2 - 1));
+      });
+    });
+    scene.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(frame);
+      scene.classList.remove('is-leaning');
+      set(0, 0);
+    });
+  });
+</script>
+
 <style>
-  .hero__head { margin-top: var(--m-spacing-xl); }
-
-  .hero__points {
-    margin-top: var(--m-spacing-xl);
+  .shero {
     display: grid;
-    gap: 12px; /* no token yet: proposed (Figma point rhythm) */
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'switch' 'scene' 'words';
+    row-gap: var(--m-spacing-lg);
+    padding-top: calc(var(--nav-h) + var(--m-spacing-lg));
   }
-  .hero__point {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* no token yet: proposed */
+  .shero__switch { grid-area: switch; }
+  .shero__words { grid-area: words; }
+  .shero__lede { margin-top: var(--m-spacing-lg); max-width: 520px; } /* no token yet: proposed (hero measure) */
+  .shero__cta { margin-top: var(--m-spacing-lg); }
+
+  /* The pair, in scene units (1/612 of the scene, the desktop frame's width),
+     so it scales as one picture. Phone lets it run into the page margin, as
+     the 390 frame does. */
+  .shero__scene {
+    grid-area: scene;
+    position: relative;
+    container-type: inline-size;
+    justify-self: center;
+    width: calc(100% + 2 * var(--page-pad));
+    max-width: 560px; /* no token yet: proposed (hero object, single column) */
+    margin-inline: calc(-1 * var(--page-pad));
   }
-  /* Assurance tick: 24px solid ink box, 4px corner, surface check. Never
-     status green, never pink. */
-  .tick {
-    flex-shrink: 0;
-    display: inline-grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px; /* no token yet: proposed (Web/Tick) */
-    background: var(--m-ink);
-    color: var(--m-surface);
+  .shero__scene::before {
+    content: '';
+    display: block;
+    aspect-ratio: 612 / 560;
+  }
+  .shero__card {
+    --s: calc(100cqw / 612);
+    position: absolute;
+    --mc-width: 100%;
+  }
+  .shero__card--back {
+    left: calc(var(--s) * 159);
+    top: calc(var(--s) * 30);
+    width: calc(var(--s) * 440);
+  }
+  .shero__card--front {
+    left: calc(var(--s) * 8);
+    top: calc(var(--s) * 290);
+    width: calc(var(--s) * 360);
   }
 
-  .hero__cta { margin-top: var(--m-spacing-xl); }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Issued on load: the back rises in and turns to +4°, then the front
+       slides up over its corner and tips to −3° (ease-out-quint: they land,
+       no bounce). */
+    .shero__card--back { animation: shero-back 520ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both; }
+    .shero__card--front { animation: shero-front 560ms cubic-bezier(0.22, 1, 0.36, 1) 360ms both; }
+    /* "Your studio" presses in (MemberCard's `mc-press`, as on the Close),
+       then the sticker lands. */
+    .shero__scene .shero__card--front :global(.mc__issuer--ghost) { animation-delay: 860ms; }
+    .shero__card--front :global(.mc__sticker) {
+      animation: mc-sticker-land 260ms cubic-bezier(0.22, 1, 0.36, 1) 1150ms both;
+    }
+
+    /* The lean: each card turns toward the pointer and shifts its way, the
+       back at half depth (`--depth`). `--px` / `--py` (−1…1) come from the
+       script; at rest they're 0. */
+    .shero__card {
+      transform:
+        perspective(calc(var(--s) * 1400))
+        translate(calc(var(--s) * 14 * var(--px, 0) * var(--depth)), calc(var(--s) * 8 * var(--py, 0) * var(--depth)))
+        rotateY(calc(6deg * var(--px, 0) * var(--depth)))
+        rotateX(calc(-6deg * var(--py, 0) * var(--depth)));
+      transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1); /* eases back on leave */
+    }
+    .shero__scene.is-leaning .shero__card { transition-duration: 160ms; }
+  }
+  @keyframes shero-back {
+    from { opacity: 0; translate: 0 calc(var(--s) * 48); rotate: -3deg; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; }
+  }
+  @keyframes shero-front {
+    from { opacity: 0; translate: calc(var(--s) * -16) calc(var(--s) * 96); rotate: 3deg; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; }
+  }
+
+  @media (min-width: 640px) {
+    .shero__scene { width: 100%; margin-inline: auto; }
+  }
+
+  @media (min-width: 1048px) {
+    .shero {
+      grid-template-columns: minmax(0, 580px) minmax(0, 1fr); /* no token yet: proposed (hero words measure) */
+      /* The words, switch included, centre on the pair. */
+      grid-template-rows: 1fr auto auto 1fr;
+      grid-template-areas: '. scene' 'switch scene' 'words scene' '. scene';
+      column-gap: 64px; /* no token yet: proposed (page gutter) */
+      row-gap: var(--m-spacing-lg);
+      min-height: min(100svh, 852px); /* no token yet: proposed (the 1440 frame's hero) */
+      padding-top: calc(var(--nav-h) + 80px); /* no token yet: proposed (hero top inset) */
+      padding-bottom: var(--m-spacing-xl);
+    }
+    .shero__scene {
+      align-self: center;
+      max-width: 612px;
+      margin-right: 0;
+    }
+  }
 </style>

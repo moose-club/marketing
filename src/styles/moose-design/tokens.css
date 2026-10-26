@@ -16,6 +16,8 @@
   --m-accent: #eb4e8d;
 
   /* color.surface */
+  --m-floor: #f7f4ef;
+  --m-paper: #ffffff;
   --m-bg: #f7f4ef;
   --m-surface: #ffffff;
   --m-surface-2: #f8f8f8;
@@ -33,6 +35,8 @@
   --m-label-4: rgb(60 60 67 / 0.18);
   --m-sep: rgb(60 60 67 / 0.12);
   --m-ink-support: rgb(26 43 95 / 0.7);
+  --m-ink-hint: rgb(26 43 95 / 0.45);
+  --m-ink-rule: rgb(26 43 95 / 0.16);
   --m-ink-placeholder: rgb(26 43 95 / 0.67);
   --m-ink-inert: rgb(26 43 95 / 0.6);
   --m-ink-disabled: rgb(26 43 95 / 0.3);
@@ -46,10 +50,18 @@
   --m-warning: #d98a23;
   --m-warning-soft: #fbf0dd;
   --m-danger: #d6453f;
+  --m-danger-plate: #c0392f;
   --m-danger-soft: #fbe7e6;
   --m-info: #243a78;
   --m-info-soft: #f3f5fa;
   --m-peak: #ff9500;
+
+  /* color.card */
+  --m-card-face: #1a2b5f;
+  --m-card-lettering: #f7f4ef;
+  --m-card-emboss: #13204a;
+  --m-card-back: #1a2b5f;
+  --m-card-sleeve: #efe9e0;
 
   /* color.button */
   --m-button-primary: #1a2b5f;
@@ -72,11 +84,23 @@
   --m-radius-xl: 24px;
   --m-radius-hero: 36px;
   --m-radius-full: 9999px;
+  --m-radius-component-send-end: 7px;
+  --m-radius-component-field: 10px;
+  --m-radius-component-plate: 12px;
+  --m-radius-component-class-card: 14px;
+  --m-radius-component-sleeve: 14px;
+  --m-radius-component-card: 16px;
+  --m-radius-component-sheet: 28px;
 
   /* shadow */
   --m-shadow-sm: 0 2px 8px 0 rgb(16 26 60 / 0.06);
   --m-shadow-md: 0 4px 16px 0 rgb(16 26 60 / 0.1);
   --m-shadow-lg: 0 8px 32px 0 rgb(16 26 60 / 0.15);
+  --m-shadow-card: 0 16px 28px 0 rgb(16 26 60 / 0.22);
+  --m-shadow-card-behind: 0 16px 28px 0 rgb(16 26 60 / 0.16);
+  --m-shadow-card-mini: 0 3px 6px 0 rgb(16 26 60 / 0.25);
+  --m-shadow-paper: 0 6px 16px 0 rgb(16 26 60 / 0.07);
+  --m-shadow-strip: 0 8px 18px 0 rgb(16 26 60 / 0.16);
 
   /* spacing */
   --m-spacing-xxs: 2px;
@@ -88,6 +112,56 @@
   --m-spacing-xxl: 48px;
 
   /* type */
+  --m-type-page-lettering-size: clamp(2.75rem, 6vw, 4.5rem);
+  --m-type-page-lettering-weight: 800;
+  --m-type-page-lettering-leading: 1;
+  --m-type-page-lettering-tracking: -0.02em;
+  --m-type-page-lettering-compact-size: clamp(2.25rem, 5vw, 3.5rem);
+  --m-type-page-lettering-compact-weight: 800;
+  --m-type-page-lettering-compact-leading: 1;
+  --m-type-page-lettering-compact-tracking: -0.02em;
+  --m-type-printed-label-size: 0.6875rem;
+  --m-type-printed-label-weight: 600;
+  --m-type-printed-label-leading: 1.4;
+  --m-type-printed-label-tracking: 0.07em;
+  --m-type-printed-label-transform: uppercase;
+  --m-type-field-value-size: 1.0625rem;
+  --m-type-field-value-weight: 500;
+  --m-type-field-value-leading: 1.294;
+  --m-type-class-time-size: 2rem;
+  --m-type-class-time-weight: 800;
+  --m-type-class-time-leading: 1;
+  --m-type-class-time-tracking: -0.02em;
+  --m-type-class-time-numeric: tabular-nums;
+  --m-type-card-figure-size: 2.5rem;
+  --m-type-card-figure-weight: 800;
+  --m-type-card-figure-leading: 1;
+  --m-type-card-figure-tracking: -0.02em;
+  --m-type-card-figure-numeric: tabular-nums;
+  --m-type-card-label-size: 0.5625rem;
+  --m-type-card-label-weight: 600;
+  --m-type-card-label-leading: 1.2;
+  --m-type-card-label-tracking: 0.13em;
+  --m-type-card-label-transform: uppercase;
+  --m-type-sticker-lettering-size: 0.625rem;
+  --m-type-sticker-lettering-weight: 700;
+  --m-type-sticker-lettering-leading: 1.2;
+  --m-type-sticker-lettering-tracking: 0.1em;
+  --m-type-sticker-lettering-transform: uppercase;
+  --m-type-plate-label-size: 1.0625rem;
+  --m-type-plate-label-weight: 600;
+  --m-type-plate-label-leading: 1.294;
+  --m-type-body-size: 1.0625rem;
+  --m-type-body-weight: 400;
+  --m-type-body-leading: 1.294;
+  --m-type-code-digits-size: 1.375rem;
+  --m-type-code-digits-weight: 500;
+  --m-type-code-digits-leading: 1.273;
+  --m-type-code-digits-tracking: 0;
+  --m-type-code-digits-numeric: tabular-nums;
+  --m-type-detail-size: 0.8125rem;
+  --m-type-detail-weight: 400;
+  --m-type-detail-leading: 1.385;
   --m-type-floor-lettering-size: clamp(2.75rem, 6vw, 4.5rem);
   --m-type-floor-lettering-weight: 800;
   --m-type-floor-lettering-leading: 0.86;
@@ -99,30 +173,16 @@
   --m-type-figure-leading: 1;
   --m-type-figure-tracking: -0.03em;
   --m-type-figure-numeric: tabular-nums;
-  --m-type-section-head-size: 1.5rem;
-  --m-type-section-head-weight: 700;
-  --m-type-section-head-leading: 1.25;
   --m-type-figure-small-size: 1.5rem;
   --m-type-figure-small-weight: 700;
   --m-type-figure-small-leading: 1.2;
   --m-type-figure-small-numeric: tabular-nums;
-  --m-type-plate-label-size: 1.0625rem;
-  --m-type-plate-label-weight: 600;
-  --m-type-plate-label-leading: 1.294;
-  --m-type-body-size: 1.0625rem;
-  --m-type-body-weight: 400;
-  --m-type-body-leading: 1.294;
+  --m-type-section-head-size: 1.5rem;
+  --m-type-section-head-weight: 700;
+  --m-type-section-head-leading: 1.25;
   --m-type-row-label-size: 0.9375rem;
   --m-type-row-label-weight: 500;
   --m-type-row-label-leading: 1.4;
-  --m-type-code-digits-size: 1.375rem;
-  --m-type-code-digits-weight: 500;
-  --m-type-code-digits-leading: 1.273;
-  --m-type-code-digits-tracking: 0;
-  --m-type-code-digits-numeric: tabular-nums;
-  --m-type-detail-size: 0.8125rem;
-  --m-type-detail-weight: 400;
-  --m-type-detail-leading: 1.385;
   --m-type-station-label-size: 0.6875rem;
   --m-type-station-label-weight: 600;
   --m-type-station-label-leading: 1.4;
@@ -131,12 +191,15 @@
 
   /* font */
   --m-font-family-sans: "Poppins", -apple-system, "BlinkMacSystemFont", "SF Pro Text", system-ui, "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif;
+  --m-font-family-display: "Poppins", -apple-system, "BlinkMacSystemFont", system-ui, sans-serif;
   --m-font-family-mono: ui-monospace, "SFMono-Regular", "SF Mono", "Menlo", "Consolas", monospace;
 }
 
 .dark {
   --m-moose-pink-soft: rgb(235 78 141 / 0.18);
   --m-moose-pink-glow: rgb(235 78 141 / 0.32);
+  --m-floor: #13204a;
+  --m-paper: #1a2a57;
   --m-bg: #13204a;
   --m-surface: #1a2a57;
   --m-surface-2: #25356a;
@@ -149,6 +212,8 @@
   --m-label-4: rgb(235 235 245 / 0.18);
   --m-sep: rgb(84 84 88 / 0.65);
   --m-ink-support: rgb(255 255 255 / 0.7);
+  --m-ink-hint: rgb(255 255 255 / 0.45);
+  --m-ink-rule: rgb(255 255 255 / 0.16);
   --m-ink-placeholder: rgb(255 255 255 / 0.67);
   --m-ink-inert: rgb(255 255 255 / 0.6);
   --m-ink-disabled: rgb(255 255 255 / 0.3);
@@ -157,8 +222,19 @@
   --m-ink-wash: rgb(255 255 255 / 0.08);
   --m-warning: #f2a63d;
   --m-warning-soft: #3b2e16;
+  --m-danger: #ff7a70;
+  --m-danger-plate: #ff7a70;
   --m-peak: #ffd60a;
+  --m-card-face: #f7f4ef;
+  --m-card-lettering: #1a2b5f;
+  --m-card-emboss: rgb(255 255 255 / 0.7);
+  --m-card-back: #efe9e0;
+  --m-card-sleeve: #25356a;
   --m-button-primary: #ffffff;
   --m-button-primary-press: #f7f4ef;
   --m-button-primary-label: #1a2b5f;
+  --m-shadow-card: 0 16px 28px 0 rgb(16 26 60 / 0.45);
+  --m-shadow-card-behind: 0 16px 28px 0 rgb(16 26 60 / 0.35);
+  --m-shadow-paper: 0 6px 16px 0 rgb(16 26 60 / 0.3);
+  --m-shadow-strip: 0 8px 18px 0 rgb(16 26 60 / 0.4);
 }

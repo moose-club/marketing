@@ -1,0 +1,201 @@
+---
+import MemberCard from './MemberCard.astro';
+import MooseLoop from './MooseLoop.astro';
+
+// The card in its sleeve (the member hero). The sleeve is the opposite of the
+// card it holds (`--m-card-sleeve`): cream-deep around the navy card in light,
+// raised navy around the cream card in dark. Its mouth has a half-ellipse
+// thumb notch, and the card's number shows through it.
+//
+// Geometry in sleeve units (1/362 of the width): the card is 354 wide and
+// stands 104 clear of the mouth; the sleeve is 362 × 236.
+//
+// `arrive`: the site's one authored motion (RULES 17b), the web echo of the
+// app's arrival. On load the sleeve drops away and fades while the card
+// settles at −3° (about 900 ms after a short hold). In the sleeve the card
+// shows its printed face, the number in the notch, as the app's does; it
+// turns to its in-use face as it comes clear. It runs again whenever the scene is shown (the member floor). Under
+// `prefers-reduced-motion` the card is already out and still.
+//
+// `issue`: the studio Close's press (feedback on the floor's one action, not
+// a second authored moment). The scene rests with the card in its sleeve and
+// its issuer ghosted; when an ancestor takes `.is-issued` the issuer presses
+// in, the card rises out of the sleeve and settles at −3° on its printed face,
+// and the sleeve drops away. Under reduced motion it simply shows the result.
+interface Props {
+  /** The accessible name of the scene. */
+  label: string;
+  kicker?: string;
+  title?: string;
+  card?: Record<string, unknown>;
+  arrive?: boolean;
+  issue?: boolean;
+  class?: string;
+}
+const { label, kicker = 'Moose Club', title = 'Partner access card', card = {}, arrive = false, issue = false, class: className } = Astro.props;
+---
+
+<div class:list={['cs', arrive && 'cs--arrive', issue && 'cs--issue', className]} role="img" aria-label={label}>
+  <div class="cs__scene">
+    <div class="cs__card">
+      <MemberCard label="" {...card} layout={arrive ? 'in-use' : 'printed'} ghostIssuer={issue} />
+      {arrive && (
+        <div class="cs__printed">
+          <MemberCard label="" {...card} layout="printed" />
+        </div>
+      )}
+    </div>
+    <div class="cs__sleeve">
+      <div class="cs__paper">
+        <span class="cs__rule"></span>
+        <p class="cs__kicker">{kicker}</p>
+        <p class="cs__title">{title}</p>
+        <span class="cs__loop"><MooseLoop /></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cs {
+    container-type: inline-size;
+    width: 100%;
+    max-width: var(--cs-width, 362px);
+  }
+  .cs__scene {
+    --u: calc(100cqw / 362);
+    position: relative;
+    aspect-ratio: 362 / 340;
+  }
+  .cs__card {
+    position: absolute;
+    top: 0;
+    left: calc(var(--u) * 4);
+    width: calc(var(--u) * 354);
+    --mc-width: 100%;
+  }
+  .cs__card :global([role='img']) { pointer-events: none; }
+  .cs__sleeve {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(var(--u) * 236);
+    border-radius: calc(var(--u) * 14); /* radius.component.sleeve at full size */
+    box-shadow: var(--m-shadow-card);
+  }
+  .cs__paper {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--m-card-sleeve);
+    color: var(--m-ink);
+    font-family: var(--m-font-family-sans);
+    /* The thumb notch: 84 × 22, a half-ellipse cut into the mouth. */
+    -webkit-mask: radial-gradient(ellipse calc(var(--u) * 42) calc(var(--u) * 22) at 50% 0, transparent 98%, #000 100%);
+    mask: radial-gradient(ellipse calc(var(--u) * 42) calc(var(--u) * 22) at 50% 0, transparent 98%, #000 100%);
+  }
+  .cs__paper > * { position: absolute; margin: 0; }
+  .cs__rule {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 84);
+    width: calc(var(--u) * 28);
+    height: calc(var(--u) * 3);
+    background: var(--m-moose-pink);
+  }
+  .cs__kicker {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 62);
+    font-size: calc(var(--u) * 9);
+    font-weight: var(--m-type-card-label-weight);
+    line-height: var(--m-type-card-label-leading);
+    letter-spacing: var(--m-type-card-label-tracking);
+    text-transform: var(--m-type-card-label-transform);
+    color: var(--m-ink-support);
+  }
+  .cs__title {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 34);
+    font-size: calc(var(--u) * 18);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .cs__loop {
+    right: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 34);
+    width: calc(var(--u) * 38);
+  }
+
+  /* Arrival. The scene is the resting card's height (260 units). It opens
+     on the card in its sleeve at 0.74, the pair centred; the sleeve drops
+     away and fades while the card grows to full size and settles at −3°.
+     Transforms pivot on the top centre, the pair's shared axis. */
+  .cs--arrive .cs__scene { aspect-ratio: 362 / 260; }
+  .cs--arrive .cs__card,
+  .cs--arrive .cs__sleeve { transform-origin: 50% 0; }
+  .cs--arrive .cs__card {
+    top: calc(var(--u) * 18);
+    transform: rotate(-3deg);
+    animation: cs-card 880ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both; /* ease-out-quint: it lands, no bounce */
+  }
+  .cs--arrive .cs__sleeve {
+    top: calc(var(--u) * 81);
+    bottom: auto;
+    transform: scale(0.74);
+    opacity: 0;
+    visibility: hidden;
+    animation: cs-sleeve 440ms cubic-bezier(0.55, 0, 0.75, 0.2) 300ms both;
+  }
+  @keyframes cs-card {
+    from { transform: translateY(calc(var(--u) * -14)) scale(0.74) rotate(0deg); }
+    to   { transform: rotate(-3deg); }
+  }
+  /* The sleeve falls on an ease-in but fades early, so it has cleared before
+     the card grows into its place. */
+  @keyframes cs-sleeve {
+    0%   { transform: scale(0.74); opacity: 1; visibility: visible; }
+    45%  { opacity: 0.5; }
+    70%  { opacity: 0; }
+    100% { transform: translateY(calc(var(--u) * 150)) scale(0.74); opacity: 0; visibility: hidden; }
+  }
+  .cs__printed {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: cs-printed 260ms ease-out 620ms both;
+  }
+  @keyframes cs-printed {
+    from { opacity: 1; }
+    to   { opacity: 0; visibility: hidden; }
+  }
+  /* Issue. The card rises clear of the mouth, then settles lower at −3°,
+     centred where the pair stood; the sleeve falls away under it. */
+  .cs--issue .cs__card,
+  .cs--issue .cs__sleeve { transform-origin: 50% 0; }
+  :global(.is-issued) .cs--issue .cs__card {
+    animation: cs-issue-card 820ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both; /* ease-out-quint: it lands, no bounce */
+  }
+  :global(.is-issued) .cs--issue .cs__sleeve {
+    animation: cs-sleeve-drop 440ms cubic-bezier(0.55, 0, 0.75, 0.2) 260ms both;
+  }
+  @keyframes cs-issue-card {
+    0%   { transform: none; }
+    40%  { transform: translateY(calc(var(--u) * -18)) rotate(-1deg); }
+    100% { transform: translateY(calc(var(--u) * 58)) rotate(-3deg); }
+  }
+  @keyframes cs-sleeve-drop {
+    0%   { transform: none; opacity: 1; visibility: visible; }
+    60%  { opacity: 0; }
+    100% { transform: translateY(calc(var(--u) * 150)); opacity: 0; visibility: hidden; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.is-issued) .cs--issue .cs__card { animation: none; transform: translateY(calc(var(--u) * 58)) rotate(-3deg); }
+    :global(.is-issued) .cs--issue .cs__sleeve { animation: none; visibility: hidden; }
+    .cs--arrive .cs__card,
+    .cs--arrive .cs__sleeve { animation: none; }
+    .cs--arrive .cs__sleeve,
+    .cs__printed { display: none; }
+  }
+</style>

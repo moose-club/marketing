@@ -40,7 +40,7 @@ something the member initiates.
 ## Product Purpose
 
 Moose is a B2B network that lets non-competing boutique studios form reciprocal
-partnerships. A member of a partner studio pays a small capped upgrade for the right to
+partnerships. A member of a partner studio pays a small upgrade for the right to
 attend a limited number of sessions per month at complementary venues nearby.
 
 The studio gets a new premium membership tier and a new revenue line without building

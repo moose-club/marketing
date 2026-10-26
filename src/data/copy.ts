@@ -1,7 +1,7 @@
 // Source of truth for marketing copy. All on-page text lives here — never
-// inline copy in section components (per CLAUDE.md). Copy is verbatim from
-// the Lane Lines frames (Figma a5SmvlBwlHP6sf0FAZfLpP, "Home · / — working")
-// and the decisions logged in .impeccable/surfaces/src-pages-index-astro.md.
+// inline copy in section components (per CLAUDE.md). Copy is Max's, verbatim
+// from the Member Card frames (Figma a5SmvlBwlHP6sf0FAZfLpP, the "Home ·
+// Studio floor" and "Home · Member floor" pages) and the decisions in DESIGN.md.
 //
 // `/` carries two floors behind the audience switch: the studio floor (the
 // default) and the member floor. Exports are grouped the same way.
@@ -54,9 +54,11 @@ export const SWITCH = {
 
 export const HERO = {
   head: "Level up your memberships.",
+  // Reworked with Max, 26 Oct 2026: mechanism first, then the payoff.
+  // "Paid upgrade", not "pay you" — priced by the studio, paid through Moose.
   subLines: [
-    "Moose unlocks variety for fitness studios.",
-    "Form reciprocal partnerships with complementary, non-competing studios nearby.",
+    "Moose partners your studio with complementary studios nearby, and your members add their classes as a paid upgrade.",
+    "More revenue, less churn — and your members stay yours.",
   ] as const,
   points: [
     "You choose your partners.",
@@ -65,9 +67,18 @@ export const HERO = {
     "Your memberships level up.",
   ] as const,
   cta: { label: "Register your studio", href: LINKS.studioPortal },
-  photo: {
-    src: "/photos/hero-strength.webp",
-    alt: "Member training with a kettlebell in warm, golden studio light",
+  // The hero object: the studio's own card, front and back (RULES 0). The
+  // member is a sample (RULES 19); the back lists the studios on Moose.
+  card: {
+    label:
+      "A sample Moose member card issued by your studio, to a sample member, valid with 4.00 credits to spend. Its back lists the partner studios it is valid at: the studios already on Moose.",
+    issuer: "Your studio",
+    member: "Alex Sample",
+    credits: "4.00",
+    creditsNote: "to spend",
+    sticker: "Valid",
+    footnote: "Refreshes every month",
+    addedBy: "your studio",
   },
 } as const;
 
@@ -75,32 +86,31 @@ export const MODEL = {
   head: "The Moose model.",
   lede: "Crossover between partner venues is intentionally limited: enough variety to enrich a membership, while keeping members anchored to you as their home studio.",
   stepsTitle: "How it works.",
-  // 01–02 sit on your lane, 03–04 on your partner's. `<strong>` ranges render
-  // as Semibold ink, not chips.
+  // Confirmed by Max, 26 Oct 2026. `<strong>` ranges render as Semibold ink.
   steps: [
     {
       n: "01",
-      title: "Identify partners and form partnerships",
+      title: "Register and connect your booking system",
       bodyHtml:
-        "You dictate who you partner with. Partnerships are seamlessly facilitated through Moose.",
+        "Sign up in the studio portal and connect your booking system.",
     },
     {
       n: "02",
-      title: "Add a premium tier to your membership catalogue",
+      title: "Choose your partners",
       bodyHtml:
-        "You sell it, you own it. Our only stipulation is that the upgrade fee is capped at <strong>$11/wk (or $48/mo)</strong> extra.",
+        "Pick the complementary, non-competing studios nearby that your members can visit.",
     },
     {
       n: "03",
-      title: "Rationed crossover",
+      title: "Select your eligible memberships",
       bodyHtml:
-        "The upgrade entitles members to a notional <strong>four crossover sessions per month</strong> at partner venues (in aggregate, not per partner).",
+        "Choose which of your memberships can add Moose. Members upgrade in the Moose app and Moose handles the payments.",
     },
     {
       n: "04",
-      title: "A balanced exchange",
+      title: "Members book, Moose keeps it balanced",
       bodyHtml:
-        "Our backend systems monitor crossover both ways, ensuring a balanced exchange between partners.",
+        "Upgraded members get <strong>credits each month</strong> to book classes at your partners in the Moose app. Moose tracks visits both ways, so no studio carries the network.",
     },
   ] as const,
 } as const;
@@ -121,13 +131,13 @@ export const VALUE = {
       title: "Attract new members",
       stat: "+$18k",
       unit: "p.a.",
-      cap: "Attracting 5 new members per year (assuming $70/wk memberships).",
+      cap: "Attracting 5 new members per year (assuming $70/\u2060wk memberships).",
     },
     {
       title: "Reduce churn",
       stat: "+$18k",
       unit: "p.a.",
-      cap: "Preserving 5 members per year (assuming $70/wk memberships).",
+      cap: "Preserving 5 members per year (assuming $70/\u2060wk memberships).",
     },
   ] as const,
 } as const;
@@ -135,9 +145,9 @@ export const VALUE = {
 export const NETWORK = {
   head: "The studios already on Moose.",
   lede: "Across Australia — and counting.",
-  // Each partner's logo sits beside its name as a single-ink mask (only its
-  // shape is kept; the ink comes from CSS). Files live in public/partners/;
-  // a partner without one keeps an empty logo box until it lands.
+  // The deck: one card issued by each studio on Moose, its logo drawn in the
+  // card's lettering (only the logo's shape is kept; files in public/partners/).
+  // A partner without a logo shows its name alone until one lands.
   partners: [
     { name: "One Hot Yoga & Pilates", href: "https://www.onehotyoga.com.au", logo: "/partners/one-hot-yoga.png" },
     { name: "ShapeShift", href: "https://shapeshift.fitness", logo: "/partners/shape-shift.png" },
@@ -148,68 +158,127 @@ export const NETWORK = {
     { name: "REVL", href: "https://revltraining.com.au", logo: "/partners/revl.svg" },
     { name: "@Pilates 24/7", href: "https://atpilates.studio/", logo: "/partners/at-pilates.png" },
   ] as const,
-  // On the compact floor the roster caps here and the rest reveal in place.
-  compactVisible: 12,
-  more: (n: number) => `${n} more`,
-  showAll: "See all",
-  showLess: "See less",
+  // The accessible names: the deck, and each card in it.
+  deckLabel: "The studios already on Moose, one card each",
+  cardLabel: (name: string) => `A Moose card issued by ${name}`,
 } as const;
 
 // The studio floor's close — the navy floor. Registering happens in the
 // studio portal, so there is no form on this site.
 export const REGISTER = {
   head: "Get your studio on Moose.",
-  lede: "No cost, no integration work. You choose your partners.",
+  lede: "No cost to join. You choose your partners.",
   cta: { label: "Register your studio", href: LINKS.studioPortal },
   detail: "Opens the studio portal at studio.trainmoose.com.",
+  // Beside the words: a fresh card in its sleeve, waiting to be issued by
+  // your studio. Registering issues it (a sample member, RULES 19).
+  card: {
+    label: "A sample Moose member card in its sleeve, waiting to be issued by your studio.",
+    issuer: "Your studio",
+    member: "Alex Sample",
+    credits: "4.00",
+    sleeveKicker: "Moose Club",
+    sleeveTitle: "Partner access card",
+  },
 } as const;
 
-// The member floor, addressed to the member in the second person.
+// The member floor, addressed to the member in the second person. Every card
+// on it is a sample (RULES 19): "Alex Sample", at "Your home studio".
+const MEMBER_CARD = {
+  issuer: "Your home studio",
+  member: "Alex Sample",
+  credits: "4.00",
+  creditsNote: "to spend",
+  sticker: "Valid",
+  footnote: "Refreshes every month",
+} as const;
+
 export const MEMBERS = {
   hero: {
     head: "Finally, some variety.",
-    lede: "Add variety to your routine through your home studio. Moose facilitates local studio collaboration, giving you access to partner venues through your home studio membership.",
+    lede: "Classes at partner studios nearby, added to your home studio membership.",
     cta: { label: "Get the Moose app", href: LINKS.appStore },
+    // The hero object: a sample card in its sleeve (RULES 19). Nothing on it is
+    // a real studio or member; the accessible name says every fact it shows.
+    card: {
+      label:
+        "A sample Moose member card coming out of its sleeve, issued to a sample member by one of the studios already on Moose: valid, with 4.00 credits to spend, refreshed every month.",
+      // The issuer cycles through the studios already on Moose (NETWORK).
+      issuers: NETWORK.partners.map((p) => p.name),
+      member: MEMBER_CARD.member,
+      credits: MEMBER_CARD.credits,
+      creditsNote: MEMBER_CARD.creditsNote,
+      sticker: MEMBER_CARD.sticker,
+      footnote: MEMBER_CARD.footnote,
+      sleeveKicker: "Moose Club",
+      sleeveTitle: "Partner access card",
+    },
   },
+  // Short and basic (Max, 26 Oct 2026). Each step shows the same sample card
+  // at that moment: its back, then the front made valid, then credits spent.
   how: {
     head: "How it works for you.",
-    lede: "Your studio stays your primary training destination, with a dash of variety at partner venues for a more well-rounded routine.",
     steps: [
-      { n: "01", body: "Your studio partners with complementary, non-competing studios nearby." },
+      {
+        n: "01",
+        title: "Your studio partners up.",
+        body: "Your home studio teams up with a few complementary studios nearby. It chooses them, so they fit alongside what you already\u00A0do.",
+      },
       {
         n: "02",
-        body: "You upgrade your membership through your home studio for access to partner venues. Moose caps the upgrade fee at $11/wk.",
+        title: "You add Moose.",
+        body: "Add Moose in the Moose app as an upgrade to your home studio membership. Your studio sets the price.",
       },
       {
         n: "03",
-        body: "You receive a notional four credits each month to book sessions across the partner venues — in total, not per partner.",
+        title: "You book with credits.",
+        body: "Each month you get credits to book classes at your studio’s partners, right in the Moose app. They refresh every month.",
       },
     ] as const,
+    card: {
+      ...MEMBER_CARD,
+      addedBy: "your studio",
+      spent: "1.46",
+      labels: [
+        "The back of a sample Moose member card: valid at the partner studios your home studio added.",
+        "The front of a sample Moose member card, issued by your home studio: valid, with 4.00 credits to spend.",
+        "The same sample card after booking: 1.46 credits left, one class attended and one booked.",
+      ],
+    },
   },
   commercials: {
     head: "What you get, what you pay.",
-    lede: "A little more variety, made affordable through local studio collaboration.",
+    lede: "A little more variety, through your home studio.",
+    // The amount varies by studio (Max, 26 Oct 2026), so no figure here.
     rows: [
-      {
-        k: "What you get",
-        body: "A notional four crossover sessions per month at partner venues, weighted for the relative membership pricing between partner studios.",
-      },
-      {
-        k: "What you pay",
-        body: "Your home studio sets the upgrade fee for the premium tier. This is capped by Moose at a maximum of $11/wk (or $48/mo).",
-      },
+      { k: "You get", body: "Credits every month" },
+      { k: "Valid at", body: "Your studio\u2019s partners" },
+      { k: "You pay", body: "Your studio\u2019s upgrade price" },
     ] as const,
   },
   app: {
-    // As given by Max: no trailing period (the Painted Line Rule wants one).
-    head: "Book and manage crossover sessions at partner venues",
-    lede: "Your Moose profile automatically links to your membership in your home studio’s system.",
+    head: "Book in the Moose app.",
+    lede: "Pick a class at a partner studio and book it with your credits.",
+    // A glimpse of Browse, one card per state. The classes are illustrative,
+    // so no real studio is named on them (Max, 26 Oct 2026).
+    classes: [
+      { studio: "A partner studio", time: "7:30", meridiem: "AM", name: "Reformer 45", meta: "45 min \u00b7 Sample instructor", state: "book" },
+      { studio: "A partner studio", time: "6:15", meridiem: "PM", name: "Strength 45", meta: "45 min \u00b7 Sample instructor", state: "booked" },
+      { studio: "A partner studio", time: "12:00", meridiem: "PM", name: "Hot Yoga 60", meta: "60 min \u00b7 Sample instructor", state: "free" },
+    ] as const,
+    label: "Three sample classes in the Moose app: one to book, one booked, and one free.",
   },
   close: {
     head: "Get the Moose app.",
     lede: "Free on the App Store. Download the app to activate your account.",
     cta: { label: "Download on the App Store", href: LINKS.appStore },
-    detail: "Opens the App Store listing for Moose. iPhone only for now.",
+    detail: "Opens the App Store listing for Moose. iPhone only for\u00a0now.",
+    // Beside the words: the sample card in use, as it lives in the app.
+    card: {
+      ...MEMBER_CARD,
+      label:
+        "A sample Moose member card issued by your home studio: valid, with 4.00 credits to spend, refreshed every month.",
+    },
   },
 } as const;
 

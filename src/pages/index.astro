@@ -1,17 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
-import { MEMBERS, REGISTER, SITE } from '../data/copy';
+import { SITE } from '../data/copy';
 import { homeNodes } from '../data/schema';
 
-import LiveLine      from '../components/primitives/LiveLine.astro';
 import MSNav         from '../components/sections/MSNav.astro';
 import MSHero        from '../components/sections/MSHero.astro';
 import MSModel       from '../components/sections/MSModel.astro';
 import MSValue       from '../components/sections/MSValue.astro';
 import MSNetwork     from '../components/sections/MSNetwork.astro';
 import MSMemberHero  from '../components/sections/MSMemberHero.astro';
-import MSMembers     from '../components/sections/MSMembers.astro';
-import MSClose       from '../components/sections/MSClose.astro';
+import MSMemberHow   from '../components/sections/MSMemberHow.astro';
+import MSMemberGet   from '../components/sections/MSMemberGet.astro';
+import MSMemberApp   from '../components/sections/MSMemberApp.astro';
+import MSMemberClose from '../components/sections/MSMemberClose.astro';
+import MSStudioClose from '../components/sections/MSStudioClose.astro';
 import MSFooter      from '../components/sections/MSFooter.astro';
 
 // `/` carries two floors behind the audience switch — "I run a studio" (the
@@ -24,7 +26,6 @@ import MSFooter      from '../components/sections/MSFooter.astro';
   title={SITE.title}
   description={SITE.description}
   jsonLd={homeNodes}
-  preloadImage="/photos/hero-strength.webp"
 >
   <script is:inline>
     if (/^#member/.test(location.hash)) document.documentElement.dataset.audience = 'member';
@@ -33,19 +34,19 @@ import MSFooter      from '../components/sections/MSFooter.astro';
   <MSNav />
   <main id="main">
     <div class="floor" data-floor="studio">
-      <LiveLine />
       <MSHero />
       <MSModel />
       <MSValue />
       <MSNetwork />
-      <MSClose id="register" {...REGISTER} />
+      <MSStudioClose />
     </div>
 
     <div class="floor" data-floor="member">
-      <LiveLine />
       <MSMemberHero />
-      <MSMembers />
-      <MSClose id="member-close" {...MEMBERS.close} />
+      <MSMemberHow />
+      <MSMemberGet />
+      <MSMemberApp />
+      <MSMemberClose />
     </div>
   </main>
   <MSFooter />

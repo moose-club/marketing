@@ -1,0 +1,277 @@
+---
+import Punch from './Punch.astro';
+import Sticker from './Sticker.astro';
+import Icon from './Icon.astro';
+
+// A class card with its stub: paper, a dashed perforation with two notches
+// cut in the floor colour, and an 84-unit stub that carries the state. Book
+// (ink), Booked (the pink leading edge and press-out ring; the word stays ink,
+// RULES 16), or Free (the sticker). Scales as one picture (units are 1/354 of
+// the width), like the member card.
+//
+// `books`: the member floor's app section (Max, 26 Oct 2026). The card rests
+// on Book; when an ancestor takes `.is-booked` the stub is pressed, a thin
+// pink arc draws round a faint ring and settles into the press-out ring, the
+// pink edge runs down the card and "Booked" prints (about 1.2 s, once). Only
+// one state's label is visible at a time, to assistive tech as on screen.
+interface Props {
+  studio: string;
+  /** The studio's badge; omitted for an unnamed studio. */
+  initials?: string;
+  time: string;
+  meridiem: string;
+  name: string;
+  meta: string;
+  state?: 'book' | 'booked' | 'free';
+  books?: boolean;
+  class?: string;
+}
+const { studio, initials, time, meridiem, name, meta, state = 'book', books = false, class: className } = Astro.props;
+---
+
+<article class:list={['cc', books && 'cc--books', className]}>
+  <div class:list={['cc__body', `cc__body--${state}`]}>
+    {(state === 'booked' || books) && <span class="cc__edge"></span>}
+    <div class="cc__main">
+      <p class="cc__studio">{initials && <span class="cc__badge" aria-hidden="true">{initials}</span>}{studio}</p>
+      <div class="cc__row">
+        <p class="cc__time">{time}<span class="cc__meridiem">{meridiem}</span></p>
+        <div class="cc__what">
+          <p class="cc__name">{name}</p>
+          <p class="cc__meta">{meta}</p>
+        </div>
+      </div>
+    </div>
+    <span class="cc__perf" aria-hidden="true"></span>
+    <div class="cc__stub">
+      {books && (
+        <>
+          <p class="cc__state cc__layer cc__layer--book">Book<Icon name="chevron-right" class="cc__chev" /></p>
+          <div class="cc__layer cc__layer--booked">
+            <span class="cc__ring" aria-hidden="true">
+              <svg class="cc__arc" viewBox="0 0 100 100" focusable="false">
+                <circle class="cc__arc-faint" cx="50" cy="50" r="44" />
+                <circle class="cc__arc-draw" cx="50" cy="50" r="44" pathLength="100" />
+              </svg>
+              <Punch state="booked" class="cc__ring-dots" />
+            </span>
+            <p class="cc__state">Booked</p>
+          </div>
+        </>
+      )}
+      {!books && state === 'book' && <p class="cc__state">Book<Icon name="chevron-right" class="cc__chev" /></p>}
+      {state === 'booked' && <><Punch state="booked" /><p class="cc__state">Booked</p></>}
+      {state === 'free' && <Sticker label="Free" />}
+    </div>
+  </div>
+</article>
+
+<style>
+  .cc {
+    container-type: inline-size;
+    width: 100%;
+    max-width: var(--cc-width, 354px);
+  }
+  .cc__body {
+    --u: calc(100cqw / 354);
+    --sticker-size: calc(var(--u) * 10);
+    --punch-size: calc(var(--u) * 24);
+    position: relative;
+    display: flex;
+    aspect-ratio: 354 / 104;
+    overflow: hidden;
+    border: 1px solid var(--m-ink-rule);
+    border-radius: calc(var(--u) * 14); /* radius.component.classCard at full size */
+    background: var(--m-paper);
+    box-shadow: var(--m-shadow-paper);
+    color: var(--m-ink);
+    font-family: var(--m-font-family-sans);
+  }
+  .cc p { margin: 0; }
+  .cc__edge {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--u) * 6);
+    background: var(--m-moose-pink);
+  }
+  .cc__main {
+    flex: 1;
+    min-width: 0;
+    padding: calc(var(--u) * 16) calc(var(--u) * 14) 0 calc(var(--u) * 16);
+  }
+  .cc__studio {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--u) * 8);
+    font-size: calc(var(--u) * 9.5);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--m-ink-support);
+    white-space: nowrap;
+  }
+  .cc__badge {
+    display: grid;
+    place-items: center;
+    width: calc(var(--u) * 20);
+    height: calc(var(--u) * 20);
+    border-radius: calc(var(--u) * 4);
+    background: var(--m-ink);
+    color: var(--m-paper);
+    font-size: calc(var(--u) * 7.5);
+    letter-spacing: 0;
+  }
+  .cc__row {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--u) * 14);
+    margin-top: calc(var(--u) * 10);
+  }
+  .cc__time {
+    font-family: var(--m-font-family-display);
+    font-size: calc(var(--u) * 28);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .cc__meridiem {
+    margin-left: calc(var(--u) * 3);
+    font-family: var(--m-font-family-sans);
+    font-size: calc(var(--u) * 9);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--m-ink-support);
+  }
+  .cc__what { min-width: 0; }
+  .cc__name {
+    font-size: calc(var(--u) * 13);
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cc__meta {
+    font-size: calc(var(--u) * 10.5);
+    line-height: 1.3;
+    color: var(--m-ink-support);
+    white-space: nowrap;
+  }
+  /* The perforation: a dashed rule with a notch top and bottom, cut in the
+     floor colour. */
+  .cc__perf {
+    position: relative;
+    flex: none;
+    width: 0;
+    border-left: 1px dashed var(--m-ink-hint);
+    margin-block: calc(var(--u) * 9);
+  }
+  .cc__perf::before,
+  .cc__perf::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--u) * -8 - 0.5px);
+    width: calc(var(--u) * 16);
+    height: calc(var(--u) * 16);
+    border-radius: 50%;
+    background: var(--cc-floor, var(--m-floor));
+    border: 1px solid var(--m-ink-rule);
+  }
+  .cc__perf::before { top: calc(var(--u) * -17 - 1px); }
+  .cc__perf::after { bottom: calc(var(--u) * -17 - 1px); }
+  .cc__stub {
+    flex: none;
+    width: calc(var(--u) * 84);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--u) * 8);
+  }
+  .cc__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--u) * 4);
+    font-size: calc(var(--u) * 10);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cc__state :global(.cc__chev) { width: calc(var(--u) * 14); height: calc(var(--u) * 14); }
+
+  /* ── Books itself ─────────────────────────────────────────────────── */
+  .cc--books .cc__stub {
+    display: grid;
+    place-items: center;
+    transform-origin: center;
+  }
+  .cc__layer { grid-area: 1 / 1; }
+  .cc__layer--booked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--u) * 8);
+    visibility: hidden;
+  }
+  .cc--books .cc__edge {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .cc__ring {
+    position: relative;
+    width: var(--punch-size);
+    height: var(--punch-size);
+  }
+  .cc__arc,
+  .cc__ring :global(.cc__ring-dots) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cc__arc { fill: none; stroke-width: 3; transform: rotate(-90deg); }
+  .cc__arc-faint { stroke: var(--m-ink-rule); }
+  .cc__arc-draw {
+    stroke: var(--m-moose-pink);
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+  .cc__ring :global(.cc__ring-dots) { opacity: 0; }
+  .cc__layer--booked .cc__state { opacity: 0; }
+
+  :global(.is-booked) .cc--books .cc__stub { animation: cc-press 220ms ease-out both; }
+  :global(.is-booked) .cc--books .cc__layer--book {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 140ms ease-out 120ms, visibility 0s 260ms;
+  }
+  :global(.is-booked) .cc--books .cc__layer--booked { visibility: visible; }
+  .cc__ring { opacity: 0; }
+  :global(.is-booked) .cc--books .cc__ring {
+    opacity: 1;
+    transition: opacity 120ms ease-out 220ms;
+  }
+  :global(.is-booked) .cc--books .cc__arc-draw { animation: cc-arc 760ms cubic-bezier(0.22, 1, 0.36, 1) 220ms both; }
+  :global(.is-booked) .cc--books .cc__arc { animation: cc-fade-out 200ms ease-out 900ms both; }
+  :global(.is-booked) .cc--books :global(.cc__ring-dots) { animation: cc-settle 260ms cubic-bezier(0.22, 1, 0.36, 1) 860ms both; }
+  :global(.is-booked) .cc--books .cc__edge {
+    transform: none;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1) 820ms;
+  }
+  :global(.is-booked) .cc--books .cc__layer--booked .cc__state {
+    opacity: 1;
+    transition: opacity 200ms ease-out 1000ms;
+  }
+  @keyframes cc-press {
+    50% { transform: scale(0.98); }
+  }
+  @keyframes cc-arc {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes cc-fade-out {
+    to { opacity: 0; }
+  }
+  @keyframes cc-settle {
+    from { opacity: 0; transform: scale(1.12); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>

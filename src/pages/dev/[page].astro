@@ -1,0 +1,164 @@
+---
+import Base from '../../layouts/Base.astro';
+import MemberCard from '../../components/primitives/MemberCard.astro';
+import CardSleeve from '../../components/primitives/CardSleeve.astro';
+import Sticker from '../../components/primitives/Sticker.astro';
+import Punch from '../../components/primitives/Punch.astro';
+import ClassCard from '../../components/primitives/ClassCard.astro';
+import Plate from '../../components/primitives/Plate.astro';
+import PrintedField from '../../components/primitives/PrintedField.astro';
+import PaperColumn from '../../components/primitives/PaperColumn.astro';
+import { NETWORK } from '../../data/copy';
+
+// The shared Member Card objects, side by side, for review against
+// moose-design/docs/reference/member-card/. Dev only: in a build there is no
+// path, so nothing ships and the sitemap never sees it.
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { page: 'gallery' } }] : [];
+}
+
+const partners = NETWORK.partners.map((p) => ({ name: p.name, logo: p.logo }));
+const sample = 'Sample card. ';
+---
+
+<Base title="Gallery — Moose (dev)" noindex>
+  <main id="main" class="gallery">
+    <h1 class="g-title">Member Card objects</h1>
+    <p class="g-note">Dev only. Toggle the system appearance to check dark.</p>
+
+    <section class="g-row">
+      <h2 class="g-h">Member card · in use</h2>
+      <div class="g-grid">
+        <MemberCard
+          label={sample + 'Issued by your home studio to Alex Chen. 3.00 credits to spend. Valid.'}
+          issuer="Your home studio" member="Alex Chen" credits="3.00"
+          sticker={{ label: 'Valid' }} footnote="Refreshes every 30 days"
+        />
+        <MemberCard
+          label={sample + 'Issued by your home studio to Alex Chen. No credits yet. Not yet valid.'}
+          issuer="Your home studio" member="Alex Chen"
+          sticker={{ label: 'Not yet valid', dashed: true }} footnote="Valid once Moose is on"
+        />
+        <MemberCard
+          label={sample + 'Two classes attended, one booked.'}
+          issuer="Your home studio" member="Alex Chen" credits="1.27"
+          sticker={{ label: 'Valid' }} punches={['attended', 'attended', 'booked', 'next']}
+          footnote="Refreshes in 13 days"
+        />
+        <MemberCard label={sample + 'Blank: nothing printed yet.'} footnote="Prints as you sign up" />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Printed front · back · fan</h2>
+      <div class="g-grid">
+        <MemberCard label={sample + 'Printed front.'} layout="printed" issuer="Your home studio" member="Alex Chen" credits="3.00" />
+        <MemberCard label={sample + 'Back, three partner lines.'} face="back" />
+        <MemberCard label={sample + 'Back, valid at the network.'} face="back" partners={partners} partnerColumns={2} addedBy="your studio" />
+        <div class="g-fan">
+          <MemberCard label="" face="back" tilt={5} class="g-fan__back" />
+          <MemberCard label={sample + 'Front and back, fanned.'} layout="printed" tilt={-3} class="g-fan__front" />
+        </div>
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Partner card (the studio Network's deck)</h2>
+      <div class="g-grid">
+        {partners.slice(0, 3).map((p) => (
+          <MemberCard label={`A Moose card issued by ${p.name}.`} layout="partner" issuer={p.name} logo={p.logo} logoSize={[130, 52]} />
+        ))}
+        <MemberCard label="A Moose card issued by a studio with no logo yet." layout="partner" issuer="A partner studio" />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">In its sleeve</h2>
+      <div class="g-grid">
+        <CardSleeve label={sample + 'A member card in its sleeve, from your home studio.'} />
+        <CardSleeve issue label={sample + 'Waiting to be issued by your studio (the studio Close).'} card={{ issuer: 'Your studio', member: 'Alex Sample', credits: '4.00' }} />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Sticker · punch marks</h2>
+      <div class="g-marks">
+        <Sticker label="Valid" />
+        <Sticker label="Free class" />
+        <Sticker label="Not yet valid" dashed />
+        <Punch state="booked" class="g-punch" />
+        <Punch state="next" class="g-punch" />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Class card</h2>
+      <div class="g-grid g-grid--classes">
+        <ClassCard studio="A partner studio" initials="PS" time="7:30" meridiem="AM" name="Reformer 45" meta="45 min · Sample instructor" />
+        <ClassCard studio="A partner studio" initials="PS" time="6:15" meridiem="AM" name="Reformer 45" meta="45 min · Sample instructor" state="booked" />
+        <ClassCard studio="A partner studio" initials="PS" time="12:00" meridiem="PM" name="Open Reformer" meta="45 min · Sample instructor" state="free" />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Plates</h2>
+      <div class="g-plates">
+        <Plate href="#">Register your studio</Plate>
+        <Plate href="#" variant="outline">Studio login</Plate>
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Printed field</h2>
+      <div class="g-fields">
+        <PrintedField id="g-email" label="Email" type="email" placeholder="you@studio.com" />
+        <PrintedField id="g-email2" label="Email" type="email" value="alex@example.com" />
+        <PrintedField id="g-email3" label="Email" type="email" value="alex@example" error="Check the email address." />
+      </div>
+    </section>
+
+    <section class="g-row">
+      <h2 class="g-h">Floating paper column</h2>
+      <PaperColumn>
+        <p class="g-paper-label">Section 1</p>
+        <h3 class="g-paper-h">Who we are</h3>
+        <p class="g-paper-p">Legal text sits on one paper column on the floor. Links are <a href="#">ink, underlined</a>. Rules between sections are printed rules.</p>
+      </PaperColumn>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .gallery {
+    max-width: 1320px;
+    overflow-x: clip; /* the fanned cards lean past the column */
+    margin-inline: auto;
+    padding: 48px 24px 120px;
+    background: var(--m-floor);
+    color: var(--m-ink);
+  }
+  :global(body) { background: var(--m-floor); }
+  .g-title { font-family: var(--m-font-family-display); font-size: var(--m-type-page-lettering-compact-size); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .g-note { margin-top: 8px; color: var(--m-ink-support); }
+  .g-row { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--m-ink-rule); }
+  .g-h {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: uppercase;
+    color: var(--m-ink-support);
+    margin-bottom: 24px;
+  }
+  .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 354px)); gap: 40px 32px; align-items: start; }
+  .g-grid--classes { grid-template-columns: repeat(auto-fill, minmax(300px, 354px)); }
+  .g-fan { position: relative; padding: 40px 0 0 0; }
+  .g-fan :global(.g-fan__back) { position: absolute; top: 0; left: 24px; opacity: 0.85; }
+  .g-fan :global(.g-fan__front) { position: relative; }
+  .g-marks { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .g-marks :global(.g-punch) { --punch-size: 36px; }
+  .g-plates, .g-fields { display: grid; gap: 16px; max-width: 420px; }
+  .g-paper-label { font-size: var(--m-type-printed-label-size); font-weight: 600; letter-spacing: var(--m-type-printed-label-tracking); text-transform: uppercase; color: var(--m-ink-support); }
+  .g-paper-h { margin-top: 6px; font-size: 1.375rem; font-weight: 700; }
+  .g-paper-p { margin-top: 12px; color: var(--m-ink-support); line-height: 1.6; }
+  .g-paper-p a { color: var(--m-ink); text-decoration: underline; text-underline-offset: 3px; }
+</style>

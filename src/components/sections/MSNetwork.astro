@@ -1,131 +1,228 @@
 ---
+import sharp from 'sharp';
 import { NETWORK } from '../../data/copy';
+import MemberCard from '../primitives/MemberCard.astro';
 
-// Station · Partner network — the studios already on Moose. Lettering, then
-// the roster: every studio on the floor, its logo beside its name. Logos are
-// single-ink masks filled with --m-ink, so every brand reads in navy; a fixed
-// logo box keeps the names aligned (an empty box where no logo has landed yet,
-// see NETWORK.partners). Regular floor: the lettering on your lane, the whole
-// roster on your partner's (two columns from 1280), the line running in the gutter
-// between them. Compact floor: one column under the lettering, capped at
-// `compactVisible` with the rest revealing in place.
-const partners = NETWORK.partners;
-const extra = Math.max(0, partners.length - NETWORK.compactVisible);
+// Network: the deck (Member Card; Figma `151:879` fanned, `151:799` stacked,
+// `154:1314` phone). One card issued by each studio on Moose, and nothing
+// else: these studios offer Moose, so their cards are true (RULES 19). The
+// studio floor's one authored moment (RULES 17b).
+//
+// Desktop (≥1048): the deck rests fanned in an arc, the right-most card on
+// top so every logo shows. With motion it arrives as a neat stack, fans out
+// when it scrolls into view, then every 3 s the front card tucks to the back
+// and the fan closes the gap. Hover lifts a card and holds the shuffle.
+// Phone and tablet: a swipeable row that moves on one card every few seconds
+// until the reader swipes. Reduced motion: the fan, or the row, still.
+
+// Logos are balanced by area, not by box: each one gets the same ink, so a
+// tall mark and a wide wordmark read at the same size (card units).
+const AREA = 6800;
+const BOX: [number, number] = [210, 80];
+async function logoSize(path: string): Promise<[number, number]> {
+  const { width = 1, height = 1 } = await sharp(`public${path}`).metadata();
+  const aspect = width / height;
+  let w = Math.sqrt(AREA * aspect);
+  let h = w / aspect;
+  if (w > BOX[0]) { w = BOX[0]; h = w / aspect; }
+  if (h > BOX[1]) { h = BOX[1]; w = h * aspect; }
+  return [Math.round(w), Math.round(h)];
+}
+
+const cards = await Promise.all(
+  NETWORK.partners.map(async (p) => ({
+    name: p.name,
+    logo: p.logo,
+    logoSize: p.logo ? await logoSize(p.logo) : undefined,
+  })),
+);
+// A small, fixed lean for each card in the stack and the phone row.
+const JITTER = [-2, 1.5, -1, 2, -1.5, 1, -2, 1.5];
+
+// The fan's slots, one per card, so the arc holds whatever the roster counts.
+// From the drawn 8 (Figma `151:879`): 150 units and 5° per step from the
+// centre, and a drop that steepens by a constant 17 per card out (0 / 28 /
+// 73 / 135). Cards move between slots at runtime (`data-slot`), so the slots
+// are a generated stylesheet, not per-card inline styles.
+const slotCss = [
+  `.deck__cards { --mid: ${(cards.length - 1) / 2}; }`,
+  ...cards.map((_, i) => {
+    const t = i - (cards.length - 1) / 2;
+    const k = Math.max(0, Math.abs(t) - 0.5);
+    const y = 19.5 * k + 8.5 * k * k;
+    return `.deck__card[data-slot='${i}'] { --x: ${150 * t}; --y: ${+y.toFixed(1)}; --r: ${+(5 * t).toFixed(1)}deg; --z: ${i}; }`;
+  }),
+].join('\n');
 ---
 
-<section class="station lanes network" id="network" aria-labelledby="networkHeading">
-  <div class="network__intro">
-    <h2 id="networkHeading" class="lettering lettering--station network__head">{NETWORK.head}</h2>
-    <p class="lead">{NETWORK.lede}</p>
+<section class="network" id="network" aria-labelledby="networkHeading">
+  <div class="page network__intro">
+    <h2 id="networkHeading" class="page-lettering page-lettering--compact">{NETWORK.head}</h2>
+    <p class="body-text network__lede">{NETWORK.lede}</p>
   </div>
 
-  <ul class="roster lane--partner" id="roster" style={`--rows: ${Math.ceil(partners.length / 2)}`}>
-    {partners.map((p, index) => {
-      const logo = 'logo' in p ? p.logo : undefined;
-      return (
-        <li class="roster__mark" data-extra={index >= NETWORK.compactVisible ? '' : undefined}>
-          <span class="roster__logo" aria-hidden="true" style={logo ? `--logo: url(${logo})` : undefined}></span>
-          <a class="plate-label roster__name" href={p.href} target="_blank" rel="noopener">{p.name}</a>
+  <div class="deck" role="region" aria-label={NETWORK.deckLabel} tabindex="0" data-deck>
+    <ul class="deck__cards">
+      {cards.map((c, i) => (
+        <li class="deck__card" data-slot={i} style={`--jit: ${JITTER[i % JITTER.length]}deg`}>
+          <MemberCard
+            label={NETWORK.cardLabel(c.name)}
+            layout="partner"
+            issuer={c.name}
+            logo={c.logo}
+            logoSize={c.logoSize}
+          />
         </li>
-      );
-    })}
-  </ul>
-
-  {extra > 0 && (
-    <p class="roster__more">
-      <span class="detail" data-more-count>{NETWORK.more(extra)}</span>
-      <button
-        type="button"
-        class="plate plate--outline plate--station"
-        aria-expanded="false"
-        aria-controls="roster"
-        data-roster-toggle
-        data-show={NETWORK.showAll}
-        data-hide={NETWORK.showLess}
-      >
-        {NETWORK.showAll}
-      </button>
-    </p>
-  )}
+      ))}
+    </ul>
+  </div>
 </section>
 
+{/* The slots are custom properties only; the desktop media query consumes
+    them, so declaring them everywhere is inert on the phone row. */}
+<style is:inline set:html={slotCss}></style>
+
 <script>
-  const toggle = document.querySelector<HTMLButtonElement>('[data-roster-toggle]');
-  const station = toggle?.closest('.network');
-  if (toggle && station) {
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') !== 'true';
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.textContent = open ? toggle.dataset.hide ?? '' : toggle.dataset.show ?? '';
-      station.classList.toggle('is-open', open);
-    });
-  }
+  const FAN = 3000; // a shuffle every 3 s
+  const ROW = 3200; // the phone row moves on one card
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = window.matchMedia('(min-width: 1048px)');
+
+  document.querySelectorAll<HTMLElement>('[data-deck]').forEach((deck) => {
+    if (reduce.matches) return;
+    const list = deck.querySelector<HTMLElement>('.deck__cards')!;
+    const cards = [...deck.querySelectorAll<HTMLElement>('.deck__card')];
+    const n = cards.length;
+    let inView = false;
+    let hovered = false;
+    let fanned = false;
+    let rowStopped = false;
+    let rowIndex = 0;
+
+    // Shown only when it's on screen, on the showing floor, in a visible tab.
+    const live = () => inView && !document.hidden && deck.offsetParent !== null;
+
+    // The fan: it arrives stacked and fans out the first time it's in view.
+    if (wide.matches) deck.classList.add('is-stacked');
+
+    new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView && wide.matches && !fanned) {
+          fanned = true;
+          deck.classList.remove('is-stacked');
+        }
+      },
+      { threshold: 0.35 },
+    ).observe(deck);
+
+    // Shuffle: the front card (the top slot) tucks to the back (slot 0) and
+    // every other card moves up one slot.
+    window.setInterval(() => {
+      if (!wide.matches || !fanned || hovered || !live()) return;
+      cards.forEach((card) => {
+        const slot = (Number(card.dataset.slot) + 1) % n;
+        card.dataset.slot = String(slot);
+        card.classList.toggle('is-tucking', slot === 0);
+      });
+    }, FAN);
+    list.addEventListener('pointerover', () => { hovered = true; });
+    list.addEventListener('pointerleave', () => { hovered = false; });
+
+    // The row: moves on one card until the reader takes over.
+    const stopRow = () => { rowStopped = true; };
+    ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach((type) =>
+      deck.addEventListener(type, stopRow, { passive: true, once: true }),
+    );
+    window.setInterval(() => {
+      if (wide.matches || rowStopped || !live()) return;
+      rowIndex = (rowIndex + 1) % n;
+      const pad = cards[0].offsetLeft;
+      deck.scrollTo({ left: cards[rowIndex].offsetLeft - pad, behavior: 'smooth' });
+    }, ROW);
+  });
 </script>
 
 <style>
+  .network { padding-top: var(--rhythm); }
+  .network__intro { text-align: center; }
+  .network__intro h2 { text-wrap: balance; }
+  .network__lede { margin: 12px auto 0; } /* no token yet: proposed */
 
-  /* Rhythm 16 compact, 24 regular. */
-  .roster {
-    display: grid;
-    gap: var(--m-spacing-md);
+  /* Phone and tablet: a swipeable row of full-size cards, the next one
+     peeking, each with a small lean. */
+  .deck {
+    margin-top: var(--m-spacing-xxl);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-pad);
+    scrollbar-width: none;
+    outline-offset: -2px;
   }
-  .network > .roster { margin-top: var(--m-spacing-md); }
-
-  .roster__mark {
-    min-height: 40px; /* no token yet: proposed */
+  .deck::-webkit-scrollbar { display: none; }
+  .deck__cards {
     display: flex;
-    align-items: center;
-    gap: var(--m-spacing-md);
+    gap: 13px; /* no token yet: proposed (the 390 frame's row) */
+    width: max-content;
+    padding: var(--m-spacing-lg) var(--page-pad) var(--m-spacing-xxl);
   }
-  .roster__logo {
+  .deck__card {
     flex: none;
-    width: 80px; /* no token yet: proposed */
-    height: 40px; /* no token yet: proposed */
-  }
-  .roster__logo[style] {
-    background-color: var(--m-ink);
-    -webkit-mask: var(--logo) left center / contain no-repeat;
-    mask: var(--logo) left center / contain no-repeat;
-  }
-  .roster__name {
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition: text-decoration-color var(--dur-fast) var(--ease-out);
-  }
-  .roster__name:hover { text-decoration-color: var(--m-ink-tape); }
-
-  .roster__more {
-    display: flex;
-    align-items: center;
-    gap: var(--m-spacing-md);
+    width: 250px; /* no token yet: proposed (the 390 frame's card) */
+    scroll-snap-align: start;
+    --mc-width: 100%;
+    rotate: calc(var(--jit) * 0.8);
   }
 
-  /* Compact: cap the roster; the rest reveal in place. */
-  @media (max-width: 1047.98px) {
-    .roster__mark[data-extra] { display: none; }
-    .network.is-open .roster__mark[data-extra] { display: flex; }
-    .network.is-open [data-more-count] { display: none; }
-  }
-
+  /* Desktop: the fan, in deck units (1/1440 of the deck, the frame's width).
+     Each slot is a place on the arc; cards move between slots. */
   @media (min-width: 1048px) {
-    /* Lettering left, roster right, level with each other; the line runs
-       down the gutter between them. */
-    .network > .roster {
-      grid-row: 1;
-      align-self: center;
-      row-gap: var(--m-spacing-lg);
-      margin-top: 0;
+    .deck {
+      container-type: inline-size;
+      position: relative;
+      max-width: 1440px; /* no token yet: proposed (deck width) */
+      margin: 72px auto 0; /* no token yet: proposed */
+      overflow: visible;
+      scroll-snap-type: none;
     }
-    .roster__more { display: none; }
+    .deck__cards {
+      --s: calc(100cqw / 1440);
+      position: relative;
+      width: 100%;
+      height: calc(var(--s) * 400);
+      padding: 0;
+    }
+    .deck__card {
+      position: absolute;
+      top: calc(var(--s) * 37);
+      left: calc(50% - var(--s) * 120);
+      width: calc(var(--s) * 240);
+      rotate: none;
+      z-index: var(--z);
+      transform: translate(calc(var(--s) * var(--x)), calc(var(--s) * (var(--y) - var(--lift, 0)))) rotate(var(--r));
+      transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
+    }
+    /* Each slot's --x / --y / --r / --z come from the generated slot
+       stylesheet above, one per card in the roster. */
+    .deck__card:hover { --lift: 16; }
+
+    /* Arriving: a neat stack in the middle, each card a step up and a small
+       lean, until the deck scrolls into view. */
+    .deck.is-stacked .deck__card {
+      transform: translate(calc(var(--s) * (var(--z) - var(--mid)) * 2), calc(var(--s) * (60 - var(--z) * 2))) rotate(var(--jit));
+    }
+    /* The tucking card rises and passes behind the fan on its way to the
+       back. */
+    .deck__card.is-tucking {
+      transition: transform 1100ms cubic-bezier(0.45, 0, 0.55, 1); /* in step with the rise */
+      animation: deck-tuck 1100ms cubic-bezier(0.45, 0, 0.55, 1);
+    }
+    @keyframes deck-tuck {
+      50% { translate: 0 calc(var(--s) * -150); }
+    }
   }
-  /* Two columns once the partner lane is wide enough that no name wraps. */
-  @media (min-width: 1280px) {
-    .network > .roster {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-auto-flow: column;
-      grid-template-rows: repeat(var(--rows), auto);
-      column-gap: var(--m-spacing-lg);
-    }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck__card { transition: none; }
   }
 </style>

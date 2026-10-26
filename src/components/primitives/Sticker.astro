@@ -1,0 +1,40 @@
+---
+// The sticker (RULES 6, 19): pink, small, tilted, and earned. Dashed, it is the
+// empty slot of a mark not yet earned ("Not yet valid"). Sized in em, so the
+// card scales it with `--sticker-size`.
+interface Props {
+  label: string;
+  dashed?: boolean;
+  /** Degrees. +4 on the card, −5 on a stub. */
+  tilt?: number;
+  class?: string;
+}
+const { label, dashed = false, tilt = 4, class: className } = Astro.props;
+---
+
+<span class:list={['sticker', dashed && 'sticker--dashed', className]} style={`--tilt: ${tilt}deg`}>{label}</span>
+
+<style>
+  .sticker {
+    display: inline-block;
+    font-family: var(--m-font-family-sans);
+    font-size: var(--sticker-size, var(--m-type-sticker-lettering-size));
+    font-weight: var(--m-type-sticker-lettering-weight);
+    line-height: var(--m-type-sticker-lettering-leading);
+    letter-spacing: var(--m-type-sticker-lettering-tracking);
+    text-transform: var(--m-type-sticker-lettering-transform);
+    white-space: nowrap;
+    padding: 0.7em 1.2em;
+    border-radius: 0.6em; /* provisional: 6px at the token size, radius.component.sticker proposed */
+    background: var(--m-moose-pink);
+    color: var(--m-on-brand);
+    box-shadow: var(--m-shadow-card-mini);
+    transform: rotate(var(--tilt));
+  }
+  .sticker--dashed {
+    background: none;
+    box-shadow: none;
+    color: var(--sticker-hint, var(--m-ink-hint));
+    border: 1px dashed currentColor;
+  }
+</style>
