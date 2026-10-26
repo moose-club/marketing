@@ -413,8 +413,8 @@ accessible name repeats every fact on it.
   "MOOSE CLUB", "Partner access card" (the app's shipped sleeve copy) and the loop. The
   card's number shows through the notch. It holds the card in the member hero.
 - No chip, hologram or security print: it would read as a bank card or a wallet pass.
-- **Always a sample** (RULES 19): a sample member at a sample studio, reading as
-  illustrative. Never a "Valid" sticker on a real studio that doesn't offer Moose.
+- **Always a sample** (RULES 19): the member is "Alex Sample", which is what makes the
+  card read as illustrative. Neither hero has a caption (Max, 26 Oct 2026). Never a "Valid" sticker on a real studio that doesn't offer Moose.
 
 ### The card's marks
 

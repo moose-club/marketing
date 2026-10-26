@@ -8,7 +8,7 @@ import Plate from '../primitives/Plate.astro';
 // load the sleeve drops away and the card settles at −3°, the web echo of
 // the app's arrival and the site's one authored motion (RULES 17b). Desktop:
 // the words on the left, the scene on the right. Phone: switch, card, words.
-// The card is a sample (RULES 19). One primary plate (RULES 5).
+// The card is a sample (RULES 19): the member is "Alex Sample". One primary plate (RULES 5).
 const { hero } = MEMBERS;
 const { card } = hero;
 ---
@@ -34,7 +34,6 @@ const { card } = hero;
         footnote: card.footnote,
       }}
     />
-    <p class="mhero__caption">{card.caption}</p>
   </div>
 
   <div class="mhero__words">
@@ -60,13 +59,6 @@ const { card } = hero;
     --cs-width: 100%;
     /* Room for the card's −3° and its shadow. */
     padding-inline: var(--m-spacing-sm);
-  }
-  .mhero__caption {
-    margin-top: var(--m-spacing-md);
-    text-align: center;
-    font-size: var(--m-type-detail-size);
-    line-height: var(--m-type-detail-leading);
-    color: var(--m-ink-support);
   }
   .mhero__words { grid-area: words; }
   .mhero__lede { margin-top: var(--m-spacing-md); }

@@ -175,7 +175,6 @@ export const MEMBERS = {
     card: {
       label:
         "A sample Moose member card coming out of its sleeve, issued to a sample member by one of the studios already on Moose: valid, with 4.00 credits to spend, refreshed every month.",
-      caption: "Sample card. Yours is issued by your home studio.",
       // The issuer cycles through the studios already on Moose (NETWORK).
       issuers: NETWORK.partners.map((p) => p.name),
       member: "Alex Sample",
