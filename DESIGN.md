@@ -506,15 +506,22 @@ between each. Figures travel open, never boxed. A `detail` line under it reads
 "Illustrative figures, AUD." (new copy, proposed: the figures are illustrative, per
 PRODUCT.md).
 
-### Network (studio floor)
+### Network (studio floor): the deck
 
-"The studios already on Moose." with "Across Australia — and counting.", then a **printed
-roster**, not a logo wall: four columns (two on phone), each partner a cell under a
-printed rule (`inkRule`) with its mark above its name (`plateLabel`, `ink`). Marks are
-single-ink: the logo's alpha is a mask under an `ink` fill (`MC/Partner logo/*` in
-Figma; the CSS mask in code), so they flip with dark mode. Each mark sits in a fixed
-120 × 40 box (96 × 32 on phone), left-aligned, so the names line up. The hero's card back
-already lists the studios as lines; this section adds their marks.
+Chosen by Max, 26 Oct 2026. "The studios already on Moose." and "Across Australia — and
+counting." centred, then **a deck of cards, one issued by each studio on Moose**
+(`MC/Partner card`: the card face, its pink edge, "ISSUED BY", the studio's mark in card
+lettering and its name). No other names or logos on the page.
+- **Desktop:** the deck rests fanned in an arc across the page (cards at 240 wide, ±17°,
+  the right-most on top so every mark shows). It arrives as a neat stack and fans out
+  when the section scrolls into view (~900 ms, ease-out). Then it slowly shuffles: every
+  3 s the front card slides out, tucks to the back, and the fan closes the gap. Hover
+  lifts a card.
+- **Phone:** a swipeable row of full-size cards (250 wide, alternating ±2°, the next one
+  peeking) that also auto-advances one card every few seconds. Swiping takes over.
+- **Reduced motion:** the fan (desktop) or the row (phone), still.
+- These studios offer Moose, so showing their cards is true (RULES 19). No sticker, no
+  member: these are the studios' own cards.
 
 ### Audience switch
 
@@ -545,6 +552,10 @@ lands at −3° (about 900ms). CSS only if it can be, with no animation library.
 the scroll-drawn live line and the app capture's scroll scrub are retired with their
 sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
+
+**The studio floor's authored moment: the deck** (Network, above). The member floor's is
+the card arriving; the studio floor's is the deck fanning out and shuffling. One each
+(RULES 17b).
 
 **The cycling issuer** (Max, 26 Oct 2026), on the member hero's card only (the studio hero's card reads "Your studio"). Once the card is shown, its "Issued by"
 line cycles through the studios already on Moose (`NETWORK.partners`), one every 1.5s
@@ -627,7 +638,7 @@ Still open: none.
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Network | options for Max. Still: A one row `148:610`, B printed grid `148:678`, C moving strip `148:766`. Animated (section `151:798`, prototypes): D the deck of partner-issued cards, E press-out reveal, F two-way traffic, G the loop (storyboard). First draft `147:570` | Max: centred text, logos only, fun motion; choosing |
+| `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | drawn 26 Oct 2026: the deck (Max's pick); awaiting final review |
 | `/`, studio floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
