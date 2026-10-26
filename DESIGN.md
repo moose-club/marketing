@@ -506,6 +506,16 @@ between each. Figures travel open, never boxed. A `detail` line under it reads
 "Illustrative figures, AUD." (new copy, proposed: the figures are illustrative, per
 PRODUCT.md).
 
+### Network (studio floor)
+
+"The studios already on Moose." with "Across Australia — and counting.", then a **printed
+roster**, not a logo wall: four columns (two on phone), each partner a cell under a
+printed rule (`inkRule`) with its mark above its name (`plateLabel`, `ink`). Marks are
+single-ink: the logo's alpha is a mask under an `ink` fill (`MC/Partner logo/*` in
+Figma; the CSS mask in code), so they flip with dark mode. Each mark sits in a fixed
+120 × 40 box (96 × 32 on phone), left-aligned, so the names line up. The hero's card back
+already lists the studios as lines; this section adds their marks.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -608,7 +618,7 @@ Decided 26 Oct 2026 (Max delegated these to the redesign):
    compact / 96 regular) and are listed as proposed tokens in the PR
    (`radius.component.sticker`, `spacing.section`).
 
-Still open: what the studio floor's Network section shows, now the hero carries the card's back (Max, when it's drawn).
+Still open: none.
 
 ## Screens
 
@@ -617,7 +627,8 @@ Still open: what the studio floor's Network section shows, now the hero carries 
 | `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
 | `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, studio floor: Network | `147:570` (1440), `147:621` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
