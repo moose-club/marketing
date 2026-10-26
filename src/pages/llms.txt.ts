@@ -43,13 +43,17 @@ ${REGISTER.lede} Register at ${LINKS.studioPortal}.
 
 ${MEMBERS.hero.lede}
 
-${MEMBERS.how.lede}
+### ${MEMBERS.how.head.replace(/\.$/, '')}
 
-${MEMBERS.how.steps.map((s) => `${s.n}. ${s.body}`).join('\n')}
+${MEMBERS.how.steps.map((s) => `${s.n}. **${s.title}** ${s.body}`).join('\n')}
+
+### ${MEMBERS.commercials.head.replace(/\.$/, '')}
 
 ${MEMBERS.commercials.rows.map((r) => `- **${r.k}:** ${r.body}`).join('\n')}
 
-${MEMBERS.app.head}. ${MEMBERS.app.lede} ${MEMBERS.close.detail.replace(/^Opens the App Store listing for Moose\. /, '')}
+### ${MEMBERS.app.head.replace(/\.$/, '')}
+
+${MEMBERS.app.lede} ${MEMBERS.close.lede} ${MEMBERS.close.detail.replace(/^Opens the App Store listing for Moose\. /, '').replace(/\u00a0/g, ' ')}
 
 ## Partner studios
 

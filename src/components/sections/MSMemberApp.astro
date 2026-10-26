@@ -1,0 +1,83 @@
+---
+import { MEMBERS } from '../../data/copy';
+import ClassCard from '../primitives/ClassCard.astro';
+
+// The app (Member Card; Figma `171:1248` / `171:1314`, motion `174:1064`). No
+// phone screenshot: the app is shown by its own objects, three class cards as
+// a glimpse of Browse, one per state. The classes are illustrative, at "A
+// partner studio" (Max, 26 Oct 2026). No plate here: the App Store plate is
+// the Close's (RULES 5).
+//
+// A class books itself (Max, 26 Oct 2026): the first time the cards come into
+// view, the top one is booked (ClassCard `books`). Once. Under reduced motion
+// it stays on Book, as drawn.
+const { app } = MEMBERS;
+---
+
+<section class="mapp page" id="member-app" aria-labelledby="memberAppHeading">
+  <div class="mapp__words">
+    <h2 id="memberAppHeading" class="page-lettering page-lettering--compact">{app.head}</h2>
+    <p class="body-text mapp__lede">{app.lede}</p>
+  </div>
+
+  <ul class="mapp__cards" aria-label={app.label} data-books>
+    {app.classes.map((c, i) => (
+      <li>
+        <ClassCard
+          studio={c.studio}
+          time={c.time}
+          meridiem={c.meridiem}
+          name={c.name}
+          meta={c.meta}
+          state={c.state}
+          books={i === 0}
+        />
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-books]').forEach((cards) => {
+    if (reduce.matches) return;
+    const seen = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        seen.disconnect();
+        // A beat after it settles in view, as if tapped.
+        window.setTimeout(() => cards.classList.add('is-booked'), 400);
+      },
+      { threshold: 0.6 },
+    );
+    seen.observe(cards);
+  });
+</script>
+
+<style>
+  .mapp {
+    display: grid;
+    gap: var(--m-spacing-xl);
+    padding-top: var(--rhythm);
+  }
+  .mapp__lede { margin-top: var(--m-spacing-md); }
+
+  .mapp__cards {
+    display: grid;
+    gap: 16px; /* no token yet: proposed (the 390 frame) */
+    --cc-width: 100%;
+  }
+
+  @media (min-width: 760px) {
+    .mapp__cards { max-width: 500px; }
+  }
+
+  @media (min-width: 1048px) {
+    .mapp {
+      grid-template-columns: minmax(0, 500px) minmax(0, 500px);
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mapp__cards { gap: 20px; } /* no token yet: proposed (the 1440 frame) */
+  }
+</style>

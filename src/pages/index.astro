@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { MEMBERS, SITE } from '../data/copy';
+import { SITE } from '../data/copy';
 import { homeNodes } from '../data/schema';
 
 import MSNav         from '../components/sections/MSNav.astro';
@@ -9,8 +9,10 @@ import MSModel       from '../components/sections/MSModel.astro';
 import MSValue       from '../components/sections/MSValue.astro';
 import MSNetwork     from '../components/sections/MSNetwork.astro';
 import MSMemberHero  from '../components/sections/MSMemberHero.astro';
-import MSMembers     from '../components/sections/MSMembers.astro';
-import MSClose       from '../components/sections/MSClose.astro';
+import MSMemberHow   from '../components/sections/MSMemberHow.astro';
+import MSMemberGet   from '../components/sections/MSMemberGet.astro';
+import MSMemberApp   from '../components/sections/MSMemberApp.astro';
+import MSMemberClose from '../components/sections/MSMemberClose.astro';
 import MSStudioClose from '../components/sections/MSStudioClose.astro';
 import MSFooter      from '../components/sections/MSFooter.astro';
 
@@ -41,8 +43,10 @@ import MSFooter      from '../components/sections/MSFooter.astro';
 
     <div class="floor" data-floor="member">
       <MSMemberHero />
-      <MSMembers />
-      <MSClose id="member-close" {...MEMBERS.close} />
+      <MSMemberHow />
+      <MSMemberGet />
+      <MSMemberApp />
+      <MSMemberClose />
     </div>
   </main>
   <MSFooter />

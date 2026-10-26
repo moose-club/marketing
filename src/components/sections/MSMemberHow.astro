@@ -1,0 +1,339 @@
+---
+import { MEMBERS, NETWORK } from '../../data/copy';
+import MemberCard from '../primitives/MemberCard.astro';
+
+// How it works for you (Member Card; Figma `162:992` / `162:1178`, motion
+// `173:855`). Three short steps, each with the same sample card at that
+// moment: its back (your studio's partners), the front made valid, then
+// credits spent with one class attended (a hole) and one booked (RULES 19:
+// "Alex Sample" at "Your home studio").
+//
+// The card earns its marks (Max, 26 Oct 2026). Desktop with motion: one card
+// stays in view while the steps scroll past; each step takes over as it
+// crosses the middle of the viewport. 01 the back; 02 it turns to its front
+// and the "Valid" sticker lands; 03 the credits count down to 1.46, a class
+// is punched (the disc drops) and the next is booked. Phone with motion: each
+// step's card plays its moment once as it comes into view. Reduced motion, or
+// no script: the three cards, still, as drawn.
+const { how } = MEMBERS;
+const { card } = how;
+const partners = NETWORK.partners.map((p) => ({ name: p.name }));
+const front = {
+  issuer: card.issuer,
+  member: card.member,
+  creditsNote: card.creditsNote,
+  sticker: { label: card.sticker },
+  footnote: card.footnote,
+};
+const PUNCHES: ('attended' | 'booked' | 'next')[] = ['attended', 'booked', 'next', 'next'];
+// The lean of each step's card, as drawn.
+const TILT = [-2, 2, -2];
+---
+
+<section class="mhow page" id="member-how" aria-labelledby="memberHowHeading" data-mhow data-step="1">
+  <h2 id="memberHowHeading" class="page-lettering page-lettering--compact">{how.head}</h2>
+
+  <div class="mhow__body">
+    <div class="mhow__scene" aria-hidden="true">
+      <div class="mhow__flip">
+        <div class="mhow__face mhow__face--front mhow__punchable" data-scene-card>
+          <MemberCard label="" {...front} credits={card.credits} punches={PUNCHES} />
+          <span class="mhow__disc"></span>
+        </div>
+        <div class="mhow__face mhow__face--back">
+          <MemberCard label="" face="back" partners={partners} partnerColumns={2} addedBy={card.addedBy} />
+        </div>
+      </div>
+    </div>
+
+    <ol class="mhow__steps">
+      {how.steps.map((s, i) => (
+        <li class="mhow__step" data-n={i + 1}>
+          <div class="mhow__card"><div class:list={['mhow__lean', i === 2 && 'mhow__punchable']} style={`--step-tilt: ${TILT[i]}deg`}>
+            {i === 0 && (
+              <MemberCard label={card.labels[0]} face="back" partners={partners} partnerColumns={2} addedBy={card.addedBy} />
+            )}
+            {i === 1 && <MemberCard label={card.labels[1]} {...front} credits={card.credits} />}
+            {i === 2 && (
+              <>
+                <MemberCard label={card.labels[2]} {...front} credits={card.spent} punches={PUNCHES} />
+                <span class="mhow__disc" aria-hidden="true"></span>
+              </>
+            )}
+          </div></div>
+          <div class="mhow__text">
+            <span class="page-lettering mhow__n">{s.n}</span>
+            <p class="mhow__title">{s.title}</p>
+            <p class="body-text mhow__line">{s.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  const COUNT = 700; // the credits count down
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = window.matchMedia('(min-width: 1048px)');
+
+  // 4.00 → 1.46, two decimals all the way (RULES 20). Returns a cancel.
+  function countDown(el: HTMLElement, from: number, to: number, done: () => void) {
+    const start = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / COUNT);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = (from + (to - from) * eased).toFixed(2);
+      if (t < 1) frame = requestAnimationFrame(tick);
+      else done();
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-mhow]').forEach((section) => {
+    if (reduce.matches) return;
+    section.classList.add('is-moving');
+
+    const steps = [...section.querySelectorAll<HTMLElement>('.mhow__step')];
+    const scene = section.querySelector<HTMLElement>('[data-scene-card]')!;
+    const sceneFigure = scene.querySelector<HTMLElement>('.mc__figure')!;
+    const FROM = Number(sceneFigure.textContent);
+
+    // The step 03 card on the stacked layout starts unspent, and spends when
+    // it plays.
+    const lastCard = steps[2].querySelector<HTMLElement>('.mhow__punchable')!;
+    const lastFigure = lastCard.querySelector<HTMLElement>('.mc__figure')!;
+    const TO = Number(lastFigure.textContent);
+    lastFigure.textContent = FROM.toFixed(2);
+
+    const setLayout = () => section.classList.toggle('is-scrolly', wide.matches);
+    setLayout();
+    wide.addEventListener('change', setLayout);
+
+    // Desktop: the step crossing the middle of the viewport sets the card.
+    let cancel = () => {};
+    const setStep = (n: number) => {
+      if (section.dataset.step === String(n)) return;
+      section.dataset.step = String(n);
+      steps.forEach((s, i) => s.classList.toggle('is-active', i + 1 === n));
+      cancel();
+      if (n === 3) {
+        cancel = countDown(sceneFigure, FROM, TO, () => (scene.dataset.punched = ''));
+      } else {
+        cancel = () => {};
+        sceneFigure.textContent = FROM.toFixed(2);
+        delete scene.dataset.punched;
+      }
+    };
+    steps[0].classList.add('is-active');
+
+    const middle = new IntersectionObserver(
+      (entries) => {
+        if (!section.classList.contains('is-scrolly')) return;
+        entries.forEach((e) => e.isIntersecting && setStep(Number((e.target as HTMLElement).dataset.n)));
+      },
+      { rootMargin: '-50% 0px -50% 0px' },
+    );
+    steps.forEach((s) => middle.observe(s));
+
+    // Stacked: each step's card plays its moment once, as it comes into view.
+    const once = new IntersectionObserver(
+      (entries) => {
+        if (section.classList.contains('is-scrolly')) return;
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const step = (e.target as HTMLElement).closest<HTMLElement>('.mhow__step')!;
+          once.unobserve(e.target);
+          step.classList.add('is-played');
+          if (step.dataset.n === '3') {
+            countDown(lastFigure, FROM, TO, () => (lastCard.dataset.punched = ''));
+          }
+        });
+      },
+      { threshold: 0.6 },
+    );
+    steps.forEach((s) => once.observe(s.querySelector('.mhow__card')!));
+  });
+</script>
+
+<style>
+  .mhow { padding-top: var(--rhythm); }
+  .mhow__body { margin-top: var(--m-spacing-xl); }
+
+  .mhow__steps { display: grid; gap: 48px; } /* no token yet: proposed (the 390 frame's step rhythm) */
+
+  /* Room round each card for its lean and its shadow. The lean is on a
+     wrapper, so the dropping disc leans with the card. */
+  .mhow__card { padding: 16px 12px 12px; } /* no token yet: proposed */
+  .mhow__lean {
+    rotate: var(--step-tilt);
+    --mc-width: 100%;
+  }
+
+  .mhow__text {
+    margin-top: 12px; /* no token yet: proposed */
+    padding-top: 20px; /* no token yet: proposed */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  /* The ordinal: display lettering at the compact role's phone size, as in
+     the Moose model. */
+  .mhow__n {
+    display: block;
+    font-size: 2.25rem; /* = --m-type-page-lettering-compact-size's floor */
+    font-variant-numeric: tabular-nums;
+    transition: color 240ms ease-out;
+  }
+  .mhow__title {
+    margin-top: 8px; /* no token yet: proposed (Figma step rhythm) */
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+    transition: color 240ms ease-out;
+  }
+  .mhow__line { margin-top: 8px; transition: color 240ms ease-out; } /* no token yet: proposed */
+
+  /* ── The marks ──────────────────────────────────────────────────────
+     A punchable card (step 03's, and the scene's front) shows its marks
+     "not yet" until it is punched: no hole, the slot's faint ring, and the
+     booked ring in the hint ink. Only with motion; otherwise it is drawn
+     punched. */
+  .mhow__punchable { position: relative; container-type: inline-size; }
+  .is-moving .mhow__punchable:not([data-punched]) :global(.mc__face) {
+    -webkit-mask-image: none;
+    mask-image: none;
+    --slot-ring: 1;
+  }
+  .is-moving .mhow__punchable:not([data-punched]) :global(.mc__hole) { opacity: 0; }
+  .is-moving .mhow__punchable :global(.punch--booked) { transition: fill 300ms ease-out 280ms; }
+  .is-moving .mhow__punchable:not([data-punched]) :global(.punch--booked) {
+    fill: var(--punch-hint);
+    transition: none;
+  }
+
+  /* The punched-out disc, in card units: it falls from the hole and fades. */
+  .mhow__disc {
+    position: absolute;
+    left: calc(100cqw * 22 / 354);
+    top: calc(100cqw * 186 / 354);
+    width: calc(100cqw * 18 / 354);
+    height: calc(100cqw * 18 / 354);
+    border-radius: 50%;
+    background: var(--m-card-face);
+    box-shadow: var(--m-shadow-card-mini);
+    opacity: 0;
+    pointer-events: none;
+  }
+  [data-punched] > .mhow__disc { animation: mhow-disc 620ms cubic-bezier(0.55, 0, 0.75, 0.2) both; }
+  @keyframes mhow-disc {
+    0%   { opacity: 1; transform: none; }
+    20%  { opacity: 1; transform: translateY(2px); }
+    100% { opacity: 0; transform: translateY(64px) rotate(50deg); }
+  }
+
+  /* The sticker lands: from a touch large, settling (the app's slap). */
+  @keyframes mhow-sticker {
+    from { opacity: 0; scale: 1.15; }
+    to   { opacity: 1; scale: 1; }
+  }
+  /* The partner lines print in, one after another. */
+  @keyframes mhow-print {
+    from { opacity: 0; transform: translateY(2px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Stacked, with motion: each card waits for its moment. */
+  .is-moving:not(.is-scrolly) .mhow__step:not(.is-played) :global(.mc__partner),
+  .is-moving:not(.is-scrolly) .mhow__step[data-n='2']:not(.is-played) :global(.sticker) { opacity: 0; }
+  .is-moving .mhow__step.is-played :global(.mc__partner) { animation: mhow-print 260ms ease-out both; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(2)) { animation-delay: 70ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(3)) { animation-delay: 140ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(4)) { animation-delay: 210ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(5)) { animation-delay: 280ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(6)) { animation-delay: 350ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(7)) { animation-delay: 420ms; }
+  .is-moving .mhow__step.is-played :global(.mc__partner:nth-child(8)) { animation-delay: 490ms; }
+  .is-moving .mhow__step[data-n='2'].is-played :global(.sticker) {
+    animation: mhow-sticker 260ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+  }
+
+  /* ── The one card (desktop, with motion) ───────────────────────────── */
+  .mhow__scene { display: none; }
+
+  @media (min-width: 760px) and (max-width: 1047.98px) {
+    .mhow__step {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--m-spacing-xl);
+      align-items: center;
+    }
+    .mhow__text { margin-top: 0; }
+  }
+
+  @media (min-width: 1048px) {
+    .mhow__body { margin-top: 56px; } /* no token yet: proposed (the 1440 frame) */
+    .mhow__steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 40px; /* no token yet: proposed (the 1440 frame) */
+    }
+
+    .mhow.is-scrolly .mhow__body {
+      display: grid;
+      grid-template-columns: minmax(0, 480px) minmax(0, 560px);
+      justify-content: space-between;
+      align-items: start;
+    }
+    .is-scrolly .mhow__scene {
+      /* The card is 480 × 304: held at the middle of the viewport. */
+      --scene-top: calc(50svh - 152px);
+      display: block;
+      position: sticky;
+      top: var(--scene-top);
+      perspective: 1600px;
+      --mc-width: 100%;
+    }
+    .is-scrolly .mhow__steps {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    /* Each step is tall enough to scroll past the middle; the last holds the
+       card while its moment plays. */
+    .is-scrolly .mhow__step { min-height: 36svh; }
+    .is-scrolly .mhow__step:last-child { min-height: 52svh; }
+    .is-scrolly .mhow__card { display: none; }
+    .is-scrolly .mhow__text {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr); /* no token yet: proposed (the motion frame) */
+      margin-top: 0;
+    }
+    .is-scrolly .mhow__n { grid-row: span 2; }
+    .is-scrolly .mhow__title { margin-top: 4px; }
+    .is-scrolly .mhow__step:not(.is-active) .mhow__n,
+    .is-scrolly .mhow__step:not(.is-active) .mhow__line { color: var(--m-ink-hint); }
+    .is-scrolly .mhow__step:not(.is-active) .mhow__title { color: var(--m-ink-support); }
+
+    /* The turn: the back first, the front from step 02. */
+    .mhow__flip {
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateY(180deg);
+      transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint: it lands, no bounce */
+    }
+    .mhow:not([data-step='1']) .mhow__flip { transform: none; }
+    .mhow__face {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .mhow__face--back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+    }
+    .mhow[data-step='1'] .mhow__scene :global(.sticker) { opacity: 0; }
+    .mhow[data-step='2'] .mhow__scene :global(.sticker) {
+      animation: mhow-sticker 260ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+    }
+  }
+</style>

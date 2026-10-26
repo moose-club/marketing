@@ -137,7 +137,7 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
           {punches.length > 0 && (
             <div class="mc__punches">
               {punches.map((p) => (p === 'attended'
-                ? <span class="mc__slot"></span>
+                ? <span class="mc__slot"><Punch state="next" /></span>
                 : <Punch state={p} />))}
             </div>
           )}
@@ -363,6 +363,10 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
     gap: calc(var(--u) * 8);
   }
   .mc__slot { width: calc(var(--u) * 18); height: calc(var(--u) * 18); }
+  /* The slot's faint ring, the punch "not yet": hidden under the hole. A scene
+     that draws the card before the class is attended (the member floor's
+     "how it works") lifts the mask and sets `--slot-ring: 1`. */
+  .mc__slot :global(.punch) { opacity: var(--slot-ring, 0); }
   /* Drawn over the face (outside its mask) at the hole's place: the card's
      thickness, shade on the top edge and a hairline of light on the bottom.
      The hole itself is the face's mask. */

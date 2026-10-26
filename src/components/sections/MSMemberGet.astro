@@ -1,0 +1,71 @@
+---
+import { MEMBERS } from '../../data/copy';
+
+// What you get, what you pay (Member Card; Figma `168:683` / `168:700`). The
+// words on the left; on the right the app's own membership panel, floating
+// paper with a row per fact and printed rules between them. No pink: nothing
+// in it is the reader's yet (RULES 6).
+const { commercials } = MEMBERS;
+---
+
+<section class="mget page" id="member-get" aria-labelledby="memberGetHeading">
+  <div class="mget__words">
+    <h2 id="memberGetHeading" class="page-lettering page-lettering--compact">{commercials.head}</h2>
+    <p class="body-text mget__lede">{commercials.lede}</p>
+  </div>
+
+  <dl class="mget__panel">
+    {commercials.rows.map((r) => (
+      <div class="mget__row">
+        <dt class="mget__key">{r.k}</dt>
+        <dd class="mget__value">{r.body}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .mget {
+    display: grid;
+    gap: var(--m-spacing-xl);
+    padding-top: var(--rhythm);
+  }
+  .mget__lede { margin-top: var(--m-spacing-md); }
+
+  .mget__panel {
+    border-radius: var(--m-radius-lg);
+    background: var(--m-paper);
+    box-shadow: var(--m-shadow-paper);
+  }
+  .mget__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--m-spacing-lg);
+    padding: 20px 24px; /* no token yet: proposed (the app's panel row) */
+  }
+  .mget__row + .mget__row { border-top: 1px solid var(--m-ink-rule); }
+  .mget__key {
+    flex: none;
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .mget__value {
+    margin: 0;
+    text-align: right;
+    font-size: var(--m-type-body-size);
+    font-weight: var(--m-type-body-weight);
+    line-height: 1.5; /* provisional: as .body-text */
+    color: var(--m-ink-support);
+  }
+
+  @media (min-width: 1048px) {
+    .mget {
+      grid-template-columns: minmax(0, 520px) minmax(0, 560px);
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>
