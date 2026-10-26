@@ -469,8 +469,8 @@ object, RULES 0). The hero's second column is the studio's card on the floor: th
 **front** (−3°, smaller) overlapping only the back's lower-left corner. The front's
 "Issued by" cycles through the live studios on Moose, as on the member hero (see Motion).
 In code, the back leaves out whichever studio is issuing, so a studio never lists itself.
-A detail caption beside it reads "Sample card. Every studio on Moose issues its own; the
-back lists the partners it chooses." Phone: switch, then the pair, the caption and the words,
+No caption (Max, 26 Oct 2026); the member name "Alex Sample" keeps the card reading
+as a sample (RULES 19). Phone: switch, then the pair and the words,
 the same order as the member floor.
 
 ### Audience switch
