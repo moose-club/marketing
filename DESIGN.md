@@ -193,10 +193,17 @@ components:
 
 ## Status
 
+**26 Oct 2026: the member floor is coded, so all of `/` is on the Member Card.** How it
+works for you (with the card earning its marks), What you get and what you pay, The app
+(with a class booking itself) and the member Close are built from their frames
+(`MSMemberHow`, `MSMemberGet`, `MSMemberApp`, `MSMemberClose`), and Max's copy answers are
+in `copy.ts`. `MSMembers`, `MSClose`, the app capture and the whole Lane Lines layer
+(`.lanes`, its type roles and the `--ll-*` values) are deleted. The plates and the floor
+rules stay in `globals.css`.
+
 **26 Oct 2026: the studio floor is coded.** Nav, Hero, Model, Value, Network (the deck)
 and the studio Close (with the Register press) are built from their agreed frames, on
-top of the footer. The member floor below its hero is still the retired build and still uses
-`MSClose`, `.lanes` and the `--ll-*` layer, so those stay until it is redrawn.
+top of the footer.
 
 **26 Oct 2026: the design moves to Figma.** Max wants to design in Figma first, then
 code. The working page (since split into Components, Studio floor and Member floor pages) holds the shared objects (card front,
@@ -558,14 +565,25 @@ Each step shows **the same sample card at that moment**: 01 the back, its "Valid
 lines (your studio partners up); 02 the front with the "Valid" sticker (you add Moose);
 03 the front with credits spent and the punch row marked, one hole and one booked ring
 (you book with credits). Under each card is a printed rule, the ordinal, the title
-(`plateLabel`) and one line (`body`). The cards tilt ±2° and are still: the hero's arrival
-is this floor's motion.
+(`plateLabel`) and one line (`body`). The cards tilt ±2°.
 
-**Proposed copy (in the Figma frames; goes into `copy.ts` when coded, because
-`MEMBERS.how` feeds the live page and `/llms.txt` until then):** "How it works for you."
-01 Your studio partners up. It teams up with studios nearby. · 02 You add Moose. Upgrade
-through your home studio. · 03 You book with credits. Credits each month for partner
-classes, in the Moose app. The old lede is dropped.
+**The card earns its marks** (Max, 26 Oct 2026; Figma motion `173:855`). At ≥1048 with
+motion, the three cards become one sample card (480 wide) held at the middle of the
+viewport on the left, with the steps on the right (the ordinal beside the title and
+line). Each step takes over as it crosses the middle; the others fall to `inkSupport` and
+`inkHint`. 01: the back. 02: the card turns to its front (~640 ms) and the "Valid"
+sticker lands (1.15 → 1, 260 ms). 03: the credits count down 4.00 → 1.46 (~700 ms, two
+decimals all the way), then the first slot is punched (the hole opens and its disc
+drops) and the booked ring turns pink. Until then each mark is drawn "not yet": the
+slot's faint ring, the booked ring in the hint ink. Scrolling back resets the card. On
+phone with motion, each step's card plays its moment once as it comes into view (the
+partner lines print in; the sticker lands; the count and the punch). Under reduced
+motion, or without script, the three still cards.
+
+**Copy (coded):** "How it works for you." 01 Your studio partners up. It teams up with
+studios nearby. · 02 You add Moose. Upgrade through your home studio. · 03 You book with
+credits. Credits each month for partner classes, in the Moose app. The old lede is
+dropped.
 
 ### What you get, what you pay (member floor)
 
@@ -575,24 +593,33 @@ paper panel of rows**, the app's own membership panel (`paper`, `radius.lg`,
 `body` `inkSupport` on the right, wrapping right-aligned on phone, with printed rules
 (`inkRule`) between the rows. No pink: nothing in it is the reader's yet.
 
-**Proposed copy (in Figma; goes into `copy.ts` when coded):** "What you get, what you
-pay." / "A little more variety, through your home studio." Rows: You get: 4.00 credits a
-month · Valid at: Your studio's partners · You pay: Your studio's upgrade price.
-(No billing row: Max, 26 Oct 2026.)
+**Copy (coded):** "What you get, what you pay." / "A little more variety, through your
+home studio." Rows: You get: Credits every month · Valid at: Your studio's partners · You
+pay: Your studio's upgrade price. No figure in "You get": the amount varies by studio
+(Max, 26 Oct 2026, replacing the frame's "4.00 credits a month"; the sample cards still
+show 4.00). No billing row (Max, 26 Oct 2026).
 
 ### The app (member floor)
 
 No phone screenshot (it's dropped): the app is shown by its own objects. The words sit
 on the left; on the right are **three class cards** (`MC/Class card` in Figma,
 `ClassCard.astro` in code) as a glimpse of Browse, one per state: Book (7:30 AM
-Reformer 45 at Essentials Studio Pilates), Booked (the pink edge and press-out ring; the
-word in `ink`) and Free (the sticker). Class names and times are illustrative ("Sample
-instructor"), at studios that are on Moose. They stack on phone. No primary plate here:
-the App Store plate is the member Close's.
+Reformer 45), Booked (the pink edge and press-out ring; the word in `ink`) and Free (the
+sticker). Class names and times are illustrative ("Sample instructor"), so each card
+reads **"A partner studio"**, with no badge, rather than a real studio (Max, 26 Oct 2026,
+replacing the frame's partner names). They stack on phone. No primary plate here: the
+App Store plate is the member Close's.
 
-**Proposed copy (in Figma; `copy.ts` when coded):** "Book in the Moose app." / "Pick a
-class at a partner studio and book it with your credits." This replaces "Book and manage
-crossover sessions at partner venues" and its lede.
+**A class books itself** (Max, 26 Oct 2026; Figma motion `174:1064`). The first time the
+cards come into view, the top one is booked, once, about 1.2 s in all: the stub presses
+(0.98), a thin pink arc draws round a faint ring and settles into the press-out ring,
+the pink edge runs down the card and "Booked" prints. Only one state's label is visible
+at a time, to assistive tech as on screen. Under reduced motion it stays on Book, as
+drawn.
+
+**Copy (coded):** "Book in the Moose app." / "Pick a class at a partner studio and book it
+with your credits." This replaces "Book and manage crossover sessions at partner venues"
+and its lede.
 
 ### Close (member floor)
 
@@ -635,9 +662,8 @@ is the only emblem.
 One authored moment on the whole site (RULES 17b): **the card arrives** on the member
 hero. On load the card slides up out of its sleeve, the sleeve drops away, and the card
 lands at −3° (about 900ms). CSS only if it can be, with no animation library. Under
-`prefers-reduced-motion` the card is already out and still. Everything else is still:
-the scroll-drawn live line and the app capture's scroll scrub are retired with their
-sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
+`prefers-reduced-motion` the card is already out and still. The scroll-drawn live line and
+the app capture's scroll scrub are retired with their sections. Press feedback on plates (scale 0.98, fast duration) is not an authored
 moment and stays.
 
 **The member floor's further moments (Max, 26 Oct 2026; a deliberate stretch of RULES
@@ -745,11 +771,11 @@ Still open: none.
 | `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | agreed and coded 26 Oct 2026 (`MSValue.astro`), without the footnote |
 | `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | agreed and coded 26 Oct 2026 (`MSNetwork.astro`; the partner card is `MemberCard layout="partner"`) |
 | `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | agreed and coded 26 Oct 2026 (`MSStudioClose.astro`); the portal opens on press, not after the animation |
-| `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
-| `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: What you get, what you pay | `168:683` (1440), `168:700` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: the app | `171:1248` (1440), `171:1314` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: Close | `172:817` (1440), `172:882` (390), Member floor page | drawn 26 Oct 2026, awaiting Max. Member floor complete in Figma |
+| `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | agreed and coded 26 Oct 2026 (`MSMemberHero.astro`); lede shortened by Max |
+| `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390); motion `173:855` (prototype) | agreed and coded 26 Oct 2026 (`MSMemberHow.astro`) |
+| `/`, member floor: What you get, what you pay | `168:683` (1440), `168:700` (390) | agreed and coded 26 Oct 2026 (`MSMemberGet.astro`), "Credits every month" |
+| `/`, member floor: the app | `171:1248` (1440), `171:1314` (390); motion `174:1064` (prototype) | agreed and coded 26 Oct 2026 (`MSMemberApp.astro`), at "A partner studio" |
+| `/`, member floor: Close | `172:817` (1440), `172:882` (390) | agreed and coded 26 Oct 2026 (`MSMemberClose.astro`) |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

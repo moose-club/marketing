@@ -147,18 +147,19 @@ Source: `src/pages/index.astro`. Each is a self-contained `.astro` file under `s
 - Metrics row: per-studio quote, per-studio % of members upgraded (22% / 31%), and a centre block showing 128 ↔ 143 crossovers/month with explanatory bullets about credit weighting.
 - Below: "From some other studios who get it." with 3 quote cards (Sarah Reid / Marcus Tran / Priya Nair).
 
-### 6.8 `MSMembers.astro` — for studio members + phone mock
+### 6.8 The member floor (`MSMemberHero` → `MSMemberHow` → `MSMemberGet` → `MSMemberApp` → `MSMemberClose`)
 
-- `.section--cream`. Eyebrow "For studio members", h2 "Finally, some (affordable) _variety…_" (one pink word).
-- Left: single-paragraph lede, two commercial cards ("What you get" / "What you pay" — prose, no stat figures), and a note linking back to the Register form with `data-register="member"` (which auto-selects the Member tab).
-- Right: a **pure-CSS** phone mock with notch, status bar, greet block, member-at-studio chip, credits card (navy, "3 of 4 left"), filter chips, and 3 booking slots. Plus a callout reminding readers the Moose app is only for booking crossover sessions.
+- **Hero:** the switch, h1 "Finally, some variety.", one line, the primary plate "Get the Moose app". The sample card in its sleeve arrives on load (the floor's first authored moment); its issuer cycles through the studios on Moose.
+- **How it works for you:** three short steps, each with the same sample card at that moment (its back; the front made valid; credits spent, one class punched and one booked). ≥1048 with motion: one card held in view while the steps scroll past (it turns, the sticker lands, the credits count down and a class is punched). Phone with motion: each card plays its moment once in view. Reduced motion: the three cards, still.
+- **What you get, what you pay:** the words, and a floating paper panel of rows (You get · Valid at · You pay). No figures: the credit amount varies by studio.
+- **The app:** "Book in the Moose app." and three class cards (Book, Booked, Free) at "A partner studio". No screenshot. The first time they come into view the top one books itself (once; still under reduced motion).
+- **Close:** the navy cover band, "Get the Moose app.", the App Store plate and the sample card in use, still.
 
 ### 6.9 `MSStudioClose.astro` — the studio close
 
 - The navy cover band (a scoped `.dark`). "Get your studio on Moose.", "No cost to join. You choose your partners.", the primary plate "Register your studio" (new tab to the studio portal) and the line naming the portal. There is no form on the site.
 - Beside the words (below on phone): a fresh card in its sleeve, "Issued by Your studio" ghosted.
 - On press the portal opens straight away and the card issues on the page behind it (the name presses in, the card rises out of the sleeve and settles at −3°). Reduced motion shows the issued card.
-- The member floor's close is still `MSClose.astro` until that floor is redrawn.
 
 ### 6.10 `MSFooter.astro`
 
@@ -297,7 +298,7 @@ moose-marketing/
 │   │   │   ├── MSNetwork.astro
 │   │   │   ├── MSValue.astro
 │   │   │   ├── MSStory.astro
-│   │   │   ├── MSMembers.astro
+│   │   │   ├── MSMemberHero / How / Get / App / Close.astro
 │   │   │   ├── MSRegister.astro
 │   │   │   └── MSFooter.astro
 │   │   └── primitives/

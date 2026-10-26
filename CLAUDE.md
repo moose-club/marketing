@@ -13,7 +13,7 @@ Audience: studio operators first, members second. Single page (`/`) with two flo
 ## Stack
 
 - **Astro 6** with `output: 'static'` — ships zero JS by default
-- **No React islands at present.** The member app capture is pure CSS (a scroll-driven scrub); the switch, dark-mode toggle, nav and roster reveal are small inline scripts. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
+- **No React islands at present.** The switch, dark-mode follow, nav, the deck, the Register press and the member floor's moments (the card earning its marks, a class booking itself) are small inline scripts over CSS. If a section ever needs state, add a React island then; don't add hydration overhead speculatively.
 - Hand-rolled CSS via CSS custom properties — **no Tailwind, no CSS-in-JS, no UI kit**
 - TypeScript strict
 - pnpm
@@ -39,14 +39,14 @@ There are no unit tests. Verification is visual: open `pnpm dev` at the breakpoi
 
 ### Composition
 
-The target world is the **Member Card** (RULES 0): the site sells the card to two readers. The studio floor shows a studio that it issues the card, and the member floor shows a member what their studio's card would do. **Figma first, then code** (Max, 26 Oct 2026): the source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, pages "Member Card · Components" (the shared objects), "Home · Studio floor — working" and "Home · Member floor — working" (the section frames). Don't code a section until Max has agreed its frame. The objects follow `../moose-design/docs/reference/member-card/`, and the order of work follows `../moose-design/docs/handoffs/marketing-site.md`. A page not yet redrawn keeps what it ships: today `/`'s studio floor, the nav, the footer and the member hero are on the Member Card, while the rest of the member floor is still the retired Lane Lines build (the file's old "Home · / — working" page and `.impeccable/surfaces/src-pages-index-astro.md` are history, not a source), and `/claim`, `/404` and the legal pages are the older card world. `DESIGN.md`'s Screens table says which page is in which state.
+The target world is the **Member Card** (RULES 0): the site sells the card to two readers. The studio floor shows a studio that it issues the card, and the member floor shows a member what their studio's card would do. **Figma first, then code** (Max, 26 Oct 2026): the source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, pages "Member Card · Components" (the shared objects), "Home · Studio floor — working" and "Home · Member floor — working" (the section frames). Don't code a section until Max has agreed its frame. The objects follow `../moose-design/docs/reference/member-card/`, and the order of work follows `../moose-design/docs/handoffs/marketing-site.md`. A page not yet redrawn keeps what it ships: today all of `/` (both floors, the nav and the footer) is on the Member Card (the file's old "Home · / — working" page and `.impeccable/surfaces/src-pages-index-astro.md` are Lane Lines history, not a source), and `/claim`, `/404` and the legal pages are the older card world. `DESIGN.md`'s Screens table says which page is in which state.
 
 `src/pages/index.astro` composes two floors; `html[data-audience]` (set before first paint from the URL hash, and by the switch) shows one:
 
 ```
 Nav
   studio floor: Hero → Model → Value → Network (the deck) → StudioClose (navy)
-  member floor: MemberHero → Members (how · get/pay · app) → Close (navy)
+  member floor: MemberHero → MemberHow → MemberGet → MemberApp → MemberClose (navy)
 Footer (navy, continues the close)
 ```
 
@@ -55,8 +55,6 @@ Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, �
 `src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD and the skip-link. Page-level metadata flows in as props; a page adds JSON-LD nodes through `jsonLd`. The structured data (`src/data/schema.ts`) and `/llms.txt` (`src/pages/llms.txt.ts`) are both built from `copy.ts`, so a copy edit updates what answer engines read too (SPEC §9).
 
 ### Primitives (`src/components/primitives/`)
-
-Shipped today (the retired Lane Lines set, replaced as each section is redrawn):
 
 - `Plate`: `primary`, `outline`, `station` (small inset action).
 - `AudienceSwitch`, `Icon` (inline Lucide).
@@ -71,13 +69,13 @@ The Member Card objects: `MemberCard` (front in use / printed / partner, back), 
 
 ### Styling
 
-Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. Dark mode follows the system (RULES 8): an inline script in `Base.astro`'s `<head>` sets `.dark` on `<html>` from `prefers-color-scheme` before first paint and follows changes. There is no theme picker. A page whose shipped CSS doesn't flip yet (`/claim`, `/404`, legal) passes `followSystemDark={false}` until it is redrawn; drop the prop when you redraw it. `globals.css` still holds the retired Lane Lines layer (`--ll-*`, lanes grid, type roles, plates, hero) and the older card-world utilities that `/claim` and the legal pages use. Delete each part when the last page using it is redrawn; never extend either. Values with no token yet are marked `/* no token yet: proposed */`.
+Values come from moose-design's `--m-*` tokens (`src/styles/moose-design/tokens.css`, generated). The navy floor is the token set's own `.dark` class, so ink, plates and support text flip from one class. Dark mode follows the system (RULES 8): an inline script in `Base.astro`'s `<head>` sets `.dark` on `<html>` from `prefers-color-scheme` before first paint and follows changes. There is no theme picker. A page whose shipped CSS doesn't flip yet (`/claim`, `/404`, legal) passes `followSystemDark={false}` until it is redrawn; drop the prop when you redraw it. The Lane Lines layer is gone from `globals.css`; it still holds the older card-world utilities that `/claim` and the legal pages use. Delete them when the last page using them is redrawn; never extend them. Values with no token yet are marked `/* no token yet: proposed */`.
 
 The Flat Page Rule (RULES 10): the page never takes a shadow, tint, gradient or glass. Depth belongs only to the objects on it: the member card and its sleeve (`--m-shadow-card`, `--m-shadow-card-behind`), the sticker (`--m-shadow-card-mini`) and floating paper (`--m-shadow-paper`). No eyebrows (RULES 14), no pills.
 
 ### Photos
 
-Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (today only the member app capture) — no `background-image` photos remain. Neither hero has a photo (Max, 26 Oct 2026); `Base.astro`'s `preloadImage` prop is there for a page that needs one.
+Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (none on `/` today) — no `background-image` photos remain. Neither hero has a photo (Max, 26 Oct 2026); `Base.astro`'s `preloadImage` prop is there for a page that needs one.
 
 ### Brand discipline (the hardest-to-relearn rules)
 
