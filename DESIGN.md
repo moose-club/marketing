@@ -175,13 +175,29 @@ components:
 > `moose-design/RULES.md`. This file says how the marketing site applies them and cites
 > each rule by number, without restating it.
 >
-> **Sources.** There is no Figma for this site (decided 2026-10-26). Design in code from
-> this file, `moose-design/docs/reference/member-card/` (PNGs of the iOS app's real
-> objects, light and dark, plus `moose-loop.svg`) and the reference description,
-> `moose-ios/DESIGN.md`. The Lane Lines Figma file (`a5SmvlBwlHP6sf0FAZfLpP`) is retired
-> as a source.
+> **Sources.** Figma first, then code (Max, 26 Oct 2026, reversing the brief's "no
+> Figma"). The source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, page **"Home ·
+> Member Card — working"** (`117:282`): the shared objects as components (section
+> `118:271`) and the section frames (`120:330`). No section is coded until Max has agreed
+> its frame. The objects follow `moose-design/docs/reference/member-card/` and
+> `moose-ios/DESIGN.md`. The file's old page, "Home · / — working", is the retired Lane
+> Lines design and is history only.
+>
+> **Figma values.** Frames bind the Moose Design System library variables. What the
+> library doesn't have yet (`inkHint`, `inkRule`, the card colours, the component radii,
+> the card shadows, the Member Card type roles) is a local collection, **"Member Card ·
+> provisional"**, plus local styles under `Member Card/…`. These alias the library where
+> they can. They're provisional until moose-design's Figma library gains them.
 
 ## Status
+
+**26 Oct 2026: the design moves to Figma.** Max wants to design in Figma first, then
+code. The page "Home · Member Card — working" holds the shared objects (card front,
+printed front, back, sleeve, card in sleeve, sticker, punch, plate, switch) and the first
+frames for review: member hero (1440 light and dark, 390), studio hero (1440, 390) and
+the arrival in three steps. The coded member hero and objects stay on the branch but are
+**unagreed**. Code changes resume section by section once a frame is agreed, and
+anything built that differs from the agreed frame is changed to match.
 
 **26 Oct 2026: the Member Card is adopted, and nothing is redrawn yet.** moose-design #4
 moved every surface onto the Member Card (RULES 0), and this file now describes that
@@ -559,11 +575,12 @@ Still open: none.
 
 ## Screens
 
-| Page | Source | State |
+| Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor (Hero, Model, Value, Network, Close) | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
-| `/`, member floor: MemberHero | before/after in `.impeccable/review/` | redrawn 26 Oct 2026 (card in its sleeve, the arrival); awaiting Max's review |
-| `/`, member floor: Members, Close | before/after in `.impeccable/review/` | not redrawn: retired Lane Lines shipped |
+| `/`, studio floor: Hero | `120:601` (1440), `120:680` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:505` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
+| `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
