@@ -483,10 +483,17 @@ Type-led, with no card: the heroes carry the object. The headline sits on the le
 the lede beside it. Under "How it works." are four printed columns (stacked on phone),
 each with a printed rule (`inkRule`) on top, the ordinal in `pageLetteringCompact` at its
 phone size, the step title in `plateLabel` and the body in `body`. Each step's bold range
-is `ink` SemiBold, and prices never break at the slash (word joiners in the copy). Step 03
-carries the one card-world detail: four empty press-out rings in `inkHint` for "four
-crossover sessions per month". They're empty because nothing on this page belongs to the
-reader (RULES 6, 19).
+is `ink` SemiBold, and prices never break at the slash (word joiners in the copy). Step 04
+ends with the one card-world detail: four empty press-out rings in `inkHint` for classes
+booked. They're empty because nothing on this page belongs to the reader (RULES 6, 19).
+
+**Step copy (26 Oct 2026, in the Figma frames; goes into `copy.ts` when the section is
+coded, because `MODEL` feeds the live page until then):** 01 Register and connect your
+booking system · 02 Choose your partners · 03 Select your eligible memberships (Max:
+members upgrade in the app and Moose handles the payments; capped at $11/wk or $48/mo) ·
+04 Members book, Moose keeps it balanced (credits each month). Still to confirm with Max:
+credits vs "four sessions", whether every studio connects a booking system, and whether
+partners can be changed any time.
 
 ### Audience switch
 
