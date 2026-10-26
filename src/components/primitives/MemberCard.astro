@@ -154,7 +154,7 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
           <span class="mc__signature">Member’s signature</span>
           <p class="mc__label mc__no">{cardNo}</p>
           <p class="mc__label mc__valid-label">Valid at{addedBy && <span class="mc__added"> · Added by {addedBy}</span>}</p>
-          <ul class:list={['mc__partners', partnerColumns === 2 && 'mc__partners--two']}>
+          <ul class:list={['mc__partners', partnerColumns === 2 && 'mc__partners--two']} style={partnerColumns === 2 ? `--rows: ${Math.ceil(Math.max(partners.length, 3) / 2)}` : undefined}>
             {(partners.length ? partners : [{ name: 'A partner studio' }, { name: 'A partner studio' }, { name: 'A partner studio' }]).map((p) => (
               <li class:list={['mc__partner', !partners.length && 'mc__hint']}>
                 {p.logo && <span class="mc__logo" style={`--logo: url('${p.logo}')`}></span>}
@@ -390,7 +390,12 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
     list-style: none;
     padding: 0;
   }
-  .mc__partners--two { grid-template-columns: 1fr 1fr; }
+  /* Two columns read down, then across. */
+  .mc__partners--two {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(var(--rows), auto);
+    grid-auto-flow: column;
+  }
   .mc__partner {
     display: flex;
     align-items: center;

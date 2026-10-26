@@ -1,64 +1,121 @@
 ---
-import { HERO } from '../../data/copy';
+import { HERO, NETWORK } from '../../data/copy';
 import AudienceSwitch from '../primitives/AudienceSwitch.astro';
-import HeroPhoto from '../primitives/HeroPhoto.astro';
-import Icon from '../primitives/Icon.astro';
+import MemberCard from '../primitives/MemberCard.astro';
 import Plate from '../primitives/Plate.astro';
 
-// Studio floor hero — a split floor: the work side on your lane, the
-// photograph from lane 2 to the edge. One filled plate.
+// Studio floor hero (Member Card; Figma `127:570` / `127:653`). The studio is
+// shown that it issues the card: its back (+4°, "Valid at" the studios on
+// Moose) with the front (−3°, "Issued by Your studio") over its lower-left
+// corner. No photo, no points, no caption (Max, 26 Oct 2026). The member is a
+// sample (RULES 19). One primary plate (RULES 5). Desktop: the words on the
+// left, the pair on the right. Phone: switch, pair, words.
+const { card } = HERO;
+const partners = NETWORK.partners.map((p) => ({ name: p.name }));
 ---
 
-<section class="hero" aria-labelledby="heroHeading">
-  <HeroPhoto src={HERO.photo.src} alt={HERO.photo.alt} />
+<section class="shero page" aria-labelledby="heroHeading">
+  <div class="shero__switch">
+    <AudienceSwitch current="studio" />
+  </div>
 
-  <div class="lanes">
-    <div class="hero__work">
-      <AudienceSwitch current="studio" />
+  <div class="shero__scene" role="img" aria-label={card.label}>
+    <MemberCard
+      label=""
+      face="back"
+      class="shero__back"
+      tilt={4}
+      partners={partners}
+      partnerColumns={2}
+      addedBy={card.addedBy}
+    />
+    <MemberCard
+      label=""
+      class="shero__front"
+      tilt={-3}
+      issuer={card.issuer}
+      member={card.member}
+      credits={card.credits}
+      creditsNote={card.creditsNote}
+      sticker={{ label: card.sticker }}
+      footnote={card.footnote}
+    />
+  </div>
 
-      <h1 id="heroHeading" class="lettering hero__head">{HERO.head}</h1>
-
-      {HERO.subLines.map((line) => <p class="lead">{line}</p>)}
-
-      <ul class="hero__points">
-        {HERO.points.map((p) => (
-          <li class="plate-label hero__point">
-            <span class="tick"><Icon name="check" size={16} /></span>
-            {p}
-          </li>
-        ))}
-      </ul>
-
-      <Plate href={HERO.cta.href} external class="hero__cta">{HERO.cta.label}</Plate>
-    </div>
+  <div class="shero__words">
+    <h1 id="heroHeading" class="page-lettering">{HERO.head}</h1>
+    <p class="body-text shero__lede">{HERO.subLines.join(' ')}</p>
+    <Plate href={HERO.cta.href} external class="shero__cta">{HERO.cta.label}</Plate>
   </div>
 </section>
 
 <style>
-  .hero__head { margin-top: var(--m-spacing-xl); }
-
-  .hero__points {
-    margin-top: var(--m-spacing-xl);
+  .shero {
     display: grid;
-    gap: 12px; /* no token yet: proposed (Figma point rhythm) */
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'switch' 'scene' 'words';
+    row-gap: var(--m-spacing-lg);
+    padding-top: calc(var(--nav-h) + var(--m-spacing-lg));
   }
-  .hero__point {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* no token yet: proposed */
+  .shero__switch { grid-area: switch; }
+  .shero__words { grid-area: words; }
+  .shero__lede { margin-top: var(--m-spacing-lg); max-width: 520px; } /* no token yet: proposed (hero measure) */
+  .shero__cta { margin-top: var(--m-spacing-lg); }
+
+  /* The pair, in scene units (1/612 of the scene, the desktop frame's width),
+     so it scales as one picture. Phone lets it run into the page margin, as
+     the 390 frame does. */
+  .shero__scene {
+    grid-area: scene;
+    container-type: inline-size;
+    justify-self: center;
+    width: calc(100% + 2 * var(--page-pad));
+    max-width: 560px; /* no token yet: proposed (hero object, single column) */
+    margin-inline: calc(-1 * var(--page-pad));
   }
-  /* Assurance tick: 24px solid ink box, 4px corner, surface check. Never
-     status green, never pink. */
-  .tick {
-    flex-shrink: 0;
-    display: inline-grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px; /* no token yet: proposed (Web/Tick) */
-    background: var(--m-ink);
-    color: var(--m-surface);
+  .shero__scene::before {
+    content: '';
+    display: block;
+    aspect-ratio: 612 / 560;
+  }
+  .shero__scene > :global(.mc) {
+    --s: calc(100cqw / 612);
+    position: absolute;
+  }
+  .shero__scene { position: relative; }
+  .shero__scene > :global(.shero__back) {
+    left: calc(var(--s) * 159);
+    top: calc(var(--s) * 30);
+    width: calc(var(--s) * 440);
+    --mc-width: 100%;
+  }
+  .shero__scene > :global(.shero__front) {
+    left: calc(var(--s) * 8);
+    top: calc(var(--s) * 290);
+    width: calc(var(--s) * 360);
+    --mc-width: 100%;
   }
 
-  .hero__cta { margin-top: var(--m-spacing-xl); }
+  @media (min-width: 640px) {
+    .shero__scene { width: 100%; margin-inline: auto; }
+  }
+
+  @media (min-width: 1048px) {
+    .shero {
+      grid-template-columns: minmax(0, 580px) minmax(0, 1fr); /* no token yet: proposed (hero words measure) */
+      /* The words, switch included, centre on the pair. */
+      grid-template-rows: 1fr auto auto 1fr;
+      grid-template-areas: '. scene' 'switch scene' 'words scene' '. scene';
+      column-gap: 64px; /* no token yet: proposed (page gutter) */
+      row-gap: var(--m-spacing-lg);
+      min-height: min(100svh, 852px); /* no token yet: proposed (the 1440 frame's hero) */
+      padding-top: calc(var(--nav-h) + 80px); /* no token yet: proposed (hero top inset) */
+      padding-bottom: var(--m-spacing-xl);
+    }
+    .shero__scene {
+      align-self: center;
+      max-width: 612px;
+      margin-right: 0;
+    }
+  }
 </style>

@@ -65,9 +65,18 @@ export const HERO = {
     "Your memberships level up.",
   ] as const,
   cta: { label: "Register your studio", href: LINKS.studioPortal },
-  photo: {
-    src: "/photos/hero-strength.webp",
-    alt: "Member training with a kettlebell in warm, golden studio light",
+  // The hero object: the studio's own card, front and back (RULES 0). The
+  // member is a sample (RULES 19); the back lists the studios on Moose.
+  card: {
+    label:
+      "A sample Moose member card issued by your studio, to a sample member, valid with 4.00 credits to spend. Its back lists the partner studios it is valid at: the studios already on Moose.",
+    issuer: "Your studio",
+    member: "Alex Sample",
+    credits: "4.00",
+    creditsNote: "to spend",
+    sticker: "Valid",
+    footnote: "Refreshes every month",
+    addedBy: "your studio",
   },
 } as const;
 
@@ -120,13 +129,13 @@ export const VALUE = {
       title: "Attract new members",
       stat: "+$18k",
       unit: "p.a.",
-      cap: "Attracting 5 new members per year (assuming $70/wk memberships).",
+      cap: "Attracting 5 new members per year (assuming $70/\u2060wk memberships).",
     },
     {
       title: "Reduce churn",
       stat: "+$18k",
       unit: "p.a.",
-      cap: "Preserving 5 members per year (assuming $70/wk memberships).",
+      cap: "Preserving 5 members per year (assuming $70/\u2060wk memberships).",
     },
   ] as const,
 } as const;
