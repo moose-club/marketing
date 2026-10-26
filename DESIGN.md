@@ -567,6 +567,19 @@ is this floor's motion.
 through your home studio. · 03 You book with credits. Credits each month for partner
 classes, in the Moose app. The old lede is dropped.
 
+### What you get, what you pay (member floor)
+
+The words on the left (the headline and one short line), and on the right **a floating
+paper panel of rows**, the app's own membership panel (`paper`, `radius.lg`,
+`shadow.paper`). Each row has a `plateLabel` key in `ink` on the left and the value in
+`body` `inkSupport` on the right, wrapping right-aligned on phone, with printed rules
+(`inkRule`) between the rows. No pink: nothing in it is the reader's yet.
+
+**Proposed copy (in Figma; goes into `copy.ts` when coded):** "What you get, what you
+pay." / "A little more variety, through your home studio." Rows: You get: 4.00 credits a
+month · Valid at: Your studio's partners · You pay: Your studio's upgrade price ·
+Billing: Through Moose.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -695,7 +708,8 @@ Still open: none.
 | `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | agreed and coded 26 Oct 2026 (`MSStudioClose.astro`); the portal opens on press, not after the animation |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: What you get / pay, the app, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: What you get, what you pay | `168:683` (1440), `168:700` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
+| `/`, member floor: the app, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
