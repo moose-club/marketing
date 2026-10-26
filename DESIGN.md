@@ -461,12 +461,15 @@ The legal text on one floating `paper` column (`radius.lg`, `shadow.paper`) cent
 the floor. `printedLabel` section labels and `inkRule` between sections. No bands,
 cards or eyebrows.
 
-### Hero photograph (studio floor)
+### Hero photograph and the issued card (studio floor)
 
-`hero-strength.webp`, square cut, no radius, no scrim. Desktop: it fills the hero's
-second column and the issued card overlaps its lower edge. Phone: a band under the nav
-with the card overlapping its foot, and the words below. It's a photo cover, so it reads
-the same in light and dark.
+`hero-strength.webp`, square cut, no radius, no scrim. Over its lower half, the studio's
+card: the **back** (+4°, `shadow.cardBehind`) reads over the photo with "Valid at" and
+every studio on Moose, and the **front** (−3°, "Issued by Your studio", smaller) overlaps
+only the back's lower-left corner. A detail caption beside it reads "Sample card. Your
+studio issues it; its back lists the partners you choose." Phone: the photo is a band
+under the nav with the same pair over its foot, then the caption, then the words. It's a
+photo cover, so it reads the same in light and dark.
 
 ### Audience switch
 
@@ -577,9 +580,9 @@ Still open: none.
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `120:601` (1440), `120:680` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Hero | `120:505` (1440), `120:680` (390) | drawn 26 Oct 2026; right column re-staged (card front + back listing the partners); awaiting Max |
 | `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
-| `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:505` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
+| `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav, audience switch and footer | before/after in `.impeccable/review/` | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav and footer not redrawn |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
