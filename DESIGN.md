@@ -191,6 +191,11 @@ components:
 
 ## Status
 
+**26 Oct 2026: the studio floor is coded.** Nav, Hero, Model, Value, Network (the deck)
+and the studio Close (with the Register press) are built from their agreed frames, on
+top of the footer. The member floor below its hero is still the retired build and still uses
+`MSClose`, `.lanes` and the `--ll-*` layer, so those stay until it is redrawn.
+
 **26 Oct 2026: the design moves to Figma.** Max wants to design in Figma first, then
 code. The page "Home · Member Card — working" holds the shared objects (card front,
 printed front, back, sleeve, card in sleeve, sticker, punch, plate, switch) and the first
@@ -502,9 +507,8 @@ as a **printed read-back ledger**, the way the app prints "Cost / Free cancel un
 Each cell has a `printedLabel` title above the figure (`pageLetteringCompact`, `ink`), the
 unit in `detail`, and the caption in `detail` (`inkSupport`). Printed rules (`inkRule`)
 run above and below the ledger and between cells; on phone the cells stack with a rule
-between each. Figures travel open, never boxed. A `detail` line under it reads
-"Illustrative figures, AUD." (new copy, proposed: the figures are illustrative, per
-PRODUCT.md).
+between each. Figures travel open, never boxed. No footnote under the
+ledger (Max, 26 Oct 2026, dropping the proposed "Illustrative figures, AUD.").
 
 ### Network (studio floor): the deck
 
@@ -525,7 +529,9 @@ lettering and its name). No other names or logos on the page.
 
 ### Close (studio floor)
 
-The navy cover band (`.dark` scoped, RULES 8): "Get your studio on Moose.", the lede,
+The navy cover band (`.dark` scoped, RULES 8): "Get your studio on Moose.", the lede
+("No cost to join. You choose your partners.": Max, 26 Oct 2026, since "no integration
+work" no longer fits step 01),
 the floor's last primary plate ("Register your studio", white with a navy label) and
 the `detail` line under it. Beside the words (below them on phone), a fresh card in its
 sleeve, "Issued by Your studio": the operator's own card, waiting to be issued. It
@@ -537,7 +543,9 @@ raised navy, as in dark mode.
 On press (~450 ms, ease-out) the plate scales to 0.98, the studio name *presses in*
 (a brief pink impression and the name rising to card lettering, the app's "press"), and
 the card slides up out of its sleeve and tips to −3° as the sleeve drops away. After
-~400 ms it settles, issued, and the studio portal opens in a new tab. Under
+~400 ms it settles, issued. The studio portal opens in its new tab **straight away**, as a
+link does (Max, 26 Oct 2026), so the card issues on the page behind it and is waiting,
+issued, when the operator comes back; no delayed tab for a popup blocker to catch. Under
 `prefers-reduced-motion` it goes straight to the issued card. Figma: `158:918` → `158:971`
 → `158:1024` (click the plate in Present).
 
@@ -678,15 +686,15 @@ Still open: none.
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front ("Your studio") + back; awaiting Max |
-| `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | drawn 26 Oct 2026, awaiting Max |
-| `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | drawn 26 Oct 2026: the deck (Max's pick); awaiting final review |
-| `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | drawn 26 Oct 2026, awaiting Max |
+| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | agreed and coded 26 Oct 2026 (`MSHero.astro`) |
+| `/`, studio floor: Model | `135:570` (1440), `135:662` (390) | agreed and coded 26 Oct 2026 (`MSModel.astro`) |
+| `/`, studio floor: Value | `143:570` (1440), `143:594` (390) | agreed and coded 26 Oct 2026 (`MSValue.astro`), without the footnote |
+| `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | agreed and coded 26 Oct 2026 (`MSNetwork.astro`; the partner card is `MemberCard layout="partner"`) |
+| `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | agreed and coded 26 Oct 2026 (`MSStudioClose.astro`); the portal opens on press, not after the animation |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: What you get / pay, the app, Close | not drawn | not redrawn: retired Lane Lines shipped |
-| Nav and audience switch | in every hero frame | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav drawn in the hero frames |
+| Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

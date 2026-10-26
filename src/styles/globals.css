@@ -380,9 +380,7 @@ html.js [data-reveal='pop'].is-revealed   { animation-name: reveal-pop; }
   --ll-lead-leading: 1.6;            /* no token yet: proposed */
   --ll-body-size:    0.9375rem;      /* no token yet: proposed (Body 15/1.55) */
   --ll-body-leading: 1.55;           /* no token yet: proposed */
-  --ll-title-size:   1.75rem;        /* no token yet: proposed (Title 28/700) */
   --ll-ordinal-size: 1.75rem;        /* no token yet: proposed (Ordinal 28/800) */
-  --ll-stat-size:    2.5rem;         /* = --m-type-figure-size's floor: proposed (Stat 40) */
   --ll-tracking:     -0.01em;        /* no token yet: proposed (Figma −1%) */
 }
 
@@ -465,14 +463,6 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
 .lettering + .lead { margin-top: var(--m-spacing-md); }
 .lead + .lead { margin-top: var(--m-spacing-md); }
 
-.title {
-  font-size: var(--ll-title-size);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--m-ink);
-}
-
 .plate-label {
   font-size: var(--m-type-plate-label-size);
   font-weight: var(--m-type-plate-label-weight);
@@ -547,17 +537,3 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
   border-radius: 10px; /* no token yet: proposed (station action plate) */
 }
 
-/* ── Hero (both floors) ─────────────────────────────────────────── */
-.hero {
-  position: relative;
-  /* Compact: under the 300px photo band, then 40. */
-  padding-top: 340px;  /* no token yet: proposed */
-}
-.hero__work { position: relative; }
-@media (min-width: 1048px) {
-  .hero {
-    padding-top: calc(var(--nav-h) + 80px);         /* no token yet: proposed (top inset 80) */
-    padding-bottom: calc(var(--rhythm) + var(--m-spacing-xxl)); /* stated floor under the work side */
-    min-height: min(100svh, 962px);
-  }
-}

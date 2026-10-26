@@ -39,13 +39,13 @@ There are no unit tests. Verification is visual: open `pnpm dev` at the breakpoi
 
 ### Composition
 
-The target world is the **Member Card** (RULES 0): the site sells the card to two readers. The studio floor shows a studio that it issues the card, and the member floor shows a member what their studio's card would do. **Figma first, then code** (Max, 26 Oct 2026): the source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, page "Home · Member Card — working" (objects as components, then section frames). Don't code a section until Max has agreed its frame. The objects follow `../moose-design/docs/reference/member-card/`, and the order of work follows `../moose-design/docs/handoffs/marketing-site.md`. A page not yet redrawn keeps what it ships: today `/` is still the retired Lane Lines build (the file's old "Home · / — working" page and `.impeccable/surfaces/src-pages-index-astro.md` are history, not a source), and `/claim`, `/404` and the legal pages are the older card world. `DESIGN.md`'s Screens table says which page is in which state.
+The target world is the **Member Card** (RULES 0): the site sells the card to two readers. The studio floor shows a studio that it issues the card, and the member floor shows a member what their studio's card would do. **Figma first, then code** (Max, 26 Oct 2026): the source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, page "Home · Member Card — working" (objects as components, then section frames). Don't code a section until Max has agreed its frame. The objects follow `../moose-design/docs/reference/member-card/`, and the order of work follows `../moose-design/docs/handoffs/marketing-site.md`. A page not yet redrawn keeps what it ships: today `/`'s studio floor, the nav, the footer and the member hero are on the Member Card, while the rest of the member floor is still the retired Lane Lines build (the file's old "Home · / — working" page and `.impeccable/surfaces/src-pages-index-astro.md` are history, not a source), and `/claim`, `/404` and the legal pages are the older card world. `DESIGN.md`'s Screens table says which page is in which state.
 
 `src/pages/index.astro` composes two floors; `html[data-audience]` (set before first paint from the URL hash, and by the switch) shows one:
 
 ```
 Nav
-  studio floor: Hero → Model → Value → Network → Close (navy)
+  studio floor: Hero → Model → Value → Network (the deck) → StudioClose (navy)
   member floor: MemberHero → Members (how · get/pay · app) → Close (navy)
 Footer (navy, continues the close)
 ```
@@ -59,9 +59,9 @@ Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, �
 Shipped today (the retired Lane Lines set, replaced as each section is redrawn):
 
 - `Plate`: `primary`, `outline`, `station` (small inset action).
-- `AudienceSwitch`, `HeroPhoto` (photo + cream floorScrims), `Icon` (inline Lucide).
+- `AudienceSwitch`, `Icon` (inline Lucide).
 
-The Member Card objects: `MemberCard` (front in use / printed, back), `CardSleeve`, `Sticker`, `Punch`, `ClassCard`, `PrintedField`, `PaperColumn`, `MooseLoop`. Each matches its reference PNG in light and dark, and all render on the dev-only gallery at `/dev/gallery` (`src/pages/dev/[page].astro`, no path in a build). Card objects scale in object units (`--u`) through a container query; see `DESIGN.md` Components.
+The Member Card objects: `MemberCard` (front in use / printed / partner, back), `CardSleeve`, `Sticker`, `Punch`, `ClassCard`, `PrintedField`, `PaperColumn`, `MooseLoop`. Each matches its reference PNG in light and dark, and all render on the dev-only gallery at `/dev/gallery` (`src/pages/dev/[page].astro`, no path in a build). Card objects scale in object units (`--u`) through a container query; see `DESIGN.md` Components.
 - `Wordmark`, `Button`, `Eyebrow`, `PhoneFrame` are the older card-world library, unused on `/`. The nav and footer use the wordmark SVGs in `public/brand/logo/` directly.
 
 ### Content & data (`src/data/`)
@@ -77,7 +77,7 @@ The Flat Page Rule (RULES 10): the page never takes a shadow, tint, gradient or 
 
 ### Photos
 
-Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (`HeroPhoto`, the member app capture) — no `background-image` photos remain. The homepage hero is `hero-strength.webp`, preloaded via `Base.astro`'s `preloadImage` prop.
+Marketing photos live under `public/photos/` as compressed `.webp` (largest ~180KB), referenced from `<img>` elements (today only the member app capture) — no `background-image` photos remain. Neither hero has a photo (Max, 26 Oct 2026); `Base.astro`'s `preloadImage` prop is there for a page that needs one.
 
 ### Brand discipline (the hardest-to-relearn rules)
 
