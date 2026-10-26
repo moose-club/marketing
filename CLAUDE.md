@@ -61,7 +61,7 @@ Shipped today (the retired Lane Lines set, replaced as each section is redrawn):
 - `Plate`: `primary`, `outline`, `station` (small inset action).
 - `AudienceSwitch`, `HeroPhoto` (photo + cream floorScrims), `Icon` (inline Lucide).
 
-The Member Card objects (member card front/back/sleeve, sticker, punch marks, class card with stub, plates, printed field, paper column) are built here once, each matching its reference PNG in light and dark, and shown on a dev-only gallery page (see `DESIGN.md` Components).
+The Member Card objects: `MemberCard` (front in use / printed, back), `CardSleeve`, `Sticker`, `Punch`, `ClassCard`, `PrintedField`, `PaperColumn`, `MooseLoop`. Each matches its reference PNG in light and dark, and all render on the dev-only gallery at `/dev/gallery` (`src/pages/dev/[page].astro`, no path in a build). Card objects scale in object units (`--u`) through a container query; see `DESIGN.md` Components.
 - `Wordmark`, `Button`, `Eyebrow`, `PhoneFrame` are the older card-world library, unused on `/`. The nav and footer use the wordmark SVGs in `public/brand/logo/` directly.
 
 ### Content & data (`src/data/`)

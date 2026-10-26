@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+
+// A printed field (`/claim`): a small-caps label above a ruled box, like a
+// printed form (RULES 14). The edge is ink, at the hint weight while empty;
+// focused, the edge and the caret are pink (RULES 6); in error the edge is
+// `danger`, with the error symbol and an ink message below (RULES 9).
+interface Props {
+  id: string;
+  label: string;
+  type?: string;
+  name?: string;
+  value?: string;
+  placeholder?: string;
+  autocomplete?: string;
+  required?: boolean;
+  error?: string;
+  class?: string;
+}
+const { id, label, type = 'text', name = id, value, placeholder, autocomplete, required, error, class: className } = Astro.props;
+const messageId = `${id}-message`;
+---
+
+<div class:list={['pf', error && 'pf--error', className]}>
+  <label class="pf__label" for={id}>{label}</label>
+  <input
+    class="pf__box"
+    id={id}
+    name={name}
+    type={type}
+    value={value}
+    placeholder={placeholder}
+    autocomplete={autocomplete}
+    required={required}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={error ? messageId : undefined}
+  />
+  {error && (
+    <p class="pf__message" id={messageId}>
+      <Icon name="circle-alert" size={16} class="pf__symbol" />{error}
+    </p>
+  )}
+</div>
+
+<style>
+  .pf { display: grid; gap: 6px; font-family: var(--m-font-family-sans); }
+  .pf__label {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  .pf__box {
+    box-sizing: border-box;
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    border: 1.5px solid var(--m-ink);
+    border-radius: var(--m-radius-component-field);
+    background: var(--m-paper);
+    color: var(--m-ink);
+    caret-color: var(--m-moose-pink);
+    font: inherit;
+    font-size: var(--m-type-field-value-size);
+    font-weight: var(--m-type-field-value-weight);
+    line-height: var(--m-type-field-value-leading);
+  }
+  .pf__box:placeholder-shown { border-color: var(--m-ink-hint); }
+  .pf__box::placeholder { color: var(--m-ink-hint); opacity: 1; }
+  .pf__box:focus,
+  .pf__box:focus-visible {
+    outline: none;
+    border-color: var(--m-moose-pink);
+  }
+  .pf--error .pf__box,
+  .pf--error .pf__box:placeholder-shown { border-color: var(--m-danger); }
+  .pf__message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink);
+  }
+  .pf__message :global(.pf__symbol) { flex: none; color: var(--m-danger); }
+</style>

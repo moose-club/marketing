@@ -472,7 +472,7 @@ html[data-audience='member'] [data-floor='member'] { display: block; }
   gap: var(--m-spacing-md);
   min-height: 56px;
   padding-inline: var(--m-spacing-lg);
-  border-radius: var(--m-radius-md);
+  border-radius: var(--m-radius-component-plate);
   font-size: var(--m-type-plate-label-size);
   font-weight: var(--m-type-plate-label-weight);
   line-height: var(--m-type-plate-label-leading);

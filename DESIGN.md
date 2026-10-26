@@ -365,23 +365,37 @@ are named tokens only (RULES 11), so the studio hero's photograph takes no scrim
 
 The shared objects match the iOS app's (see its `DESIGN.md` and the reference PNGs),
 drawn in Poppins and adapted to the web, not reinvented. Each is a static Astro component
-in `src/components/primitives/` (HTML and CSS, SVG where it helps). All of them render in
-light and dark on the dev gallery (`src/pages/dev/gallery.astro`, which answers 404
-outside dev).
+in `src/components/primitives/` (HTML and CSS, SVG where it helps): `MemberCard`,
+`CardSleeve`, `Sticker`, `Punch`, `ClassCard`, `Plate`, `PrintedField`, `PaperColumn` and
+`MooseLoop`. All of them render in light and dark on the dev gallery (`/dev/gallery`,
+`src/pages/dev/[page].astro`, which has no path in a build, so it never ships or reaches
+the sitemap).
+
+The card objects (card, sleeve, class card) are drawn in **object units**: every measure
+is a fraction of the object's width (`--u`, 1/354 of the card), through a container
+query, so an object scales as one picture at any width and never reflows. Their own ink
+weights are the card lettering mixed at 70 / 45 / 22% (provisional: card ink weights,
+proposed upstream).
 
 ### The member card
 
 An illustration at a fixed proportion, read by assistive tech as one image whose
 accessible name repeats every fact on it.
-- **Front:** the pink edge; "ISSUED BY" and the studio; the Moose loop top right
-  (`moose-loop.svg`, the only emblem); the number, embossed (`--m-card-emboss`);
-  "MEMBER" and the name; "CREDITS" with the balance to two decimals in `cardFigure`; the
-  sticker slot tilted +4° top right.
+- **Front, in use:** the pink edge; "ISSUED BY" and the studio; the Moose loop top right
+  (`moose-loop.svg`, the only emblem); the sticker slot tilted +4°; "MEMBER" and the name,
+  embossed (`--m-card-emboss`); "CREDITS" with the balance to two decimals in
+  `cardFigure`; a printed rule; then the punch row and a footnote. A slot left empty
+  draws its dashed "not yet" state.
+- **Front, printed:** issued by, the loop, the embossed number ("MOOSE  0000  0001"),
+  member and a small credits line. This is the face in the sleeve.
+- **Punches:** booked is the pink ring; attended is a real hole (the face's mask), with
+  the card's thickness drawn over it outside the mask.
 - **Back:** "VALID AT" with "Added by" the studio, then one partner per line on printed
   rules. On the studio floor this is the network section: partner names (and their
   single-ink logos) as lines on the card's back, never a logo wall.
-- **Sleeve:** `--m-card-sleeve`, a pink rule, "Member card", "From your home studio" and
-  the loop. It holds the card in the member hero.
+- **Sleeve:** `--m-card-sleeve`, the thumb notch (a half-ellipse mask), a pink rule,
+  "MOOSE CLUB", "Partner access card" (the app's shipped sleeve copy) and the loop. The
+  card's number shows through the notch. It holds the card in the member hero.
 - No chip, hologram or security print: it would read as a bank card or a wallet pass.
 - **Always a sample** (RULES 19): a sample member at a sample studio, reading as
   illustrative. Never a "Valid" sticker on a real studio that doesn't offer Moose.
@@ -404,7 +418,9 @@ mark):
 
 Paper, `radius.component.classCard`, `shadow.paper`. Studio and class, the time in
 display lettering, and a stub behind the perforation that carries the state ("Book",
-Booked with a pink edge and booked ring, Free with a sticker). Use it only where the
+Booked with a pink edge and booked ring, Free with a sticker). "Booked" stays `ink`, not
+the app's pink caps: small pink text fails contrast (RULES 16), and the ring already says
+whose it is. Use it only where the
 member floor shows a crossover class.
 
 ### Plates

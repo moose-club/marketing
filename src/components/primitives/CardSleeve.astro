@@ -1,0 +1,109 @@
+---
+import MemberCard from './MemberCard.astro';
+import MooseLoop from './MooseLoop.astro';
+
+// The card in its sleeve (the member hero). The sleeve is the opposite of the
+// card it holds (`--m-card-sleeve`): cream-deep around the navy card in light,
+// raised navy around the cream card in dark. Its mouth has a half-ellipse
+// thumb notch, and the card's number shows through it.
+//
+// Geometry in sleeve units (1/362 of the width): the card is 354 wide and
+// stands 104 clear of the mouth; the sleeve is 362 × 236.
+interface Props {
+  /** The accessible name of the scene. */
+  label: string;
+  kicker?: string;
+  title?: string;
+  card?: Record<string, unknown>;
+  class?: string;
+}
+const { label, kicker = 'Moose Club', title = 'Partner access card', card = {}, class: className } = Astro.props;
+---
+
+<div class:list={['cs', className]} role="img" aria-label={label}>
+  <div class="cs__scene">
+    <div class="cs__card">
+      <MemberCard label="" layout="printed" {...card} />
+    </div>
+    <div class="cs__sleeve">
+      <div class="cs__paper">
+        <span class="cs__rule"></span>
+        <p class="cs__kicker">{kicker}</p>
+        <p class="cs__title">{title}</p>
+        <span class="cs__loop"><MooseLoop /></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cs {
+    container-type: inline-size;
+    width: 100%;
+    max-width: var(--cs-width, 362px);
+  }
+  .cs__scene {
+    --u: calc(100cqw / 362);
+    position: relative;
+    aspect-ratio: 362 / 340;
+  }
+  .cs__card {
+    position: absolute;
+    top: 0;
+    left: calc(var(--u) * 4);
+    width: calc(var(--u) * 354);
+    --mc-width: 100%;
+  }
+  .cs__card :global([role='img']) { pointer-events: none; }
+  .cs__sleeve {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(var(--u) * 236);
+    border-radius: calc(var(--u) * 14); /* radius.component.sleeve at full size */
+    box-shadow: var(--m-shadow-card);
+  }
+  .cs__paper {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--m-card-sleeve);
+    color: var(--m-ink);
+    font-family: var(--m-font-family-sans);
+    /* The thumb notch: 84 × 22, a half-ellipse cut into the mouth. */
+    -webkit-mask: radial-gradient(ellipse calc(var(--u) * 42) calc(var(--u) * 22) at 50% 0, transparent 98%, #000 100%);
+    mask: radial-gradient(ellipse calc(var(--u) * 42) calc(var(--u) * 22) at 50% 0, transparent 98%, #000 100%);
+  }
+  .cs__paper > * { position: absolute; margin: 0; }
+  .cs__rule {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 84);
+    width: calc(var(--u) * 28);
+    height: calc(var(--u) * 3);
+    background: var(--m-moose-pink);
+  }
+  .cs__kicker {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 62);
+    font-size: calc(var(--u) * 9);
+    font-weight: var(--m-type-card-label-weight);
+    line-height: var(--m-type-card-label-leading);
+    letter-spacing: var(--m-type-card-label-tracking);
+    text-transform: var(--m-type-card-label-transform);
+    color: var(--m-ink-support);
+  }
+  .cs__title {
+    left: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 34);
+    font-size: calc(var(--u) * 18);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .cs__loop {
+    right: calc(var(--u) * 22);
+    bottom: calc(var(--u) * 34);
+    width: calc(var(--u) * 38);
+  }
+</style>
