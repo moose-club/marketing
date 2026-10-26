@@ -2,96 +2,171 @@
 import { FOOTER } from '../../data/copy';
 import Icon from '../primitives/Icon.astro';
 
-// The navy floor continues from the close, no seam and no hairline. Brand on
-// your lane, link columns on your partner's.
+// The footer (Member Card; Figma `159:984` / `159:1018`). It continues the
+// close's navy band with no seam: the token set's own `.dark`, so ink, rules and
+// the wordmark flip from one class (RULES 8). Brand on the left, three printed
+// columns on the right, then a printed rule and the legal row.
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer dark">
-  <div class="lanes footer__top">
-    <div class="footer__brand">
-      <img src="/brand/logo/moose-wordmark-white.svg" alt="Moose" class="footer__logo" width="120" height="23" />
-      <p class="body-copy">{FOOTER.tagline}</p>
-      <a href={FOOTER.instagram.href} class="footer__ig" target="_blank" rel="noopener" aria-label={FOOTER.instagram.label}>
-        <Icon name="instagram" />
-      </a>
+  <div class="page footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#top" class="footer__wordmark" aria-label="Moose, back to top"><span aria-hidden="true"></span></a>
+        <p class="footer__tagline">{FOOTER.tagline}</p>
+        <a href={FOOTER.instagram.href} class="footer__ig" target="_blank" rel="noopener" aria-label={FOOTER.instagram.label}>
+          <Icon name="instagram" />
+        </a>
+      </div>
+
+      <nav class="footer__cols" aria-label="Footer">
+        {FOOTER.cols.map((c) => (
+          <div class="footer__col">
+            <h2 class="footer__head">{c.title}</h2>
+            <ul>
+              {c.items.map((it) => {
+                const external = 'external' in it && it.external;
+                return (
+                  <li>
+                    <a href={it.h} class="footer__link" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>{it.l}</a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
     </div>
 
-    <div class="lane--partner footer__cols">
-      {FOOTER.cols.map((c) => (
-        <div class="footer__col">
-          <h2 class="plate-label">{c.title}</h2>
-          {c.items.map((it) => {
-            const external = 'external' in it && it.external;
-            return (
-              <a href={it.h} class="body-copy footer__link" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
-                {it.l}
-              </a>
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <div class="footer__legal detail">
-    <div class="footer__row">
-      <span>© {year} Moose Club. Made in Australia.</span>
-      {FOOTER.legal.map((l) => <a href={l.h}>{l.l}</a>)}
-    </div>
-    <div class="footer__row">
-      <a href={FOOTER.register.h} target="_blank" rel="noopener">{FOOTER.register.l}</a>
-      <a href="#top">{FOOTER.backToTop}</a>
+    <div class="footer__legal">
+      <div class="footer__group">
+        <span class="footer__copy">© {year} Moose Club. Made in Australia.</span>
+        {FOOTER.legal.map((l) => <a href={l.h}>{l.l}</a>)}
+      </div>
+      <div class="footer__group">
+        <a href={FOOTER.register.h} target="_blank" rel="noopener">{FOOTER.register.l}</a>
+        <a href="#top">{FOOTER.backToTop}</a>
+      </div>
     </div>
   </div>
 </footer>
 
 <style>
   .footer {
-    background: var(--m-bg);
+    background: var(--m-floor);
     color: var(--m-ink);
-    padding-top: calc(var(--rhythm) + var(--m-spacing-md));
+  }
+  .footer__inner {
+    display: grid;
+    gap: var(--m-spacing-xl);
+    padding-top: var(--m-spacing-xxl);
     padding-bottom: var(--m-spacing-xl);
   }
-  .footer__top { row-gap: var(--m-spacing-xxl); }
 
-  .footer__brand { display: grid; justify-items: start; align-content: start; gap: var(--m-spacing-md); }
-  .footer__logo { display: block; width: 120px; height: auto; }
-  .footer__ig { color: var(--m-ink); display: inline-flex; }
-  .footer__ig:hover { color: var(--m-ink-support); }
-
-  .footer__cols { display: grid; gap: var(--m-spacing-lg); }
-  .footer__col { display: grid; align-content: start; gap: 10px; } /* no token yet: proposed */
-  .footer__link { transition: color var(--dur-fast) var(--ease-out); overflow-wrap: anywhere; }
-  .footer__link:hover { color: var(--m-ink); }
-
-  .footer__legal {
-    max-width: var(--floor-max);
-    margin: var(--m-spacing-xxl) auto 0;
-    padding-inline: var(--floor-pad-start) var(--floor-pad-end);
+  .footer__top {
     display: grid;
+    gap: var(--m-spacing-xl);
+  }
+
+  .footer__brand {
+    display: grid;
+    justify-items: start;
+    align-content: start;
     gap: var(--m-spacing-sm);
   }
-  .footer__row { display: flex; flex-wrap: wrap; gap: var(--m-spacing-sm) var(--m-spacing-lg); }
-  .footer__legal a { transition: color var(--dur-fast) var(--ease-out); }
-  .footer__legal a:hover { color: var(--m-ink); }
+  /* One ink (RULES 7): the wordmark is a mask filled with `ink`. */
+  .footer__wordmark span {
+    display: block;
+    width: 120px;
+    aspect-ratio: 120 / 23;
+    background: var(--m-ink);
+    -webkit-mask: url('/brand/logo/moose-wordmark-navy.svg') center / contain no-repeat;
+    mask: url('/brand/logo/moose-wordmark-navy.svg') center / contain no-repeat;
+  }
+  .footer__tagline {
+    margin-top: var(--m-spacing-xs);
+    font-size: var(--m-type-body-size);
+    line-height: var(--m-type-body-leading);
+    color: var(--m-ink-support);
+  }
+  .footer__ig {
+    display: inline-flex;
+    margin-top: var(--m-spacing-xs);
+    min-width: 44px;
+    min-height: 44px; /* RULES 17 */
+    align-items: center;
+    color: var(--m-ink);
+  }
+
+  .footer__cols {
+    display: grid;
+    gap: var(--m-spacing-xl);
+  }
+  .footer__head {
+    margin: 0 0 var(--m-spacing-sm);
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  .footer__col ul { display: grid; gap: var(--m-spacing-xs); }
+  .footer__link {
+    display: inline-block;
+    padding-block: 6px; /* no token yet: proposed (44px hit row with body leading) */
+    font-size: var(--m-type-body-size);
+    line-height: var(--m-type-body-leading);
+    color: var(--m-ink);
+    overflow-wrap: anywhere;
+    text-underline-offset: 4px;
+  }
+  .footer__link:hover,
+  .footer__link:focus-visible { text-decoration: underline; }
+
+  .footer__legal {
+    display: grid;
+    gap: var(--m-spacing-sm);
+    padding-top: var(--m-spacing-lg);
+    border-top: 1px solid var(--m-ink-rule);
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .footer__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m-spacing-xs) var(--m-spacing-lg);
+  }
+  .footer__copy { flex-basis: 100%; }
+  .footer__legal a { color: inherit; text-underline-offset: 3px; }
+  .footer__legal a:hover,
+  .footer__legal a:focus-visible { color: var(--m-ink); text-decoration: underline; }
 
   @media (min-width: 760px) {
     .footer__cols {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--m-spacing-lg) var(--m-spacing-xl);
+      grid-auto-flow: column;
+      justify-content: start;
+      gap: 72px; /* no token yet: proposed (footer column gap) */
     }
-    .footer__col { min-width: 170px; } /* no token yet: proposed */
     .footer__link { overflow-wrap: normal; white-space: nowrap; }
   }
+
   @media (min-width: 1048px) {
-    .footer__top > * { grid-row: 1; }
+    .footer__inner {
+      gap: 56px; /* no token yet: proposed */
+      padding-top: 64px; /* no token yet: proposed */
+      padding-bottom: 40px; /* no token yet: proposed */
+    }
+    .footer__top {
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+    }
     .footer__legal {
-      margin-top: 96px; /* no token yet: proposed (Figma legal row at 271) */
-      padding-inline: calc(var(--floor-pad-start) - var(--line-inset)) calc(var(--floor-pad-end) - var(--line-inset));
       display: flex;
       justify-content: space-between;
     }
+    .footer__copy { flex-basis: auto; }
   }
 </style>
