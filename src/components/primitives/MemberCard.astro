@@ -44,6 +44,9 @@ interface Props {
   partnerColumns?: 1 | 2;
   addedBy?: string;
   belongs?: string;
+  /** The issuer not yet pressed in (the studio Close): drawn in the hint
+      weight until an ancestor takes `.is-issued`. */
+  ghostIssuer?: boolean;
   /** Degrees; the card at rest in a scene is −3. */
   tilt?: number;
   class?: string;
@@ -66,6 +69,7 @@ const {
   partnerColumns = 1,
   addedBy,
   belongs = 'This card belongs to your home studio.',
+  ghostIssuer = false,
   tilt = 0,
   class: className,
 } = Astro.props;
@@ -137,7 +141,7 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
           <span class="mc__loop mc__loop--printed"><MooseLoop /></span>
           <p class="mc__label mc__p-issued-label">Issued by</p>
           {firstIssuer
-            ? <p class="mc__issuer mc__p-issuer">{firstIssuer}</p>
+            ? <p class:list={['mc__issuer mc__p-issuer', ghostIssuer && 'mc__issuer--ghost']}>{firstIssuer}</p>
             : <p class="mc__issuer mc__p-issuer mc__hint mc__dashed">Your home studio</p>}
           <p class="mc__number mc__emboss">{number}</p>
           <p class="mc__label mc__p-member-label">Member</p>
@@ -268,6 +272,27 @@ const faceStyle = holeMask ? `--holes: ${holeMask}` : undefined;
   }
   .mc__cycle.is-out { opacity: 0; transform: translateY(calc(var(--u) * -3)); }
   .mc__sticker { top: calc(var(--u) * 52); right: calc(var(--u) * 22); }
+  /* Not yet issued: the name in the hint weight. On issue it presses in, a
+     brief pink impression (the card is the reader's here, RULES 6) rising to
+     the card's lettering. */
+  .mc__issuer--ghost {
+    translate: calc(var(--u) * -4) 0;
+    padding-inline: calc(var(--u) * 4);
+    border-radius: calc(var(--u) * 3);
+    color: var(--mc-hint);
+  }
+  :global(.is-issued) .mc__issuer--ghost {
+    color: var(--mc-ink);
+    animation: mc-press 520ms ease-out both;
+  }
+  @keyframes mc-press {
+    0%   { color: var(--mc-hint); background: transparent; transform: scale(1); }
+    30%  { color: var(--mc-ink); background: color-mix(in srgb, var(--m-moose-pink) 35%, transparent); transform: scale(0.97); } /* provisional: the press impression */
+    100% { color: var(--mc-ink); background: transparent; transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.is-issued) .mc__issuer--ghost { animation: none; }
+  }
   .mc__member-label { top: calc(var(--u) * 103); left: calc(var(--u) * 22); }
   .mc__member {
     top: calc(var(--u) * 116);

@@ -1,0 +1,90 @@
+---
+import { REGISTER } from '../../data/copy';
+import CardSleeve from '../primitives/CardSleeve.astro';
+import Plate from '../primitives/Plate.astro';
+
+// The studio floor's close (Member Card; Figma `156:870` / `156:902`). The navy
+// cover band: the token set's own `.dark`, scoped, so ink, the plate and the
+// card flip from one class (RULES 8). The words and the floor's last primary
+// plate; beside them (below on phone) a fresh card in its sleeve, "Issued by
+// Your studio", ghosted until it's issued.
+//
+// The press (Max, 26 Oct 2026; Figma `158:918` → `158:1024`): pressing
+// "Register your studio" issues the card. The portal opens in its new tab
+// straight away, as a link does, and the card issues on the page behind it.
+// It plays once.
+const { card } = REGISTER;
+---
+
+<section class="sclose dark" id="register" aria-labelledby="registerHeading">
+  <div class="page sclose__inner">
+    <div class="sclose__words">
+      <h2 id="registerHeading" class="page-lettering page-lettering--compact">{REGISTER.head}</h2>
+      <p class="body-text sclose__lede">{REGISTER.lede}</p>
+      <Plate href={REGISTER.cta.href} external class="sclose__cta" data-issue="">{REGISTER.cta.label}</Plate>
+      <p class="sclose__detail">{REGISTER.detail}</p>
+    </div>
+
+    <div class="sclose__scene">
+      <CardSleeve
+        issue
+        label={card.label}
+        kicker={card.sleeveKicker}
+        title={card.sleeveTitle}
+        card={{ issuer: card.issuer, member: card.member, credits: card.credits }}
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  // A primary click issues the card; the link opens the portal as usual.
+  document.querySelectorAll<HTMLAnchorElement>('[data-issue]').forEach((plate) => {
+    plate.addEventListener('click', (e) => {
+      if (e.button !== 0) return;
+      plate.closest('.sclose')?.classList.add('is-issued');
+    });
+  });
+</script>
+
+<style>
+  .sclose {
+    margin-top: var(--rhythm);
+    background: var(--m-floor);
+    color: var(--m-ink);
+  }
+  .sclose__inner {
+    display: grid;
+    gap: var(--m-spacing-xxl);
+    padding-block: var(--rhythm);
+  }
+  .sclose__lede { margin-top: 20px; } /* no token yet: proposed */
+  .sclose__cta { margin-top: 20px; } /* no token yet: proposed */
+  .sclose__detail {
+    margin-top: 20px; /* no token yet: proposed */
+    font-size: var(--m-type-detail-size);
+    font-weight: var(--m-type-detail-weight);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  .sclose__scene {
+    justify-self: center;
+    width: min(100%, 320px); /* no token yet: proposed (the 390 frame's scene) */
+    --cs-width: 100%;
+  }
+
+  @media (min-width: 760px) {
+    .sclose__scene { width: min(100%, 400px); }
+  }
+
+  @media (min-width: 1048px) {
+    .sclose__inner {
+      grid-template-columns: minmax(0, 560px) minmax(0, 460px);
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 112px; /* no token yet: proposed (cover band inset) */
+    }
+    .sclose__scene { width: 100%; }
+  }
+</style>

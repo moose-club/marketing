@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { MEMBERS, REGISTER, SITE } from '../data/copy';
+import { MEMBERS, SITE } from '../data/copy';
 import { homeNodes } from '../data/schema';
 
 import MSNav         from '../components/sections/MSNav.astro';
@@ -11,6 +11,7 @@ import MSNetwork     from '../components/sections/MSNetwork.astro';
 import MSMemberHero  from '../components/sections/MSMemberHero.astro';
 import MSMembers     from '../components/sections/MSMembers.astro';
 import MSClose       from '../components/sections/MSClose.astro';
+import MSStudioClose from '../components/sections/MSStudioClose.astro';
 import MSFooter      from '../components/sections/MSFooter.astro';
 
 // `/` carries two floors behind the audience switch — "I run a studio" (the
@@ -35,7 +36,7 @@ import MSFooter      from '../components/sections/MSFooter.astro';
       <MSModel />
       <MSValue />
       <MSNetwork />
-      <MSClose id="register" {...REGISTER} />
+      <MSStudioClose />
     </div>
 
     <div class="floor" data-floor="member">

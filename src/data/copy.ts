@@ -167,9 +167,19 @@ export const NETWORK = {
 // studio portal, so there is no form on this site.
 export const REGISTER = {
   head: "Get your studio on Moose.",
-  lede: "No cost, no integration work. You choose your partners.",
+  lede: "No cost to join. You choose your partners.",
   cta: { label: "Register your studio", href: LINKS.studioPortal },
   detail: "Opens the studio portal at studio.trainmoose.com.",
+  // Beside the words: a fresh card in its sleeve, waiting to be issued by
+  // your studio. Registering issues it (a sample member, RULES 19).
+  card: {
+    label: "A sample Moose member card in its sleeve, waiting to be issued by your studio.",
+    issuer: "Your studio",
+    member: "Alex Sample",
+    credits: "4.00",
+    sleeveKicker: "Moose Club",
+    sleeveTitle: "Partner access card",
+  },
 } as const;
 
 // The member floor, addressed to the member in the second person.
