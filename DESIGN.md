@@ -580,6 +580,20 @@ pay." / "A little more variety, through your home studio." Rows: You get: 4.00 c
 month · Valid at: Your studio's partners · You pay: Your studio's upgrade price.
 (No billing row: Max, 26 Oct 2026.)
 
+### The app (member floor)
+
+No phone screenshot (it's dropped): the app is shown by its own objects. The words sit
+on the left; on the right are **three class cards** (`MC/Class card` in Figma,
+`ClassCard.astro` in code) as a glimpse of Browse, one per state: Book (7:30 AM
+Reformer 45 at Essentials Studio Pilates), Booked (the pink edge and press-out ring; the
+word in `ink`) and Free (the sticker). Class names and times are illustrative ("Sample
+instructor"), at studios that are on Moose. They stack on phone. No primary plate here:
+the App Store plate is the member Close's.
+
+**Proposed copy (in Figma; `copy.ts` when coded):** "Book in the Moose app." / "Pick a
+class at a partner studio and book it with your credits." This replaces "Book and manage
+crossover sessions at partner venues" and its lede.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -709,7 +723,8 @@ Still open: none.
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: What you get, what you pay | `168:683` (1440), `168:700` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
-| `/`, member floor: the app, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: the app | `171:1248` (1440), `171:1314` (390), Member floor page | drawn 26 Oct 2026, awaiting Max |
+| `/`, member floor: Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
