@@ -577,8 +577,8 @@ paper panel of rows**, the app's own membership panel (`paper`, `radius.lg`,
 
 **Proposed copy (in Figma; goes into `copy.ts` when coded):** "What you get, what you
 pay." / "A little more variety, through your home studio." Rows: You get: 4.00 credits a
-month · Valid at: Your studio's partners · You pay: Your studio's upgrade price ·
-Billing: Through Moose.
+month · Valid at: Your studio's partners · You pay: Your studio's upgrade price.
+(No billing row: Max, 26 Oct 2026.)
 
 ### Audience switch
 
