@@ -1,0 +1,23 @@
+---
+// A quiet line leading from a home-page section to its answer page: the
+// question in the support ink, the link in ink, underlined (never pink,
+// RULES 6).
+interface Props {
+  lead: string;
+  link: string;
+  href: string;
+  class?: string;
+}
+const { lead, link, href, class: className } = Astro.props;
+---
+
+<p class:list={['body-text', 'answer-link', className]}>{lead} <a href={href}>{link}</a></p>
+
+<style>
+  .answer-link a {
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+</style>

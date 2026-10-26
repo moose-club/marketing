@@ -12,16 +12,28 @@ export const LINKS = {
   appStore: "https://apps.apple.com/au/app/moose-studio-crossover/id6780323407",
 } as const;
 
+// The answer pages' paths, with the trailing slash their canonicals carry.
+// Here, not with the pages, so the home page's sections can link to them.
+export const PATHS = {
+  classpass: "/compare/classpass/",
+  secondMembership: "/compare/second-membership/",
+  reciprocal: "/reciprocal-memberships/",
+  studios: "/studios/",
+  faq: "/faq/",
+} as const;
+
 // What Moose is, in one breath — the homepage title and meta description, and
 // the company description in the JSON-LD and /llms.txt. Answer engines quote
 // this, so keep it plain and in step with the model below.
 export const SITE = {
   title: "Moose - Level up your memberships.",
+  // The hero's line (Max, 26 Oct 2026), so search and answer engines lead
+  // with what the page leads with.
   description:
-    "Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade. Members stay anchored to you. You gain a new recurring revenue stream and a stickier membership base.",
+    "Moose partners your studio with complementary studios nearby; members add their classes as a paid upgrade. More revenue, less churn, members who stay yours.",
   // The third-person line: the company description in structured data.
   entity:
-    "Moose lets boutique fitness studios form local, reciprocal partnerships with complementary operators and sell members a premium crossover upgrade.",
+    "Moose is a network for boutique fitness studios in Australia. Each studio partners with complementary, non-competing studios nearby, and its members add a paid upgrade to book classes at those partners each month.",
   legalName: "Blubby Pty Ltd",
   alternateNames: ["Moose Club", "Train Moose"],
   abn: "11 690 645 106",
@@ -86,6 +98,8 @@ export const MODEL = {
   head: "The Moose model.",
   lede: "Crossover between partner venues is intentionally limited: enough variety to enrich a membership, while keeping members anchored to you as their home studio.",
   stepsTitle: "How it works.",
+  // Under the steps (Figma `135:570`, `135:662`): the comparison studios ask for.
+  compare: { lead: "How is Moose different from ClassPass?", link: "See the side-by-side.", href: PATHS.classpass },
   // Confirmed by Max, 26 Oct 2026. `<strong>` ranges render as Semibold ink.
   steps: [
     {
@@ -252,6 +266,8 @@ export const MEMBERS = {
   commercials: {
     head: "What you get, what you pay.",
     lede: "A little more variety, through your home studio.",
+    // Under the lede (Figma `168:683`, `168:700`).
+    compare: { lead: "Weighing up a second membership?", link: "Compare your options.", href: PATHS.secondMembership },
     // The amount varies by studio (Max, 26 Oct 2026), so no figure here.
     rows: [
       { k: "You get", body: "Credits every month" },
@@ -309,10 +325,9 @@ export const ANSWER = {
   sources: "Sources",
 } as const;
 
-const COMPARE_CLASSPASS_PATH = "/compare/classpass/";
 
 export const CLASSPASS = {
-  path: COMPARE_CLASSPASS_PATH,
+  path: PATHS.classpass,
   title: "Moose or ClassPass? A comparison for studio owners | Moose",
   description:
     "ClassPass sells spots in your classes to its own subscribers. Moose adds a paid upgrade to the memberships you already sell, valid at partner studios you choose. A side-by-side for studio owners.",
@@ -378,7 +393,7 @@ export const CLASSPASS = {
 } as const;
 
 export const SECOND_MEMBERSHIP = {
-  path: "/compare/second-membership/",
+  path: PATHS.secondMembership,
   title: "Moose or a second gym membership? | Moose",
   description:
     "Want variety without leaving your studio? Compare a second membership, casual classes, and Moose: an upgrade to the membership you already have, valid at your studio's partner studios.",
@@ -435,7 +450,7 @@ export const SECOND_MEMBERSHIP = {
 } as const;
 
 export const RECIPROCAL = {
-  path: "/reciprocal-memberships/",
+  path: PATHS.reciprocal,
   title: "What is a reciprocal studio membership? | Moose",
   description:
     "A reciprocal membership lets members of one fitness studio book classes at a partner studio, and the partner's members book back. How it works on Moose, and what keeps it fair.",
@@ -472,7 +487,7 @@ export const RECIPROCAL = {
     head: "Common questions.",
     items: [
       { q: "Do both studios have to agree?", aHtml: "Yes. Each partnership works both ways, so both studios choose it." },
-      { q: "Is a reciprocal membership the same as ClassPass?", aHtml: `No. ClassPass sells spots to its own subscribers across its whole network. A reciprocal membership is an upgrade to a studio’s own membership, valid only at the partners it chose. See <a href="${COMPARE_CLASSPASS_PATH}">Moose or ClassPass?</a>` },
+      { q: "Is a reciprocal membership the same as ClassPass?", aHtml: `No. ClassPass sells spots to its own subscribers across its whole network. A reciprocal membership is an upgrade to a studio’s own membership, valid only at the partners it chose. See <a href="${PATHS.classpass}">Moose or ClassPass?</a>` },
       { q: "Which booking systems does Moose work with?", aHtml: `${bookingSystems}.` },
     ],
   },
@@ -498,7 +513,7 @@ export const studioSlug = (name: string) =>
 export const studioPath = (name: string) => `/studios/${studioSlug(name)}/`;
 
 export const STUDIOS = {
-  path: "/studios/",
+  path: PATHS.studios,
   title: "Studios on Moose | Moose",
   description: `The ${partnerCount} studios across Australia on Moose, from Pilates and yoga to strength and recovery, and the partnerships live today.`,
   head: "Studios on Moose.",
@@ -549,7 +564,7 @@ export const STUDIO_PAGE = {
 } as const;
 
 export const FAQ = {
-  path: "/faq/",
+  path: PATHS.faq,
   title: "Moose FAQ: questions from studios and members | Moose",
   description:
     "Straight answers about Moose: what it is, what it costs, how studios are paid, which booking systems it works with, and how members book partner studios.",
@@ -566,7 +581,7 @@ export const FAQ = {
         { q: "Do I choose my partners?", aHtml: "Yes. You pick the complementary, non-competing studios nearby that your members can visit, and each partnership works both ways." },
         { q: "Will my members leave for my partners?", aHtml: "Moose is built so they don’t. Members get a limited number of credits each month: enough for variety, while your studio stays their home." },
         { q: "Which booking systems does Moose work with?", aHtml: `${bookingSystems}.` },
-        { q: "Can I use Moose alongside ClassPass?", aHtml: `Yes. They reach different people: ClassPass its subscribers, Moose your own members and your partners’. See <a href="${COMPARE_CLASSPASS_PATH}">Moose or ClassPass?</a>` },
+        { q: "Can I use Moose alongside ClassPass?", aHtml: `Yes. They reach different people: ClassPass its subscribers, Moose your own members and your partners’. See <a href="${PATHS.classpass}">Moose or ClassPass?</a>` },
         { q: "Where is Moose available?", aHtml: "In Australia." },
         { q: "How do I join?", aHtml: `Register your studio in the studio portal at <a href="${LINKS.studioPortal}">studio.trainmoose.com</a>. It’s free to join.` },
       ],

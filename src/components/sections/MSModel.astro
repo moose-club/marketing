@@ -1,5 +1,6 @@
 ---
 import { MODEL } from '../../data/copy';
+import AnswerLink from '../answer/AnswerLink.astro';
 
 // The Moose model (Member Card; Figma `135:570` / `135:662`). Type-led, with no
 // card: the heroes carry the object. The headline with the lede beside it,
@@ -23,10 +24,12 @@ import { MODEL } from '../../data/copy';
       </li>
     ))}
   </ol>
+  <AnswerLink {...MODEL.compare} class="model__compare" />
 </section>
 
 <style>
   .model { padding-top: var(--rhythm); }
+  .model :global(.model__compare) { margin-top: var(--m-spacing-xl); }
 
   .model__intro {
     display: grid;

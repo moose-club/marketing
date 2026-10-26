@@ -23,11 +23,15 @@ interface Props {
   close?: 'studio' | 'member';
 }
 const { path, title, description, head, lede, questions = [], jsonLd = [], close = 'studio' } = Astro.props;
+// Each page's social image mirrors its path: /studios/s30/ → /og/studios/s30.png
+// (drawn on the Figma page "AEO · Compare + FAQ — working", section "Social images").
+const ogImage = `/og${path.replace(/\/$/, '')}.png`;
 ---
 
 <Base
   title={title}
   description={description}
+  ogImage={ogImage}
   jsonLd={[...answerNodes({ path, name: head.replace(/\.$/, ''), description, questions }), ...jsonLd]}
 >
   <MSNav home={false} />

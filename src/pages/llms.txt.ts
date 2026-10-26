@@ -9,8 +9,11 @@ import {
 import { SITE_URL, stripTags } from '../data/schema';
 
 const answerPages = [CLASSPASS, SECOND_MEMBERSHIP, RECIPROCAL, STUDIOS, FAQ];
-// Root-relative links in answers become absolute: this file is read off-site.
-const answerText = (html: string) => stripTags(html.replace(/href="\//g, `href="${SITE_URL}/`));
+// Links in answers become markdown, root-relative hrefs made absolute: this
+// file is read off-site, where a bare link label can't be followed.
+const answerText = (html: string) =>
+  stripTags(html.replace(/<a href="([^"]+)">([^<]*)<\/a>/g, (_, href, text) =>
+    `[${text}](${href.startsWith('/') ? SITE_URL + href : href})`));
 // copy.ts carries presentational Unicode — U+00A0 no-break spaces and U+2060
 // word joiners that steer line breaks on the page. This file is plain text
 // for machines, so flatten them wherever they appear (applied to the whole
