@@ -2,10 +2,15 @@
 // (llmstxt.org). Built from copy.ts so it says exactly what the page says.
 
 import type { APIRoute } from 'astro';
-import { FOOTER, HERO, LINKS, MEMBERS, MODEL, NETWORK, REGISTER, SITE, VALUE } from '../data/copy';
-import { SITE_URL } from '../data/schema';
+import {
+  CLASSPASS, FAQ, FOOTER, HERO, LINKS, MEMBERS, MODEL, NETWORK, PARTNERSHIPS, RECIPROCAL, REGISTER,
+  REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, VALUE, studioPath,
+} from '../data/copy';
+import { SITE_URL, stripTags } from '../data/schema';
 
-const stripTags = (html: string) => html.replace(/<[^>]+>/g, '');
+const answerPages = [CLASSPASS, SECOND_MEMBERSHIP, RECIPROCAL, STUDIOS, FAQ];
+// Root-relative links in answers become absolute: this file is read off-site.
+const answerText = (html: string) => stripTags(html.replace(/href="\//g, `href="${SITE_URL}/`));
 // copy.ts carries presentational Unicode — U+00A0 no-break spaces and U+2060
 // word joiners that steer line breaks on the page. This file is plain text
 // for machines, so flatten them wherever they appear (applied to the whole
@@ -64,7 +69,33 @@ ${MEMBERS.app.lede} ${MEMBERS.close.lede} ${MEMBERS.close.detail.replace(/^Opens
 
 ${NETWORK.lede}
 
-${NETWORK.partners.map((p) => `- [${p.name}](${p.href})`).join('\n')}
+${NETWORK.partners.map((p) => `- [${p.name}](${p.href}): ${p.kind}`).join('\n')}
+
+### Live partnerships
+
+${STUDIOS.live.lede}
+
+${PARTNERSHIPS.map(([a, b]) => `- [${a.name}](${SITE_URL}${studioPath(a.name)}), ${a.where} ${STUDIOS.live.and} [${b.name}](${SITE_URL}${studioPath(b.name)}), ${b.where}`).join('\n')}
+
+${STUDIOS.note}
+
+## Answers
+
+Last reviewed ${REVIEWED.label}.
+
+${answerPages.map((p) => `- [${p.head.replace(/\.$/, '')}](${SITE_URL}${p.path}): ${p.description}`).join('\n')}
+
+### ${CLASSPASS.head}
+
+${CLASSPASS.lede}
+
+${CLASSPASS.ledger.rows.map((r) => `- **${r.label}.** Moose: ${r.cells[0]} ClassPass: ${r.cells[1]}`).join('\n')}
+
+ClassPass facts are from ClassPass's partner pages and named press: ${CLASSPASS.sources.items.map((s) => s.href).join(', ')}.
+
+### FAQ
+
+${FAQ.groups.map((g) => g.items.map((i) => `**${i.q}** ${answerText(i.aHtml)}`).join('\n\n')).join('\n\n')}
 
 ## Links
 

@@ -1,0 +1,20 @@
+---
+// A section of an answer page: compact page lettering over its content, on
+// the page measure, at the section rhythm.
+interface Props {
+  head: string;
+  id?: string;
+}
+const { head, id } = Astro.props;
+const headingId = id ? `${id}-heading` : undefined;
+---
+
+<section class="page answer-section" id={id} aria-labelledby={headingId}>
+  <h2 id={headingId} class="page-lettering page-lettering--compact">{head}</h2>
+  <div class="answer-section__body"><slot /></div>
+</section>
+
+<style>
+  .answer-section { padding-top: var(--rhythm); }
+  .answer-section__body { margin-top: var(--m-spacing-xl); }
+</style>

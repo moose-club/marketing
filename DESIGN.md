@@ -794,6 +794,9 @@ Still open: none.
 | `/`, member floor: Close | `172:817` (1440), `172:882` (390) | agreed and coded 26 Oct 2026 (`MSMemberClose.astro`) |
 | Nav and audience switch | in every hero frame | coded 26 Oct 2026: the nav on the page measure, "Studio login" with its chevron; switch chosen = ink edge, never a fill |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
+| Answer pages: `/compare/classpass`, `/faq` | page "AEO · Compare + FAQ — working": `184:270` (1440), `186:462` (390, top), `185:390` (FAQ 1440); components `AEO/Ledger row` `183:271`, `… · phone` `186:454`, `AEO/Question` `183:278` | agreed and coded 26 Oct 2026 (`Answer.astro`, `components/answer/`), facts updated per Max |
+| Answer pages: `/compare/second-membership`, `/reciprocal-memberships`, `/studios`, `/studios/<slug>` | none: built from the agreed answer-page frames and blocks | coded 26 Oct 2026 at Max's request; draw them back to Figma when they next change |
+| Footer "Learn" column | none: the footer frame has three columns | coded 26 Oct 2026; two by two from 760, one row from 1280 |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | Legal pages (privacy, terms, studio-terms, studio-privacy, studio-conduct, liability-waiver) | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

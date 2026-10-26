@@ -50,6 +50,8 @@ Nav
 Footer (navy, continues the close)
 ```
 
+The answer pages (`/compare/classpass`, `/compare/second-membership`, `/reciprocal-memberships`, `/studios` and a page per live-partnership studio, `/faq`; SPEC §9) use `src/layouts/Answer.astro` and the blocks in `src/components/answer/`. They pass `home={false}` to the nav and footer, so the home page's section anchors lead back to `/`.
+
 Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. The old pink live line is retired and removed (RULES 6).
 
 `src/layouts/Base.astro` owns `<html>`, all meta tags, OG/Twitter cards, the JSON-LD and the skip-link. Page-level metadata flows in as props; a page adds JSON-LD nodes through `jsonLd`. The structured data (`src/data/schema.ts`) and `/llms.txt` (`src/pages/llms.txt.ts`) are both built from `copy.ts`, so a copy edit updates what answer engines read too (SPEC §9).

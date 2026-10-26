@@ -1,0 +1,117 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import { NETWORK, PARTNERSHIPS, STUDIO_PAGE as P, studioPath, studioSlug } from '../../data/copy';
+import { SITE_URL } from '../../data/schema';
+
+// One page per studio in a live partnership (PARTNERSHIPS): where it takes
+// Moose bookings, whom it partners with, and how a member books it. Built
+// from the agreed answer-page blocks. For members first, so the close is the
+// App Store's.
+export function getStaticPaths() {
+  return PARTNERSHIPS.flatMap(([a, b]) => [
+    { params: { slug: studioSlug(a.name) }, props: { s: a, p: b } },
+    { params: { slug: studioSlug(b.name) }, props: { s: b, p: a } },
+  ]);
+}
+
+const { s, p } = Astro.props;
+const info = NETWORK.partners.find((x) => x.name === s.name)!;
+const website = s.href ?? info.href;
+const path = studioPath(s.name);
+const questions = P.questions.items(s, p);
+
+const place = {
+  '@type': 'SportsActivityLocation',
+  '@id': `${SITE_URL}${path}#studio`,
+  name: s.name,
+  url: website,
+  description: info.kind,
+  address: { '@type': 'PostalAddress', addressLocality: s.locality, addressRegion: s.region, addressCountry: 'AU' },
+};
+---
+
+<Answer
+  path={path}
+  title={P.title(s)}
+  description={P.description(s, p)}
+  head={P.head(s)}
+  lede={P.lede(s, p)}
+  questions={questions}
+  jsonLd={[place]}
+  close="member"
+>
+  <AnswerSection head={P.facts.head} id="at-a-glance">
+    <span class="studio__logo" style={`--logo: url('${info.logo}')`} aria-hidden="true"></span>
+    <dl class="facts">
+      <div class="facts__row">
+        <dt>{P.facts.offers}</dt>
+        <dd>{info.kind}</dd>
+      </div>
+      <div class="facts__row">
+        <dt>{P.facts.where}</dt>
+        <dd>{s.where}</dd>
+      </div>
+      <div class="facts__row">
+        <dt>{P.facts.partner}</dt>
+        <dd><a href={studioPath(p.name)}>{p.name}</a>, {p.where}</dd>
+      </div>
+      <div class="facts__row">
+        <dt>{P.facts.website}</dt>
+        <dd><a href={website} rel="noopener" target="_blank">{new URL(website).hostname.replace(/^www\./, '')}</a></dd>
+      </div>
+    </dl>
+  </AnswerSection>
+
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={questions} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .studio__logo {
+    display: block;
+    width: 160px;
+    height: 64px; /* no token yet: proposed (logo box) */
+    margin-bottom: var(--m-spacing-lg);
+    background: var(--m-ink);
+    -webkit-mask: var(--logo) left center / contain no-repeat;
+    mask: var(--logo) left center / contain no-repeat;
+  }
+  .facts { max-width: 760px; } /* no token yet: proposed (the frames' question column) */
+  .facts__row {
+    display: grid;
+    gap: var(--m-spacing-xs);
+    padding: 20px 0 22px; /* no token yet: proposed (as the ledger's rows) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .facts__row:last-child { border-bottom: 1px solid var(--m-ink-rule); }
+  dt {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  dd {
+    margin: 0;
+    font-size: var(--m-type-body-size);
+    line-height: 1.5; /* provisional: as .body-text */
+    color: var(--m-ink);
+  }
+  dd a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (min-width: 760px) {
+    .facts__row {
+      grid-template-columns: 212px minmax(0, 1fr); /* no token yet: proposed (ledger label column) */
+      align-items: baseline;
+      gap: 32px;
+    }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import Base from './Base.astro';
+import MSNav from '../components/sections/MSNav.astro';
+import MSFooter from '../components/sections/MSFooter.astro';
+import MSStudioClose from '../components/sections/MSStudioClose.astro';
+import MSMemberClose from '../components/sections/MSMemberClose.astro';
+import { ANSWER, REVIEWED } from '../data/copy';
+import { answerNodes } from '../data/schema';
+
+// An answer page (Member Card; Figma "AEO · Compare + FAQ — working"): the
+// question as the page lettering, the answer in the first sentence under it,
+// and the date it was last checked. Sections follow in the slot; then the
+// close for the page's reader and the footer. One primary plate: the close's.
+interface Props {
+  path: string;
+  title: string;
+  description: string;
+  head: string;
+  lede: string;
+  /** Every question the page answers, for its FAQPage JSON-LD. */
+  questions?: readonly { q: string; aHtml: string }[];
+  jsonLd?: Record<string, unknown>[];
+  close?: 'studio' | 'member';
+}
+const { path, title, description, head, lede, questions = [], jsonLd = [], close = 'studio' } = Astro.props;
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={[...answerNodes({ path, name: head.replace(/\.$/, ''), description, questions }), ...jsonLd]}
+>
+  <MSNav home={false} />
+  <main id="main" class="answer">
+    <header class="page answer__intro">
+      <h1 class="page-lettering">{head}</h1>
+      <p class="body-text answer__lede">{lede}</p>
+      <p class="answer__reviewed">{ANSWER.reviewed} <time datetime={REVIEWED.iso}>{REVIEWED.label}</time>.</p>
+    </header>
+    <slot />
+    {close === 'studio' ? <MSStudioClose /> : <MSMemberClose />}
+  </main>
+  <MSFooter home={false} />
+</Base>
+
+<style>
+  .answer { background: var(--m-bg); color: var(--m-ink); }
+  .answer__intro {
+    display: grid;
+    gap: var(--m-spacing-md);
+    padding-top: calc(var(--nav-h) + var(--m-spacing-xl));
+  }
+  .answer__intro h1 { max-width: 16em; }
+  .answer__lede { max-width: 38em; }
+  .answer__reviewed {
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  @media (min-width: 1048px) {
+    .answer__intro {
+      gap: var(--m-spacing-lg);
+      padding-top: calc(var(--nav-h) + 96px); /* no token yet: proposed (the 1440 frame's top inset) */
+    }
+  }
+</style>

@@ -231,6 +231,16 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--pink); }
   border-radius: 4px;
 }
 
+/* Read by assistive tech, not drawn (a table's caption, a stacked header). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* ── Skip link ───────────────────────────────────────────────── */
 
 .skip-link {

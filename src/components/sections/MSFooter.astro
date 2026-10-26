@@ -4,8 +4,15 @@ import Icon from '../primitives/Icon.astro';
 
 // The footer (Member Card; Figma `159:984` / `159:1018`). It continues the
 // close's navy band with no seam: the token set's own `.dark`, so ink, rules and
-// the wordmark flip from one class (RULES 8). Brand on the left, three printed
+// the wordmark flip from one class (RULES 8). Brand on the left, the printed
 // columns on the right, then a printed rule and the legal row.
+//
+// `home={false}` on any page but `/`, so the section anchors lead back home.
+interface Props {
+  home?: boolean;
+}
+const { home = true } = Astro.props;
+const to = (href: string) => (!home && href.startsWith('#') && href !== '#top' ? `/${href}` : href);
 const year = new Date().getFullYear();
 ---
 
@@ -29,7 +36,7 @@ const year = new Date().getFullYear();
                 const external = 'external' in it && it.external;
                 return (
                   <li>
-                    <a href={it.h} class="footer__link" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>{it.l}</a>
+                    <a href={to(it.h)} class="footer__link" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>{it.l}</a>
                   </li>
                 );
               })}
@@ -144,13 +151,21 @@ const year = new Date().getFullYear();
   .footer__legal a:hover,
   .footer__legal a:focus-visible { color: var(--m-ink); text-decoration: underline; }
 
+  /* Four columns: two by two until there's room for them in one row. */
   @media (min-width: 760px) {
     .footer__cols {
-      grid-auto-flow: column;
+      grid-template-columns: repeat(2, max-content);
       justify-content: start;
-      gap: 72px; /* no token yet: proposed (footer column gap) */
+      gap: var(--m-spacing-xl) 72px; /* no token yet: proposed (footer column gap) */
     }
     .footer__link { overflow-wrap: normal; white-space: nowrap; }
+  }
+  @media (min-width: 1280px) {
+    .footer__cols {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      column-gap: 48px; /* no token yet: proposed (footer column gap, four columns) */
+    }
   }
 
   @media (min-width: 1048px) {

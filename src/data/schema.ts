@@ -5,7 +5,7 @@
 // (what Moose sells, the app, the partner roster) — a legal page shouldn't
 // describe the product.
 
-import { FOOTER, LINKS, MODEL, NETWORK, SITE } from './copy';
+import { FOOTER, LINKS, MODEL, NETWORK, REVIEWED, SITE } from './copy';
 
 export const SITE_URL = 'https://www.trainmoose.com';
 const ORG_ID = `${SITE_URL}/#org`;
@@ -50,7 +50,64 @@ export const siteNodes: Node[] = [
   },
 ];
 
-const stripTags = (html: string) => html.replace(/<[^>]+>/g, '');
+export const stripTags = (html: string) => html.replace(/<[^>]+>/g, '');
+
+const partnerItems = NETWORK.partners.map((p, i) => ({
+  '@type': 'ListItem',
+  position: i + 1,
+  item: { '@type': 'SportsActivityLocation', name: p.name, url: p.href, description: p.kind },
+}));
+
+/** An answer page: the page itself (an FAQPage when it answers questions),
+    dated by its last review, with a breadcrumb back to the home page. */
+export function answerNodes({ path, name, description, questions = [] }: {
+  path: string;
+  name: string;
+  description: string;
+  questions?: readonly { q: string; aHtml: string }[];
+}): Node[] {
+  const url = `${SITE_URL}${path}`;
+  return [
+    {
+      '@type': questions.length ? 'FAQPage' : 'WebPage',
+      '@id': `${url}#page`,
+      url,
+      name,
+      description,
+      inLanguage: 'en-AU',
+      dateModified: REVIEWED.iso,
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': ORG_ID },
+      publisher: { '@id': ORG_ID },
+      breadcrumb: { '@id': `${url}#breadcrumb` },
+      ...(questions.length
+        ? {
+            mainEntity: questions.map((x) => ({
+              '@type': 'Question',
+              name: x.q,
+              acceptedAnswer: { '@type': 'Answer', text: stripTags(x.aHtml) },
+            })),
+          }
+        : {}),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${url}#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Moose', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name, item: url },
+      ],
+    },
+  ];
+}
+
+/** The studios on Moose, as a list (on `/` and `/studios`). */
+export const partnerList: Node = {
+  '@type': 'ItemList',
+  name: 'Partner studios on Moose',
+  numberOfItems: NETWORK.partners.length,
+  itemListElement: partnerItems,
+};
 
 export const homeNodes: Node[] = [
   {
@@ -78,16 +135,7 @@ export const homeNodes: Node[] = [
     publisher: { '@id': ORG_ID },
     offers: { '@type': 'Offer', price: 0, priceCurrency: 'AUD' },
   },
-  {
-    '@type': 'ItemList',
-    name: 'Partner studios on Moose',
-    numberOfItems: NETWORK.partners.length,
-    itemListElement: NETWORK.partners.map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: { '@type': 'SportsActivityLocation', name: p.name, url: p.href },
-    })),
-  },
+  partnerList,
 ];
 
 /** Wrap nodes in a single @graph document so @id references resolve. */

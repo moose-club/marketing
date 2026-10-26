@@ -1,0 +1,34 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import Ledger from '../../components/answer/Ledger.astro';
+import PrintedLists from '../../components/answer/PrintedLists.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import Sources from '../../components/answer/Sources.astro';
+import { CLASSPASS as P } from '../../data/copy';
+
+// Moose or ClassPass? (Figma `184:270`, 390 `186:462`), for studio owners.
+// Every ClassPass fact is from ClassPass's own partner pages or named press,
+// listed under Sources.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  close="studio"
+>
+  <AnswerSection head={P.ledger.head} id="side-by-side">
+    <Ledger caption={P.ledger.caption} columns={P.ledger.columns} rows={P.ledger.rows} />
+  </AnswerSection>
+  <AnswerSection head={P.fit.head} id="which-suits">
+    <PrintedLists lists={P.fit.lists} />
+  </AnswerSection>
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+  <Sources items={P.sources.items} note={P.sources.note} />
+</Answer>

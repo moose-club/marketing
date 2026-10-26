@@ -1,0 +1,127 @@
+---
+// A comparison as a printed ledger (Figma `AEO/Ledger row`, `… · phone`): a
+// real table, because answer engines read tables. Each row is a printed label
+// over a printed rule, then one cell per option; Moose's column in ink, the
+// others in the support ink. Below 760px each row stacks, and every cell
+// prints its column's name above it.
+//
+// Stacking changes the cells' display, which drops table semantics in some
+// browsers, so the roles are stated.
+interface Props {
+  caption: string;
+  columns: readonly string[];
+  rows: readonly { label: string; cells: readonly string[] }[];
+  note?: string;
+}
+const { caption, columns, rows, note } = Astro.props;
+---
+
+<div class="ledger" style={`--cols: ${columns.length}`}>
+  <table class="ledger__table" role="table">
+    <caption class="visually-hidden">{caption}</caption>
+    <thead role="rowgroup">
+      <tr role="row">
+        <td class="ledger__corner" role="cell"></td>
+        {columns.map((c) => <th scope="col" role="columnheader">{c}</th>)}
+      </tr>
+    </thead>
+    <tbody role="rowgroup">
+      {rows.map((r) => (
+        <tr role="row">
+          <th scope="row" role="rowheader">{r.label}</th>
+          {r.cells.map((cell, i) => (
+            <td role="cell" class:list={[i === 0 && 'is-ours']}>
+              <span class="ledger__col" aria-hidden="true">{columns[i]}</span>
+              {cell}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {note && <p class="ledger__note">{note}</p>}
+</div>
+
+<style>
+  .ledger__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  /* Phone: one row at a time, stacked. */
+  .ledger__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .ledger__table tbody,
+  .ledger__table tr,
+  .ledger__table th,
+  .ledger__table td { display: block; }
+  .ledger__table tbody tr {
+    padding: 20px 0 24px; /* no token yet: proposed (the 390 frame's row) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .ledger__table tbody tr:last-child { border-bottom: 1px solid var(--m-ink-rule); }
+
+  th[scope='row'] {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  td {
+    margin-top: var(--m-spacing-sm);
+    font-size: var(--m-type-body-size);
+    line-height: 1.5; /* provisional: as .body-text */
+    color: var(--m-ink-support);
+  }
+  td.is-ours { color: var(--m-ink); }
+  .ledger__col {
+    display: block;
+    margin-bottom: 2px;
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+
+  .ledger__note {
+    margin-top: var(--m-spacing-md);
+    max-width: 46em;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  /* From 760: a table, the label column then one column per option. */
+  @media (min-width: 760px) {
+    .ledger__table { display: table; table-layout: fixed; }
+    .ledger__table thead { position: static; width: auto; height: auto; overflow: visible; clip-path: none; display: table-header-group; }
+    .ledger__table tbody { display: table-row-group; }
+    .ledger__table tr { display: table-row; }
+    .ledger__table th,
+    .ledger__table td { display: table-cell; vertical-align: top; }
+    .ledger__table tbody tr { padding: 0; }
+    .ledger__table tbody tr > * {
+      padding: 24px 32px 28px 0; /* no token yet: proposed (the 1440 frame's row) */
+      border-top: 1px solid var(--m-ink-rule);
+    }
+    .ledger__table tbody tr:last-child { border-bottom: 0; }
+    .ledger__table tbody tr:last-child > * { border-bottom: 1px solid var(--m-ink-rule); }
+    .ledger__corner { width: 212px; } /* no token yet: proposed (ledger label column) */
+    th[scope='col'] {
+      padding: 0 32px 16px 0;
+      font-size: var(--m-type-plate-label-size);
+      font-weight: var(--m-type-plate-label-weight);
+      line-height: var(--m-type-plate-label-leading);
+      color: var(--m-ink);
+    }
+    th[scope='row'] { padding-top: 28px; }
+    td { margin-top: 0; }
+    .ledger__col { display: none; }
+  }
+  /* Three options need the room: the label column narrows a little. */
+  @media (min-width: 760px) and (max-width: 1047.98px) {
+    .ledger__corner { width: 140px; }
+  }
+</style>
