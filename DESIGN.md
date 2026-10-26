@@ -463,6 +463,10 @@ cards or eyebrows.
 
 ### The issued card (studio floor hero)
 
+The studio hero's words are the switch, the headline, the supporting line and the
+primary plate, nothing else. The four points ("You choose your partners." …) are off the
+page (Max, 26 Oct 2026). They stay in `copy.ts` because `/llms.txt` reads them.
+
 No photograph (Max, 26 Oct 2026: it competed with the card and the page wants one
 object, RULES 0). The hero's second column is the studio's card on the floor: the
 **back** (+4°, `shadow.cardBehind`) with "Valid at" and every studio on Moose, and the
@@ -581,7 +585,7 @@ Still open: what the studio floor's Network section shows, now the hero carries 
 
 | Page | Source (Figma `a5SmvlBwlHP6sf0FAZfLpP`) | State |
 | --- | --- | --- |
-| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo (agreed), the card front + back, issuer cycling; awaiting Max |
+| `/`, studio floor: Hero | `127:570` (1440), `127:653` (390) | drawn 26 Oct 2026: no photo, no points list, no caption (agreed); the card front + back, issuer cycling; awaiting Max |
 | `/`, studio floor: Model, Value, Network, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
 | `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
