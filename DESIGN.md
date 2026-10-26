@@ -176,9 +176,11 @@ components:
 > each rule by number, without restating it.
 >
 > **Sources.** Figma first, then code (Max, 26 Oct 2026, reversing the brief's "no
-> Figma"). The source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, page **"Home ·
-> Member Card — working"** (`117:282`): the shared objects as components (section
-> `118:271`) and the section frames (`120:330`). No section is coded until Max has agreed
+> Figma"). The source is the Marketing file `a5SmvlBwlHP6sf0FAZfLpP`, three pages
+> (split 26 Oct 2026): **"Member Card · Components"** (`117:282`, the shared objects as
+> components, section `118:271`), **"Home · Studio floor — working"** (`165:1206`) and
+> **"Home · Member floor — working"** (`165:1207`), one labelled section per page
+> section, desktop on the left and phone beside it. No section is coded until Max has agreed
 > its frame. The objects follow `moose-design/docs/reference/member-card/` and
 > `moose-ios/DESIGN.md`. The file's old page, "Home · / — working", is the retired Lane
 > Lines design and is history only.
@@ -197,7 +199,7 @@ top of the footer. The member floor below its hero is still the retired build an
 `MSClose`, `.lanes` and the `--ll-*` layer, so those stay until it is redrawn.
 
 **26 Oct 2026: the design moves to Figma.** Max wants to design in Figma first, then
-code. The page "Home · Member Card — working" holds the shared objects (card front,
+code. The working page (since split into Components, Studio floor and Member floor pages) holds the shared objects (card front,
 printed front, back, sleeve, card in sleeve, sticker, punch, plate, switch) and the first
 frames for review: member hero (1440 light and dark, 390), studio hero (1440, 390) and
 the arrival in three steps. The coded member hero and objects stay on the branch but are
