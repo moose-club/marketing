@@ -143,9 +143,9 @@ export const VALUE = {
 export const NETWORK = {
   head: "The studios already on Moose.",
   lede: "Across Australia — and counting.",
-  // Each partner's logo sits beside its name as a single-ink mask (only its
-  // shape is kept; the ink comes from CSS). Files live in public/partners/;
-  // a partner without one keeps an empty logo box until it lands.
+  // The deck: one card issued by each studio on Moose, its logo drawn in the
+  // card's lettering (only the logo's shape is kept; files in public/partners/).
+  // A partner without a logo shows its name alone until one lands.
   partners: [
     { name: "One Hot Yoga & Pilates", href: "https://www.onehotyoga.com.au", logo: "/partners/one-hot-yoga.png" },
     { name: "ShapeShift", href: "https://shapeshift.fitness", logo: "/partners/shape-shift.png" },
@@ -156,11 +156,9 @@ export const NETWORK = {
     { name: "REVL", href: "https://revltraining.com.au", logo: "/partners/revl.svg" },
     { name: "@Pilates 24/7", href: "https://atpilates.studio/", logo: "/partners/at-pilates.png" },
   ] as const,
-  // On the compact floor the roster caps here and the rest reveal in place.
-  compactVisible: 12,
-  more: (n: number) => `${n} more`,
-  showAll: "See all",
-  showLess: "See less",
+  // The accessible names: the deck, and each card in it.
+  deckLabel: "The studios already on Moose, one card each",
+  cardLabel: (name: string) => `A Moose card issued by ${name}`,
 } as const;
 
 // The studio floor's close — the navy floor. Registering happens in the

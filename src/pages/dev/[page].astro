@@ -63,9 +63,20 @@ const sample = 'Sample card. ';
     </section>
 
     <section class="g-row">
+      <h2 class="g-h">Partner card (the studio Network's deck)</h2>
+      <div class="g-grid">
+        {partners.slice(0, 3).map((p) => (
+          <MemberCard label={`A Moose card issued by ${p.name}.`} layout="partner" issuer={p.name} logo={p.logo} logoSize={[130, 52]} />
+        ))}
+        <MemberCard label="A Moose card issued by a studio with no logo yet." layout="partner" issuer="A partner studio" />
+      </div>
+    </section>
+
+    <section class="g-row">
       <h2 class="g-h">In its sleeve</h2>
       <div class="g-grid">
         <CardSleeve label={sample + 'A member card in its sleeve, from your home studio.'} />
+        <CardSleeve issue label={sample + 'Waiting to be issued by your studio (the studio Close).'} card={{ issuer: 'Your studio', member: 'Alex Sample', credits: '4.00' }} />
       </div>
     </section>
 
