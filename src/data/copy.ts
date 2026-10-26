@@ -217,12 +217,20 @@ export const MEMBERS = {
   how: {
     head: "How it works for you.",
     steps: [
-      { n: "01", title: "Your studio partners up.", body: "It teams up with studios nearby." },
-      { n: "02", title: "You add Moose.", body: "Upgrade through your home studio." },
+      {
+        n: "01",
+        title: "Your studio partners up.",
+        body: "Your home studio teams up with a few complementary studios nearby. It chooses them, so they fit alongside what you already\u00A0do.",
+      },
+      {
+        n: "02",
+        title: "You add Moose.",
+        body: "Add Moose in the Moose app as an upgrade to your home studio membership. Your studio sets the price.",
+      },
       {
         n: "03",
         title: "You book with credits.",
-        body: "Credits each month for partner classes, in the Moose app.",
+        body: "Each month you get credits to book classes at your studio’s partners, right in the Moose app. They refresh every month.",
       },
     ] as const,
     card: {
