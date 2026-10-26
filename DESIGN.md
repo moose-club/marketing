@@ -541,6 +541,22 @@ the card slides up out of its sleeve and tips to −3° as the sleeve drops away
 `prefers-reduced-motion` it goes straight to the issued card. Figma: `158:918` → `158:971`
 → `158:1024` (click the plate in Present).
 
+### How it works for you (member floor)
+
+Short and basic (Max, 26 Oct 2026). The headline, then three steps (stacked on phone).
+Each step shows **the same sample card at that moment**: 01 the back, its "Valid at"
+lines (your studio partners up); 02 the front with the "Valid" sticker (you add Moose);
+03 the front with credits spent and the punch row marked, one hole and one booked ring
+(you book with credits). Under each card is a printed rule, the ordinal, the title
+(`plateLabel`) and one line (`body`). The cards tilt ±2° and are still: the hero's arrival
+is this floor's motion.
+
+**Proposed copy (in the Figma frames; goes into `copy.ts` when coded, because
+`MEMBERS.how` feeds the live page and `/llms.txt` until then):** "How it works for you."
+01 Your studio partners up. It teams up with studios nearby. · 02 You add Moose. Upgrade
+through your home studio. · 03 You book with credits. Credits each month for partner
+classes, in the Moose app. The old lede is dropped.
+
 ### Audience switch
 
 Two plates above the hero headline on both floors. Chosen: a 2px `ink` edge and an
@@ -668,7 +684,8 @@ Still open: none.
 | `/`, studio floor: Network | `151:879` fanned + `151:799` stacked (1440, prototype), `154:1314` + `154:1235` (390 row, prototype) | drawn 26 Oct 2026: the deck (Max's pick); awaiting final review |
 | `/`, studio floor: Close | `156:870` (1440), `156:902` (390); press animation `158:918`–`158:1024` (prototype) | drawn 26 Oct 2026, awaiting Max |
 | `/`, member floor: MemberHero | `120:331` (1440 light), `120:418` (1440 dark), `120:601` (390), `120:759` (arrival) | drawn 26 Oct 2026, awaiting Max; coded ahead of the frame (unagreed) |
-| `/`, member floor: Members, Close | not drawn | not redrawn: retired Lane Lines shipped |
+| `/`, member floor: How it works for you | `162:992` (1440), `162:1178` (390) | drawn 26 Oct 2026, awaiting Max |
+| `/`, member floor: What you get / pay, the app, Close | not drawn | not redrawn: retired Lane Lines shipped |
 | Nav and audience switch | in every hero frame | switch restyled 26 Oct 2026 (chosen = ink edge, never a fill); nav drawn in the hero frames |
 | Footer | `159:984` (1440), `159:1018` (390) | agreed and coded 26 Oct 2026 (`MSFooter.astro`) |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
