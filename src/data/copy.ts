@@ -26,6 +26,7 @@ export const PATHS = {
   about: "/about/",
   credits: "/credits/",
   swap: "/compare/informal-swap/",
+  badge: "/badge/",
 } as const;
 
 // What Moose is, in one breath — the homepage title and meta description, and
@@ -917,6 +918,85 @@ export const GUIDE = {
     ],
   },
 } as const;
+
+// ── The partner badge ────────────────────────────────────────────────────
+// A badge each studio in a live partnership places on its own website,
+// linking to its studio page here (Figma `Web/Partner badge` 209:1520, page
+// 213:1526). The studio's own domain then confirms the partnership, which
+// answer engines trust above anything Moose says about itself. Plain HTML, no
+// script; the images are served from public/badge/. The words on the badge
+// are its alt text, so they're the link's words for a crawler.
+export const BADGE = {
+  path: PATHS.badge,
+  title: "How to add the Moose badge to your studio\u2019s website | Moose",
+  description:
+    "For studios in a live partnership on Moose: add the Partner studio on Moose badge to your website, linking to your studio\u2019s page. Free, about five minutes.",
+  head: "How to add the Moose badge to your website.",
+  lede: "If your studio is in a live partnership on Moose, add the Partner studio on Moose badge to your website. It links to your studio\u2019s page on Moose, so members and search engines can see the partnership is real. It\u2019s free and takes about five minutes.",
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  alt: "Partner studio on Moose",
+  width: 147,
+  height: 64,
+  image: (ink: "navy" | "white", ext: "svg" | "png") => `/badge/partner-studio-${ink}.${ext}`,
+  badge: {
+    head: "The badge.",
+    navy: "Navy, for a light background.",
+    white: "White, for a dark background.",
+    note: "147 \u00d7 64. Make it bigger or smaller, but keep its shape, and keep it navy or white.",
+    download: "Download:",
+    files: [
+      { l: "Navy SVG", ink: "navy", ext: "svg" },
+      { l: "Navy PNG", ink: "navy", ext: "png" },
+      { l: "White SVG", ink: "white", ext: "svg" },
+      { l: "White PNG", ink: "white", ext: "png" },
+    ],
+  },
+  steps: {
+    head: "Step by step.",
+    items: [
+      { title: "Find your studio below and copy its code.", bodyHtml: "Each studio\u2019s code links to its own page on Moose. For a dark background, change \u201cnavy\u201d to \u201cwhite\u201d in the code." },
+      { title: "Paste it where your site takes HTML.", bodyHtml: "Add an HTML, code or embed block to your footer, so the badge is on every page, and paste the code in. Your builder\u2019s steps are below." },
+      { title: "No HTML block? Add it as an image.", bodyHtml: "Download the badge, add it as an image, link it to your studio\u2019s page on Moose and set its alt text to \u201cPartner studio on Moose\u201d." },
+      { title: "Publish, then tell us where it is.", bodyHtml: `Email <a href="mailto:partnerships@trainmoose.com">partnerships@trainmoose.com</a> with the page it\u2019s on and we\u2019ll check the link works.` },
+    ],
+  },
+  code: {
+    head: "Your studio\u2019s code.",
+    copy: "Copy code",
+    copied: "Copied",
+    caption: (name: string) => `The badge code for ${name}`,
+  },
+  builders: {
+    head: "By website builder.",
+    caption: "How to add the badge in each website builder",
+    columns: ["Paste the code", "Or add it as an image"],
+    rows: [
+      { label: "Squarespace", cells: ["Add a Code block to your footer and paste the code.", "An Image block: set the clickthrough link to your page on Moose, and the alt text."] },
+      { label: "Wix", cells: ["Don\u2019t use Embed HTML: Wix puts it in a frame on another site, so search engines don\u2019t count the link.", "Add \u2192 Image, then Link \u2192 Web address, and the alt text in its settings. Use this one."] },
+      { label: "Webflow", cells: ["Add an Embed element to your footer and paste the code.", "An Image inside a Link block, with the alt text in the image settings."] },
+      { label: "WordPress", cells: ["Add a Custom HTML block, or a Custom HTML widget in the footer, and paste the code.", "An Image block: link it to your page on Moose and fill in the alt text."] },
+    ],
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "Does the badge cost anything?", aHtml: "No. It\u2019s free, and adding it is up to you." },
+      { q: "Where should it go?", aHtml: "In your footer, so it\u2019s on every page. Your memberships page, beside the Moose upgrade, works well too." },
+      { q: "Can we change how it looks?", aHtml: "Make it bigger or smaller, and use navy or white to suit your site. Please don\u2019t recolour, stretch or redraw it." },
+      { q: "Our studio isn\u2019t in a live partnership yet. Can we add it?", aHtml: "Not yet. The badge links to your studio\u2019s page on Moose, which goes up when your first partnership is live." },
+    ],
+  },
+  // The quiet line under a studio page's facts.
+  link: { lead: "Is this your studio?", link: "Add the Moose badge to your website." },
+} as const;
+
+// The code a studio pastes: a plain link and image, absolute URLs (it's read
+// off-site), the badge's words as alt text.
+export const badgeSnippet = (s: { name: string }, site: string) =>
+  `<a href="${site}${studioPath(s.name)}" title="${s.name.replace(/&/g, "&amp;")} on Moose">
+  <img src="${site}${BADGE.image("navy", "svg")}"
+       alt="${BADGE.alt}" width="${BADGE.width}" height="${BADGE.height}">
+</a>`;
 
 // ── Moose in numbers ─────────────────────────────────────────────────────
 // One citable answer to "how big is Moose?", updated monthly from Moose's

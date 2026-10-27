@@ -9,6 +9,7 @@ import '@fontsource/poppins/800.css';
 import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
 import poppins800 from '@fontsource/poppins/files/poppins-latin-800-normal.woff2?url';
 import '../styles/globals.css';
+import Analytics from '../components/Analytics.astro';
 import { SITE } from '../data/copy';
 import { SITE_URL, graph, siteNodes } from '../data/schema';
 
@@ -165,5 +166,6 @@ const structuredData = graph([...siteNodes, ...jsonLd]);
       }
       countEls.forEach((el) => countIO.observe(el));
     </script>
+    <Analytics />
   </body>
 </html>

@@ -3,13 +3,13 @@
 
 import type { APIRoute } from 'astro';
 import {
-  ABOUT, CLASSPASS, CREDITS, FAQ, FOOTER, GUIDE, HERO, LINKS, MEMBERS, MODEL, NETWORK, NUMBERS, PARTNERSHIPS, PILATES,
+  ABOUT, BADGE, CLASSPASS, CREDITS, FAQ, FOOTER, GUIDE, HERO, LINKS, MEMBERS, MODEL, NETWORK, NUMBERS, PARTNERSHIPS, PILATES,
   RECIPROCAL, REGISTER, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, SWAP, TEAM, VALUE, reportPath,
   studioPath,
 } from '../data/copy';
 import { SITE_URL, stripTags } from '../data/schema';
 
-const answerPages = [ABOUT, CLASSPASS, PILATES, SWAP, SECOND_MEMBERSHIP, CREDITS, RECIPROCAL, GUIDE, STUDIOS, FAQ];
+const answerPages = [ABOUT, CLASSPASS, PILATES, SWAP, SECOND_MEMBERSHIP, CREDITS, RECIPROCAL, GUIDE, BADGE, STUDIOS, FAQ];
 // Links in answers become markdown, root-relative hrefs made absolute: this
 // file is read off-site, where a bare link label can't be followed.
 const answerText = (html: string) =>

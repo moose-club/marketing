@@ -1,0 +1,89 @@
+---
+import { LINKS } from '../data/copy';
+
+// Product analytics (PostHog), into the "Web" project (675300), which the
+// studio portal sends to as well. Using the same project token means the same
+// `ph_<token>_posthog` cookie on .trainmoose.com, so a studio that registers
+// can be followed from this site into the portal.
+//
+// Off unless PUBLIC_POSTHOG_KEY is set at build time (dev and local builds
+// send nothing). Inline and loaded only after the page has, so it adds no
+// request to the critical path: once the page is idle, it adds PostHog's
+// bundle from /ingest, which the Worker proxies to PostHog (worker/index.ts).
+// Crawlers don't run this; the Worker logs them instead.
+const key = import.meta.env.PUBLIC_POSTHOG_KEY;
+
+// The two ways out: the studio portal (Register, Studio login) and the App
+// Store. Matched by origin, so a call site needs no markup of its own.
+const outbound = [
+  { origin: new URL(LINKS.studioPortal).origin, event: 'studio_portal_click' },
+  { origin: new URL(LINKS.appStore).origin, event: 'app_store_click' },
+];
+---
+
+{key && (
+  <script is:inline define:vars={{ key, outbound }}>
+    const root = document.documentElement;
+    // Only `/` has floors; elsewhere events carry no `floor`.
+    const floor = () => (root.dataset.audience === 'member' ? 'member' : 'studio');
+
+    // Where on the page a click came from: the section's id (or its
+    // heading's, for the hero), else the nav or the footer.
+    const sectionOf = (el) => {
+      const section = el.closest('section');
+      if (section) return section.id || section.getAttribute('aria-labelledby') || 'section';
+      return el.closest('nav, footer, header')?.tagName.toLowerCase() ?? 'page';
+    };
+
+    const start = () => {
+      const posthog = window.posthog;
+      posthog.init(key, {
+        api_host: '/ingest',
+        ui_host: 'https://us.posthog.com',
+        // Pinned like the portal's, so a PostHog release can't move a
+        // behaviour this file doesn't name.
+        defaults: '2026-08-30',
+        capture_pageview: 'history_change',
+        capture_pageleave: true,
+        autocapture: true,
+        person_profiles: 'identified_only',
+        persistence: 'localStorage+cookie',
+        disable_session_recording: true,
+        disable_surveys: true,
+      });
+      posthog.register({ app: 'marketing' });
+      // register persists, so a page without floors clears a floor left over
+      // from an earlier visit to `/`.
+      if (document.querySelector('[data-floor]')) posthog.register({ floor: floor() });
+      else posthog.unregister('floor');
+
+      document.addEventListener('audiencechange', (e) => {
+        posthog.register({ floor: e.detail });
+        posthog.capture('audience_switch', { to: e.detail });
+      });
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href]');
+        const out = link && outbound.find((o) => link.href.startsWith(o.origin));
+        if (!out) return;
+        posthog.capture(
+          out.event,
+          { label: link.textContent.trim(), section: sectionOf(link), href: link.href },
+          // The page is about to unload; a beacon survives it.
+          { transport: 'sendBeacon' },
+        );
+      });
+    };
+
+    const load = () => {
+      const script = document.createElement('script');
+      script.src = '/ingest/static/array.js';
+      script.async = true;
+      script.onload = start;
+      document.head.append(script);
+    };
+    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(load) : setTimeout(load, 1));
+    if (document.readyState === 'complete') idle();
+    else addEventListener('load', idle, { once: true });
+  </script>
+)}

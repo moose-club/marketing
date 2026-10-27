@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import { ABOUT, CREDITS, GUIDE, NUMBERS, PATHS, PILATES, REPORTS, REVIEWED, SWAP, reportPath } from './src/data/copy.ts';
+import { ABOUT, BADGE, CREDITS, GUIDE, NUMBERS, PATHS, PILATES, REPORTS, REVIEWED, SWAP, reportPath } from './src/data/copy.ts';
 
 // The answer pages carry a reviewed date; the sitemap says so, so crawlers
 // know when to read them again. Studio pages live under PATHS.studios.
@@ -33,6 +33,7 @@ export default defineConfig({
         if (path === ABOUT.path) item.lastmod = ABOUT.reviewed.iso;
         if (path === CREDITS.path) item.lastmod = CREDITS.reviewed.iso;
         if (path === SWAP.path) item.lastmod = SWAP.reviewed.iso;
+        if (path === BADGE.path) item.lastmod = BADGE.reviewed.iso;
         return item;
       },
     }),

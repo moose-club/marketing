@@ -24,7 +24,7 @@ The site converts studio operators from "haven't heard of Moose" to "filled in t
 | Icons             | **Inline SVGs** in each section                                                                  | No icon library, no runtime cost                                                                                                                |
 | Type system       | TypeScript, strict mode                                                                          |                                                                                                                                                 |
 | Package manager   | `pnpm`                                                                                           |                                                                                                                                                 |
-| Deployment target | Static (`output: 'static'`) — Vercel or Cloudflare Pages                                         |                                                                                                                                                 |
+| Deployment target | Static (`output: 'static'`) on a Cloudflare Worker with static assets (`wrangler.jsonc`)         |                                                                                                                                                 |
 | Node              | 24 (`.nvmrc`)                                                                                    | Astro 6 needs ≥22.12                                                                                                                            |
 
 **Do not introduce:** Tailwind, CSS-in-JS, shadcn, Next.js, Remix, a CMS, a state library, a UI kit, or an icon library. The brand discipline is the point.
@@ -244,7 +244,8 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 - `<link rel="canonical">`
 - Photos are compressed `.webp` under `public/photos/`, served as `<img>`. Neither hero has a photo, so none is preloaded.
 - Poppins self-hosted (RULES 12); the Latin 400 and 800 files are preloaded.
-- No third-party scripts in v1. (Add Plausible later via a single `<script defer data-domain>` line if desired.)
+- One third-party script: PostHog, for analytics. It goes to the "Web" project (675300), the same one as the studio portal, so a studio can be followed from the site into registration. It is served first-party through `/ingest` (the Worker proxies it), loaded inline only after the page has loaded (`src/components/Analytics.astro`), and is off unless `PUBLIC_POSTHOG_KEY` is set at build time. It records page views, autocapture, `studio_portal_click` and `app_store_click` (with `label`, `section`, `floor`) and `audience_switch`. No session replay, no surveys.
+- **Crawler analytics:** the Worker (`worker/index.ts`) logs every page request, plus `/llms.txt`, `robots.txt` and the sitemaps, to PostHog as `$http_log`. Crawlers and AI agents never run the browser script, so this is the only record of them. PostHog classifies them at query time (Web Analytics › Bots). Built bundles, images and fonts skip the Worker (`run_worker_first` in `wrangler.jsonc`).
 
 **Answer engines (AEO):** the goal is for ChatGPT, Perplexity, Gemini, Claude and AI Overviews to find Moose and describe it correctly.
 
@@ -257,6 +258,7 @@ Target Lighthouse scores on mobile, throttled, on the deployed build:
 - **Pilates in-house or partner** (`/compare/pilates-in-house-or-partner/`, `PILATES` in `copy.ts`): for a studio weighing up a second class type. Trade-offs are Moose's own, with no outside cost figures; its "Or partner first" section cites the week-one report.
 - **Setup guide** (`/guides/reciprocal-partnership/`, `GUIDE` in `copy.ts`): how to set up a reciprocal partnership, step by step, with HowTo JSON-LD. Steps 02–09 mirror the studio portal's setup checklist (`studio-portal/src/features/setup/derive-checklist.ts`); when the portal's steps change, change these.
 - **Moose in numbers** (`/numbers/`, `NUMBERS` in `copy.ts`): the one citable answer to "how big is Moose?", updated monthly from the same warehouse tables as the reports. Studios = `status = 'active'` and not `is_internal` (leads and demo studios excluded); live partnerships = `status = 'active'` between two such studios; members = real members with an `active` or `trialing` upgrade; visits = completed partner bookings in the month, open days included. Linked from the footer, the FAQ and `/llms.txt` (near the top).
+- **Partner badge** (`/badge/`, `BADGE` in `copy.ts`): a "Partner studio on Moose" badge each studio in a live partnership places on its own website, linking to its studio page. The partner's own domain then confirms the partnership, which answer engines trust above Moose's word. The page gives each live studio its code (plain link and image, from `badgeSnippet`) with a Copy plate, the steps for each website builder, and the files in `public/badge/` (navy and white, SVG and PNG). Wix studios add it as a linked image: Wix's Embed HTML renders in an iframe on another domain, so the link wouldn't count. Linked from each studio page and `/llms.txt`. When a partnership goes live, send the studio the page.
 - Each answer and studio page has its own social image at `public/og/<path>.png` (drawn in Figma, section "Social images"); the sitemap gives those pages a `lastmod` of `REVIEWED`.
 - `/llms.txt` (`src/pages/llms.txt.ts`) is a markdown brief generated from `copy.ts`, including the answer pages and the full FAQ.
 - **Answer pages** (`src/layouts/Answer.astro`, copy in `copy.ts` under "Answer pages"): `/compare/classpass`, `/compare/second-membership`, `/reciprocal-memberships`, `/studios`, `/studios/<slug>` (one per studio in a live partnership, from `PARTNERSHIPS`) and `/faq`, linked from the footer's "Learn" column. Each asks its question as the h1, answers it in the first sentence, and carries a dated "Last reviewed" (`REVIEWED`), an `FAQPage` (or `WebPage`) node and a `BreadcrumbList`. Every claim about another company is sourced on the page; re-check those sources and bump `REVIEWED` when the copy changes. A location appears only where a partnership is live (`PARTNERSHIPS`, from Max): several partners are multi-site.
@@ -346,7 +348,7 @@ The site is "good" when all of these are true:
 
 - [ ] All 9 sections from §6 render in order without horizontal scroll at 375/414/768/1024/1280/1440.
 - [ ] No third-party font requests; Poppins is served from the site.
-- [ ] No third-party JS (no analytics, no icon libraries, no UI kits).
+- [ ] No third-party JS other than PostHog, served through `/ingest` and loaded after the page (no icon libraries, no UI kits).
 - [ ] Build output is static HTML + per-section inline scripts only. No hydrated React.
 - [ ] All copy from `src/data/copy.ts` appears verbatim — no paraphrasing.
 - [ ] Brand discipline: at most one pink word per headline, one primary CTA per visible viewport, no third colour introduced beyond navy / pink / paper / cream / ink.
@@ -367,7 +369,7 @@ The site is "good" when all of these are true:
 - ❌ Don't recolour the wordmark outside the three official lockups.
 - ❌ Don't paraphrase copy in section files — edit `src/data/copy.ts` instead.
 - ❌ Don't add a React island unless a section genuinely needs reactive state. Vanilla JS scoped to a section is the default.
-- ❌ Don't add a cookie banner unless legally required (no third-party tracking in v1).
+- ❌ Don't add a cookie banner unless legally required (PostHog is first-party analytics, covered by the privacy policy §8; no advertising trackers).
 
 ---
 
