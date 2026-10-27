@@ -3,12 +3,13 @@
 
 import type { APIRoute } from 'astro';
 import {
-  CLASSPASS, FAQ, FOOTER, HERO, LINKS, MEMBERS, MODEL, NETWORK, PARTNERSHIPS, RECIPROCAL, REGISTER,
-  GUIDE, NUMBERS, PILATES, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, VALUE, reportPath, studioPath,
+  ABOUT, CLASSPASS, FAQ, FOOTER, GUIDE, HERO, LINKS, MEMBERS, MODEL, NETWORK, NUMBERS, PARTNERSHIPS, PILATES,
+  RECIPROCAL, REGISTER, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, TEAM, VALUE, reportPath,
+  studioPath,
 } from '../data/copy';
 import { SITE_URL, stripTags } from '../data/schema';
 
-const answerPages = [CLASSPASS, PILATES, SECOND_MEMBERSHIP, RECIPROCAL, GUIDE, STUDIOS, FAQ];
+const answerPages = [ABOUT, CLASSPASS, PILATES, SECOND_MEMBERSHIP, RECIPROCAL, GUIDE, STUDIOS, FAQ];
 // Links in answers become markdown, root-relative hrefs made absolute: this
 // file is read off-site, where a bare link label can't be followed.
 const answerText = (html: string) =>
@@ -29,6 +30,12 @@ const body = `# Moose
 > ${SITE.entity}
 
 Moose operates in Australia. Founded ${SITE.foundingYear}. Operated by ${SITE.legalName} (trading as ${SITE.alternateNames[0]}), ABN ${SITE.abn}.
+
+## Who runs Moose
+
+${TEAM.map((t) => `- ${t.name}, ${t.role}`).join('\n')}
+
+More at ${SITE_URL}${ABOUT.path}
 
 ## Moose in numbers
 

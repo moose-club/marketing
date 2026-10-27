@@ -5,7 +5,7 @@
 // (what Moose sells, the app, the partner roster) — a legal page shouldn't
 // describe the product.
 
-import { FOOTER, LINKS, MODEL, NETWORK, REVIEWED, SITE } from './copy';
+import { FOOTER, LINKS, MODEL, NETWORK, PATHS, REVIEWED, SITE, TEAM } from './copy';
 
 export const SITE_URL = 'https://www.trainmoose.com';
 const ORG_ID = `${SITE_URL}/#org`;
@@ -39,6 +39,9 @@ export const siteNodes: Node[] = [
       areaServed: 'AU',
     })),
     sameAs: [FOOTER.instagram.href, SITE.linkedin],
+    founder: TEAM.map((t) => ({ '@type': 'Person', name: t.name, jobTitle: t.role })),
+    // The page that says who's behind Moose (answer engines weigh it).
+    subjectOf: { '@type': 'AboutPage', url: `${SITE_URL}${PATHS.about}` },
   },
   {
     '@type': 'WebSite',

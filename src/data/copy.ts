@@ -23,6 +23,7 @@ export const PATHS = {
   numbers: "/numbers/",
   guide: "/guides/reciprocal-partnership/",
   pilates: "/compare/pilates-in-house-or-partner/",
+  about: "/about/",
 } as const;
 
 // What Moose is, in one breath — the homepage title and meta description, and
@@ -629,6 +630,65 @@ export const REPORTS = [
   },
 ] as const;
 
+// ── About ────────────────────────────────────────────────────────────────
+// Who's behind Moose. The team and roles are from moose-knowledge "Team and
+// Roles" (a June 2026 draft; names and titles only, to confirm with Max); the
+// why is "What Moose is"; the beliefs are the model's "what Moose doesn't do".
+export const TEAM = [
+  { name: "Gavin Roberts", role: "Managing Director", line: "Leads strategy and product." },
+  { name: "Max Kelly", role: "Head of Development", line: "Builds the Moose app, the studio portal and the platform behind them." },
+  { name: "Jake Kelly", role: "Head of Operations & Systems", line: "Runs operations and the systems that let Moose scale." },
+  { name: "William Swale", role: "Head of Partnerships", line: "Works with studios to form their partnerships." },
+] as const;
+
+export const ABOUT = {
+  path: PATHS.about,
+  title: "About Moose: who we are and why we built it | Moose",
+  description:
+    "Moose helps boutique fitness studios in Australia form reciprocal partnerships with studios nearby. Who we are, why we built it, what we believe, and our company details.",
+  head: "About Moose.",
+  lede: `${SITE.entity} We\u2019re a small Australian team, and we started Moose in ${SITE.foundingYear}.`,
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  why: {
+    head: "Why we built Moose.",
+    paragraphs: [
+      "Boutique studios win by specialising. That\u2019s why members love them, and why they pay more for them. But even loyal members want some variety: Pilates alongside their strength work, yoga for recovery.",
+      "Their options aren\u2019t good. A second membership costs as much as the first. Casual classes are too expensive to become a habit. Aggregators trade the studio relationship for variety. And a studio that adds a new class type in-house takes on equipment, space, staff and a broader brand.",
+      "So we built a partnership layer between studios. Two complementary studios nearby agree to share, members add a small upgrade, and everyone stays a member of the studio they joined.",
+    ],
+  },
+  beliefs: {
+    head: "What we believe.",
+    items: [
+      { q: "The member stays the studio\u2019s.", aHtml: "Moose doesn\u2019t sell memberships of its own. Members find us through their studio, and their studio stays their home." },
+      { q: "Partners are chosen, not assigned.", aHtml: "Studios pick the complementary studios they partner with, and every partnership works both ways." },
+      { q: "No discounting, no spare-spot selling.", aHtml: "Moose doesn\u2019t sell studios\u2019 classes to the public or undercut their prices. It adds variety to the memberships they already sell." },
+      { q: "Variety should keep members, not take them.", aHtml: "Members get a limited number of credits each month: enough for variety, never a reason to leave." },
+    ],
+  },
+  team: { head: "The team." },
+  company: {
+    head: "Company details.",
+    rows: [
+      { k: "Legal name", vHtml: `${SITE.legalName}, trading as ${SITE.alternateNames[0]}` },
+      { k: "ABN", vHtml: SITE.abn },
+      { k: "Founded", vHtml: `${SITE.foundingYear}, in Australia` },
+      { k: "Studios", vHtml: `<a href="${LINKS.studioPortal}">studio.trainmoose.com</a> \u00b7 <a href="mailto:partnerships@trainmoose.com">partnerships@trainmoose.com</a>` },
+      { k: "Members", vHtml: `<a href="${LINKS.appStore}">The Moose app on iPhone</a> \u00b7 <a href="mailto:support@trainmoose.com">support@trainmoose.com</a>` },
+      { k: "Follow", vHtml: `<a href="${SITE.linkedin}">LinkedIn</a> \u00b7 <a href="https://www.instagram.com/trainmoose/">Instagram</a>` },
+    ],
+    numbers: { lead: "How big is Moose today?", link: "See Moose in numbers.", href: PATHS.numbers },
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "Who runs Moose?", aHtml: `Moose is run by ${SITE.legalName} (ABN ${SITE.abn}), an Australian company trading as ${SITE.alternateNames[0]}.` },
+      { q: "Is Moose part of ClassPass or Mindbody?", aHtml: `No. Moose is independent, and it works alongside the booking systems studios already use. See <a href="${PATHS.classpass}">Moose or ClassPass?</a>` },
+      { q: "How do I contact Moose?", aHtml: `Studios: <a href="mailto:partnerships@trainmoose.com">partnerships@trainmoose.com</a>. Members: <a href="mailto:support@trainmoose.com">support@trainmoose.com</a>.` },
+    ],
+  },
+} as const;
+
 // ── Pilates in-house or partner ──────────────────────────────────────────
 // For a studio weighing up a second class type. The trade-offs are Moose's
 // own (moose-knowledge "What Moose is": staff, space, capex, quality, brand
@@ -845,6 +905,7 @@ export const FOOTER = {
     {
       title: "More",
       items: [
+        { l: "About Moose", h: PATHS.about },
         { l: "For studio members", h: "#members" },
         { l: "Register your studio", h: LINKS.studioPortal, external: true },
       ],
