@@ -798,6 +798,13 @@ Still open: none.
 | Answer pages: `/compare/second-membership`, `/reciprocal-memberships`, `/studios`, `/studios/<slug>` | none: built from the agreed answer-page frames and blocks | coded 26 Oct 2026 at Max's request; draw them back to Figma when they next change |
 | Social images (`og:image`) for the answer and studio pages | page "AEO · Compare + FAQ — working", section "Social images" `191:483` (1200 × 630, navy band) | agreed and exported 27 Oct 2026 to `public/og/`, one per page path (`Answer.astro`) |
 | Home: links to the answer pages | Model `135:570` / `135:662` ("How is Moose different from ClassPass?"), member Get `168:683` / `168:700` ("Weighing up a second membership?") | drawn and coded 27 Oct 2026 (`AnswerLink.astro`) |
+| Partnership reports: `/partnerships/<slug>/` | page "AEO · Compare + FAQ — working": `196:790` (1440); social image `197:838` | agreed and coded 27 Oct 2026 (`partnerships/[slug].astro`, `Figures.astro`); figures from the PostHog warehouse, real members only |
+| Moose in numbers: `/numbers/` | page "AEO · Compare + FAQ — working": `199:858` (1440); social image `200:906` | agreed and coded 27 Oct 2026 (`numbers.astro`; `Figures` takes four cells, `Ledger tone="data"`); updated monthly |
+| Setup guide: `/guides/reciprocal-partnership/` | page "AEO · Compare + FAQ — working": `201:951` (1440); `AEO/Step` `201:945`; social image `201:3020` | agreed and coded 27 Oct 2026 (`Steps.astro`, HowTo JSON-LD) |
+| Pilates in-house or partner: `/compare/pilates-in-house-or-partner/` | page "AEO · Compare + FAQ — working": `203:1063` (1440); social image `203:3160` | agreed and coded 27 Oct 2026 (the ClassPass page's blocks) |
+| About Moose: `/about/` | page "AEO · Compare + FAQ — working": `205:1185` (1440); social image `205:3243` | agreed and coded 27 Oct 2026 (`about.astro`); founders also in the Organization JSON-LD |
+| How credits work: `/credits/` | page "AEO · Compare + FAQ — working": `206:1276` (1440); social image `207:3407` | agreed and coded 27 Oct 2026 (`credits.astro`, member close) |
+| Moose or an informal swap: `/compare/informal-swap/` | `207:1345` (1440); social image `207:3501` | agreed and coded 27 Oct 2026 (the ClassPass page's blocks) |
 | Footer "Learn" column | none: the footer frame has three columns | coded 26 Oct 2026; two by two from 760, one row from 1280 |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

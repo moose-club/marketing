@@ -21,8 +21,14 @@ interface Props {
   questions?: readonly { q: string; aHtml: string }[];
   jsonLd?: Record<string, unknown>[];
   close?: 'studio' | 'member';
+  /** The dated line under the lede. Defaults to the answer pages' review date;
+      a partnership report passes its own update date and how it was counted. */
+  updated?: { lead: string; iso: string; label: string; note?: string };
 }
-const { path, title, description, head, lede, questions = [], jsonLd = [], close = 'studio' } = Astro.props;
+const {
+  path, title, description, head, lede, questions = [], jsonLd = [], close = 'studio',
+  updated = { lead: ANSWER.reviewed, iso: REVIEWED.iso, label: REVIEWED.label },
+} = Astro.props;
 // Each page's social image mirrors its path: /studios/s30/ → /og/studios/s30.png
 // (drawn on the Figma page "AEO · Compare + FAQ — working", section "Social images").
 const ogImage = `/og${path.replace(/\/$/, '')}.png`;
@@ -32,14 +38,14 @@ const ogImage = `/og${path.replace(/\/$/, '')}.png`;
   title={title}
   description={description}
   ogImage={ogImage}
-  jsonLd={[...answerNodes({ path, name: head.replace(/\.$/, ''), description, questions }), ...jsonLd]}
+  jsonLd={[...answerNodes({ path, name: head.replace(/\.$/, '').replace(/\u2060/g, ''), description, questions, dateModified: updated.iso }), ...jsonLd]}
 >
   <MSNav home={false} />
   <main id="main" class="answer">
     <header class="page answer__intro">
       <h1 class="page-lettering">{head}</h1>
       <p class="body-text answer__lede">{lede}</p>
-      <p class="answer__reviewed">{ANSWER.reviewed} <time datetime={REVIEWED.iso}>{REVIEWED.label}</time>.</p>
+      <p class="answer__reviewed">{updated.lead} <time datetime={updated.iso}>{updated.label}</time>.{updated.note && ` ${updated.note}`}</p>
     </header>
     <slot />
     {close === 'studio' ? <MSStudioClose /> : <MSMemberClose />}

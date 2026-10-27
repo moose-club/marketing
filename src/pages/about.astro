@@ -1,0 +1,150 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import AnswerLink from '../components/answer/AnswerLink.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import { ABOUT as P, ANSWER, TEAM } from '../data/copy';
+
+// About Moose (Figma `205:1185`): who's behind it, why it exists, what it
+// believes, and the company details answer engines check a company against.
+// The team prints as a ledger, like the figures: the role as a printed label,
+// the name, one line. The founders also go in the site-wide Organization node.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  updated={{ lead: ANSWER.reviewed, iso: P.reviewed.iso, label: P.reviewed.label }}
+  close="studio"
+>
+  <AnswerSection head={P.why.head} id="why">
+    <div class="why">
+      {P.why.paragraphs.map((t) => <p class="body-text">{t}</p>)}
+    </div>
+  </AnswerSection>
+
+  <AnswerSection head={P.beliefs.head} id="beliefs">
+    <QuestionList items={P.beliefs.items} />
+  </AnswerSection>
+
+  <AnswerSection head={P.team.head} id="team">
+    <ul class="team">
+      {TEAM.map((t) => (
+        <li class="team__person">
+          <p class="team__role">{t.role}</p>
+          <h3 class="team__name">{t.name}</h3>
+          <p class="team__line">{t.line}</p>
+        </li>
+      ))}
+    </ul>
+  </AnswerSection>
+
+  <AnswerSection head={P.company.head} id="company">
+    <dl class="company">
+      {P.company.rows.map((r) => (
+        <div class="company__row">
+          <dt>{r.k}</dt>
+          <dd set:html={r.vHtml} />
+        </div>
+      ))}
+    </dl>
+    <AnswerLink {...P.company.numbers} class="company__numbers" />
+  </AnswerSection>
+
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .why { display: grid; gap: var(--m-spacing-md); }
+
+  /* The team: a printed ledger, as the figures. Stacked on phone, two by two
+     from 760, one row from 1048. */
+  .team {
+    display: grid;
+    border-block: 1px solid var(--m-ink-rule);
+  }
+  .team__person { padding-block: 28px; } /* no token yet: proposed (read-back cell, as Value) */
+  .team__person + .team__person { border-top: 1px solid var(--m-ink-rule); }
+  .team__role {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  .team__name {
+    margin-top: 8px; /* no token yet: proposed */
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .team__line {
+    margin-top: 8px; /* no token yet: proposed */
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  @media (min-width: 760px) {
+    .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .team__person { padding-inline-end: var(--m-spacing-lg); }
+    .team__person:nth-child(even) {
+      border-left: 1px solid var(--m-ink-rule);
+      padding-inline-start: 28px; /* no token yet: proposed */
+    }
+    .team__person:nth-child(2) { border-top: 0; }
+  }
+  @media (min-width: 1048px) {
+    .team { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .team__person + .team__person {
+      border-top: 0;
+      border-left: 1px solid var(--m-ink-rule);
+      padding-inline-start: 28px; /* no token yet: proposed */
+    }
+  }
+
+  /* Company details: printed rows, as a studio page's facts. */
+  .company { max-width: 760px; } /* no token yet: proposed (the frames' question column) */
+  .company__row {
+    display: grid;
+    gap: var(--m-spacing-xs);
+    padding: 20px 0 22px; /* no token yet: proposed (as the ledger's rows) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .company__row:last-child { border-bottom: 1px solid var(--m-ink-rule); }
+  dt {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  dd {
+    margin: 0;
+    font-size: var(--m-type-body-size);
+    line-height: 1.5; /* provisional: as .body-text */
+    color: var(--m-ink);
+  }
+  dd :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  :global(.company__numbers) { margin-top: var(--m-spacing-lg); }
+
+  @media (min-width: 760px) {
+    .company__row {
+      grid-template-columns: 212px minmax(0, 1fr); /* no token yet: proposed (ledger label column) */
+      align-items: baseline;
+      gap: 32px;
+    }
+  }
+</style>

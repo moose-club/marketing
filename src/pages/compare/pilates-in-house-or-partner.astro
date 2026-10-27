@@ -1,0 +1,45 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import Ledger from '../../components/answer/Ledger.astro';
+import PrintedLists from '../../components/answer/PrintedLists.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import { ANSWER, PILATES as P } from '../../data/copy';
+
+// Add Pilates in-house, or partner? (Figma `203:1063`), for a studio owner
+// weighing up a second class type. The same blocks as Moose or ClassPass?, plus
+// "Or partner first", which points at real demand: the week-one report.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  updated={{ lead: ANSWER.reviewed, iso: P.reviewed.iso, label: P.reviewed.label, note: P.scope }}
+  close="studio"
+>
+  <AnswerSection head={P.ledger.head} id="side-by-side">
+    <Ledger caption={P.ledger.caption} columns={P.ledger.columns} rows={P.ledger.rows} />
+  </AnswerSection>
+  <AnswerSection head={P.fit.head} id="which-suits">
+    <PrintedLists lists={P.fit.lists} />
+  </AnswerSection>
+  <AnswerSection head={P.first.head} id="partner-first">
+    <p class="body-text first" set:html={P.first.bodyHtml} />
+  </AnswerSection>
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .first :global(a) {
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+</style>

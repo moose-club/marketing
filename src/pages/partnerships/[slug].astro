@@ -1,0 +1,62 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import Figures from '../../components/answer/Figures.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import { NETWORK, REPORT, REPORTS, reportPath, studioPath } from '../../data/copy';
+import { SITE_URL } from '../../data/schema';
+
+// A partnership report (Figma `196:790`): what one live partnership did, from
+// Moose's booking records. The answer up front (the lede states the headline
+// figures), then the figures, what we saw, what's next, and questions. The
+// page grows with each update; the dated line says when it last changed and
+// how the figures were counted.
+export function getStaticPaths() {
+  return REPORTS.map((r) => ({ params: { slug: r.slug }, props: { r } }));
+}
+
+const { r } = Astro.props;
+const path = reportPath(r.slug);
+const article = {
+  '@type': 'Article',
+  '@id': `${SITE_URL}${path}#article`,
+  headline: r.head.replace(/\.$/, ''),
+  description: r.description,
+  datePublished: r.published,
+  dateModified: r.updated.iso,
+  author: { '@id': `${SITE_URL}/#org` },
+  publisher: { '@id': `${SITE_URL}/#org` },
+  mainEntityOfPage: { '@id': `${SITE_URL}${path}#page` },
+  about: r.studios.map((name) => ({
+    '@type': 'SportsActivityLocation',
+    name,
+    url: NETWORK.partners.find((p) => p.name === name)?.href,
+    sameAs: `${SITE_URL}${studioPath(name)}`,
+  })),
+};
+---
+
+<Answer
+  path={path}
+  title={r.title}
+  description={r.description}
+  head={r.head}
+  lede={r.lede}
+  questions={r.questions.items}
+  jsonLd={[article]}
+  updated={{ lead: REPORT.updated, iso: r.updated.iso, label: r.updated.label, note: r.method }}
+  close="studio"
+>
+  <AnswerSection head={r.figures.head} id="figures">
+    <Figures cells={r.figures.cells} />
+  </AnswerSection>
+  <AnswerSection head={r.saw.head} id="what-we-saw">
+    <QuestionList items={r.saw.items} />
+  </AnswerSection>
+  <AnswerSection head={r.next.head} id="next">
+    <p class="body-text">{r.next.body}</p>
+  </AnswerSection>
+  <AnswerSection head={r.questions.head} id="questions">
+    <QuestionList items={r.questions.items} />
+  </AnswerSection>
+</Answer>
