@@ -152,8 +152,8 @@ ${FAQ.groups.map((g) => g.items.map((i) => `**${i.q}** ${answerText(i.aHtml)}`).
 - [Moose homepage](${SITE_URL}/)
 - [Register your studio](${LINKS.studioPortal})
 - [Moose on the App Store](${LINKS.appStore})
-- [Privacy policy](${SITE_URL}/privacy)
-- [Terms of use](${SITE_URL}/terms)
+- [Privacy policy](${SITE_URL}/privacy/)
+- [Terms of use](${SITE_URL}/terms/)
 - [Instagram](${FOOTER.instagram.href})
 - [LinkedIn](${SITE.linkedin})
 ${emails.map((e) => `- Contact: ${e}`).join('\n')}
