@@ -20,6 +20,8 @@ Audience: studio operators first, members second. Single page (`/`) with two flo
 - **Node 24** required. Astro 6 needs ≥22.12; this repo standardises on 24 (`.nvmrc`)
 - Poppins (RULES 12), self-hosted from `@fontsource/poppins` (400–800) and imported in `Base.astro`
 - Lucide-style icons rendered as **inline SVGs** in each section. No icon library.
+- **Cloudflare Worker with static assets** (`wrangler.jsonc`). The site is static; `worker/index.ts` only proxies PostHog at `/ingest` and logs page requests as `$http_log`, so crawlers and AI agents show up in PostHog. Built bundles, images and fonts skip it (`run_worker_first`). `pnpm build && npx wrangler dev` runs it locally on :8787.
+- **PostHog** for analytics (SPEC §9): `src/components/Analytics.astro`, inline and loaded after the page, off unless `PUBLIC_POSTHOG_KEY` is set at build time. Outbound clicks are matched by origin against `LINKS`, so a new Register or App Store link needs no markup.
 
 ## Commands
 
@@ -50,7 +52,7 @@ Nav
 Footer (navy, continues the close)
 ```
 
-The answer pages (`/compare/classpass`, `/compare/second-membership`, `/reciprocal-memberships`, `/studios` and a page per live-partnership studio, `/faq`; SPEC §9) use `src/layouts/Answer.astro` and the blocks in `src/components/answer/`. They pass `home={false}` to the nav and footer, so the home page's section anchors lead back to `/`.
+The answer pages (`/compare/classpass`, `/compare/second-membership`, `/reciprocal-memberships`, `/studios` and a page per live-partnership studio, `/faq`, `/badge`; SPEC §9) use `src/layouts/Answer.astro` and the blocks in `src/components/answer/`. They pass `home={false}` to the nav and footer, so the home page's section anchors lead back to `/`.
 
 Any link to an anchor on the other floor (`#members`, `#member-how`, `#model`, …) switches floors first. The old pink live line is retired and removed (RULES 6).
 
@@ -95,9 +97,8 @@ These are violations Claude will be tempted to make. Keep them top of mind:
 ## Things deliberately not in this repo
 
 - No CMS, no blog (yet)
-- No analytics scripts (SPEC §9 — no third-party scripts in v1)
-- No cookie banner (no third-party tracking, so legally not required)
-- No `vercel.json` / `vercel.ts` yet — deploys cleanly as a static site to Vercel or Cloudflare Pages. Add platform config when the deployment target is locked in.
+- No analytics beyond PostHog (SPEC §9). No session replay, no surveys, no ad pixels
+- No cookie banner (first-party analytics only, covered by the privacy policy; legally not required)
 - No `/styleguide` route any more — the rebuild deleted it. Add one back if the primitives library grows enough to warrant it.
 
 ## Open items the spec calls out (SPEC §15)

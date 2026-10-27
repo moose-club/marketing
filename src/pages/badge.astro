@@ -1,0 +1,218 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import Steps from '../components/answer/Steps.astro';
+import Ledger from '../components/answer/Ledger.astro';
+import { ANSWER, BADGE as P, PARTNERSHIPS, badgeSnippet } from '../data/copy';
+import { SITE_URL, stripTags } from '../data/schema';
+
+// How to add the Moose badge to your website (Figma `213:1526`): the badge,
+// four steps, each live studio's code with a Copy plate, then the steps by
+// website builder. Only studios in a live partnership have a studio page, so
+// only they are listed.
+const url = `${SITE_URL}${P.path}`;
+const studios = PARTNERSHIPS.flat();
+const howTo = {
+  '@type': 'HowTo',
+  '@id': `${url}#howto`,
+  name: P.head.replace(/\.$/, ''),
+  description: P.description,
+  dateModified: P.reviewed.iso,
+  totalTime: 'PT5M',
+  step: P.steps.items.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.title.replace(/\.$/, ''),
+    text: stripTags(s.bodyHtml),
+    url: `${url}#step-${i + 1}`,
+  })),
+};
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  jsonLd={[howTo]}
+  updated={{ lead: ANSWER.reviewed, iso: P.reviewed.iso, label: P.reviewed.label }}
+  close="studio"
+>
+  <AnswerSection head={P.badge.head} id="the-badge">
+    <div class="preview">
+      <figure class="preview__tile">
+        <img src={P.image('navy', 'svg')} alt={P.alt} width={P.width} height={P.height} />
+        <figcaption>{P.badge.navy}</figcaption>
+      </figure>
+      <figure class="preview__tile preview__tile--dark">
+        <img src={P.image('white', 'svg')} alt={P.alt} width={P.width} height={P.height} />
+        <figcaption>{P.badge.white}</figcaption>
+      </figure>
+    </div>
+    <p class="preview__note">
+      {P.badge.note} {P.badge.download}{' '}
+      {P.badge.files.map((f, i) => (
+        <>
+          <a href={P.image(f.ink, f.ext)} download>{f.l}</a>{i < P.badge.files.length - 1 ? ', ' : '.'}
+        </>
+      ))}
+    </p>
+  </AnswerSection>
+
+  <AnswerSection head={P.steps.head} id="steps">
+    <Steps items={P.steps.items} />
+  </AnswerSection>
+
+  <AnswerSection head={P.code.head} id="code">
+    <ul class="codes">
+      {studios.map((s) => (
+        <li class="codes__studio">
+          <div class="codes__head">
+            <div>
+              <h3 class="codes__name">{s.name}</h3>
+              <p class="codes__where">{s.where}</p>
+            </div>
+            <button type="button" class="plate plate--outline codes__copy" data-copy={P.code.copied}>
+              <span data-copy-label>{P.code.copy}</span><span class="visually-hidden">: {s.name}</span>
+            </button>
+          </div>
+          <pre class="codes__code" aria-label={P.code.caption(s.name)}><code>{badgeSnippet(s, SITE_URL)}</code></pre>
+        </li>
+      ))}
+    </ul>
+    <p class="visually-hidden" aria-live="polite" data-copy-status></p>
+  </AnswerSection>
+
+  <AnswerSection head={P.builders.head} id="builders">
+    <Ledger caption={P.builders.caption} columns={P.builders.columns} rows={P.builders.rows} tone="data" />
+  </AnswerSection>
+
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<script>
+  // Copy a studio's code. The plate says so for a moment; a live region tells
+  // a screen reader.
+  const status = document.querySelector<HTMLElement>('[data-copy-status]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    const label = button.querySelector<HTMLElement>('[data-copy-label]')!;
+    const idle = label.textContent ?? '';
+    const done = button.dataset.copy ?? '';
+    button.addEventListener('click', async () => {
+      const code = button.closest('li')?.querySelector('code')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        return;
+      }
+      label.textContent = done;
+      if (status) status.textContent = done;
+      window.setTimeout(() => {
+        label.textContent = idle;
+        if (status) status.textContent = '';
+      }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .preview {
+    display: grid;
+    gap: var(--m-spacing-lg);
+    max-width: 860px; /* no token yet: proposed (the frame's step column) */
+  }
+  .preview__tile {
+    display: grid;
+    justify-items: start;
+    gap: 20px; /* no token yet: proposed (as the frame) */
+    padding: 48px; /* no token yet: proposed (as the frame) */
+    border: 1px solid var(--m-ink-rule);
+    border-radius: var(--m-radius-component-plate);
+  }
+  /* A dark site, drawn in the brand's navy whatever the reader's appearance:
+     the white badge is shown on what it's for. */
+  .preview__tile--dark {
+    border-color: var(--m-moose-navy);
+    background: var(--m-moose-navy);
+  }
+  .preview__tile figcaption {
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .preview__tile--dark figcaption { color: var(--m-on-brand); }
+  /* On the navy floor the light-site tile stays light, or the navy badge
+     would vanish into it. */
+  :global(.dark) .preview__tile:not(.preview__tile--dark) { background: var(--m-on-brand); }
+  :global(.dark) .preview__tile:not(.preview__tile--dark) figcaption { color: var(--m-moose-navy); }
+  .preview__note {
+    margin-top: var(--m-spacing-md);
+    max-width: 860px;
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .preview__note a {
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  .codes { max-width: 860px; } /* no token yet: proposed (the frame's step column) */
+  .codes__studio {
+    display: grid;
+    gap: var(--m-spacing-md);
+    padding: 28px 0 32px; /* no token yet: proposed (as the frame) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .codes__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--m-spacing-md);
+  }
+  .codes__name {
+    font-size: var(--m-type-plate-label-size);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--m-ink);
+  }
+  .codes__where {
+    font-size: var(--m-type-detail-size);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+  .codes__copy {
+    min-width: 180px; /* no token yet: proposed (as the frame) */
+    justify-content: center;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .codes__code {
+    overflow-x: auto;
+    padding: 20px 24px; /* no token yet: proposed (as the frame) */
+    border-radius: var(--m-radius-component-plate);
+    background: var(--m-cream-deep);
+    font-family: inherit;
+    font-size: 0.875rem; /* no token yet: proposed (code) */
+    font-weight: 500;
+    line-height: 1.65;
+    color: var(--m-ink);
+    white-space: pre;
+  }
+  .codes__code code { font: inherit; }
+  /* cream-deep doesn't flip; on the navy floor the code sits on raised paper. */
+  :global(.dark) .codes__code { background: var(--m-surface-2); }
+
+  @media (min-width: 760px) {
+    .preview { grid-template-columns: 1fr 1fr; }
+  }
+</style>

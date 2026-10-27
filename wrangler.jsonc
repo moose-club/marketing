@@ -2,8 +2,35 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "moose-marketing",
   "compatibility_date": "2026-06-01",
+  // The site is static; the Worker only proxies PostHog and logs page
+  // requests for crawler analytics (worker/index.ts).
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // Pages and /ingest go through the Worker; built bundles, images and
+    // fonts are served straight from the assets, free and uncounted.
+    "run_worker_first": [
+      "/*",
+      "!/_astro/*",
+      "!/brand/*",
+      "!/og/*",
+      "!/og.png",
+      "!/og.svg",
+      "!/favicon.svg",
+      "!/partners/*",
+      "!/photos/*",
+      "!/badge/*.png",
+      "!/badge/*.svg"
+    ]
+  },
+  // The "Web" PostHog project (675300), shared with the studio portal, so a
+  // visitor stitches into the portal's funnel. The token is public and
+  // write-only (it ships in the page too, as PUBLIC_POSTHOG_KEY). Blank turns
+  // the crawler log off.
+  "vars": {
+    "POSTHOG_TOKEN": "phc_BMZshYFyMqRAfjmYL7qDSkDJzSviL2fX5rzmsuA3unMn",
+    "POSTHOG_HOST": "https://us.i.posthog.com"
   }
 }

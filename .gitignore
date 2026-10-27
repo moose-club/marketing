@@ -33,3 +33,6 @@ pnpm-debug.log*
 
 # Migration review artifacts (regenerate with .context/tools/sheets.mjs)
 docs/migration/
+
+# wrangler dev state
+.wrangler/

@@ -805,6 +805,7 @@ Still open: none.
 | About Moose: `/about/` | page "AEO · Compare + FAQ — working": `205:1185` (1440); social image `205:3243` | agreed and coded 27 Oct 2026 (`about.astro`); founders also in the Organization JSON-LD |
 | How credits work: `/credits/` | page "AEO · Compare + FAQ — working": `206:1276` (1440); social image `207:3407` | agreed and coded 27 Oct 2026 (`credits.astro`, member close) |
 | Moose or an informal swap: `/compare/informal-swap/` | `207:1345` (1440); social image `207:3501` | agreed and coded 27 Oct 2026 (the ClassPass page's blocks) |
+| Partner badge: `/badge/` and `public/badge/` | page "AEO · Compare + FAQ — working": badge `Web/Partner badge` `209:1520` (review board `210:1496`), page `213:1526` (1440); social image `216:1632` | agreed and coded 27 Oct 2026 (`badge.astro`); Lockup A (stacked), navy and white, one ink, no pink; SVG exported with outlined text, PNG at 2× |
 | Footer "Learn" column | none: the footer frame has three columns | coded 26 Oct 2026; two by two from 760, one row from 1280 |
 | `/claim` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |
 | `/404` | before/after in `.impeccable/review/` | not redrawn: retired card world shipped |

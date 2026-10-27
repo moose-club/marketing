@@ -3,7 +3,7 @@ import Answer from '../../layouts/Answer.astro';
 import AnswerSection from '../../components/answer/AnswerSection.astro';
 import QuestionList from '../../components/answer/QuestionList.astro';
 import AnswerLink from '../../components/answer/AnswerLink.astro';
-import { NETWORK, PARTNERSHIPS, REPORT, REPORTS, STUDIO_PAGE as P, reportPath, studioPath, studioSlug } from '../../data/copy';
+import { BADGE, NETWORK, PARTNERSHIPS, REPORT, REPORTS, STUDIO_PAGE as P, reportPath, studioPath, studioSlug } from '../../data/copy';
 import { SITE_URL } from '../../data/schema';
 
 // One page per studio in a live partnership (PARTNERSHIPS): where it takes
@@ -65,6 +65,7 @@ const place = {
       </div>
     </dl>
     {report && <AnswerLink {...REPORT.link} href={reportPath(report.slug)} class="studio__report" />}
+    <AnswerLink {...BADGE.link} href={BADGE.path} class="studio__badge" />
   </AnswerSection>
 
   <AnswerSection head={P.questions.head} id="questions">
@@ -83,7 +84,9 @@ const place = {
     mask: var(--logo) left center / contain no-repeat;
   }
   .facts { max-width: 760px; } /* no token yet: proposed (the frames' question column) */
-  :global(.studio__report) { margin-top: var(--m-spacing-lg); }
+  :global(.studio__report),
+  :global(.studio__badge) { margin-top: var(--m-spacing-lg); }
+  :global(.studio__report + .studio__badge) { margin-top: var(--m-spacing-sm); }
   .facts__row {
     display: grid;
     gap: var(--m-spacing-xs);
