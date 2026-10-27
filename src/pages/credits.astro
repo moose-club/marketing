@@ -1,0 +1,46 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import Figures from '../components/answer/Figures.astro';
+import Ledger from '../components/answer/Ledger.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import { ANSWER, CREDITS as P } from '../data/copy';
+
+// How do Moose credits work? (Figma `206:1276`), for members: the short
+// version, what a class costs, cancelling, and questions. Only what the
+// credit policy calls public; the app's own close.
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  updated={{ lead: ANSWER.reviewed, iso: P.reviewed.iso, label: P.reviewed.label }}
+  close="member"
+>
+  <AnswerSection head={P.short.head} id="short-version">
+    <Figures cells={P.short.cells} />
+  </AnswerSection>
+  <AnswerSection head={P.cost.head} id="what-a-class-costs">
+    <p class="body-text cost__body">{P.cost.body}</p>
+    <div class="cost__table">
+      <Ledger caption={P.cost.caption} columns={P.cost.columns} rows={P.cost.rows} note={P.cost.note} tone="data" />
+    </div>
+  </AnswerSection>
+  <AnswerSection head={P.cancelling.head} id="cancelling">
+    <QuestionList items={P.cancelling.items} />
+  </AnswerSection>
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .cost__table {
+    max-width: 860px; /* no token yet: proposed (the frame's table column) */
+    margin-top: var(--m-spacing-xl);
+  }
+</style>

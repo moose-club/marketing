@@ -3,13 +3,13 @@
 
 import type { APIRoute } from 'astro';
 import {
-  ABOUT, CLASSPASS, FAQ, FOOTER, GUIDE, HERO, LINKS, MEMBERS, MODEL, NETWORK, NUMBERS, PARTNERSHIPS, PILATES,
-  RECIPROCAL, REGISTER, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, TEAM, VALUE, reportPath,
+  ABOUT, CLASSPASS, CREDITS, FAQ, FOOTER, GUIDE, HERO, LINKS, MEMBERS, MODEL, NETWORK, NUMBERS, PARTNERSHIPS, PILATES,
+  RECIPROCAL, REGISTER, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, SWAP, TEAM, VALUE, reportPath,
   studioPath,
 } from '../data/copy';
 import { SITE_URL, stripTags } from '../data/schema';
 
-const answerPages = [ABOUT, CLASSPASS, PILATES, SECOND_MEMBERSHIP, RECIPROCAL, GUIDE, STUDIOS, FAQ];
+const answerPages = [ABOUT, CLASSPASS, PILATES, SWAP, SECOND_MEMBERSHIP, CREDITS, RECIPROCAL, GUIDE, STUDIOS, FAQ];
 // Links in answers become markdown, root-relative hrefs made absolute: this
 // file is read off-site, where a bare link label can't be followed.
 const answerText = (html: string) =>
@@ -120,6 +120,20 @@ ${PILATES.lede}
 ${PILATES.ledger.rows.map((r) => `- **${r.label}.** Partner on Moose: ${r.cells[0]} Add it in-house: ${r.cells[1]}`).join('\n')}
 
 ${answerText(PILATES.first.bodyHtml)}
+
+### ${SWAP.head.replace(/\.$/, '')}
+
+${SWAP.lede}
+
+${SWAP.ledger.rows.map((r) => `- **${r.label}.** Moose: ${r.cells[0]} An informal swap: ${r.cells[1]}`).join('\n')}
+
+### ${CREDITS.head}
+
+${CREDITS.lede}
+
+${CREDITS.cost.body} ${CREDITS.cost.rows.map((r) => `${r.label}: ${r.cells[0]}`).join('; ')} (${CREDITS.cost.note})
+
+${CREDITS.cancelling.items.map((i) => `- **${i.q}** ${answerText(i.aHtml)}`).join('\n')}
 
 ### ${GUIDE.head.replace(/\.$/, '')}
 

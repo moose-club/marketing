@@ -24,6 +24,8 @@ export const PATHS = {
   guide: "/guides/reciprocal-partnership/",
   pilates: "/compare/pilates-in-house-or-partner/",
   about: "/about/",
+  credits: "/credits/",
+  swap: "/compare/informal-swap/",
 } as const;
 
 // What Moose is, in one breath — the homepage title and meta description, and
@@ -630,6 +632,118 @@ export const REPORTS = [
   },
 ] as const;
 
+// ── How credits work (members) ───────────────────────────────────────────
+// From the credit policy and the backend (moose-knowledge credit-cycles,
+// credit-ledger, cancel-booking; 27 Oct 2026). Public only: the carry-over
+// cap and the overdraft are internal and stay off the site. The app shows each
+// class's credit cost before booking (moose-ios ClassRow, SessionDetails).
+export const CREDITS = {
+  path: PATHS.credits,
+  title: "How do Moose credits work? | Moose",
+  description:
+    "Moose credits for members: a monthly allowance to book classes at your home studio's partners. What a class costs, when credits refresh, and what happens when you cancel.",
+  head: "How do Moose credits work?",
+  lede: "Each month you get credits to book classes at your home studio\u2019s partner studios. A class costs about one credit, a little more at studios with pricier memberships and a little less at cheaper ones. Credits refresh on the 1st, and if you cancel in time, they come back.",
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  short: {
+    head: "The short version.",
+    cells: [
+      { label: "Credits refresh", figure: "1st", caption: "Of every month, Sydney time." },
+      { label: "A typical class", figure: "1.00", caption: "Credit, give or take, depending on the studio." },
+      { label: "A free open-day class", figure: "0.00", caption: "Credits. Open days are on the studio." },
+    ],
+  },
+  cost: {
+    head: "What a class costs.",
+    body: "A class costs more credits at a studio whose memberships cost more than your home studio\u2019s, and fewer at one whose memberships cost less. That keeps it fair for both studios. The app shows the cost before you book.",
+    caption: "Examples of what a class costs in Moose credits",
+    columns: ["Credits"],
+    rows: [
+      { label: "A studio priced like yours", cells: ["About 1.00"] },
+      { label: "A studio with pricier memberships", cells: ["A little more, like 1.10"] },
+      { label: "A studio with cheaper memberships", cells: ["A little less, like 0.90"] },
+      { label: "A free open-day class", cells: ["0.00"] },
+    ],
+    note: "Examples, not prices. Credits always show to two decimals.",
+  },
+  cancelling: {
+    head: "Cancelling.",
+    items: [
+      { q: "Cancel in time, and your credits come back.", aHtml: "Each partner studio sets a cancellation window. Cancel before it closes and the credits return to your balance straight away." },
+      { q: "Cancel late, and they don\u2019t.", aHtml: "After the window closes, cancelling keeps your spot free for someone else, but the credits are used." },
+      { q: "If the studio cancels, they always come back.", aHtml: "If the partner studio cancels the class, your credits are refunded, whenever it happens." },
+    ],
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "How many credits do I get?", aHtml: "It depends on your studio\u2019s Moose upgrade. Your balance is in the Moose app." },
+      { q: "Where can I use my credits?", aHtml: "At your home studio\u2019s partner studios. Classes at your home studio are part of your membership, not Moose." },
+      { q: "Do unused credits roll over?", aHtml: "Credits are a monthly allowance, so plan to use them within the month." },
+      { q: "Why does a class cost 0.97 credits?", aHtml: "Because the partner studio\u2019s memberships cost a little less than your home studio\u2019s. Costs are worked out per studio, to two decimals." },
+    ],
+  },
+} as const;
+
+// ── Moose or an informal swap (studios) ──────────────────────────────────
+// The alternative studios already use: a discount or a free class each way
+// with a neighbour. moose-knowledge "What Moose is" names it ("partner
+// informally… too complex to structure properly"). No outside facts.
+export const SWAP = {
+  path: PATHS.swap,
+  title: "Moose or an informal studio swap? A comparison for studio owners | Moose",
+  description:
+    "Many studios already swap with a neighbour: a discount or a free class each way. How that compares with a reciprocal partnership on Moose, on tracking, fairness and who pays.",
+  head: "Moose or an informal studio swap?",
+  lede: "Plenty of studios already swap with a neighbour: show your tag for 20% off, or a free class each way. It\u2019s easy to start and hard to keep fair. Moose does the same thing as part of your membership, with every visit tracked, balanced and paid for.",
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  ledger: {
+    head: "Side by side.",
+    caption: "Moose compared with an informal swap between studios, for a studio owner",
+    columns: ["Moose", "An informal swap"],
+    rows: [
+      { label: "How it works", cells: ["Members add Moose to their membership and book your partner\u2019s classes in the Moose app, with credits.", "Members show a tag or quote a code for a discount, and book with your partner directly."] },
+      { label: "Tracking", cells: ["Every visit is recorded, both ways, by studio.", "By hand, if at all: codes, front-desk tallies, a spreadsheet."] },
+      { label: "Keeping it fair", cells: ["Visits are weighted by each studio\u2019s membership pricing, and the studio that hosts more visits earns more.", "Usually nobody checks. One studio can end up giving far more than it gets."] },
+      { label: "Who pays", cells: ["Members pay Moose for the upgrade, and Moose pays each studio monthly.", "Members pay your partner a discounted rate for each class."] },
+      { label: "What your studio earns", cells: ["A share of every upgrade your members buy, plus a share of a partner pool for the visits you host.", "Nothing directly: goodwill, and the odd new member."] },
+      { label: "Booking", cells: ["In one app, synced with your partner\u2019s booking system.", "Each studio\u2019s own booking, with the discount applied by hand."] },
+      { label: "Protecting your classes", cells: ["Members get a limited number of credits each month, and you choose which memberships can add Moose.", "Whatever the two of you agree, enforced at the front desk."] },
+      { label: "Cost to set up", cells: ["Free.", "Free, plus your team\u2019s time to run it."] },
+    ],
+  },
+  fit: {
+    head: "Which suits your studio.",
+    lists: [
+      {
+        title: "Moose may suit you better if",
+        items: [
+          "You want variety to be part of your membership, not a promotion.",
+          "You want every visit tracked, and the exchange kept fair.",
+          "You want to earn from it, not just give a discount.",
+          `Your booking system is one Moose connects to: ${bookingSystems}.`,
+        ],
+      },
+      {
+        title: "An informal swap may suit you better if",
+        items: [
+          "You want a one-off promotion for a month or two.",
+          "You\u2019re happy to track it by hand and trust it evens out.",
+          "Your partner\u2019s booking system isn\u2019t one Moose connects to yet.",
+        ],
+      },
+    ],
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "We already swap with a studio. Can we move it onto Moose?", aHtml: `Yes. You both register in the studio portal and invite each other. The <a href="${PATHS.guide}">setup guide</a> walks through every step.` },
+      { q: "Can we keep our swap and add Moose?", aHtml: "Yes. Nothing stops you running both while members move across." },
+      { q: "Does Moose cost my studio anything?", aHtml: "No. Joining is free. Moose is paid from the upgrades members buy." },
+    ],
+  },
+} as const;
+
 // ── About ────────────────────────────────────────────────────────────────
 // Who's behind Moose. The team and roles are from moose-knowledge "Team and
 // Roles" (a June 2026 draft; names and titles only, to confirm with Max); the
@@ -883,7 +997,7 @@ export const FAQ = {
       head: "For members.",
       items: [
         { q: "How do I get Moose?", aHtml: "Through your home studio. If your studio offers Moose, add it in the Moose app as an upgrade to your membership. Moose isn’t sold on its own." },
-        { q: "How many credits do I get?", aHtml: "Credits refresh every month. How many you get, and the price, depend on your studio." },
+        { q: "How many credits do I get?", aHtml: `Credits refresh every month. How many you get, and the price, depend on your studio. See <a href="${PATHS.credits}">how Moose credits work</a>.` },
         { q: "Where can I use my credits?", aHtml: "At your home studio’s partner studios: the ones it chose, listed in the Moose app." },
         { q: "Can I get Moose if my studio isn’t on it?", aHtml: "No. Moose comes through your home studio, so your studio needs to offer it." },
         { q: "Is Moose on Android?", aHtml: "Not yet. Moose is iPhone only for now." },
@@ -907,6 +1021,7 @@ export const FOOTER = {
       items: [
         { l: "About Moose", h: PATHS.about },
         { l: "For studio members", h: "#members" },
+        { l: "How credits work", h: PATHS.credits },
         { l: "Register your studio", h: LINKS.studioPortal, external: true },
       ],
     },
@@ -918,6 +1033,7 @@ export const FOOTER = {
         { l: "Reciprocal memberships", h: RECIPROCAL.path },
         { l: "Studios on Moose", h: STUDIOS.path },
         { l: "Pilates in-house vs partner", h: PATHS.pilates },
+        { l: "Moose vs an informal swap", h: PATHS.swap },
         { l: "Set up a partnership", h: PATHS.guide },
         { l: "Moose in numbers", h: PATHS.numbers },
         { l: "FAQ", h: FAQ.path },
