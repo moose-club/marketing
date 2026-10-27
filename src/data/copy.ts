@@ -1132,8 +1132,8 @@ export const FOOTER = {
     label: "Moose on Instagram",
   },
   legal: [
-    { l: "Privacy", h: "/privacy" },
-    { l: "Terms & Conditions", h: "/terms" },
+    { l: "Privacy", h: "/privacy/" },
+    { l: "Terms & Conditions", h: "/terms/" },
   ] as const,
   register: { l: "Register your studio", h: LINKS.studioPortal },
   backToTop: "Back to top",
