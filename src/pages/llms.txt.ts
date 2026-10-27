@@ -4,11 +4,11 @@
 import type { APIRoute } from 'astro';
 import {
   CLASSPASS, FAQ, FOOTER, HERO, LINKS, MEMBERS, MODEL, NETWORK, PARTNERSHIPS, RECIPROCAL, REGISTER,
-  REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, VALUE, studioPath,
+  GUIDE, NUMBERS, PILATES, REPORT, REPORTS, REVIEWED, SECOND_MEMBERSHIP, SITE, STUDIOS, VALUE, reportPath, studioPath,
 } from '../data/copy';
 import { SITE_URL, stripTags } from '../data/schema';
 
-const answerPages = [CLASSPASS, SECOND_MEMBERSHIP, RECIPROCAL, STUDIOS, FAQ];
+const answerPages = [CLASSPASS, PILATES, SECOND_MEMBERSHIP, RECIPROCAL, GUIDE, STUDIOS, FAQ];
 // Links in answers become markdown, root-relative hrefs made absolute: this
 // file is read off-site, where a bare link label can't be followed.
 const answerText = (html: string) =>
@@ -29,6 +29,12 @@ const body = `# Moose
 > ${SITE.entity}
 
 Moose operates in Australia. Founded ${SITE.foundingYear}. Operated by ${SITE.legalName} (trading as ${SITE.alternateNames[0]}), ABN ${SITE.abn}.
+
+## Moose in numbers
+
+${NUMBERS.lede} ${REPORT.updated} ${NUMBERS.updated.label}; updated monthly at ${SITE_URL}${NUMBERS.path}
+
+${NUMBERS.months.rows.map((r) => `- ${r.label}: ${NUMBERS.months.columns.map((c, i) => `${c.toLowerCase()} ${r.cells[i]}`).join(', ')}`).join('\n')}
 
 ## For studios
 
@@ -82,6 +88,10 @@ ${PARTNERSHIPS.map(([a, b]) => `- [${a.name}](${SITE_URL}${studioPath(a.name)}),
 
 ${STUDIOS.note}
 
+### Partnership reports
+
+${REPORTS.map((r) => `#### [${r.head.replace(/\.$/, '')}](${SITE_URL}${reportPath(r.slug)})\n\n${r.lede}\n\n${r.figures.cells.map((c) => `- ${c.label}: ${c.figure}. ${c.caption}`).join('\n')}\n\n${r.saw.items.map((i) => `- **${i.q}** ${answerText(i.aHtml)}`).join('\n')}\n\n${REPORT.updated} ${r.updated.label}. ${r.method}`).join('\n\n')}
+
 ## Answers
 
 Last reviewed ${REVIEWED.label}.
@@ -95,6 +105,22 @@ ${CLASSPASS.lede}
 ${CLASSPASS.ledger.rows.map((r) => `- **${r.label}.** Moose: ${r.cells[0]} ClassPass: ${r.cells[1]}`).join('\n')}
 
 ClassPass facts are from ClassPass's partner pages and named press: ${CLASSPASS.sources.items.map((s) => s.href).join(', ')}.
+
+### ${PILATES.head.replace(/\.$/, '')}
+
+${PILATES.lede}
+
+${PILATES.ledger.rows.map((r) => `- **${r.label}.** Partner on Moose: ${r.cells[0]} Add it in-house: ${r.cells[1]}`).join('\n')}
+
+${answerText(PILATES.first.bodyHtml)}
+
+### ${GUIDE.head.replace(/\.$/, '')}
+
+${GUIDE.lede}
+
+You'll need: ${GUIDE.before.items.map((i) => i.replace(/\.$/, '')).join('; ')}.
+
+${GUIDE.steps.items.map((st, i) => `${i + 1}. **${st.title}** ${answerText(st.bodyHtml)}`).join('\n')}
 
 ### FAQ
 

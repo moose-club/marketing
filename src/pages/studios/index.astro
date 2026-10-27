@@ -2,7 +2,7 @@
 import Answer from '../../layouts/Answer.astro';
 import AnswerSection from '../../components/answer/AnswerSection.astro';
 import QuestionList from '../../components/answer/QuestionList.astro';
-import { NETWORK, PARTNERSHIPS, STUDIOS as P, studioPath } from '../../data/copy';
+import { NETWORK, PARTNERSHIPS, REPORT, REPORTS, STUDIOS as P, reportPath, studioPath } from '../../data/copy';
 import { partnerList } from '../../data/schema';
 
 const live = new Map(PARTNERSHIPS.flat().map((s) => [s.name as string, s]));
@@ -53,6 +53,10 @@ const live = new Map(PARTNERSHIPS.flat().map((s) => [s.name as string, s]));
           <a href={studioPath(a.name)}>{a.name}</a>, {a.where}
           <span class="pairs__and">{P.live.and}</span>
           <a href={studioPath(b.name)}>{b.name}</a>, {b.where}
+          {(() => {
+            const report = REPORTS.find((r) => (r.studios as readonly string[]).includes(a.name));
+            return report && <span class="pairs__report"> · <a href={reportPath(report.slug)}>{REPORT.live}</a></span>;
+          })()}
         </li>
       ))}
     </ul>

@@ -12,8 +12,11 @@ interface Props {
   columns: readonly string[];
   rows: readonly { label: string; cells: readonly string[] }[];
   note?: string;
+  /** `compare` (default): Moose's column in ink, the others in support ink.
+      `data`: every cell in ink, as a table of figures. */
+  tone?: 'compare' | 'data';
 }
-const { caption, columns, rows, note } = Astro.props;
+const { caption, columns, rows, note, tone = 'compare' } = Astro.props;
 ---
 
 <div class="ledger">
@@ -30,7 +33,7 @@ const { caption, columns, rows, note } = Astro.props;
         <tr role="row">
           <th scope="row" role="rowheader">{r.label}</th>
           {r.cells.map((cell, i) => (
-            <td role="cell" class:list={[i === 0 && 'is-ours']}>
+            <td role="cell" class:list={[(tone === 'data' || i === 0) && 'is-ours']}>
               <span class="ledger__col" aria-hidden="true">{columns[i]}</span>
               {cell}
             </td>

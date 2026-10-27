@@ -1,0 +1,59 @@
+---
+// A how-to's steps (Figma `AEO/Step` `201:945`): the ordinal in compact display
+// lettering beside the title and body, each under a printed rule. A real
+// ordered list, with an anchor per step for the HowTo JSON-LD. A body may
+// carry a link (`bodyHtml`), drawn in ink and underlined.
+interface Props {
+  items: readonly { title: string; bodyHtml: string }[];
+}
+const { items } = Astro.props;
+---
+
+<ol class="steps">
+  {items.map((s, i) => (
+    <li class="steps__step" id={`step-${i + 1}`}>
+      <span class="steps__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      <div>
+        <h3 class="steps__title">{s.title}</h3>
+        <p class="body-text steps__body" set:html={s.bodyHtml} />
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps { max-width: 860px; } /* no token yet: proposed (the frame's step column) */
+  .steps__step {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr); /* no token yet: proposed (ordinal column) */
+    column-gap: var(--m-spacing-md);
+    padding: 24px 0 28px; /* no token yet: proposed (as the questions) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+  .steps__n {
+    font-family: var(--m-font-family-display);
+    font-size: 2.25rem; /* = --m-type-page-lettering-compact-size's floor, as the Model */
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--m-ink);
+  }
+  .steps__title {
+    font-size: var(--m-type-plate-label-size);
+    font-weight: var(--m-type-plate-label-weight);
+    line-height: var(--m-type-plate-label-leading);
+    color: var(--m-ink);
+  }
+  .steps__body { margin-top: 8px; max-width: none; } /* no token yet: proposed */
+  .steps__body :global(a) {
+    color: var(--m-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (min-width: 760px) {
+    .steps__step { grid-template-columns: 72px minmax(0, 1fr); column-gap: 32px; }
+  }
+</style>

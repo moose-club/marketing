@@ -20,6 +20,9 @@ export const PATHS = {
   reciprocal: "/reciprocal-memberships/",
   studios: "/studios/",
   faq: "/faq/",
+  numbers: "/numbers/",
+  guide: "/guides/reciprocal-partnership/",
+  pilates: "/compare/pilates-in-house-or-partner/",
 } as const;
 
 // What Moose is, in one breath — the homepage title and meta description, and
@@ -31,9 +34,11 @@ export const SITE = {
   // with what the page leads with.
   description:
     "Moose partners your studio with complementary studios nearby; members add their classes as a paid upgrade. More revenue, less churn, members who stay yours.",
-  // The third-person line: the company description in structured data.
+  // The company line (Max, 27 Oct 2026): the description in the JSON-LD and
+  // /llms.txt, and word for word on LinkedIn, Crunchbase, the App Store and
+  // every other profile (SPEC §9). Partnership first: Moose isn't an aggregator.
   entity:
-    "Moose is a network for boutique fitness studios in Australia. Each studio partners with complementary, non-competing studios nearby, and its members add a paid upgrade to book classes at those partners each month.",
+    "Moose helps boutique fitness studios in Australia form reciprocal partnerships with complementary, non-competing studios nearby. Members add a paid upgrade to their membership to book classes at their studio\u2019s partners each month.",
   legalName: "Blubby Pty Ltd",
   alternateNames: ["Moose Club", "Train Moose"],
   abn: "11 690 645 106",
@@ -172,7 +177,6 @@ export const NETWORK = {
     { name: "Essentials Studio Pilates", href: "https://essentialsstudio.com.au", logo: "/partners/essential-studio.png", kind: "Reformer Pilates, mat Pilates and barre." },
     { name: "ACTV Strength Co.", href: "https://actvstrengthco.com", logo: "/partners/actv.png", kind: "Group strength and conditioning." },
     { name: "S30", href: "https://www.s30studio.com.au", logo: "/partners/s30.png", kind: "Coached group strength and conditioning, including HYROX prep." },
-    { name: "REVL", href: "https://revltraining.com.au", logo: "/partners/revl.svg", kind: "Functional strength and conditioning in small groups." },
     { name: "@Pilates 24/7", href: "https://atpilates.studio/", logo: "/partners/at-pilates.png", kind: "24/7 reformer Pilates studios, with classes on the hour." },
   ] as const,
   // The accessible names: the deck, and each card in it.
@@ -316,7 +320,10 @@ export const BOOKING_SYSTEMS = ["Hapana (v2)", "Mindbody", "GymMaster", "Momence
 export const listOf = (items: readonly string[], joiner = "and") =>
   items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} ${joiner} ${items[items.length - 1]}`;
 
-const partnerCount = NETWORK.partners.length;
+// Moose's own counts (PostHog warehouse, 26 Oct 2026; SPEC §9). The site uses
+// these, not the length of the partner list: a studio can have several sites,
+// and studios still setting up aren't live. Update monthly with NUMBERS.
+const COUNTS = { studios: 5, settingUp: 3, partnerships: 1, members: 7, visits: 13, month: "October" } as const;
 const bookingSystems = listOf(BOOKING_SYSTEMS);
 
 // Shared by every answer page: the dated line under the lede.
@@ -345,7 +352,7 @@ export const CLASSPASS = {
       { label: "Cost to join", cells: ["No cost to join.", "No cost to join."] },
       { label: "Protecting your classes", cells: ["Members get a limited number of credits each month, so your studio stays their home.", "ClassPass lists the spots it predicts you won’t fill (SmartSpot), and you can limit ClassPass at peak times."] },
       { label: "The customer", cells: ["Stays your member. Moose is an add-on to their membership with you, not a replacement for it.", "Holds a ClassPass subscription, billed by ClassPass. You meet them when they book you."] },
-      { label: "Size of the network", cells: [`Small and local: ${partnerCount} studios across Australia today.`, "Large: over 73,000 partners in more than 30 countries (2025)."] },
+      { label: "Size of the network", cells: [`Small and local: ${COUNTS.studios} studios across Australia today.`, "Large: over 73,000 partners in more than 30 countries (2025)."] },
       { label: "Apps", cells: ["iPhone.", "iPhone, Android and the web."] },
     ],
   },
@@ -461,6 +468,7 @@ export const RECIPROCAL = {
     body: "A strength studio partners with a Pilates studio around the corner. They don’t compete: one builds strength, the other mobility and control. Each adds Moose to its memberships. Now the strength studio’s members can mix Pilates into their week, the Pilates studio’s members can add strength work, and both stay members of the studio they joined.",
   },
   stepsHead: "How it works on Moose.",
+  guideLink: { lead: "Setting one up?", link: "Follow the step-by-step guide.", href: PATHS.guide },
   fair: {
     head: "What keeps it fair.",
     lists: [
@@ -515,9 +523,9 @@ export const studioPath = (name: string) => `/studios/${studioSlug(name)}/`;
 export const STUDIOS = {
   path: PATHS.studios,
   title: "Studios on Moose | Moose",
-  description: `The ${partnerCount} studios across Australia on Moose, from Pilates and yoga to strength and recovery, and the partnerships live today.`,
+  description: `The studios on Moose: ${COUNTS.studios} live across New South Wales, Victoria and Queensland, ${COUNTS.settingUp} more setting up, and the partnerships live today.`,
   head: "Studios on Moose.",
-  lede: `${partnerCount} studios across Australia are on Moose, from Pilates and yoga to strength and recovery.`,
+  lede: `${COUNTS.studios} studios across New South Wales, Victoria and Queensland are live on Moose, from Pilates and yoga to strength and recovery, and ${COUNTS.settingUp} more are setting up.`,
   note: "Some of these studios have several locations. Where a partnership is live, the location is listed under Live partnerships; the Moose app shows which studios partner with yours.",
   website: "Website",
   page: "On Moose",
@@ -563,6 +571,231 @@ export const STUDIO_PAGE = {
   },
 } as const;
 
+// ── Partnership reports ──────────────────────────────────────────────────
+// What a live partnership did, from Moose's booking records (synced to the
+// PostHog warehouse). Figures are counts of real members only: staff and test
+// accounts excluded (the `real_members` view). Classes are counted when
+// attended, not booked. One page per partnership that grows: week one, then
+// one month, then three. Both studios see each update before it goes live.
+
+export const REPORT = {
+  updated: "Last updated",
+  link: { lead: "How’s the partnership going?", link: "Read the week-one report." },
+  live: "Week-one report",
+} as const;
+
+export const reportPath = (slug: string) => `/partnerships/${slug}/`;
+
+export const REPORTS = [
+  {
+    slug: "s30-one-hot-yoga-pilates",
+    studios: ["S30", "One Hot Yoga & Pilates"],
+    title: "S30 × One Hot Yoga & Pilates on Moose: week one | Moose",
+    description:
+      "S30 Surry Hills and One Hot Yoga & Pilates Potts Point went live on Moose on 18 October 2026. In their first week, 7 members added Moose, and 11 members took 13 classes at the partner studio.",
+    head: "S30 × One Hot Yoga & Pilates: week one.",
+    lede: "S30 Surry Hills and One Hot Yoga & Pilates Potts Point went live on Moose on 18 October 2026. In their first week, 7 members added Moose, and 11 members took 13 classes at the partner studio.",
+    published: "2026-10-27",
+    updated: { iso: "2026-10-27", label: "27 October 2026" },
+    method: "Figures from Moose’s booking records, 18 to 26 October, excluding staff and test accounts.",
+    figures: {
+      head: "The first week.",
+      cells: [
+        { label: "Members who added Moose", figure: "7", caption: "5 at S30, 2 at One Hot." },
+        { label: "Partner classes attended", figure: "13", caption: "11 by S30 members at One Hot, 2 by One Hot members at S30." },
+        { label: "Members who tried the partner", figure: "11", caption: "10 from S30, 1 from One Hot." },
+      ],
+    },
+    saw: {
+      head: "What we saw.",
+      items: [
+        { q: "Most of the movement was one way.", aHtml: "S30’s strength members went looking for yoga and Pilates. One Hot’s members have been slower to book strength: one member, two classes so far." },
+        { q: "An open day got people through the door.", aHtml: "Each studio offered the other’s members a free class. Nine S30 members came to One Hot’s open day on Saturday 25 October, across reformer Pilates and hot flow." },
+        { q: "Reformer and hot flow led the way.", aHtml: "At One Hot, Pilates Reformer Open was the most-attended class, then Slow Hot Flow. At S30, members took Get Low and Back 2 Back." },
+        { q: "Not every booking stuck.", aHtml: "Members cancelled 7 bookings ahead of class, most of them open-day spots, so we count classes attended, not bookings. Two more classes are already booked." },
+      ],
+    },
+    next: {
+      head: "What’s next.",
+      body: "We’ll update this page at one month and three months, with how often members come back and what the partnership means for each studio.",
+    },
+    questions: {
+      head: "Common questions.",
+      items: [
+        { q: "Can I book S30 or One Hot with Moose?", aHtml: `Yes, if one of them is your home studio. Add Moose to an eligible membership and book the other in the Moose app. See <a href="${studioPath("S30")}">S30</a> and <a href="${studioPath("One Hot Yoga & Pilates")}">One Hot Yoga &amp; Pilates</a> on Moose.` },
+        { q: "Can my studio do the same?", aHtml: `Yes, and it’s free to join. Register your studio in the studio portal at <a href="${LINKS.studioPortal}">studio.trainmoose.com</a>.` },
+      ],
+    },
+  },
+] as const;
+
+// ── Pilates in-house or partner ──────────────────────────────────────────
+// For a studio weighing up a second class type. The trade-offs are Moose's
+// own (moose-knowledge "What Moose is": staff, space, capex, quality, brand
+// dilution); no outside cost figures, so nothing here needs a source. The
+// headline's word joiner keeps "in-house" on one line.
+export const PILATES = {
+  path: PATHS.pilates,
+  title: "Add Pilates in-house, or partner with a Pilates studio? | Moose",
+  description:
+    "For studio owners weighing up a second class type: adding Pilates yourself versus partnering with a Pilates studio nearby, compared on cost, space, staff, quality and brand.",
+  head: "Add Pilates in-\u2060house, or partner?",
+  lede: "If your members want Pilates now and you\u2019d rather not buy equipment, hire instructors or give up floor space, partnering with a Pilates studio nearby gets them there sooner. If Pilates is becoming core to your business and you have the room and the budget, building it yourself keeps it all under your roof.",
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  scope: "The same trade-offs apply to yoga, boxing or any class type you don\u2019t run today.",
+  ledger: {
+    head: "Side by side.",
+    caption: "Partnering with a Pilates studio on Moose compared with adding Pilates in-house, for a studio owner",
+    columns: ["Partner on Moose", "Add it in-house"],
+    rows: [
+      { label: "Upfront cost", cells: ["Nothing. Moose is free to join.", "Equipment, fit-out and any building work. Reformer Pilates needs a reformer for every spot in the class."] },
+      { label: "Space", cells: ["None. Classes happen at your partner\u2019s studio.", "Floor space, taken from your current timetable or found in a new lease."] },
+      { label: "Staff", cells: ["None. Your partner\u2019s instructors teach.", "Pilates-trained instructors to hire, train and roster, alongside the team you have."] },
+      { label: "Quality", cells: ["A specialist that does Pilates all day.", "Yours to build, next to everything else you already run."] },
+      { label: "Time to start", cells: ["As soon as you and your partner are both live on Moose.", "As long as fit-out, hiring and launch take."] },
+      { label: "Revenue", cells: ["A share of every upgrade your members buy, plus a share of a partner pool for the visits you host.", "Everything your Pilates classes earn, against what they cost to run."] },
+      { label: "Your brand", cells: ["Stays specialised: you\u2019re the strength studio, with a Pilates partner.", "Broadens: you become a strength and Pilates studio."] },
+      { label: "How much Pilates", cells: ["A few classes a month for each member, with credits.", "As much as your timetable offers."] },
+      { label: "Control", cells: ["You choose the partner and which memberships can add Moose. They run their classes.", "All yours: classes, pricing and timetable."] },
+      { label: "If it doesn\u2019t work", cells: ["No equipment or lease to unwind.", "The equipment, the space and the staff stay with you."] },
+    ],
+  },
+  fit: {
+    head: "Which suits your studio.",
+    lists: [
+      {
+        title: "Partnering may suit you better if",
+        items: [
+          "You want to see how much Pilates your members actually book before you invest.",
+          "You don\u2019t have the space or the capital for a studio fit-out.",
+          "You\u2019d rather stay the best at what you already do.",
+          "Your members want a little Pilates, not a lot.",
+        ],
+      },
+      {
+        title: "Building it in-house may suit you better if",
+        items: [
+          "Pilates is becoming core to what your members come for.",
+          "You have the space and the budget, and instructors you can hire.",
+          "You want unlimited Pilates inside your own memberships.",
+          "You want every dollar and every decision under your roof.",
+        ],
+      },
+    ],
+  },
+  first: {
+    head: "Or partner first.",
+    bodyHtml: `A partnership shows you real demand before you spend anything. In their first week on Moose, 10 members of S30, a strength studio in Surry Hills, took classes at One Hot Yoga & Pilates in Potts Point, most of them reformer Pilates and hot flow. <a href="${reportPath("s30-one-hot-yoga-pilates")}">Read the week-one report.</a>`,
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "Will partnering send my members to a competitor?", aHtml: "Your partner doesn\u2019t run what you do, so there\u2019s nothing to switch to. Members get a limited number of credits each month, so your studio stays their home." },
+      { q: "Can I partner now and add Pilates later?", aHtml: "Yes. Talk to your partner first: once you run Pilates yourself, the two of you are no longer complementary." },
+      { q: "What if there\u2019s no Pilates studio near me on Moose?", aHtml: `Invite one. It\u2019s free for them to join, and the <a href="${PATHS.guide}">setup guide</a> walks through every step.` },
+    ],
+  },
+} as const;
+
+// ── Setup guide ──────────────────────────────────────────────────────────
+// How to set up a reciprocal partnership, step by step. Steps 02–09 follow the
+// studio portal's own setup checklist (studio-portal derive-checklist.ts, 27
+// Oct 2026); re-check it when the portal's steps change.
+export const GUIDE = {
+  path: PATHS.guide,
+  title: "How to set up a reciprocal partnership between fitness studios | Moose",
+  description:
+    "A step-by-step guide for studio owners: find a complementary studio nearby, set up Moose in the studio portal, invite your partner, and tell your members.",
+  head: "How to set up a reciprocal partnership.",
+  lede: "Pick a complementary, non-competing studio nearby, set up Moose in the studio portal, then invite them to partner. It\u2019s free, and your members can start booking once you\u2019re both live. Here\u2019s every step.",
+  reviewed: { iso: "2026-10-27", label: "27 October 2026" },
+  before: {
+    head: "Before you start.",
+    items: [
+      `Your booking system\u2019s admin login. Moose connects to ${bookingSystems}.`,
+      "Your business details and bank account, for payouts through Stripe.",
+      "Your logo, a cover photo and a short description of your studio.",
+      "A studio in mind to partner with.",
+    ],
+  },
+  steps: {
+    head: "Step by step.",
+    items: [
+      { title: "Find a complementary studio nearby.", bodyHtml: "Look for a studio your members would visit but you\u2019d never compete with: Pilates beside strength, yoga beside boxing. Talk to the owner first. An invite from someone they know lands better than one from a platform." },
+      { title: "Register your studio.", bodyHtml: `Sign up in the studio portal at <a href="${LINKS.studioPortal}">studio.trainmoose.com</a>. It\u2019s free, and there\u2019s nothing to install.` },
+      { title: "Connect your booking system.", bodyHtml: "Choose your system and enter your details. Some systems ask you to approve Moose\u2019s access in their own settings; the portal tells you when. Moose then syncs your timetable and memberships." },
+      { title: "Choose which memberships can add Moose.", bodyHtml: "Pick the memberships whose members can buy the upgrade. On GymMaster, you\u2019ll also choose the visitor membership your partner\u2019s members check in on." },
+      { title: "Set your upgrade fee.", bodyHtml: "Choose the weekly price your members pay to add Moose." },
+      { title: "Set up payouts.", bodyHtml: "Add your business details and bank account with Stripe. Members pay Moose, and Moose pays your studio each month." },
+      { title: "Finish your studio profile.", bodyHtml: "Add your logo, a cover photo and a description. It\u2019s what your partner\u2019s members see in the Moose app." },
+      { title: "Submit for review.", bodyHtml: "Moose checks your setup and gets you live." },
+      { title: "Invite your partner.", bodyHtml: "Under Partners in the portal, invite the studio you spoke to, or accept their invite, and agree the terms between you. If they\u2019re not on Moose yet, they register for free and follow these same steps." },
+      { title: "Tell your members.", bodyHtml: `Share your studio\u2019s Moose page by email, SMS, your Instagram bio or a QR poster at the front desk. An open day helps: S30 and One Hot each offered the other\u2019s members a free class, and <a href="${reportPath("s30-one-hot-yoga-pilates")}">nine S30 members came to One Hot\u2019s</a>.` },
+    ],
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "Does it cost anything?", aHtml: "No. Joining and setting up are free. Moose is paid from the upgrades members buy." },
+      { q: "Can I partner with more than one studio?", aHtml: "Yes. Each partnership is between two studios, and you can have several. Your members can book at any of them." },
+      { q: "What if my booking system isn\u2019t listed?", aHtml: `Tell us which one you use at <a href="mailto:partnerships@trainmoose.com">partnerships@trainmoose.com</a>.` },
+      { q: "How long does it take?", aHtml: "Most of it is self-serve in the studio portal. Once you submit, Moose reviews your setup and gets you live." },
+    ],
+  },
+} as const;
+
+// ── Moose in numbers ─────────────────────────────────────────────────────
+// One citable answer to "how big is Moose?", updated monthly from Moose's
+// records in the PostHog data warehouse (real members only; demo studios and
+// leads excluded). To update: change COUNTS (with the answer pages), the
+// dates here, and add the month to the top of `months.rows`. Past months are
+// literals, so they stay as they were.
+const NUMBERS_TODAY = COUNTS;
+
+export const NUMBERS = {
+  path: PATHS.numbers,
+  title: "Moose in numbers: studios, partnerships and visits | Moose",
+  description: `How big is Moose? As of 26 October 2026, ${NUMBERS_TODAY.studios} studios are on Moose, with ${NUMBERS_TODAY.partnerships} partnership live and ${NUMBERS_TODAY.members} members using it. Updated monthly.`,
+  head: "Moose in numbers.",
+  lede: `As of 26 October 2026, ${NUMBERS_TODAY.studios} studios across New South Wales, Victoria and Queensland are on Moose, with ${NUMBERS_TODAY.partnerships} partnership live. ${NUMBERS_TODAY.members} members have added Moose, and they made ${NUMBERS_TODAY.visits} visits to partner studios in ${NUMBERS_TODAY.month}.`,
+  updated: { iso: "2026-10-27", label: "27 October 2026" },
+  method: "Updated monthly from Moose\u2019s booking records, excluding staff and test accounts.",
+  today: {
+    head: "Today.",
+    cells: [
+      { label: "Studios on Moose", figure: String(NUMBERS_TODAY.studios), caption: "In NSW, Victoria and Queensland." },
+      { label: "Live partnerships", figure: String(NUMBERS_TODAY.partnerships), caption: "S30 Surry Hills \u00d7 One Hot Yoga & Pilates Potts Point." },
+      { label: "Members with Moose", figure: String(NUMBERS_TODAY.members), caption: "With an active upgrade or in their trial." },
+      { label: `Partner visits in ${NUMBERS_TODAY.month}`, figure: String(NUMBERS_TODAY.visits), caption: "Classes attended at a partner studio." },
+    ],
+  },
+  months: {
+    head: "Month by month.",
+    caption: "Moose studios, partnerships, members and partner visits, by month",
+    columns: ["Studios", "Live partnerships", "Members with Moose", "Partner visits"],
+    rows: [
+      { label: "October 2026", cells: ["5", "1", "7", "13"] },
+    ],
+    note: "Members could first book a partner studio in October 2026.",
+  },
+  how: {
+    head: "How we count.",
+    items: [
+      { q: "Studios on Moose", aHtml: "Studios that have joined Moose and are set up, not ones still talking to us. Moose\u2019s own demo studios are left out." },
+      { q: "Live partnerships", aHtml: "Two studios whose members can book each other\u2019s classes today." },
+      { q: "Members with Moose", aHtml: "Members with an active Moose upgrade or in their trial, at the end of the month. Staff and test accounts are left out." },
+      { q: "Partner visits", aHtml: "Classes members attended at a partner studio, including free open-day classes. Cancelled bookings don\u2019t count." },
+    ],
+  },
+  questions: {
+    head: "Common questions.",
+    items: [
+      { q: "How big is Moose?", aHtml: `As of 26 October 2026, ${NUMBERS_TODAY.studios} studios are on Moose, with ${NUMBERS_TODAY.partnerships} partnership live and ${NUMBERS_TODAY.members} members using it. Moose opened to members in October 2026.` },
+      { q: "How often is this page updated?", aHtml: "Monthly, from Moose\u2019s booking records. The date at the top says when." },
+    ],
+  },
+} as const;
+
 export const FAQ = {
   path: PATHS.faq,
   title: "Moose FAQ: questions from studios and members | Moose",
@@ -574,7 +807,7 @@ export const FAQ = {
     {
       head: "For studios.",
       items: [
-        { q: "What is Moose?", aHtml: "Moose is a network for boutique fitness studios in Australia. Your studio partners with complementary, non-competing studios nearby, and your members add a paid upgrade to book classes at those partners each month." },
+        { q: "What is Moose?", aHtml: "Moose helps boutique fitness studios in Australia form reciprocal partnerships with complementary, non-competing studios nearby. Your members add a paid upgrade to their membership to book classes at your partners each month." },
         { q: "What does Moose cost my studio?", aHtml: "Nothing to join. Members pay Moose for the upgrade, and Moose pays your studio its share each month." },
         { q: "How does my studio earn from Moose?", aHtml: "Members pay Moose for the upgrade, and Moose pays your studio each month: a share of every upgrade your members buy, plus a share of a partners’ pool, split by the visits each studio hosts and weighted for each studio’s membership pricing." },
         { q: "Who sets the price of the upgrade?", aHtml: "Your studio does. You also choose which of your memberships can add Moose." },
@@ -582,8 +815,8 @@ export const FAQ = {
         { q: "Will my members leave for my partners?", aHtml: "Moose is built so they don’t. Members get a limited number of credits each month: enough for variety, while your studio stays their home." },
         { q: "Which booking systems does Moose work with?", aHtml: `${bookingSystems}.` },
         { q: "Can I use Moose alongside ClassPass?", aHtml: `Yes. They reach different people: ClassPass its subscribers, Moose your own members and your partners’. See <a href="${PATHS.classpass}">Moose or ClassPass?</a>` },
-        { q: "Where is Moose available?", aHtml: "In Australia." },
-        { q: "How do I join?", aHtml: `Register your studio in the studio portal at <a href="${LINKS.studioPortal}">studio.trainmoose.com</a>. It’s free to join.` },
+        { q: "Where is Moose available?", aHtml: `In Australia: New South Wales, Victoria and Queensland today. See <a href="${PATHS.numbers}">Moose in numbers</a>.` },
+        { q: "How do I join?", aHtml: `Register your studio in the studio portal at <a href="${LINKS.studioPortal}">studio.trainmoose.com</a>. It’s free to join. The <a href="${PATHS.guide}">setup guide</a> walks through every step.` },
       ],
     },
     {
@@ -623,6 +856,9 @@ export const FOOTER = {
         { l: "Moose vs a second membership", h: SECOND_MEMBERSHIP.path },
         { l: "Reciprocal memberships", h: RECIPROCAL.path },
         { l: "Studios on Moose", h: STUDIOS.path },
+        { l: "Pilates in-house vs partner", h: PATHS.pilates },
+        { l: "Set up a partnership", h: PATHS.guide },
+        { l: "Moose in numbers", h: PATHS.numbers },
         { l: "FAQ", h: FAQ.path },
       ],
     },

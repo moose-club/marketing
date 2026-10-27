@@ -60,11 +60,12 @@ const partnerItems = NETWORK.partners.map((p, i) => ({
 
 /** An answer page: the page itself (an FAQPage when it answers questions),
     dated by its last review, with a breadcrumb back to the home page. */
-export function answerNodes({ path, name, description, questions = [] }: {
+export function answerNodes({ path, name, description, questions = [], dateModified = REVIEWED.iso }: {
   path: string;
   name: string;
   description: string;
   questions?: readonly { q: string; aHtml: string }[];
+  dateModified?: string;
 }): Node[] {
   const url = `${SITE_URL}${path}`;
   return [
@@ -75,7 +76,7 @@ export function answerNodes({ path, name, description, questions = [] }: {
       name,
       description,
       inLanguage: 'en-AU',
-      dateModified: REVIEWED.iso,
+      dateModified,
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': ORG_ID },
       publisher: { '@id': ORG_ID },

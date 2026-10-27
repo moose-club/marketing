@@ -1,0 +1,72 @@
+---
+// Three or four figures as a printed read-back ledger, as the home page's
+// Value section (Figma `143:570`; the report frame `196:790`): a printed
+// label, the figure in compact lettering, its caption. Printed rules above,
+// below and between the cells; stacked on phone. Figures travel open, never
+// boxed.
+interface Props {
+  cells: readonly { label: string; figure: string; caption: string }[];
+}
+const { cells } = Astro.props;
+---
+
+<ul class="figures" data-n={cells.length}>
+  {cells.map((c) => (
+    <li class="figures__cell">
+      <p class="figures__label">{c.label}</p>
+      <p class="page-lettering page-lettering--compact figures__figure">{c.figure}</p>
+      <p class="figures__caption">{c.caption}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .figures {
+    display: grid;
+    border-block: 1px solid var(--m-ink-rule);
+  }
+  .figures__cell { padding-block: 28px; } /* no token yet: proposed (read-back cell, as Value) */
+  .figures__cell + .figures__cell { border-top: 1px solid var(--m-ink-rule); }
+  .figures__label {
+    font-size: var(--m-type-printed-label-size);
+    font-weight: var(--m-type-printed-label-weight);
+    line-height: var(--m-type-printed-label-leading);
+    letter-spacing: var(--m-type-printed-label-tracking);
+    text-transform: var(--m-type-printed-label-transform);
+    color: var(--m-ink-support);
+  }
+  .figures__figure {
+    margin-top: 10px; /* no token yet: proposed */
+    padding-bottom: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .figures__caption {
+    margin-top: 10px; /* no token yet: proposed */
+    font-size: var(--m-type-detail-size);
+    font-weight: var(--m-type-detail-weight);
+    line-height: var(--m-type-detail-leading);
+    color: var(--m-ink-support);
+  }
+
+  @media (min-width: 760px) {
+    .figures { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .figures__cell { padding-inline-end: var(--m-spacing-lg); }
+    .figures__cell + .figures__cell {
+      border-top: 0;
+      border-left: 1px solid var(--m-ink-rule);
+      padding-inline-start: 28px; /* no token yet: proposed */
+    }
+  }
+  /* Four figures: two by two until there's room for one row. */
+  @media (min-width: 760px) and (max-width: 1047.98px) {
+    .figures[data-n='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .figures[data-n='4'] .figures__cell:nth-child(3) {
+      border-left: 0;
+      padding-inline-start: 0;
+    }
+    .figures[data-n='4'] .figures__cell:nth-child(n + 3) { border-top: 1px solid var(--m-ink-rule); }
+  }
+  @media (min-width: 1048px) {
+    .figures[data-n='4'] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>

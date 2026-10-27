@@ -1,0 +1,61 @@
+---
+import Answer from '../../layouts/Answer.astro';
+import AnswerSection from '../../components/answer/AnswerSection.astro';
+import QuestionList from '../../components/answer/QuestionList.astro';
+import Steps from '../../components/answer/Steps.astro';
+import { ANSWER, GUIDE as P } from '../../data/copy';
+import { SITE_URL, stripTags } from '../../data/schema';
+
+// How to set up a reciprocal partnership (Figma `201:951`): what to have ready,
+// then ten steps, then questions. Steps 02–09 are the studio portal's own
+// setup checklist, in its order.
+const url = `${SITE_URL}${P.path}`;
+const howTo = {
+  '@type': 'HowTo',
+  '@id': `${url}#howto`,
+  name: P.head.replace(/\.$/, ''),
+  description: P.description,
+  dateModified: P.reviewed.iso,
+  supply: P.before.items.map((name) => ({ '@type': 'HowToSupply', name })),
+  step: P.steps.items.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.title.replace(/\.$/, ''),
+    text: stripTags(s.bodyHtml),
+    url: `${url}#step-${i + 1}`,
+  })),
+};
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  jsonLd={[howTo]}
+  updated={{ lead: ANSWER.reviewed, iso: P.reviewed.iso, label: P.reviewed.label }}
+  close="studio"
+>
+  <AnswerSection head={P.before.head} id="before-you-start">
+    <ul class="before">
+      {P.before.items.map((it) => <li class="body-text before__item">{it}</li>)}
+    </ul>
+  </AnswerSection>
+  <AnswerSection head={P.steps.head} id="steps">
+    <Steps items={P.steps.items} />
+  </AnswerSection>
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
+
+<style>
+  .before { max-width: 860px; } /* no token yet: proposed (the frame's step column) */
+  .before__item {
+    max-width: none;
+    padding: 16px 0 18px; /* no token yet: proposed (as the printed lists) */
+    border-top: 1px solid var(--m-ink-rule);
+  }
+</style>

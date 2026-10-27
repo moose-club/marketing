@@ -1,0 +1,49 @@
+---
+import Answer from '../layouts/Answer.astro';
+import AnswerSection from '../components/answer/AnswerSection.astro';
+import Figures from '../components/answer/Figures.astro';
+import Ledger from '../components/answer/Ledger.astro';
+import QuestionList from '../components/answer/QuestionList.astro';
+import { NUMBERS as P, REPORT } from '../data/copy';
+import { SITE_URL } from '../data/schema';
+
+// Moose in numbers (Figma `199:858`): the one citable answer to "how big is
+// Moose?". Today's four figures, then month by month (newest first), then how
+// each figure is counted. Updated monthly; the dated line says when.
+const dataset = {
+  '@type': 'Dataset',
+  '@id': `${SITE_URL}${P.path}#dataset`,
+  name: 'Moose in numbers',
+  description: P.description,
+  url: `${SITE_URL}${P.path}`,
+  creator: { '@id': `${SITE_URL}/#org` },
+  dateModified: P.updated.iso,
+  spatialCoverage: 'Australia',
+  variableMeasured: P.months.columns,
+};
+---
+
+<Answer
+  path={P.path}
+  title={P.title}
+  description={P.description}
+  head={P.head}
+  lede={P.lede}
+  questions={P.questions.items}
+  jsonLd={[dataset]}
+  updated={{ lead: REPORT.updated, iso: P.updated.iso, label: P.updated.label, note: P.method }}
+  close="studio"
+>
+  <AnswerSection head={P.today.head} id="today">
+    <Figures cells={P.today.cells} />
+  </AnswerSection>
+  <AnswerSection head={P.months.head} id="month-by-month">
+    <Ledger caption={P.months.caption} columns={P.months.columns} rows={P.months.rows} note={P.months.note} tone="data" />
+  </AnswerSection>
+  <AnswerSection head={P.how.head} id="how-we-count">
+    <QuestionList items={P.how.items} />
+  </AnswerSection>
+  <AnswerSection head={P.questions.head} id="questions">
+    <QuestionList items={P.questions.items} />
+  </AnswerSection>
+</Answer>
