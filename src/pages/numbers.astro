@@ -17,6 +17,8 @@ const dataset = {
   description: P.description,
   url: `${SITE_URL}${P.path}`,
   creator: { '@id': `${SITE_URL}/#org` },
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  isAccessibleForFree: true,
   dateModified: P.updated.iso,
   spatialCoverage: 'Australia',
   variableMeasured: P.months.columns,
